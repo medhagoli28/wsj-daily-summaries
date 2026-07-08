@@ -245,7 +245,7 @@ def research(digest):
             continue
         print(f"[{i}/{len(digest)}] {title[:60]}", file=sys.stderr)
         researched.append(research_headline(client, item))
-        store[title] = {"embedding": dedup.embed(title), "date": today}
+        store[title] = {"date": today}
 
     dedup.save_store(dedup.prune_store(store))  # drop entries past the lookback window
     return research_to_markdown(researched)
