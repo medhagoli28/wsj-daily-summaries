@@ -26,13 +26,14 @@ jobs:
       - name: Build the deep digest
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}   # for embedding-based dedup
         run: python3 wsj_fetch.py --research --limit 10
 
-      - name: Commit the digest
+      - name: Commit the digest and embeddings store
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "digest-$(date -u +%F).md"
+          git add "digest-$(date -u +%F).md" embeddings_store.json
           git diff --cached --quiet || git commit -m "Digest for $(date -u +%F)"
           git push
 
