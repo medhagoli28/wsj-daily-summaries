@@ -127,11 +127,13 @@ def to_markdown(digest):
         if it["section"] != current:
             current = it["section"]
             lines.append(f"\n## {current}\n")
-        lines.append(f"- **{it['title']}**")
+        # Link the title itself so the rendered page stays clean (no raw URLs).
+        if it["link"]:
+            lines.append(f"- [{it['title']}]({it['link']})")
+        else:
+            lines.append(f"- **{it['title']}**")
         if it["dek"]:
             lines.append(f"  - {it['dek']}")
-        if it["link"]:
-            lines.append(f"  - <{it['link']}>")
     return "\n".join(lines)
 
 
