@@ -1,5 +1,4 @@
-# Runtime dependencies. The fetch layer is stdlib-only; the research layer (Stage 2)
-# uses the Anthropic SDK for Claude's server-side web_search tool, and OpenAI for
-# headline embeddings used by cross-day de-duplication (see dedup.py).
+# The fetch layer (Mode A) and de-duplication (dedup.py) are stdlib-only — free,
+# no dependencies. The only dependency is the Anthropic SDK, needed solely for the
+# optional, opt-in deep-research mode (`--research`, which makes paid API calls).
 anthropic>=0.40
-openai>=1.0
