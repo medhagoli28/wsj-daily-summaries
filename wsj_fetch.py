@@ -247,7 +247,7 @@ def research(digest):
         researched.append(research_headline(client, item))
         store[title] = {"embedding": dedup.embed(title), "date": today}
 
-    dedup.save_store(store)
+    dedup.save_store(dedup.prune_store(store))  # drop entries past the lookback window
     return research_to_markdown(researched)
 
 
