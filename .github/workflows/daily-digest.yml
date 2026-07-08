@@ -35,3 +35,13 @@ jobs:
           git add "digest-$(date -u +%F).md"
           git diff --cached --quiet || git commit -m "Digest for $(date -u +%F)"
           git push
+
+      - name: Generate the Pages index
+        run: python3 generate_index.py   # builds ./public (index.html + digest copies)
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}   # built-in, no new secret needed
+          publish_dir: ./public
+          publish_branch: gh-pages
