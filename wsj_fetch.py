@@ -224,14 +224,30 @@ def research_to_markdown(researched):
 
 
 def research(digest):
-    """Run Mode B over every fetched headline and return the Markdown report."""
+    """Run Mode B over every fetched headline and return the Markdown report.
+
+    Cross-day de-dup: before researching a headline we skip it if a very similar
+    headline was already covered in the last few days (see dedup.py). Headlines
+    that pass the filter are researched and added to the store for next time.
+    """
     import anthropic  # imported lazily so Mode A works without the SDK installed
+    import dedup
 
     client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from the environment
+    store = dedup.load_store()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
     researched = []
     for i, item in enumerate(digest, 1):
-        print(f"[{i}/{len(digest)}] {item['title'][:60]}", file=sys.stderr)
+        title = item["title"]
+        if dedup.is_duplicate(title, store):
+            print(f"[{i}/{len(digest)}] skip (already covered): {title[:60]}", file=sys.stderr)
+            continue
+        print(f"[{i}/{len(digest)}] {title[:60]}", file=sys.stderr)
         researched.append(research_headline(client, item))
+        store[title] = {"embedding": dedup.embed(title), "date": today}
+
+    dedup.save_store(store)
     return research_to_markdown(researched)
 
 
