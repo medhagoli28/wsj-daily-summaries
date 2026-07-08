@@ -59,6 +59,21 @@ def embed(text):
     return resp.data[0].embedding
 
 
+def prune_store(store, lookback_days=7):
+    """Return a copy of the store without entries older than the lookback window.
+
+    Only headlines from the last `lookback_days` are ever compared, so anything
+    older is dead weight — dropping it keeps embeddings_store.json from growing
+    without bound.
+    """
+    cutoff = date.today() - timedelta(days=lookback_days)
+    return {
+        text: record
+        for text, record in store.items()
+        if date.fromisoformat(record["date"]) >= cutoff
+    }
+
+
 def is_duplicate(headline, store, threshold=0.85, lookback_days=7):
     """True if `headline` is similar to any headline covered in the last N days.
 
