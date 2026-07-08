@@ -1,0 +1,17 @@
+# Generated / intermediate data — regenerated on each run
+digest.json
+digest_full.json
+worklist.json
+
+# Daily output digests (keep the sample committed, ignore the rest)
+digest-*.md
+!digest-2026-07-08.md
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# macOS
+.DS_Store
