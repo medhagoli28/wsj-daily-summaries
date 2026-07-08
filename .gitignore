@@ -3,15 +3,17 @@ digest.json
 digest_full.json
 worklist.json
 
-# Daily output digests (keep the sample committed, ignore the rest)
-digest-*.md
-!digest-2026-07-08.md
+# Dated digests (digest-<date>.md) ARE committed — the daily workflow writes them.
 
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
 venv/
 .venv/
+
+# Local env
+.env
 
 # macOS
 .DS_Store
