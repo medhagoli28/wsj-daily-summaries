@@ -11,9 +11,12 @@ It does NOT fetch article bodies (those are paywalled). Output is a clean JSON l
 of {section, title, dek, link, published} that Stage 2 (Claude web research) deepens.
 
 Usage:
-  python3 wsj_fetch.py                 # print a markdown digest to stdout
-  python3 wsj_fetch.py --json out.json # also write structured JSON
+  python3 wsj_fetch.py                 # Mode A: print a headline digest to stdout
+  python3 wsj_fetch.py --json out.json # Mode A: also write structured JSON
   python3 wsj_fetch.py --limit 8       # cap items per section (default 12)
+  python3 wsj_fetch.py --research      # Mode B: deepen each headline via Claude
+                                       #   web search, write digest-<date>.md
+                                       #   (needs ANTHROPIC_API_KEY in the env)
 """
 
 import argparse
@@ -132,13 +135,126 @@ def to_markdown(digest):
     return "\n".join(lines)
 
 
+# ---------------------------------------------------------------------------
+# Mode B — deepen each headline with Claude's web search.
+#
+# WSJ article bodies are paywalled, so we never read them. Instead we hand Claude
+# just the headline and let its server-side web_search tool find the same story on
+# other outlets (Reuters, AP, Bloomberg, CNBC, ...) and write a short, sourced
+# summary. This keeps us on the free/legal side of the paywall.
+# ---------------------------------------------------------------------------
+
+# Opus 4.8 is required for the web_search_20260209 tool (dynamic filtering).
+RESEARCH_MODEL = "claude-opus-4-8"
+
+RESEARCH_SYSTEM = (
+    "You research a news headline and write a short, factual brief. The headline "
+    "comes from The Wall Street Journal, but WSJ is paywalled: do NOT use or quote "
+    "WSJ article text. Use the web_search tool to find the same story on OTHER "
+    "outlets (Reuters, AP, Bloomberg, CNBC, etc.), then write 3-4 sentences with "
+    "concrete numbers and dates.\n\n"
+    "End your answer with one line in exactly this form:\n"
+    "SOURCES: <url1>, <url2>\n\n"
+    "List 1-3 non-WSJ URLs you actually used. Never link wsj.com. If no other "
+    "outlet covered the story (a WSJ exclusive or an advice column), say so in one "
+    "sentence and give the SOURCES line as 'SOURCES: none'."
+)
+
+
+def split_summary_and_sources(text):
+    """Split the model's answer into (summary, [urls]).
+
+    The model is told to end with a 'SOURCES: ...' line; we cut the text there and
+    pull the http links out of that line. Anything before it is the summary.
+    """
+    match = re.search(r"(?im)^\s*sources\s*:\s*(.+)\s*$", text)
+    if not match:
+        return text.strip(), []
+    summary = text[:match.start()].strip()
+    urls = re.findall(r"https?://\S+", match.group(1))
+    urls = [u.rstrip(".,)") for u in urls if "wsj.com" not in u]  # defensively drop WSJ
+    return summary, urls
+
+
+def research_headline(client, item):
+    """Research one headline via Claude + web search.
+
+    Returns the item dict with 'summary' and 'sources' added. On any API/network
+    error it returns the item with an 'error' string instead, so a single bad
+    headline never aborts the whole run.
+    """
+    try:
+        message = client.messages.create(
+            model=RESEARCH_MODEL,
+            max_tokens=1024,
+            system=RESEARCH_SYSTEM,
+            tools=[{"type": "web_search_20260209", "name": "web_search", "max_uses": 4}],
+            messages=[{
+                "role": "user",
+                "content": f"Section: {item['section']}\nHeadline: {item['title']}",
+            }],
+        )
+    except Exception as e:  # noqa — record the failure and keep going
+        return {**item, "summary": "", "sources": [], "error": str(e)}
+
+    # The final answer is in the 'text' blocks; web-search blocks are ignored here.
+    text = "".join(b.text for b in message.content if b.type == "text").strip()
+    summary, sources = split_summary_and_sources(text)
+    return {**item, "summary": summary, "sources": sources, "error": None}
+
+
+def research_to_markdown(researched):
+    """Render researched items as a dated Markdown digest, grouped by section."""
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    lines = [f"# WSJ Deep Digest — {date}", "",
+             "_Headlines selected by WSJ; summaries researched from non-WSJ sources._", ""]
+    current = None
+    for it in researched:
+        if it["section"] != current:
+            current = it["section"]
+            lines.append(f"\n## {current}\n")
+        if it.get("error"):
+            lines.append(f"- **{it['title']}** — _(could not research: {it['error']})_")
+            continue
+        srcs = ""
+        if it["sources"]:
+            srcs = " _Sources: " + ", ".join(f"<{u}>" for u in it["sources"]) + "_"
+        lines.append(f"- **{it['title']}** — {it['summary']}{srcs}")
+    return "\n".join(lines)
+
+
+def research(digest):
+    """Run Mode B over every fetched headline and return the Markdown report."""
+    import anthropic  # imported lazily so Mode A works without the SDK installed
+
+    client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from the environment
+    researched = []
+    for i, item in enumerate(digest, 1):
+        print(f"[{i}/{len(digest)}] {item['title'][:60]}", file=sys.stderr)
+        researched.append(research_headline(client, item))
+    return research_to_markdown(researched)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=12, help="items per section")
     ap.add_argument("--json", metavar="PATH", help="also write JSON here")
+    ap.add_argument("--research", action="store_true",
+                    help="Mode B: deepen each headline via Claude web search")
+    ap.add_argument("--out", metavar="PATH",
+                    help="path for the Mode B digest (default: digest-<date>.md)")
     args = ap.parse_args()
 
     digest = build(args.limit)
+
+    if args.research:
+        report = research(digest)
+        out = args.out or f"digest-{datetime.now(timezone.utc):%Y-%m-%d}.md"
+        with open(out, "w") as f:
+            f.write(report)
+        print(f"[wrote {out}]", file=sys.stderr)
+        return
+
     print(to_markdown(digest))
     if args.json:
         with open(args.json, "w") as f:
