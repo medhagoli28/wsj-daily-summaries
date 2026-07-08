@@ -25,9 +25,10 @@ I try follow WSJ regularly but kept losing track of stories across the day — t
 ## Files
 - `wsj_fetch.py` — the whole tool. Stage 1 (fetch) is stdlib-only; Stage 2 (`--research`) uses the Anthropic SDK.
 - `tests/` — unit tests for the pure parse/clean helpers (`python3 -m pytest`).
-- `.github/workflows/daily-digest.yml` — cron that runs Stage 2 daily and commits the digest.
-- `requirements.txt` — the one runtime dependency (`anthropic`), needed only for Stage 2.
-- `digest-<date>.md` — a generated deep digest (committed daily by the workflow).
+- `dedup.py` — free cross-day de-duplication (difflib similarity, no dependencies) so Stage 2 skips stories already covered.
+- `.github/workflows/daily-digest.yml` — cron that publishes the **free** headline digest to GitHub Pages daily.
+- `requirements.txt` — the one dependency (`anthropic`), needed only for the optional `--research` mode.
+- `digest-<date>.md` — a generated digest (committed daily by the workflow).
 
 ## Sources (all free)
 Headlines come from Google News RSS scoped to `site:wsj.com` (the native `feeds.a.dj.com`
@@ -75,11 +76,15 @@ How Stage 2 works, in three small functions:
 - `split_summary_and_sources(text)` — parses the model's `SOURCES:` line and drops any wsj.com links.
 - `research_to_markdown(...)` — groups the results into a dated Markdown digest.
 
-### Automated daily run (GitHub Actions)
-`.github/workflows/daily-digest.yml` runs `--research` on a cron (`0 16 * * *` = noon ET) and commits
-`digest-<date>.md` back to the repo. To enable it: add your key as a repo secret named
-**`ANTHROPIC_API_KEY`** (Settings → Secrets and variables → Actions). You can also trigger it manually
-from the Actions tab (`workflow_dispatch`).
+### Automated daily run (GitHub Actions) — free
+`.github/workflows/daily-digest.yml` runs on a cron (`0 16 * * *` = noon ET) and is **completely free**:
+it fetches today's headlines (Mode A, stdlib only), commits `digest-<date>.md`, and publishes it to
+GitHub Pages. It uses only the built-in `GITHUB_TOKEN` — **no API keys, no secrets to add.** You can also
+trigger it manually from the Actions tab (`workflow_dispatch`).
+
+The paid deep-research mode (`--research`) is intentionally **not** run by the workflow. Generate deep
+summaries on demand instead — run `--research` locally with an `ANTHROPIC_API_KEY`, or ask Claude to
+research a fetched headline list for you. De-duplication (`dedup.py`) is free either way (difflib, no API).
 
 ---
 
