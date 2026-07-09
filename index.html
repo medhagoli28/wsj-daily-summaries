@@ -28,10 +28,13 @@
   table.cal td { border: 1px solid var(--border); height: 84px; vertical-align: top; padding: .35rem .45rem; }
   table.cal td.empty { border-color: transparent; }
   table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
-  table.cal td.has { background: rgba(37, 99, 235, .09); }
+  /* days with a digest stay clickable, but are not "highlighted" */
   table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: inherit; font-weight: 800; font-size: 1.15rem; }
+  table.cal td.has .num { color: var(--tech); font-weight: 700; }
   table.cal td.has .tag { margin-top: auto; font-size: .72rem; color: var(--tech); font-weight: 600; }
+  /* only the current date is highlighted */
+  table.cal td.today { background: rgba(37, 99, 235, .09); }
+  table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
   @media (max-width: 560px) {
     table.cal td { height: 54px; padding: .25rem; }
     table.cal td.has .tag { display: none; } table.cal th { font-size: .58rem; }
@@ -68,7 +71,7 @@
     :root { --card: #161b22; --border: #24292f; --muted: #9198a1; }
     body { color: #e6e6e6; background: #0d1117; }
     a { color: #6ea8fe; }
-    table.cal td.has { background: rgba(110, 168, 254, .14); }
+    table.cal td.today { background: rgba(110, 168, 254, .14); }
   }
 </style>
 </head>
@@ -79,7 +82,7 @@
 <thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>
 <tbody>
 <tr><td class="empty"></td><td class="empty"></td><td class="empty"></td><td><span class="num">1</span></td><td><span class="num">2</span></td><td><span class="num">3</span></td><td><span class="num">4</span></td></tr>
-<tr><td><span class="num">5</span></td><td><span class="num">6</span></td><td><span class="num">7</span></td><td class="has"><a href="digest-2026-07-08.html"><span class="num">8</span><span class="tag">Digest →</span></a></td><td class="has"><a href="digest-2026-07-09.html"><span class="num">9</span><span class="tag">Digest →</span></a></td><td><span class="num">10</span></td><td><span class="num">11</span></td></tr>
+<tr><td><span class="num">5</span></td><td><span class="num">6</span></td><td><span class="num">7</span></td><td class="has"><a href="digest-2026-07-08.html"><span class="num">8</span><span class="tag">Digest →</span></a></td><td class="has today"><a href="digest-2026-07-09.html"><span class="num">9</span><span class="tag">Digest →</span></a></td><td><span class="num">10</span></td><td><span class="num">11</span></td></tr>
 <tr><td><span class="num">12</span></td><td><span class="num">13</span></td><td><span class="num">14</span></td><td><span class="num">15</span></td><td><span class="num">16</span></td><td><span class="num">17</span></td><td><span class="num">18</span></td></tr>
 <tr><td><span class="num">19</span></td><td><span class="num">20</span></td><td><span class="num">21</span></td><td><span class="num">22</span></td><td><span class="num">23</span></td><td><span class="num">24</span></td><td><span class="num">25</span></td></tr>
 <tr><td><span class="num">26</span></td><td><span class="num">27</span></td><td><span class="num">28</span></td><td><span class="num">29</span></td><td><span class="num">30</span></td><td><span class="num">31</span></td><td class="empty"></td></tr>
