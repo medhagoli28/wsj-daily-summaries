@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WSJ Deep Digest</title>
   <style>
-  :root { color-scheme: light dark;
-          --tech: #2563eb; --markets: #059669; --finance: #d97706;
-          --card: #fafafa; --border: #ececec; --muted: #6b7280; }
+  :root { color-scheme: dark;
+          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
+          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
   * { box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
          max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; color: #1a1a1a; background: #fff; -webkit-font-smoothing: antialiased; }
+         line-height: 1.65; color: #e9e4da; background: #201d1a; -webkit-font-smoothing: antialiased; }
   h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 .4rem; }
   .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--tech); text-decoration: none; }
+  a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
   .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #9aa0a6; font-size: .82rem; }
+  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+
+  /* "Read the latest" hero on the index */
+  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
+                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
+                 font-weight: 700; font-size: 1.02rem; }
+  .hero-latest:hover { text-decoration: none; opacity: .93; }
+  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
 
   /* Calendar index */
   table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
@@ -30,10 +37,10 @@
   table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
   /* days with a digest stay clickable, but are not "highlighted" */
   table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--tech); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .72rem; color: var(--tech); font-weight: 600; }
+  table.cal td.has .num { color: var(--accent); font-weight: 700; }
+  table.cal td.has .tag { margin-top: auto; font-size: .72rem; color: var(--accent); font-weight: 600; }
   /* only the current date is highlighted */
-  table.cal td.today { background: rgba(37, 99, 235, .09); }
+  table.cal td.today { background: rgba(110, 168, 254, .14); }
   table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
   @media (max-width: 560px) {
     table.cal td { height: 54px; padding: .25rem; }
@@ -57,11 +64,10 @@
   .bubbles { column-count: 2; column-gap: 1.2rem; }
   .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
             background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
-  .bubble-num { font-size: 3.4rem; font-weight: 800; line-height: .85; letter-spacing: -0.03em; }
+  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
   .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
                  padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; margin-top: .5rem; white-space: nowrap; }
+                 text-transform: uppercase; white-space: nowrap; }
   .bubble.tech .bubble-pill { background: var(--tech); }
   .bubble.markets .bubble-pill { background: var(--markets); }
   .bubble.finance .bubble-pill { background: var(--finance); }
@@ -74,17 +80,31 @@
   .bubble-sources a { color: #7a663f; }
   @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
 
-  @media (prefers-color-scheme: dark) {
-    :root { --card: #161b22; --border: #24292f; --muted: #9198a1; }
-    body { color: #e6e6e6; background: #0d1117; }
-    a { color: #6ea8fe; }
-    table.cal td.today { background: rgba(110, 168, 254, .14); }
-  }
+  /* prev / next-day navigation */
+  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
+  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
+              padding: .75rem 1rem; color: #e9e4da; }
+  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
+  .daynav .dn-next { text-align: right; }
+  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+                      color: #8a7f6d; }
+  .daynav .dn-date { font-weight: 700; }
+  .daynav .dn-spacer { flex: 1; }
+  /* recurring "threads" cross-links */
+  .threads { margin: 2rem 0 0; }
+  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
+               margin: 0 0 .7rem; }
+  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
+            margin: 0 0 .6rem; font-size: .9rem; }
+  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
+  .thread a { margin-right: .7rem; white-space: nowrap; }
+  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 </style>
 </head>
 <body>
   <h1>WSJ Deep Digest</h1>
   <p class="lead">Daily summaries — headlines from WSJ, depth researched from other outlets. Pick a highlighted day.</p>
+  <a class="hero-latest" href="digest-2026-07-09.html">Read the latest digest → <span class="hero-date">July 9, 2026</span></a>
 <table class="cal"><caption>July 2026</caption>
 <thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>
 <tbody>
