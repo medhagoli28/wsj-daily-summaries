@@ -26,20 +26,48 @@ SECTION_CLASSES = [("tech", "tech"), ("markets", "markets"), ("personal finance"
 PILL_LABEL = {"tech": "Tech", "markets": "Markets", "finance": "Finance"}
 WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
+# Recurring "threads" — a digest joins a thread when its text matches any keyword.
+# Days that share a thread get cross-linked so readers can follow a story over time.
+TOPIC_RULES = [
+    ("AI boom", ["artificial intelligence", "hyperscaler", "openai", "anthropic",
+                 "nvidia", "claude", "chatgpt", "data center", "capex", "zhipu", "llm"]),
+    ("Iran & oil", ["iran", "ceasefire", "hormuz", "israel", "middle east", "crude", "brent"]),
+    ("Crypto", ["bitcoin", "btc", "crypto", "microstrategy", "ethereum", "stablecoin"]),
+    ("Tariffs & trade", ["tariff", "trade war", "liberation day", "import duty"]),
+    ("Fed & rates", ["federal reserve", "interest rate", "treasury yield", "bond yield", "rate cut"]),
+    ("IPOs & listings", ["ipo", "nasdaq-100", "market debut", "public offering", "share placement"]),
+    ("Chips", ["chip", "semiconductor", "samsung", "sk hynix", "broadcom", "tsmc", "memory"]),
+    ("Deals & M&A", ["acquisition", "takeover", "merger", "buyout", "private equity", "commerzbank"]),
+]
+_TOPIC_RES = [(label, [re.compile(rf"\b{re.escape(k)}\b", re.I) for k in kws])
+              for label, kws in TOPIC_RULES]
+
+
+def digest_topics(md_text):
+    """Return the set of thread labels a digest matches, based on its text."""
+    return {label for label, pats in _TOPIC_RES if any(p.search(md_text) for p in pats)}
+
 CSS = """
-  :root { color-scheme: light dark;
-          --tech: #2563eb; --markets: #059669; --finance: #d97706;
-          --card: #fafafa; --border: #ececec; --muted: #6b7280; }
+  :root { color-scheme: dark;
+          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
+          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
   * { box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
          max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; color: #1a1a1a; background: #fff; -webkit-font-smoothing: antialiased; }
+         line-height: 1.65; color: #e9e4da; background: #201d1a; -webkit-font-smoothing: antialiased; }
   h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 .4rem; }
   .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--tech); text-decoration: none; }
+  a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
   .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #9aa0a6; font-size: .82rem; }
+  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+
+  /* "Read the latest" hero on the index */
+  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
+                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
+                 font-weight: 700; font-size: 1.02rem; }
+  .hero-latest:hover { text-decoration: none; opacity: .93; }
+  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
 
   /* Calendar index */
   table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
@@ -52,10 +80,10 @@ CSS = """
   table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
   /* days with a digest stay clickable, but are not "highlighted" */
   table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--tech); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .72rem; color: var(--tech); font-weight: 600; }
+  table.cal td.has .num { color: var(--accent); font-weight: 700; }
+  table.cal td.has .tag { margin-top: auto; font-size: .72rem; color: var(--accent); font-weight: 600; }
   /* only the current date is highlighted */
-  table.cal td.today { background: rgba(37, 99, 235, .09); }
+  table.cal td.today { background: rgba(110, 168, 254, .14); }
   table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
   @media (max-width: 560px) {
     table.cal td { height: 54px; padding: .25rem; }
@@ -79,11 +107,10 @@ CSS = """
   .bubbles { column-count: 2; column-gap: 1.2rem; }
   .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
             background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
-  .bubble-num { font-size: 3.4rem; font-weight: 800; line-height: .85; letter-spacing: -0.03em; }
+  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
   .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
                  padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; margin-top: .5rem; white-space: nowrap; }
+                 text-transform: uppercase; white-space: nowrap; }
   .bubble.tech .bubble-pill { background: var(--tech); }
   .bubble.markets .bubble-pill { background: var(--markets); }
   .bubble.finance .bubble-pill { background: var(--finance); }
@@ -96,12 +123,25 @@ CSS = """
   .bubble-sources a { color: #7a663f; }
   @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
 
-  @media (prefers-color-scheme: dark) {
-    :root { --card: #161b22; --border: #24292f; --muted: #9198a1; }
-    body { color: #e6e6e6; background: #0d1117; }
-    a { color: #6ea8fe; }
-    table.cal td.today { background: rgba(110, 168, 254, .14); }
-  }
+  /* prev / next-day navigation */
+  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
+  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
+              padding: .75rem 1rem; color: #e9e4da; }
+  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
+  .daynav .dn-next { text-align: right; }
+  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+                      color: #8a7f6d; }
+  .daynav .dn-date { font-weight: 700; }
+  .daynav .dn-spacer { flex: 1; }
+  /* recurring "threads" cross-links */
+  .threads { margin: 2rem 0 0; }
+  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
+               margin: 0 0 .7rem; }
+  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
+            margin: 0 0 .6rem; font-size: .9rem; }
+  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
+  .thread a { margin-right: .7rem; white-space: nowrap; }
+  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 """
 
 
@@ -209,19 +249,23 @@ def _bubble(n, a):
         src = f'<p class="bubble-sources">Sources: {links}</p>'
     return (
         f'<div class="bubble {a["cls"]}" data-cat="{a["cls"] or "other"}">'
-        f'<div class="bubble-head"><span class="bubble-num">{n}</span>'
-        f'<span class="bubble-pill">{html.escape(pill)}</span></div>'
+        f'<div class="bubble-head"><span class="bubble-pill">{html.escape(pill)}</span></div>'
         f"{kicker}<div class=\"bubble-title\">{title}</div>{body}{src}</div>"
     )
 
 
 def _filter_bar(articles):
-    """Filter buttons for the categories actually present, in canonical order."""
-    present = {a["cls"] for a in articles}
-    buttons = ['<button class="filter-btn is-active" data-filter="all">All</button>']
+    """Filter buttons (with counts) for the categories actually present."""
+    counts = {}
+    for a in articles:
+        counts[a["cls"]] = counts.get(a["cls"], 0) + 1
+    total = len(articles)
+    buttons = ['<button class="filter-btn is-active" data-filter="all" aria-pressed="true">'
+               f'All<span class="fc">{total}</span></button>']
     for _, cls in SECTION_CLASSES:
-        if cls in present:
-            buttons.append(f'<button class="filter-btn" data-filter="{cls}">{PILL_LABEL[cls]}</button>')
+        if counts.get(cls):
+            buttons.append(f'<button class="filter-btn" data-filter="{cls}" aria-pressed="false">'
+                           f'{PILL_LABEL[cls]}<span class="fc">{counts[cls]}</span></button>')
     if len(buttons) < 3:            # nothing meaningful to filter by
         return ""
     return ('<div class="filters" role="group" aria-label="Filter by category">'
@@ -233,22 +277,71 @@ FILTER_JS = """
   var bar = document.querySelector('.filters');
   if (!bar) return;
   var cards = document.querySelectorAll('.bubble');
-  bar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (!btn) return;
-    var f = btn.getAttribute('data-filter');
-    bar.querySelectorAll('.filter-btn').forEach(function (b) {
-      b.classList.toggle('is-active', b === btn);
+  var buttons = bar.querySelectorAll('.filter-btn');
+  function apply(f, push) {
+    var matched = false;
+    buttons.forEach(function (b) {
+      var on = b.getAttribute('data-filter') === f;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on) matched = true;
     });
+    if (!matched) { f = 'all'; buttons[0].classList.add('is-active');
+                    buttons[0].setAttribute('aria-pressed', 'true'); }
     cards.forEach(function (c) {
       c.hidden = !(f === 'all' || c.getAttribute('data-cat') === f);
     });
+    if (push) {
+      var h = f === 'all' ? ' ' : '#' + f;
+      history.replaceState(null, '', h === ' ' ? location.pathname + location.search : h);
+    }
+  }
+  bar.addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter-btn');
+    if (btn) apply(btn.getAttribute('data-filter'), true);
+  });
+  apply((location.hash || '').replace('#', '') || 'all', false);
+  window.addEventListener('hashchange', function () {
+    apply((location.hash || '').replace('#', '') || 'all', false);
   });
 })();
 """
 
 
-def render_digest_page(md_text, date):
+def _daynav(older, newer):
+    """Prev/next links between digest days (older on the left, newer on the right)."""
+    if not older and not newer:
+        return ""
+    if older:
+        left = (f'<a class="dn-prev" href="digest-{older.isoformat()}.html">'
+                f'<span class="dn-label">← Older</span>'
+                f'<span class="dn-date">{older:%b} {older.day}</span></a>')
+    else:
+        left = '<span class="dn-spacer"></span>'
+    if newer:
+        right = (f'<a class="dn-next" href="digest-{newer.isoformat()}.html">'
+                 f'<span class="dn-label">Newer →</span>'
+                 f'<span class="dn-date">{newer:%b} {newer.day}</span></a>')
+    else:
+        right = '<span class="dn-spacer"></span>'
+    return f'<nav class="daynav">{left}{right}</nav>'
+
+
+def _threads_block(threads):
+    """threads: list of (label, [other dates]) sharing a recurring topic with this day."""
+    if not threads:
+        return ""
+    rows = []
+    for label, dates in threads:
+        links = "".join(f'<a href="digest-{d.isoformat()}.html">{d:%b %-d}</a>'
+                        for d in sorted(dates, reverse=True))
+        rows.append(f'<div class="thread"><span class="thread-label">{html.escape(label)}</span>'
+                    f'<span class="thread-days">also on {links}</span></div>')
+    return ('<section class="threads"><h2 class="threads-h">Recurring threads</h2>'
+            + "".join(rows) + "</section>")
+
+
+def render_digest_page(md_text, date, older=None, newer=None, threads=None):
     articles = _parse_articles(md_text)
     cards = "\n".join(_bubble(i, a) for i, a in enumerate(articles, 1))
     mast = (
@@ -258,7 +351,8 @@ def render_digest_page(md_text, date):
     )
     filters = _filter_bar(articles)
     body = (f'<a class="back" href="index.html">← calendar</a>\n{mast}\n{filters}\n'
-            f'<div class="bubbles">\n{cards}\n</div>\n<script>{FILTER_JS}</script>')
+            f'<div class="bubbles">\n{cards}\n</div>\n'
+            f'{_threads_block(threads)}\n{_daynav(older, newer)}\n<script>{FILTER_JS}</script>')
     return _page(f"WSJ Digest — {pretty_date(date)}", body, body_class="digest")
 
 
@@ -303,11 +397,16 @@ def render_index(digests):
     months = sorted({(d.year, d.month) for d, _ in digests} | {(today.year, today.month)}, reverse=True)
     cals = "\n".join(_month_calendar(y, m, digest_dates, today) for y, m in months) if months \
         else "<p class='lead'>No digests yet.</p>"
+    hero = ""
+    if digests:
+        latest = digests[0][0]
+        hero = (f'  <a class="hero-latest" href="digest-{latest.isoformat()}.html">'
+                f'Read the latest digest → <span class="hero-date">{pretty_date(latest)}</span></a>\n')
     body = (
         "  <h1>WSJ Deep Digest</h1>\n"
         '  <p class="lead">Daily summaries — headlines from WSJ, depth researched from other outlets. '
         "Pick a highlighted day.</p>\n"
-        f"{cals}\n"
+        f"{hero}{cals}\n"
         "  <footer>Generated automatically. No paywalled WSJ text is reproduced.</footer>"
     )
     return _page("WSJ Deep Digest", body)
@@ -319,17 +418,47 @@ def main():
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
-    digests = find_digests()
+    digests = find_digests()   # newest first
 
-    for date, name in digests:
-        md_text = open(name, encoding="utf-8").read()
+    # First pass: read text + derive each day's recurring-topic labels.
+    texts = {date: open(name, encoding="utf-8").read() for date, name in digests}
+    topics = {date: digest_topics(texts[date]) for date, _ in digests}
+    topic_days = {}
+    for date, labels in topics.items():
+        for label in labels:
+            topic_days.setdefault(label, set()).add(date)
+
+    for i, (date, _) in enumerate(digests):
+        newer = digests[i - 1][0] if i > 0 else None
+        older = digests[i + 1][0] if i < len(digests) - 1 else None
+        threads = []
+        for label in topics[date]:
+            others = topic_days[label] - {date}
+            if others:
+                threads.append((label, others))
+        # strongest threads first (shared by the most days), then alphabetical; keep it tidy
+        threads.sort(key=lambda t: (-len(t[1]), t[0]))
+        threads = threads[:5]
         with open(os.path.join(args.out, f"digest-{date.isoformat()}.html"), "w", encoding="utf-8") as f:
-            f.write(render_digest_page(md_text, date))
+            f.write(render_digest_page(texts[date], date, older=older, newer=newer, threads=threads))
 
     with open(os.path.join(args.out, "index.html"), "w", encoding="utf-8") as f:
         f.write(render_index(digests))
 
-    print(f"[wrote {args.out}/index.html + {len(digests)} digest page(s)]")
+    # Stable bookmarkable URL that always points at the newest digest.
+    if digests:
+        latest_iso = digests[0][0].isoformat()
+        redirect = (
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            f'<meta http-equiv="refresh" content="0; url=digest-{latest_iso}.html">'
+            f'<link rel="canonical" href="digest-{latest_iso}.html">'
+            '<title>Latest WSJ Deep Digest</title></head>'
+            f'<body><a href="digest-{latest_iso}.html">Latest digest →</a></body></html>\n'
+        )
+        with open(os.path.join(args.out, "latest.html"), "w", encoding="utf-8") as f:
+            f.write(redirect)
+
+    print(f"[wrote {args.out}/index.html + latest.html + {len(digests)} digest page(s)]")
 
 
 if __name__ == "__main__":
