@@ -107,12 +107,7 @@ This tool only reads free RSS metadata and researches events via third-party out
 scrape, store, or reproduce WSJ article bodies. Keep it that way: if you later want full WSJ article
 text programmatically, use a licensed feed (Dow Jones Newswires / Factiva), not a scraper.
 
-## Recreate this project from scratch
-
-Hand the prompt below to any capable coding agent (or developer) to reproduce this project
-faithfully — content pipeline, exact markdown contract, the static-site generator with all
-its UX features, and the CI automation. For a lighter build, drop the "Recurring threads" and
-`latest.html` sections; everything else is the core.
+## Prompt for project
 
 ```
 Build a free, fully-automated "WSJ Deep Digest" — a daily news digest that turns WSJ
