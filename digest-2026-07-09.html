@@ -19,6 +19,15 @@
   .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
   footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
 
+  /* Top-right search bar on the index */
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+            flex-wrap: wrap; margin: 0 0 .5rem; }
+  .topbar h1 { margin: 0; }
+  .topsearch input { font: inherit; color: #e9e4da; background: #2a2521; border: 1px solid #4a453e;
+                     border-radius: 999px; padding: .5rem 1rem; min-width: 210px; }
+  .topsearch input:focus { outline: none; border-color: var(--accent); }
+  @media (max-width: 520px) { .topsearch, .topsearch input { width: 100%; } }
+
   /* "Read the latest" hero on the index */
   .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
                  background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;

@@ -133,6 +133,8 @@
       $("from").addEventListener(ev, update);
       $("to").addEventListener(ev, update);
     });
+    const q0 = new URLSearchParams(location.search).get("q");  // from the index search bar
+    if (q0) $("q").value = q0;
     update();
   }).catch(() => { $("count").textContent = "Could not load the search index."; });
   </script>
