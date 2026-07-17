@@ -19,6 +19,7 @@ import glob
 import html
 import os
 import re
+import shutil
 
 FILENAME_RE = re.compile(r"^digest-(\d{4}-\d{2}-\d{2})\.md$")
 
@@ -48,13 +49,17 @@ def digest_topics(md_text):
     return {label for label, pats in _TOPIC_RES if any(p.search(md_text) for p in pats)}
 
 CSS = """
+  @font-face { font-family: "Lumiare"; src: url("fonts/Lumiare.otf") format("opentype"); font-display: swap; }
+  @font-face { font-family: "Dealerplate California"; src: url("fonts/DealerplateCalifornia.otf") format("opentype"); font-display: swap; }
   :root { color-scheme: dark;
           --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
           --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
   * { box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
          max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
          line-height: 1.65; color: #e9e4da; background: #201d1a; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
+    font-family: "Lumiare", Georgia, "Times New Roman", serif; }
   h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 .4rem; }
   .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
   a { color: var(--accent); text-decoration: none; }
@@ -430,6 +435,12 @@ def main():
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
+
+    # publish the custom fonts alongside the pages (referenced by @font-face)
+    fonts_src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+    if os.path.isdir(fonts_src):
+        shutil.copytree(fonts_src, os.path.join(args.out, "fonts"), dirs_exist_ok=True)
+
     digests = find_digests()   # newest first
 
     # First pass: read text + derive each day's recurring-topic labels.
