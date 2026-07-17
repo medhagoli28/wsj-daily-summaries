@@ -423,8 +423,7 @@ def render_index(digests):
         "    </form></div>\n"
         '  <p class="lead">Daily summaries — headlines from WSJ, depth researched from other outlets. '
         "Pick a highlighted day.</p>\n"
-        f"{hero}{cals}\n"
-        "  <footer>Generated automatically. No paywalled WSJ text is reproduced.</footer>"
+        f"{hero}{cals}"
     )
     return _page("WSJ Deep Digest", body)
 
