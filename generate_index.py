@@ -57,10 +57,10 @@ CSS = """
   * { box-sizing: border-box; }
   body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
          max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; color: #e9e4da; background: #201d1a; -webkit-font-smoothing: antialiased; }
+         line-height: 1.65; letter-spacing: .04em; color: #e9e4da; background: #201d1a; -webkit-font-smoothing: antialiased; }
   h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
-    font-family: "Lumiare", Georgia, "Times New Roman", serif; }
-  h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 .4rem; }
+    font-family: "Lumiare", Georgia, "Times New Roman", serif; letter-spacing: .05em; }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .4rem; }
   .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
@@ -108,7 +108,7 @@ CSS = """
   body.digest { background: #201d1a; color: #e9e4da; max-width: 960px; }
   body.digest .back { color: #b8b0a4; }
   .mast { background: #efe9dc; color: #26221e; border-radius: 24px; padding: 2rem 2.1rem 1.6rem; margin: 0 0 1.4rem; }
-  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.03em; line-height: .9; text-transform: uppercase; }
+  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: .02em; line-height: .9; text-transform: uppercase; }
   .mast-title { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin-top: .35rem; }
   .mast-sub { color: #6f6658; font-size: .92rem; margin-top: .45rem; font-style: italic; }
   .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
