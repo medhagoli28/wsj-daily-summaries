@@ -3,198 +3,222 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WSJ Digest — July 17, 2026</title>
+  <title>The Deep Digest — July 17, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <style>
-  @font-face { font-family: "Lumiare"; src: url("fonts/Lumiare.otf") format("opentype"); font-display: swap; }
-  @font-face { font-family: "Dealerplate California"; src: url("fonts/DealerplateCalifornia.otf") format("opentype"); font-display: swap; }
-  :root { color-scheme: dark;
-          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
-          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
   * { box-sizing: border-box; }
-  body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-         max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; letter-spacing: .04em; color: #e9e4da; min-height: 100vh;
-         background: radial-gradient(1100px 560px at 18% -10%, #2c2721, #201d1a 58%); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
-    font-family: "Lumiare", Georgia, "Times New Roman", serif; letter-spacing: .05em; }
-  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .4rem; }
-  .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
 
-  /* Top-right search bar on the index */
-  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-            flex-wrap: wrap; margin: 0 0 .5rem; }
-  .topbar h1 { margin: 0; }
-  .topsearch input { font: inherit; color: #e9e4da; background: #2a2521; border: 1px solid #4a453e;
-                     border-radius: 999px; padding: .5rem 1rem; min-width: 210px; }
-  .topsearch input:focus { outline: none; border-color: var(--accent); }
-  @media (max-width: 520px) { .topsearch, .topsearch input { width: 100%; } }
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
 
-  /* "Read the latest" hero on the index */
-  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
-                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
-                 font-weight: 700; font-size: 1.02rem; }
-  .hero-latest:hover { text-decoration: none; opacity: .93; }
-  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
 
-  /* Calendar index */
-  table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
-  table.cal caption { caption-side: top; text-align: left; font-size: 1.3rem; font-weight: 700;
-                      letter-spacing: -0.01em; margin-bottom: .6rem; }
-  table.cal th { padding: .3rem .45rem; text-align: right; font-size: .68rem; font-weight: 600;
-                 text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-  table.cal td { border: 1px solid var(--border); height: 84px; vertical-align: top; padding: .35rem .45rem; }
-  table.cal td.empty { border-color: transparent; }
-  table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
-  /* days with a digest stay clickable, but are not "highlighted" */
-  table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--accent); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .85rem; color: var(--accent); font-weight: 600; }
-  /* only the current date is highlighted */
-  table.cal td.today { background: rgba(110, 168, 254, .14); }
-  table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
-  @media (max-width: 560px) {
-    table.cal td { height: 54px; padding: .25rem; }
-    table.cal td.has .tag, table.cal td.has .cell-head { display: none; } table.cal th { font-size: .58rem; }
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
   }
-
-  /* Landing: hero, stats, featured card */
-  .hero { margin: 0 0 1.6rem; }
-  .topbar { align-items: flex-start; }
-  .brand h1 { margin: 0; }
-  .tagline { color: var(--muted); font-size: .98rem; margin: .3rem 0 0; max-width: 48ch; }
-  .stats { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; color: var(--muted);
-           font-size: .85rem; margin: 1rem 0 0; }
-  .stats b { color: #e9e4da; font-weight: 700; }
-  .featured { display: block; background: #efe9dc; color: #26221e; border-radius: 20px;
-              padding: 1.5rem 1.7rem; margin: 0 0 2.2rem; transition: transform .15s ease;
-              box-shadow: 0 18px 40px -24px rgba(0,0,0,.65); }
-  .featured:hover { text-decoration: none; transform: translateY(-2px); }
-  .featured-label { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8a7f6d; }
-  .featured-date { font-family: "Lumiare", Georgia, serif; font-size: 2.1rem; letter-spacing: .04em; margin: .1rem 0 .7rem; }
-  .featured-heads { list-style: none; padding: 0; margin: 0 0 .9rem; }
-  .featured-heads li { font-weight: 600; font-size: .98rem; padding: .3rem 0;
-                       border-bottom: 1px solid rgba(38, 34, 30, .12); }
-  .featured-heads li:last-child { border-bottom: 0; }
-  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .8rem; }
-  .chip { background: #26221e; color: #efe9dc; border-radius: 999px; padding: .22rem .62rem;
-          font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
-  .featured-cta { font-weight: 700; color: #7a663f; }
-
-  /* Richer calendar cells */
-  table.cal td { height: 118px; }
-  table.cal td.has a { gap: .15rem; }
-  table.cal td.has .num { text-align: left; }
-  table.cal td.has:hover { border-color: var(--accent); background: rgba(110, 168, 254, .06); }
-  .cell-head { font-size: .72rem; line-height: 1.18; color: #b9b1a5; margin-top: .1rem;
-               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  table.cal td.today { outline: 2px solid var(--accent); outline-offset: -2px; }
-
-  /* Bubble digest page (dark) */
-  body.digest { background: #201d1a; color: #e9e4da; max-width: 960px; }
-  body.digest .back { color: #b8b0a4; }
-  .mast { background: #efe9dc; color: #26221e; border-radius: 24px; padding: 2rem 2.1rem 1.6rem; margin: 0 0 1.4rem; }
-  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: .02em; line-height: .9; text-transform: uppercase; }
-  .mast-title { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin-top: .35rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
-  .filter-btn { font: inherit; cursor: pointer; -webkit-appearance: none; border: 1px solid #4a453e;
-                background: transparent; color: #d9d2c6; border-radius: 999px; padding: .4rem .95rem;
-                font-size: .82rem; font-weight: 600; letter-spacing: .02em; }
-  .filter-btn:hover { border-color: #7a7266; }
-  .filter-btn.is-active { background: #efe9dc; color: #26221e; border-color: #efe9dc; }
-  .bubble[hidden] { display: none; }
-  .bubbles { column-count: 2; column-gap: 1.2rem; }
-  .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
-            background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
-  .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
-                 padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; white-space: nowrap; }
-  .bubble.tech .bubble-pill { background: var(--tech); }
-  .bubble.markets .bubble-pill { background: var(--markets); }
-  .bubble.finance .bubble-pill { background: var(--finance); }
-  .bubble-kicker { font-style: italic; text-transform: uppercase; font-size: .76rem; letter-spacing: .03em;
-                   color: #8a7f6d; margin: .9rem 0 .15rem; }
-  .bubble-title { font-size: 1.16rem; font-weight: 800; line-height: 1.25; margin: .15rem 0 .55rem; }
-  .bubble-title a { color: inherit; }
-  .bubble-body { font-size: .95rem; line-height: 1.55; color: #3a352e; margin: 0; }
-  @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
-
-  /* prev / next-day navigation */
-  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
-  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
-              padding: .75rem 1rem; color: #e9e4da; }
-  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
-  .daynav .dn-next { text-align: right; }
-  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
-                      color: #8a7f6d; }
-  .daynav .dn-date { font-weight: 700; }
-  .daynav .dn-spacer { flex: 1; }
-  /* recurring "threads" cross-links */
-  .threads { margin: 2rem 0 0; }
-  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
-               margin: 0 0 .7rem; }
-  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
-            margin: 0 0 .6rem; font-size: .9rem; }
-  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
-  .thread a { margin-right: .7rem; white-space: nowrap; }
-  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 </style>
 </head>
-<body class="digest">
-<a class="back" href="index.html">← calendar</a>
-<header class="mast"><div class="mast-month">July 17</div><div class="mast-title">WSJ Digest</div></header>
-<div class="filters" role="group" aria-label="Filter by category"><button class="filter-btn is-active" data-filter="all" aria-pressed="true">All<span class="fc">10</span></button><button class="filter-btn" data-filter="tech" aria-pressed="false">Tech<span class="fc">5</span></button><button class="filter-btn" data-filter="markets" aria-pressed="false">Markets<span class="fc">3</span></button><button class="filter-btn" data-filter="finance" aria-pressed="false">Finance<span class="fc">2</span></button></div>
-<div class="bubbles">
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">AI&#x27;s Wider Availability Is Good for China, Not Great for OpenAI and Anthropic</div><p class="bubble-body">As of mid-July 2026, cheap and freely downloadable Chinese open-weight models are eroding the pricing power of US frontier labs, running roughly 60% to 90% cheaper than leading OpenAI and Anthropic offerings. Z.ai&#x27;s GLM 5.2, released in June, landed within a percentage point of Anthropic&#x27;s Opus 4.8 on a closely watched agentic benchmark at about a fifth of the cost, and saw the fastest adoption of any model Vercel tracked in 2026 (daily token volume grew roughly 27x and customers grew about 80x in its first full week). The share of tokens US companies route to Chinese models via OpenRouter has stayed above 30% every week since February 8, peaking near 46%, versus a 12-month average of just 11%. The pressure intensified after OpenAI limited a new model rollout at the US government&#x27;s request in late June, while export controls around Anthropic&#x27;s frontier models added uncertainty. Enterprises are increasingly routing lower-stakes tasks to &quot;good enough&quot; cheaper Chinese models, squeezing the premium US labs can charge.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Exclusive | Meta Plans to Hire Top Amazon Computing Executive as It Weighs Cloud Push</div><p class="bubble-body">Meta is hiring Dave Brown, an AWS senior vice president who spent nearly 19 years building Amazon&#x27;s compute and machine-learning services (including EC2), to oversee its rapidly expanding AI infrastructure. Per a July 15, 2026 memo from AWS CEO Matt Garman, Brown—part of Andy Jassy&#x27;s advisory group—will depart Amazon at the end of July and join Meta in the coming weeks, reporting to Meta&#x27;s head of infrastructure. His mandate centers on scaling data centers and building &quot;Meta Compute,&quot; a potential pivot toward renting AI infrastructure to outside customers the way AWS, Microsoft Azure, and Google Cloud do. The move aligns with Meta&#x27;s massive infrastructure spending, reported at over $50 billion, and signals ambitions to monetize its compute buildout rather than use it solely internally. It marks a notable talent poach from the very cloud leader Brown helped build.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">China&#x27;s Moonshot AI Releases Model to Challenge Top U.S. Systems</div><p class="bubble-body">Beijing-based Moonshot AI unveiled Kimi K3 on Friday, July 17, 2026, a 2.8-trillion-parameter model it calls the largest open-weight AI model ever built. Benchmarks show it beating Anthropic&#x27;s Claude Opus 4.8 and OpenAI&#x27;s GPT-5.5 on coding and general-agent tasks, placing among the top three across six coding benchmarks, leading SWE Marathon and Program Bench, and trailing only GPT-5.6 Sol in Terminal Bench 2.1 by half a point—though it still trails the top-tier Claude Fable 5 and GPT-5.6 Sol overall. The model is priced at $3 per million input tokens and $15 per million output tokens, with cached input at $0.30 per million, positioning it at mid-tier Western pricing but near-frontier performance. Full open-weight parameters are scheduled for release on July 27, letting enterprises download and fine-tune it. The launch is seen as fresh evidence that Chinese labs are rapidly closing the gap with US frontier systems despite US compute-export limits.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">China&#x27;s Xi Touts Open-Source AI and Takes a Swipe at U.S. Dominance</div><p class="bubble-body">Speaking at the opening ceremony of the World Artificial Intelligence Conference (WAIC) in Shanghai on Friday, July 17, 2026, Xi Jinping cast Beijing as champion of a new global AI order, urging countries to seize the &quot;historic opportunity&quot; of open-source AI and warning against single-country dominance and &quot;new historical injustices&quot; from unequal access. His remarks came a day after China launched the World AI Cooperation Organization (WAICO), which signed up 29 member countries; Xi called it a &quot;milestone in the history of world AI development&quot; aimed at Global South participation in AI governance. The July 17-20 conference coincided with Moonshot AI&#x27;s Kimi K3 launch and came a month after the US pulled Anthropic&#x27;s frontier models over security concerns, underscoring the shifting landscape. It also preceded the first government-level US-China AI talks under the Trump administration, with China promoting low-cost open-source models as a tool to reduce global disparities. Xi pledged to help developing nations build AI capabilities.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Exclusive | Databricks Set to Hit $188 Billion Valuation With New Investment From Coatue</div><p class="bubble-body">Databricks announced on July 16, 2026 that it has signed a term sheet for a strategic funding round valuing the company at $188 billion, led by existing investor Coatue Management, which is putting in roughly $3 billion. The round, expected to close later this summer, marks a steep climb from the roughly $134 billion valuation at which Databricks raised about $5 billion earlier in 2026. The company said it plans to use the capital to fund acquisitions and expand platforms including its AI assistant Genie and the Unity AI Gateway, which help enterprises track and control AI usage costs. The deal cements Databricks as one of the world&#x27;s most valuable privately held companies. The rapid valuation jump reflects intense investor demand for enterprise AI and data infrastructure.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S. Stock Futures Lower as Chip Selloff Deepens</div><p class="bubble-body">U.S. stock index futures slid before the open on Friday, July 17, 2026, as a deepening semiconductor rout pushed the group toward bear-market territory and forced investors to question this year&#x27;s AI-fueled rally. Nasdaq-100 futures dropped about 1.9%, S&amp;P 500 futures fell 0.9%, and Dow futures shed roughly 335 points (0.6%), with a weak Netflix forecast (shares down about 11%) adding pressure. The iShares Semiconductor ETF slipped 3.7% premarket, on track for a 6.9% weekly loss, as Applied Materials and Lam Research each fell about 5% and Intel and KLA Corp lost more than 4%. The selloff was global: Japan&#x27;s Nikkei 225 closed down 4%, Taiwan&#x27;s benchmark lost 6.5%, and mainland China&#x27;s CSI 300 shed 3.6%, driven by worries that the AI capital-spending spree is becoming harder to justify.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Nasdaq Declines as Chip Stocks Come Under Pressure</div><p class="bubble-body">The Nasdaq Composite fell 1.47% to close at 25,881.95 on Thursday, July 16, 2026, as a semiconductor slide dragged Wall Street lower despite an otherwise solid earnings season. The S&amp;P 500 dipped 0.51% to 7,533.77 and the Dow Jones Industrial Average slipped 105.67 points (0.20%) to 52,552.97, with technology the weakest of the 11 S&amp;P sectors amid a roughly 4.8% drop in chip names. The catalyst was Taiwan Semiconductor, which raised its 2026 capital-expenditure forecast to $60 billion-$64 billion (from $52 billion-$56 billion), overshadowing a better-than-expected Q2 report and stoking fears of an AI spending glut. The VanEck Semiconductor ETF (SMH) slid nearly 4%, led by a more than 5% decline in Arm Holdings, while SK Hynix tumbled over 11% in Seoul, reversing an 8% gain the prior session.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Financial Services Roundup: Market Talk</div><p class="bubble-body">Mid-July 2026 was dominated by a blockbuster Q2 bank earnings season, with the biggest U.S. lenders reporting on July 14-15 and posting record trading and investment-banking revenue. JPMorgan Chase led with EPS of $6.14 (versus $5.85 expected) and $58.02 billion in revenue as profit jumped 41% year over year, while Goldman Sachs delivered its best quarter ever, with EPS of $20.98 (nearly double a year earlier) on net revenue of $20.34 billion, up 39%. Citigroup posted EPS of $3.15 and $24.8 billion in revenue — its best in a decade — and Morgan Stanley reported $3.46 EPS on record $21.3 billion in revenue, both beating estimates on strong equities-trading. A major tailwind was capital-markets activity, including SpaceX&#x27;s record $86 billion IPO on June 12 at a $1.77 trillion valuation (Goldman lead-left, with JPMorgan, BofA and Citi as co-underwriters); still, several bank stocks reversed lower even on the beats as the broader chip-driven risk-off tone weighed on markets.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Debt Collectors Chase More Consumers in Court</div><p class="bubble-body">Debt collection lawsuits have surged back to pre-pandemic highs, with Pew Charitable Trusts finding that contract-case filings (which include most debt suits) jumped 21% in 2022 and another 15% in 2023, driven largely by credit card, bank, and medical debt. The cases are highly concentrated among a handful of repeat filers: in Connecticut, just 10 plaintiffs account for roughly 80% of the debt docket, and debt buyer LVNV Funding boosted its filings about 350% between 2019 and 2024. Consumers are badly outmatched, appearing with legal representation in fewer than 10% of cases (as low as 0.6% in some courts), which helps push default judgments for plaintiffs to around 70% in many jurisdictions; historically about half of all debt collection cases are for less than $2,000. The pressure comes amid rising complaint volume—CFPB debt-collection complaints ran at 27,567 in February 2026 and were up about 40% year-to-date versus 2025—even as consumer-side FDCPA (+18.5%) and FCRA (+37.4%) suits also climbed. Regulatory protections have grown shakier: the CFPB&#x27;s June 2024 rule to strip most medical debt from credit reports was overturned by a federal judge in July 2025, keeping that debt in play for collectors, who derived roughly a quarter of industry revenue from health-care debt in 2023.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Why High Credit Card Delinquencies Aren&#x27;t Showing Up at the Big Banks</div><p class="bubble-body">Federal Reserve data show credit card delinquencies remain elevated but stable in mid-2026, with the all-commercial-banks rate at 2.92% (seasonally adjusted) in Q1 2026—down from the 2024 cycle highs but still above the roughly 2.6% pre-pandemic baseline—while net charge-offs ran near 3.8%. The stress is starkly uneven: banks outside the 100 largest posted a Q1 2026 delinquency rate of 6.43%, more than double the ~2.9% at the biggest institutions, and issuers catering to lower-prime and store-card borrowers like Capital One (~4.5%) and Synchrony (~4.8%) run roughly double the ~2.3% reported by JPMorgan and Citigroup. This K-shaped divide traces to post-2008 underwriting reforms that pushed top-tier issuers toward prime customers and concentrated subprime exposure at smaller, specialized lenders and fintechs. In Q2 2026 earnings, all eight globally systemically important U.S. banks reported higher revenue and net income than a year earlier, with fee booms (Goldman&#x27;s investment-banking fees up 55% year-over-year, Morgan Stanley wealth topping $10 trillion in client assets) masking what executives called &quot;cracks in the armor&quot; among lower-income consumers. Bank CFOs signaled they expect net charge-offs to stay flat to slightly lower near term as early- and late-stage delinquencies improve for their prime-heavy portfolios.</p></div>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-07-16.html">‹ Jul 16</a> &nbsp;·&nbsp; <a href="digest-2026-07-18.html">Jul 18 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 10</div>
+    <div class="issue-date">July 17, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 3</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI&#x27;s Wider Availability Is Good for China, Not Great for OpenAI and Anthropic</div>
+        <div class="art-sum">As of mid-July 2026, cheap and freely downloadable Chinese open-weight models are eroding the pricing power of US frontier labs, running roughly 60% to 90% cheaper than leading OpenAI and Anthropic offerings. Z.ai&#x27;s GLM 5.2, released in June, landed within a percentage point of Anthropic&#x27;s Opus 4.8 on a closely watched agentic benchmark at about a fifth of the cost, and saw the fastest adoption of any model Vercel tracked in 2026 (daily token volume grew roughly 27x and customers grew about 80x in its first full week). The share of tokens US companies route to Chinese models via OpenRouter has stayed above 30% every week since February 8, peaking near 46%, versus a 12-month average of just 11%. The pressure intensified after OpenAI limited a new model rollout at the US government&#x27;s request in late June, while export controls around Anthropic&#x27;s frontier models added uncertainty. Enterprises are increasingly routing lower-stakes tasks to &quot;good enough&quot; cheaper Chinese models, squeezing the premium US labs can charge.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Meta Plans to Hire Top Amazon Computing Executive as It Weighs Cloud Push</div>
+        <div class="art-sum">Meta is hiring Dave Brown, an AWS senior vice president who spent nearly 19 years building Amazon&#x27;s compute and machine-learning services (including EC2), to oversee its rapidly expanding AI infrastructure. Per a July 15, 2026 memo from AWS CEO Matt Garman, Brown—part of Andy Jassy&#x27;s advisory group—will depart Amazon at the end of July and join Meta in the coming weeks, reporting to Meta&#x27;s head of infrastructure. His mandate centers on scaling data centers and building &quot;Meta Compute,&quot; a potential pivot toward renting AI infrastructure to outside customers the way AWS, Microsoft Azure, and Google Cloud do. The move aligns with Meta&#x27;s massive infrastructure spending, reported at over $50 billion, and signals ambitions to monetize its compute buildout rather than use it solely internally. It marks a notable talent poach from the very cloud leader Brown helped build.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China&#x27;s Moonshot AI Releases Model to Challenge Top U.S. Systems</div>
+        <div class="art-sum">Beijing-based Moonshot AI unveiled Kimi K3 on Friday, July 17, 2026, a 2.8-trillion-parameter model it calls the largest open-weight AI model ever built. Benchmarks show it beating Anthropic&#x27;s Claude Opus 4.8 and OpenAI&#x27;s GPT-5.5 on coding and general-agent tasks, placing among the top three across six coding benchmarks, leading SWE Marathon and Program Bench, and trailing only GPT-5.6 Sol in Terminal Bench 2.1 by half a point—though it still trails the top-tier Claude Fable 5 and GPT-5.6 Sol overall. The model is priced at $3 per million input tokens and $15 per million output tokens, with cached input at $0.30 per million, positioning it at mid-tier Western pricing but near-frontier performance. Full open-weight parameters are scheduled for release on July 27, letting enterprises download and fine-tune it. The launch is seen as fresh evidence that Chinese labs are rapidly closing the gap with US frontier systems despite US compute-export limits.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China&#x27;s Xi Touts Open-Source AI and Takes a Swipe at U.S. Dominance</div>
+        <div class="art-sum">Speaking at the opening ceremony of the World Artificial Intelligence Conference (WAIC) in Shanghai on Friday, July 17, 2026, Xi Jinping cast Beijing as champion of a new global AI order, urging countries to seize the &quot;historic opportunity&quot; of open-source AI and warning against single-country dominance and &quot;new historical injustices&quot; from unequal access. His remarks came a day after China launched the World AI Cooperation Organization (WAICO), which signed up 29 member countries; Xi called it a &quot;milestone in the history of world AI development&quot; aimed at Global South participation in AI governance. The July 17-20 conference coincided with Moonshot AI&#x27;s Kimi K3 launch and came a month after the US pulled Anthropic&#x27;s frontier models over security concerns, underscoring the shifting landscape. It also preceded the first government-level US-China AI talks under the Trump administration, with China promoting low-cost open-source models as a tool to reduce global disparities. Xi pledged to help developing nations build AI capabilities.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Databricks Set to Hit $188 Billion Valuation With New Investment From Coatue</div>
+        <div class="art-sum">Databricks announced on July 16, 2026 that it has signed a term sheet for a strategic funding round valuing the company at $188 billion, led by existing investor Coatue Management, which is putting in roughly $3 billion. The round, expected to close later this summer, marks a steep climb from the roughly $134 billion valuation at which Databricks raised about $5 billion earlier in 2026. The company said it plans to use the capital to fund acquisitions and expand platforms including its AI assistant Genie and the Unity AI Gateway, which help enterprises track and control AI usage costs. The deal cements Databricks as one of the world&#x27;s most valuable privately held companies. The rapid valuation jump reflects intense investor demand for enterprise AI and data infrastructure.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stock Futures Lower as Chip Selloff Deepens</div>
+        <div class="art-sum">U.S. stock index futures slid before the open on Friday, July 17, 2026, as a deepening semiconductor rout pushed the group toward bear-market territory and forced investors to question this year&#x27;s AI-fueled rally. Nasdaq-100 futures dropped about 1.9%, S&amp;P 500 futures fell 0.9%, and Dow futures shed roughly 335 points (0.6%), with a weak Netflix forecast (shares down about 11%) adding pressure. The iShares Semiconductor ETF slipped 3.7% premarket, on track for a 6.9% weekly loss, as Applied Materials and Lam Research each fell about 5% and Intel and KLA Corp lost more than 4%. The selloff was global: Japan&#x27;s Nikkei 225 closed down 4%, Taiwan&#x27;s benchmark lost 6.5%, and mainland China&#x27;s CSI 300 shed 3.6%, driven by worries that the AI capital-spending spree is becoming harder to justify.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nasdaq Declines as Chip Stocks Come Under Pressure</div>
+        <div class="art-sum">The Nasdaq Composite fell 1.47% to close at 25,881.95 on Thursday, July 16, 2026, as a semiconductor slide dragged Wall Street lower despite an otherwise solid earnings season. The S&amp;P 500 dipped 0.51% to 7,533.77 and the Dow Jones Industrial Average slipped 105.67 points (0.20%) to 52,552.97, with technology the weakest of the 11 S&amp;P sectors amid a roughly 4.8% drop in chip names. The catalyst was Taiwan Semiconductor, which raised its 2026 capital-expenditure forecast to $60 billion-$64 billion (from $52 billion-$56 billion), overshadowing a better-than-expected Q2 report and stoking fears of an AI spending glut. The VanEck Semiconductor ETF (SMH) slid nearly 4%, led by a more than 5% decline in Arm Holdings, while SK Hynix tumbled over 11% in Seoul, reversing an 8% gain the prior session.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Financial Services Roundup: Market Talk</div>
+        <div class="art-sum">Mid-July 2026 was dominated by a blockbuster Q2 bank earnings season, with the biggest U.S. lenders reporting on July 14-15 and posting record trading and investment-banking revenue. JPMorgan Chase led with EPS of $6.14 (versus $5.85 expected) and $58.02 billion in revenue as profit jumped 41% year over year, while Goldman Sachs delivered its best quarter ever, with EPS of $20.98 (nearly double a year earlier) on net revenue of $20.34 billion, up 39%. Citigroup posted EPS of $3.15 and $24.8 billion in revenue — its best in a decade — and Morgan Stanley reported $3.46 EPS on record $21.3 billion in revenue, both beating estimates on strong equities-trading. A major tailwind was capital-markets activity, including SpaceX&#x27;s record $86 billion IPO on June 12 at a $1.77 trillion valuation (Goldman lead-left, with JPMorgan, BofA and Citi as co-underwriters); still, several bank stocks reversed lower even on the beats as the broader chip-driven risk-off tone weighed on markets.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Debt Collectors Chase More Consumers in Court</div>
+        <div class="art-sum">Debt collection lawsuits have surged back to pre-pandemic highs, with Pew Charitable Trusts finding that contract-case filings (which include most debt suits) jumped 21% in 2022 and another 15% in 2023, driven largely by credit card, bank, and medical debt. The cases are highly concentrated among a handful of repeat filers: in Connecticut, just 10 plaintiffs account for roughly 80% of the debt docket, and debt buyer LVNV Funding boosted its filings about 350% between 2019 and 2024. Consumers are badly outmatched, appearing with legal representation in fewer than 10% of cases (as low as 0.6% in some courts), which helps push default judgments for plaintiffs to around 70% in many jurisdictions; historically about half of all debt collection cases are for less than $2,000. The pressure comes amid rising complaint volume—CFPB debt-collection complaints ran at 27,567 in February 2026 and were up about 40% year-to-date versus 2025—even as consumer-side FDCPA (+18.5%) and FCRA (+37.4%) suits also climbed. Regulatory protections have grown shakier: the CFPB&#x27;s June 2024 rule to strip most medical debt from credit reports was overturned by a federal judge in July 2025, keeping that debt in play for collectors, who derived roughly a quarter of industry revenue from health-care debt in 2023.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Why High Credit Card Delinquencies Aren&#x27;t Showing Up at the Big Banks</div>
+        <div class="art-sum">Federal Reserve data show credit card delinquencies remain elevated but stable in mid-2026, with the all-commercial-banks rate at 2.92% (seasonally adjusted) in Q1 2026—down from the 2024 cycle highs but still above the roughly 2.6% pre-pandemic baseline—while net charge-offs ran near 3.8%. The stress is starkly uneven: banks outside the 100 largest posted a Q1 2026 delinquency rate of 6.43%, more than double the ~2.9% at the biggest institutions, and issuers catering to lower-prime and store-card borrowers like Capital One (~4.5%) and Synchrony (~4.8%) run roughly double the ~2.3% reported by JPMorgan and Citigroup. This K-shaped divide traces to post-2008 underwriting reforms that pushed top-tier issuers toward prime customers and concentrated subprime exposure at smaller, specialized lenders and fintechs. In Q2 2026 earnings, all eight globally systemically important U.S. banks reported higher revenue and net income than a year earlier, with fee booms (Goldman&#x27;s investment-banking fees up 55% year-over-year, Morgan Stanley wealth topping $10 trillion in client assets) masking what executives called &quot;cracks in the armor&quot; among lower-income consumers. Bank CFOs signaled they expect net charge-offs to stay flat to slightly lower near term as early- and late-stage delinquencies improve for their prime-heavy portfolios.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">AI&#x27;s Wider Availability Is Good for China, Not Great for OpenAI and Anthropic</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | Meta Plans to Hire Top Amazon Computing Executive as It Weighs Cloud Push</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">China&#x27;s Moonshot AI Releases Model to Challenge Top U.S. Systems</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">China&#x27;s Xi Touts Open-Source AI and Takes a Swipe at U.S. Dominance</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Exclusive | Databricks Set to Hit $188 Billion Valuation With New Investment From Coatue</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Stock Futures Lower as Chip Selloff Deepens</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Nasdaq Declines as Chip Stocks Come Under Pressure</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Financial Services Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">Debt Collectors Chase More Consumers in Court</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">Why High Credit Card Delinquencies Aren&#x27;t Showing Up at the Big Banks</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">9 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">7 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-07-16.html">← Older · July 16, 2026 · TSMC to Invest a Further $100 Billion in U.S. After AI Fuels Surge in Earnings</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
 </div>
-<section class="threads"><h2 class="threads-h">Recurring threads</h2><div class="thread"><span class="thread-label">AI boom</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Chips</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">IPOs &amp; listings</span><span class="thread-days">also on <a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Crypto</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Fed &amp; rates</span><span class="thread-days">also on <a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div></section>
-<nav class="daynav"><a class="dn-prev" href="digest-2026-07-16.html"><span class="dn-label">← Older</span><span class="dn-date">Jul 16</span></a><a class="dn-next" href="digest-2026-07-18.html"><span class="dn-label">Newer →</span><span class="dn-date">Jul 18</span></a></nav>
-<script>
-(function () {
-  var bar = document.querySelector('.filters');
-  if (!bar) return;
-  var cards = document.querySelectorAll('.bubble');
-  var buttons = bar.querySelectorAll('.filter-btn');
-  function apply(f, push) {
-    var matched = false;
-    buttons.forEach(function (b) {
-      var on = b.getAttribute('data-filter') === f;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      if (on) matched = true;
-    });
-    if (!matched) { f = 'all'; buttons[0].classList.add('is-active');
-                    buttons[0].setAttribute('aria-pressed', 'true'); }
-    cards.forEach(function (c) {
-      c.hidden = !(f === 'all' || c.getAttribute('data-cat') === f);
-    });
-    if (push) {
-      var h = f === 'all' ? ' ' : '#' + f;
-      history.replaceState(null, '', h === ' ' ? location.pathname + location.search : h);
-    }
-  }
-  bar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (btn) apply(btn.getAttribute('data-filter'), true);
-  });
-  apply((location.hash || '').replace('#', '') || 'all', false);
-  window.addEventListener('hashchange', function () {
-    apply((location.hash || '').replace('#', '') || 'all', false);
-  });
-})();
-</script>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
 </body>
 </html>

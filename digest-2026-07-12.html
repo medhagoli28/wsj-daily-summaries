@@ -3,203 +3,247 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WSJ Digest — July 12, 2026</title>
+  <title>The Deep Digest — July 12, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <style>
-  @font-face { font-family: "Lumiare"; src: url("fonts/Lumiare.otf") format("opentype"); font-display: swap; }
-  @font-face { font-family: "Dealerplate California"; src: url("fonts/DealerplateCalifornia.otf") format("opentype"); font-display: swap; }
-  :root { color-scheme: dark;
-          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
-          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
   * { box-sizing: border-box; }
-  body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-         max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; letter-spacing: .04em; color: #e9e4da; min-height: 100vh;
-         background: radial-gradient(1100px 560px at 18% -10%, #2c2721, #201d1a 58%); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
-    font-family: "Lumiare", Georgia, "Times New Roman", serif; letter-spacing: .05em; }
-  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .4rem; }
-  .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
 
-  /* Top-right search bar on the index */
-  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-            flex-wrap: wrap; margin: 0 0 .5rem; }
-  .topbar h1 { margin: 0; }
-  .topsearch input { font: inherit; color: #e9e4da; background: #2a2521; border: 1px solid #4a453e;
-                     border-radius: 999px; padding: .5rem 1rem; min-width: 210px; }
-  .topsearch input:focus { outline: none; border-color: var(--accent); }
-  @media (max-width: 520px) { .topsearch, .topsearch input { width: 100%; } }
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
 
-  /* "Read the latest" hero on the index */
-  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
-                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
-                 font-weight: 700; font-size: 1.02rem; }
-  .hero-latest:hover { text-decoration: none; opacity: .93; }
-  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
 
-  /* Calendar index */
-  table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
-  table.cal caption { caption-side: top; text-align: left; font-size: 1.3rem; font-weight: 700;
-                      letter-spacing: -0.01em; margin-bottom: .6rem; }
-  table.cal th { padding: .3rem .45rem; text-align: right; font-size: .68rem; font-weight: 600;
-                 text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-  table.cal td { border: 1px solid var(--border); height: 84px; vertical-align: top; padding: .35rem .45rem; }
-  table.cal td.empty { border-color: transparent; }
-  table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
-  /* days with a digest stay clickable, but are not "highlighted" */
-  table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--accent); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .85rem; color: var(--accent); font-weight: 600; }
-  /* only the current date is highlighted */
-  table.cal td.today { background: rgba(110, 168, 254, .14); }
-  table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
-  @media (max-width: 560px) {
-    table.cal td { height: 54px; padding: .25rem; }
-    table.cal td.has .tag, table.cal td.has .cell-head { display: none; } table.cal th { font-size: .58rem; }
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
   }
-
-  /* Landing: hero, stats, featured card */
-  .hero { margin: 0 0 1.6rem; }
-  .topbar { align-items: flex-start; }
-  .brand h1 { margin: 0; }
-  .tagline { color: var(--muted); font-size: .98rem; margin: .3rem 0 0; max-width: 48ch; }
-  .stats { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; color: var(--muted);
-           font-size: .85rem; margin: 1rem 0 0; }
-  .stats b { color: #e9e4da; font-weight: 700; }
-  .featured { display: block; background: #efe9dc; color: #26221e; border-radius: 20px;
-              padding: 1.5rem 1.7rem; margin: 0 0 2.2rem; transition: transform .15s ease;
-              box-shadow: 0 18px 40px -24px rgba(0,0,0,.65); }
-  .featured:hover { text-decoration: none; transform: translateY(-2px); }
-  .featured-label { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8a7f6d; }
-  .featured-date { font-family: "Lumiare", Georgia, serif; font-size: 2.1rem; letter-spacing: .04em; margin: .1rem 0 .7rem; }
-  .featured-heads { list-style: none; padding: 0; margin: 0 0 .9rem; }
-  .featured-heads li { font-weight: 600; font-size: .98rem; padding: .3rem 0;
-                       border-bottom: 1px solid rgba(38, 34, 30, .12); }
-  .featured-heads li:last-child { border-bottom: 0; }
-  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .8rem; }
-  .chip { background: #26221e; color: #efe9dc; border-radius: 999px; padding: .22rem .62rem;
-          font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
-  .featured-cta { font-weight: 700; color: #7a663f; }
-
-  /* Richer calendar cells */
-  table.cal td { height: 118px; }
-  table.cal td.has a { gap: .15rem; }
-  table.cal td.has .num { text-align: left; }
-  table.cal td.has:hover { border-color: var(--accent); background: rgba(110, 168, 254, .06); }
-  .cell-head { font-size: .72rem; line-height: 1.18; color: #b9b1a5; margin-top: .1rem;
-               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  table.cal td.today { outline: 2px solid var(--accent); outline-offset: -2px; }
-
-  /* Bubble digest page (dark) */
-  body.digest { background: #201d1a; color: #e9e4da; max-width: 960px; }
-  body.digest .back { color: #b8b0a4; }
-  .mast { background: #efe9dc; color: #26221e; border-radius: 24px; padding: 2rem 2.1rem 1.6rem; margin: 0 0 1.4rem; }
-  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: .02em; line-height: .9; text-transform: uppercase; }
-  .mast-title { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin-top: .35rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
-  .filter-btn { font: inherit; cursor: pointer; -webkit-appearance: none; border: 1px solid #4a453e;
-                background: transparent; color: #d9d2c6; border-radius: 999px; padding: .4rem .95rem;
-                font-size: .82rem; font-weight: 600; letter-spacing: .02em; }
-  .filter-btn:hover { border-color: #7a7266; }
-  .filter-btn.is-active { background: #efe9dc; color: #26221e; border-color: #efe9dc; }
-  .bubble[hidden] { display: none; }
-  .bubbles { column-count: 2; column-gap: 1.2rem; }
-  .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
-            background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
-  .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
-                 padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; white-space: nowrap; }
-  .bubble.tech .bubble-pill { background: var(--tech); }
-  .bubble.markets .bubble-pill { background: var(--markets); }
-  .bubble.finance .bubble-pill { background: var(--finance); }
-  .bubble-kicker { font-style: italic; text-transform: uppercase; font-size: .76rem; letter-spacing: .03em;
-                   color: #8a7f6d; margin: .9rem 0 .15rem; }
-  .bubble-title { font-size: 1.16rem; font-weight: 800; line-height: 1.25; margin: .15rem 0 .55rem; }
-  .bubble-title a { color: inherit; }
-  .bubble-body { font-size: .95rem; line-height: 1.55; color: #3a352e; margin: 0; }
-  @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
-
-  /* prev / next-day navigation */
-  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
-  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
-              padding: .75rem 1rem; color: #e9e4da; }
-  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
-  .daynav .dn-next { text-align: right; }
-  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
-                      color: #8a7f6d; }
-  .daynav .dn-date { font-weight: 700; }
-  .daynav .dn-spacer { flex: 1; }
-  /* recurring "threads" cross-links */
-  .threads { margin: 2rem 0 0; }
-  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
-               margin: 0 0 .7rem; }
-  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
-            margin: 0 0 .6rem; font-size: .9rem; }
-  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
-  .thread a { margin-right: .7rem; white-space: nowrap; }
-  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 </style>
 </head>
-<body class="digest">
-<a class="back" href="index.html">← calendar</a>
-<header class="mast"><div class="mast-month">July 12</div><div class="mast-title">WSJ Digest</div></header>
-<div class="filters" role="group" aria-label="Filter by category"><button class="filter-btn is-active" data-filter="all" aria-pressed="true">All<span class="fc">15</span></button><button class="filter-btn" data-filter="tech" aria-pressed="false">Tech<span class="fc">5</span></button><button class="filter-btn" data-filter="markets" aria-pressed="false">Markets<span class="fc">5</span></button><button class="filter-btn" data-filter="finance" aria-pressed="false">Finance<span class="fc">5</span></button></div>
-<div class="bubbles">
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Intel&#x27;s Insiders</div><p class="bubble-body">Intel&#x27;s turnaround under CEO Lip-Bu Tan, who took over on March 18, 2025, has been driven by an aggressive internal shake-up that reshaped the company&#x27;s power structure. Tan flattened corporate bureaucracy and laid off roughly 34% of the global workforce, elevating engineers while cutting layers of middle management. He recruited senior executives from Qualcomm and Arm to run Intel&#x27;s data-center and AI divisions and secured strategic investments from Nvidia (about $5 billion) and SoftBank. The moves have paid off in the market: Intel shares have more than quadrupled since Tan took the helm, aided by stronger CPU demand, government backing, and restructuring.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">The Hard-Line Activists Ramping Up for the War With AI</div><p class="bubble-body">A loose but growing anti-AI movement is escalating from online organizing to street protests, uniting artists, writers, musicians, and existential-risk campaigners against the AI labs. In February 2026, a couple hundred demonstrators marched through London&#x27;s King&#x27;s Cross tech hub in what organizers billed as the largest anti-AI protest yet, coordinated by groups including Pause AI and Pull the Plug, with grievances ranging from &quot;online slop&quot; and nonconsensual images to killer robots and human extinction. Creators are also fighting on technical and legal fronts: the University of Chicago&#x27;s Glaze and Nightshade tools let artists &quot;poison&quot; their work so it is effectively untrainable, while portfolio sites like Cara promise AI-free spaces until data-privacy issues are regulated. The playbook draws on labor precedent such as the 2023 Hollywood writers&#x27; strike, which lasted 148 days, and analysts expect both local and national opposition in the U.S. to deepen through 2026.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Alex Karp Is Saying What Every Angry CEO Is Thinking About AI</div><p class="bubble-body">In a heated July 1, 2026 CNBC interview, Palantir CEO Alex Karp called the AI industry &quot;effing insane,&quot; blasting U.S. reliance on Silicon Valley consensus for national-security technology: &quot;Are we really going to outsource the battlefield of this country to the consensus view in Silicon Valley?&quot; He accused leading AI firms of overcharging businesses and exploiting customer data to train their own models — a practice he likened to a &quot;wealth tax&quot; on American companies. Karp framed himself as a mouthpiece for frustrated executives, saying &quot;this is the voice of American business that is being channeled through me&quot; and claiming other CEOs privately share his anger but stay quiet. The comments came as Palantir promoted a partnership with Nvidia to help the U.S. government deploy AI more securely, and echo his January 2026 Davos warning that AI &quot;will destroy&quot; humanities jobs while rewarding vocational and technical skills.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">U.S. Biotechs Are Keeping More Secrets to Beat Copycats in China</div><p class="bubble-body">American biotech firms are tightening internal secrecy as Chinese rivals rapidly reverse-engineer and race ahead on promising drug programs. In one illustrative case, after Amgen presented data on a hard-to-treat lung-cancer target, a Chinese company began preparing a competing trial within six weeks, and at least 10 distinct programs against the same protein entered clinical development in China within 18 months; by June 2026, at least 62 such Chinese programs had launched, 13 of them licensed to major U.S. and European drugmakers. Companies are responding by hardening confidentiality agreements, onboarding and offboarding procedures, IT access controls, and data-governance policies to protect trade secrets amid heavy cross-border collaboration and employee mobility. The legal landscape is shifting too: China&#x27;s new Provisions on the Protection of Trade Secrets took effect June 1, 2026, while Washington&#x27;s BIOSECURE Act and proposed outbound-investment rules aim to curb U.S. dependence on Chinese biotech.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">China Says It Has Found Security Vulnerabilities in Anthropic&#x27;s Claude Code</div><p class="bubble-body">China&#x27;s Ministry of Industry and Information Technology said its cybersecurity threat platform found a &quot;security back-door vulnerability&quot; in Anthropic&#x27;s Claude Code, claiming versions 2.1.91 through 2.1.196 (released between April and June) can send sensitive data such as user location and identity to remote servers without consent, and it advised users to uninstall or upgrade. Anthropic rejected the &quot;backdoor&quot; characterization, saying the flagged code was an experimental anti-abuse measure from a March effort to stop unauthorized resellers and model distillation, that it planned to remove the code, and that Claude Code is not authorized for use in China in the first place. The dispute follows Anthropic&#x27;s earlier accusation that Alibaba tried to extract its AI capabilities; Alibaba told employees that using Claude Code would be banned starting July 10 over security concerns. The exchange underscores how AI tooling has become a flashpoint in U.S.–China tech tensions.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Tech Stock Jitters Just Went Off the Charts</div><p class="bubble-body">A sharp repricing of AI and chip stocks rattled markets in early-to-mid July 2026 as investors questioned valuations built more on the technology&#x27;s promise than on bottom-line profit growth. In one brutal session, Sandisk, Micron Technology, and Arm each plunged more than 10%, while Marvell, Analog Devices, Western Digital, Texas Instruments, and Qualcomm fell around 9% and Nvidia dropped 4.15%. The memory and semiconductor complex — the epicenter of the AI trade — bore the brunt as doubts about &quot;sky-high&quot; valuations took hold. Renewed geopolitical stress, including attacks in the Strait of Hormuz that slowed shipping, added to the uncertainty weighing on risk assets.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Tobacco Stocks Are Coming in From the Cold</div><p class="bubble-body">Long shunned by ESG-minded investors, tobacco stocks have quietly become one of the market&#x27;s steadier performers, with Altria up 15.9% over the past year and British American Tobacco up 20.5%. The rally reflects a successful pivot toward smoke-free products even as cigarette volumes decline: Philip Morris International&#x27;s heated-tobacco-unit volumes (led by IQOS) jumped 112% during 2025, Altria is expanding its on! oral nicotine pouches, and about 20% of British American Tobacco&#x27;s revenue now comes from smokeless products like Vuse and Velo. The group&#x27;s generous, growing dividends remain a core draw, with yields of roughly 3.08% for Philip Morris, 4.37% for Altria, and 5.02% for British American Tobacco — well above the market average. Philip Morris has raised its payout every year since splitting from Altria in 2008, lifting it 220% as of May 2026.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">MiniMax Shares Drop on $2 Billion Fundraising Plan</div><p class="bubble-body">Shares of Chinese AI startup MiniMax tumbled after it unveiled a roughly $2 billion capital raise combining equity and debt. The plan pairs a HK$9.5 billion (about $1.2 billion) placement of 35.6 million shares at HK$268 each — a 9.9% discount to the prior close of HK$297.4 — with HK$6.5 billion of zero-coupon convertible bonds due 2027 carrying a 25% conversion premium. The stock fell as much as 9.8% on the announcement and slumped as much as 18% the following Monday in a third straight day of declines, leaving it down more than 80% from its March high. In an unusual move, MiniMax&#x27;s founder pledged to donate a 5% personal stake over four years and to forgo all compensation until the company achieves artificial general intelligence.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Pepsi Fizzles, Stocks Bubble On</div><p class="bubble-body">PepsiCo&#x27;s second-quarter 2026 results, reported July 9, landed with a thud even as the broader market pressed higher. The company earned $2.20 per share, a three-cent miss versus the $2.23 Wall Street expected, though net revenue of $24.18 billion rose 6.4% year over year and beat the $23.95 billion consensus. Growth came almost entirely from overseas — Asia Pacific Foods, International Beverages, and Europe/Middle East/Africa all posted organic volume gains — while North American beverage volume fell 4% as budget-tightening U.S. consumers pulled back. The small EPS miss and a cautious full-year tone sent shares down about 3.2% to $137.96, a reminder that even in a buoyant tape, weak U.S. staples demand still stings.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">The Mind Game That Investors Can&#x27;t Stop Playing</div><p class="bubble-body">The market-timing impulse — trying to sell before drops and buy back before rebounds — is one of the most persistent and costly behavioral traps in investing. It is rooted in loss aversion, the tendency identified by psychologists Daniel Kahneman and Amos Tversky in which the pain of a loss is roughly twice as powerful as the pleasure of an equivalent gain, pushing investors to panic-sell in downturns and chase rallies at the top. Research suggests emotional decision-making shaves 1–2 percentage points off returns annually, and studies of the &quot;behavior gap&quot; find the average investor earns only about 3–4% versus roughly 10% for the market itself. Because the market&#x27;s best days often cluster right after its worst, investors who flee downturns tend to miss the recovery, locking in losses that compound over time — which is why disciplined buy-and-hold strategies usually win.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">He&#x27;s 17 Years Old and His Family&#x27;s Financial Adviser</div><p class="bubble-body">A teenager steering a household&#x27;s money is unusual, but it lands amid a broader story of Gen Z taking money management into its own hands while wrestling with shaky financial literacy. A 2026 Bank of America study found just 34% of Gen Z now receive financial help from family, down from 46% in 2024, even as many live paycheck to paycheck; yet 84% still rely on parents and family as their main source of financial information. Financial literacy remains the weak link: only about 38% of Gen Z answer basic financial questions correctly, the lowest of any generation, and more than one in four say they lack confidence in their money skills. Still, nearly 70% took concrete steps in the past year to manage rising costs — cutting dining out, skipping events, or picking up side hustles — and 66% report saving, up from 60% in 2024, while 24 states now require personal-finance coursework in schools.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">A Broken Elbow Forces Two Retirees to Ponder Their Future Mobility</div><p class="bubble-body">A single injury like a broken elbow is often the wake-up call that pushes retirees to plan for declining mobility before a crisis forces rushed decisions. The stakes are high: in 2026, nearly one in three adults aged 65 and older falls each year, and the fall death rate among that group rose 21% between 2018 and 2024, with falls frequently causing fractures, head trauma, and long-term disability. Experts say the most effective &quot;aging in place&quot; strategy pairs home modifications — grab bars, non-slip flooring, curbless or walk-in showers, comfort-height toilets, brighter motion-activated lighting, and ramps replacing entry steps — with an exercise program to preserve balance and strength. Increasingly, wearables and smart-home sensors round out the plan, but the recurring advice is to act proactively rather than waiting until after a fall.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Why Home Sales Are Poised to Pick Up This Summer</div><p class="bubble-body">After years of gridlock, the U.S. housing market is showing signs of thawing in mid-2026 as rates stabilize and inventory slowly rebuilds. The 30-year fixed mortgage rate has settled into the mid-6% range (around 6.4%), well below its 2023–2024 peaks even if the 3% era is gone for good, while the median existing-home price sits near $429,300, up about 1.3% year over year. Supply has loosened to roughly 4.5 months — still tilted toward sellers but far from the ultra-tight 2–3 month market of 2021–2022 — and forecasters expect single-family and condo listings to rise 5–10% in 2026 as homeowners respond to steadier rates. The result is a more balanced market in which well-priced homes still move but buyers have regained negotiating room, inspection contingencies, and time to decide.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">SpaceX Shares Stumble in Nasdaq-100 Debut</div><p class="bubble-body">SpaceX&#x27;s entry into the Nasdaq-100 on July 7, 2026 — less than a month after its June 12 market debut — proved a disappointment, as the stock fell 6.8% to $149.47 on its first day in the index despite the forced buying that inclusion usually brings. The slide deepened over the following days, with shares dropping as much as 35% from a post-IPO peak of $225.64 and closing at $148 on July 8, below where they began trading. A key culprit is the tiny public float: SpaceX raised about $86 billion in its offering but floated less than 5% of the company, limiting how much index-tracking funds could buy. Fundamentals also weigh on sentiment — SpaceX posted a $4.9 billion net loss in 2025 and a $4.3 billion loss in the first quarter of 2026, much of it tied to xAI, the AI startup it absorbed earlier in the year.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Parents of Some Babies Face Delays Opening Trump Accounts</div><p class="bubble-body">The government&#x27;s new &quot;Trump Accounts&quot; — which seed a $1,000 federal deposit for U.S.-citizen children born between January 1, 2025 and December 31, 2028 — launched on July 4, 2026, but some parents hit early snags because the required paperwork wasn&#x27;t immediately available. IRS Form 4547 and the online portal at TrumpAccounts.gov did not go fully live until around July 5, delaying families eager to open accounts and begin adding contributions on top of the government seed. A senior Treasury official said more than 6 million children have already been registered, with about 1.4 million eligible for the $1,000 government deposit. The accounts let families and employers contribute additional money over time, positioning them as a new long-term savings vehicle for children despite the bumpy rollout.</p></div>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-07-11.html">‹ Jul 11</a> &nbsp;·&nbsp; <a href="digest-2026-07-13.html">Jul 13 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 5</div>
+    <div class="issue-date">July 12, 2026</div>
+    <div class="issue-sub">15 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 15</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Intel&#x27;s Insiders</div>
+        <div class="art-sum">Intel&#x27;s turnaround under CEO Lip-Bu Tan, who took over on March 18, 2025, has been driven by an aggressive internal shake-up that reshaped the company&#x27;s power structure. Tan flattened corporate bureaucracy and laid off roughly 34% of the global workforce, elevating engineers while cutting layers of middle management. He recruited senior executives from Qualcomm and Arm to run Intel&#x27;s data-center and AI divisions and secured strategic investments from Nvidia (about $5 billion) and SoftBank. The moves have paid off in the market: Intel shares have more than quadrupled since Tan took the helm, aided by stronger CPU demand, government backing, and restructuring.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Hard-Line Activists Ramping Up for the War With AI</div>
+        <div class="art-sum">A loose but growing anti-AI movement is escalating from online organizing to street protests, uniting artists, writers, musicians, and existential-risk campaigners against the AI labs. In February 2026, a couple hundred demonstrators marched through London&#x27;s King&#x27;s Cross tech hub in what organizers billed as the largest anti-AI protest yet, coordinated by groups including Pause AI and Pull the Plug, with grievances ranging from &quot;online slop&quot; and nonconsensual images to killer robots and human extinction. Creators are also fighting on technical and legal fronts: the University of Chicago&#x27;s Glaze and Nightshade tools let artists &quot;poison&quot; their work so it is effectively untrainable, while portfolio sites like Cara promise AI-free spaces until data-privacy issues are regulated. The playbook draws on labor precedent such as the 2023 Hollywood writers&#x27; strike, which lasted 148 days, and analysts expect both local and national opposition in the U.S. to deepen through 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Alex Karp Is Saying What Every Angry CEO Is Thinking About AI</div>
+        <div class="art-sum">In a heated July 1, 2026 CNBC interview, Palantir CEO Alex Karp called the AI industry &quot;effing insane,&quot; blasting U.S. reliance on Silicon Valley consensus for national-security technology: &quot;Are we really going to outsource the battlefield of this country to the consensus view in Silicon Valley?&quot; He accused leading AI firms of overcharging businesses and exploiting customer data to train their own models — a practice he likened to a &quot;wealth tax&quot; on American companies. Karp framed himself as a mouthpiece for frustrated executives, saying &quot;this is the voice of American business that is being channeled through me&quot; and claiming other CEOs privately share his anger but stay quiet. The comments came as Palantir promoted a partnership with Nvidia to help the U.S. government deploy AI more securely, and echo his January 2026 Davos warning that AI &quot;will destroy&quot; humanities jobs while rewarding vocational and technical skills.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">U.S. Biotechs Are Keeping More Secrets to Beat Copycats in China</div>
+        <div class="art-sum">American biotech firms are tightening internal secrecy as Chinese rivals rapidly reverse-engineer and race ahead on promising drug programs. In one illustrative case, after Amgen presented data on a hard-to-treat lung-cancer target, a Chinese company began preparing a competing trial within six weeks, and at least 10 distinct programs against the same protein entered clinical development in China within 18 months; by June 2026, at least 62 such Chinese programs had launched, 13 of them licensed to major U.S. and European drugmakers. Companies are responding by hardening confidentiality agreements, onboarding and offboarding procedures, IT access controls, and data-governance policies to protect trade secrets amid heavy cross-border collaboration and employee mobility. The legal landscape is shifting too: China&#x27;s new Provisions on the Protection of Trade Secrets took effect June 1, 2026, while Washington&#x27;s BIOSECURE Act and proposed outbound-investment rules aim to curb U.S. dependence on Chinese biotech.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China Says It Has Found Security Vulnerabilities in Anthropic&#x27;s Claude Code</div>
+        <div class="art-sum">China&#x27;s Ministry of Industry and Information Technology said its cybersecurity threat platform found a &quot;security back-door vulnerability&quot; in Anthropic&#x27;s Claude Code, claiming versions 2.1.91 through 2.1.196 (released between April and June) can send sensitive data such as user location and identity to remote servers without consent, and it advised users to uninstall or upgrade. Anthropic rejected the &quot;backdoor&quot; characterization, saying the flagged code was an experimental anti-abuse measure from a March effort to stop unauthorized resellers and model distillation, that it planned to remove the code, and that Claude Code is not authorized for use in China in the first place. The dispute follows Anthropic&#x27;s earlier accusation that Alibaba tried to extract its AI capabilities; Alibaba told employees that using Claude Code would be banned starting July 10 over security concerns. The exchange underscores how AI tooling has become a flashpoint in U.S.–China tech tensions.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Stock Jitters Just Went Off the Charts</div>
+        <div class="art-sum">A sharp repricing of AI and chip stocks rattled markets in early-to-mid July 2026 as investors questioned valuations built more on the technology&#x27;s promise than on bottom-line profit growth. In one brutal session, Sandisk, Micron Technology, and Arm each plunged more than 10%, while Marvell, Analog Devices, Western Digital, Texas Instruments, and Qualcomm fell around 9% and Nvidia dropped 4.15%. The memory and semiconductor complex — the epicenter of the AI trade — bore the brunt as doubts about &quot;sky-high&quot; valuations took hold. Renewed geopolitical stress, including attacks in the Strait of Hormuz that slowed shipping, added to the uncertainty weighing on risk assets.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tobacco Stocks Are Coming in From the Cold</div>
+        <div class="art-sum">Long shunned by ESG-minded investors, tobacco stocks have quietly become one of the market&#x27;s steadier performers, with Altria up 15.9% over the past year and British American Tobacco up 20.5%. The rally reflects a successful pivot toward smoke-free products even as cigarette volumes decline: Philip Morris International&#x27;s heated-tobacco-unit volumes (led by IQOS) jumped 112% during 2025, Altria is expanding its on! oral nicotine pouches, and about 20% of British American Tobacco&#x27;s revenue now comes from smokeless products like Vuse and Velo. The group&#x27;s generous, growing dividends remain a core draw, with yields of roughly 3.08% for Philip Morris, 4.37% for Altria, and 5.02% for British American Tobacco — well above the market average. Philip Morris has raised its payout every year since splitting from Altria in 2008, lifting it 220% as of May 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">MiniMax Shares Drop on $2 Billion Fundraising Plan</div>
+        <div class="art-sum">Shares of Chinese AI startup MiniMax tumbled after it unveiled a roughly $2 billion capital raise combining equity and debt. The plan pairs a HK$9.5 billion (about $1.2 billion) placement of 35.6 million shares at HK$268 each — a 9.9% discount to the prior close of HK$297.4 — with HK$6.5 billion of zero-coupon convertible bonds due 2027 carrying a 25% conversion premium. The stock fell as much as 9.8% on the announcement and slumped as much as 18% the following Monday in a third straight day of declines, leaving it down more than 80% from its March high. In an unusual move, MiniMax&#x27;s founder pledged to donate a 5% personal stake over four years and to forgo all compensation until the company achieves artificial general intelligence.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Pepsi Fizzles, Stocks Bubble On</div>
+        <div class="art-sum">PepsiCo&#x27;s second-quarter 2026 results, reported July 9, landed with a thud even as the broader market pressed higher. The company earned $2.20 per share, a three-cent miss versus the $2.23 Wall Street expected, though net revenue of $24.18 billion rose 6.4% year over year and beat the $23.95 billion consensus. Growth came almost entirely from overseas — Asia Pacific Foods, International Beverages, and Europe/Middle East/Africa all posted organic volume gains — while North American beverage volume fell 4% as budget-tightening U.S. consumers pulled back. The small EPS miss and a cautious full-year tone sent shares down about 3.2% to $137.96, a reminder that even in a buoyant tape, weak U.S. staples demand still stings.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Mind Game That Investors Can&#x27;t Stop Playing</div>
+        <div class="art-sum">The market-timing impulse — trying to sell before drops and buy back before rebounds — is one of the most persistent and costly behavioral traps in investing. It is rooted in loss aversion, the tendency identified by psychologists Daniel Kahneman and Amos Tversky in which the pain of a loss is roughly twice as powerful as the pleasure of an equivalent gain, pushing investors to panic-sell in downturns and chase rallies at the top. Research suggests emotional decision-making shaves 1–2 percentage points off returns annually, and studies of the &quot;behavior gap&quot; find the average investor earns only about 3–4% versus roughly 10% for the market itself. Because the market&#x27;s best days often cluster right after its worst, investors who flee downturns tend to miss the recovery, locking in losses that compound over time — which is why disciplined buy-and-hold strategies usually win.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">He&#x27;s 17 Years Old and His Family&#x27;s Financial Adviser</div>
+        <div class="art-sum">A teenager steering a household&#x27;s money is unusual, but it lands amid a broader story of Gen Z taking money management into its own hands while wrestling with shaky financial literacy. A 2026 Bank of America study found just 34% of Gen Z now receive financial help from family, down from 46% in 2024, even as many live paycheck to paycheck; yet 84% still rely on parents and family as their main source of financial information. Financial literacy remains the weak link: only about 38% of Gen Z answer basic financial questions correctly, the lowest of any generation, and more than one in four say they lack confidence in their money skills. Still, nearly 70% took concrete steps in the past year to manage rising costs — cutting dining out, skipping events, or picking up side hustles — and 66% report saving, up from 60% in 2024, while 24 states now require personal-finance coursework in schools.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Broken Elbow Forces Two Retirees to Ponder Their Future Mobility</div>
+        <div class="art-sum">A single injury like a broken elbow is often the wake-up call that pushes retirees to plan for declining mobility before a crisis forces rushed decisions. The stakes are high: in 2026, nearly one in three adults aged 65 and older falls each year, and the fall death rate among that group rose 21% between 2018 and 2024, with falls frequently causing fractures, head trauma, and long-term disability. Experts say the most effective &quot;aging in place&quot; strategy pairs home modifications — grab bars, non-slip flooring, curbless or walk-in showers, comfort-height toilets, brighter motion-activated lighting, and ramps replacing entry steps — with an exercise program to preserve balance and strength. Increasingly, wearables and smart-home sensors round out the plan, but the recurring advice is to act proactively rather than waiting until after a fall.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Why Home Sales Are Poised to Pick Up This Summer</div>
+        <div class="art-sum">After years of gridlock, the U.S. housing market is showing signs of thawing in mid-2026 as rates stabilize and inventory slowly rebuilds. The 30-year fixed mortgage rate has settled into the mid-6% range (around 6.4%), well below its 2023–2024 peaks even if the 3% era is gone for good, while the median existing-home price sits near $429,300, up about 1.3% year over year. Supply has loosened to roughly 4.5 months — still tilted toward sellers but far from the ultra-tight 2–3 month market of 2021–2022 — and forecasters expect single-family and condo listings to rise 5–10% in 2026 as homeowners respond to steadier rates. The result is a more balanced market in which well-priced homes still move but buyers have regained negotiating room, inspection contingencies, and time to decide.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">SpaceX Shares Stumble in Nasdaq-100 Debut</div>
+        <div class="art-sum">SpaceX&#x27;s entry into the Nasdaq-100 on July 7, 2026 — less than a month after its June 12 market debut — proved a disappointment, as the stock fell 6.8% to $149.47 on its first day in the index despite the forced buying that inclusion usually brings. The slide deepened over the following days, with shares dropping as much as 35% from a post-IPO peak of $225.64 and closing at $148 on July 8, below where they began trading. A key culprit is the tiny public float: SpaceX raised about $86 billion in its offering but floated less than 5% of the company, limiting how much index-tracking funds could buy. Fundamentals also weigh on sentiment — SpaceX posted a $4.9 billion net loss in 2025 and a $4.3 billion loss in the first quarter of 2026, much of it tied to xAI, the AI startup it absorbed earlier in the year.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Parents of Some Babies Face Delays Opening Trump Accounts</div>
+        <div class="art-sum">The government&#x27;s new &quot;Trump Accounts&quot; — which seed a $1,000 federal deposit for U.S.-citizen children born between January 1, 2025 and December 31, 2028 — launched on July 4, 2026, but some parents hit early snags because the required paperwork wasn&#x27;t immediately available. IRS Form 4547 and the online portal at TrumpAccounts.gov did not go fully live until around July 5, delaying families eager to open accounts and begin adding contributions on top of the government seed. A senior Treasury official said more than 6 million children have already been registered, with about 1.4 million eligible for the $1,000 government deposit. The accounts let families and employers contribute additional money over time, positioning them as a new long-term savings vehicle for children despite the bumpy rollout.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 15 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Intel&#x27;s Insiders</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">The Hard-Line Activists Ramping Up for the War With AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Alex Karp Is Saying What Every Angry CEO Is Thinking About AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">U.S. Biotechs Are Keeping More Secrets to Beat Copycats in China</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">China Says It Has Found Security Vulnerabilities in Anthropic&#x27;s Claude Code</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Tech Stock Jitters Just Went Off the Charts</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Tobacco Stocks Are Coming in From the Cold</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">MiniMax Shares Drop on $2 Billion Fundraising Plan</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Pepsi Fizzles, Stocks Bubble On</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">The Mind Game That Investors Can&#x27;t Stop Playing</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">He&#x27;s 17 Years Old and His Family&#x27;s Financial Adviser</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">A Broken Elbow Forces Two Retirees to Ponder Their Future Mobility</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Why Home Sales Are Poised to Pick Up This Summer</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">SpaceX Shares Stumble in Nasdaq-100 Debut</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Parents of Some Babies Face Delays Opening Trump Accounts</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">9 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-07-11.html">← Older · July 11, 2026 · The White House Made Fixing Intel Its Pet Project. It&#x27;s Working.</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
 </div>
-<section class="threads"><h2 class="threads-h">Recurring threads</h2><div class="thread"><span class="thread-label">AI boom</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Chips</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">IPOs &amp; listings</span><span class="thread-days">also on <a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Iran &amp; oil</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Crypto</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div></section>
-<nav class="daynav"><a class="dn-prev" href="digest-2026-07-11.html"><span class="dn-label">← Older</span><span class="dn-date">Jul 11</span></a><a class="dn-next" href="digest-2026-07-13.html"><span class="dn-label">Newer →</span><span class="dn-date">Jul 13</span></a></nav>
-<script>
-(function () {
-  var bar = document.querySelector('.filters');
-  if (!bar) return;
-  var cards = document.querySelectorAll('.bubble');
-  var buttons = bar.querySelectorAll('.filter-btn');
-  function apply(f, push) {
-    var matched = false;
-    buttons.forEach(function (b) {
-      var on = b.getAttribute('data-filter') === f;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      if (on) matched = true;
-    });
-    if (!matched) { f = 'all'; buttons[0].classList.add('is-active');
-                    buttons[0].setAttribute('aria-pressed', 'true'); }
-    cards.forEach(function (c) {
-      c.hidden = !(f === 'all' || c.getAttribute('data-cat') === f);
-    });
-    if (push) {
-      var h = f === 'all' ? ' ' : '#' + f;
-      history.replaceState(null, '', h === ' ' ? location.pathname + location.search : h);
-    }
-  }
-  bar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (btn) apply(btn.getAttribute('data-filter'), true);
-  });
-  apply((location.hash || '').replace('#', '') || 'all', false);
-  window.addEventListener('hashchange', function () {
-    apply((location.hash || '').replace('#', '') || 'all', false);
-  });
-})();
-</script>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
 </body>
 </html>

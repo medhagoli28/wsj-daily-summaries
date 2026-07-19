@@ -3,209 +3,277 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WSJ Digest — July 18, 2026</title>
+  <title>The Deep Digest — July 18, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <style>
-  @font-face { font-family: "Lumiare"; src: url("fonts/Lumiare.otf") format("opentype"); font-display: swap; }
-  @font-face { font-family: "Dealerplate California"; src: url("fonts/DealerplateCalifornia.otf") format("opentype"); font-display: swap; }
-  :root { color-scheme: dark;
-          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
-          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
   * { box-sizing: border-box; }
-  body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-         max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; letter-spacing: .04em; color: #e9e4da; min-height: 100vh;
-         background: radial-gradient(1100px 560px at 18% -10%, #2c2721, #201d1a 58%); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
-    font-family: "Lumiare", Georgia, "Times New Roman", serif; letter-spacing: .05em; }
-  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .4rem; }
-  .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
 
-  /* Top-right search bar on the index */
-  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-            flex-wrap: wrap; margin: 0 0 .5rem; }
-  .topbar h1 { margin: 0; }
-  .topsearch input { font: inherit; color: #e9e4da; background: #2a2521; border: 1px solid #4a453e;
-                     border-radius: 999px; padding: .5rem 1rem; min-width: 210px; }
-  .topsearch input:focus { outline: none; border-color: var(--accent); }
-  @media (max-width: 520px) { .topsearch, .topsearch input { width: 100%; } }
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
 
-  /* "Read the latest" hero on the index */
-  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
-                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
-                 font-weight: 700; font-size: 1.02rem; }
-  .hero-latest:hover { text-decoration: none; opacity: .93; }
-  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
 
-  /* Calendar index */
-  table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
-  table.cal caption { caption-side: top; text-align: left; font-size: 1.3rem; font-weight: 700;
-                      letter-spacing: -0.01em; margin-bottom: .6rem; }
-  table.cal th { padding: .3rem .45rem; text-align: right; font-size: .68rem; font-weight: 600;
-                 text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-  table.cal td { border: 1px solid var(--border); height: 84px; vertical-align: top; padding: .35rem .45rem; }
-  table.cal td.empty { border-color: transparent; }
-  table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
-  /* days with a digest stay clickable, but are not "highlighted" */
-  table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--accent); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .85rem; color: var(--accent); font-weight: 600; }
-  /* only the current date is highlighted */
-  table.cal td.today { background: rgba(110, 168, 254, .14); }
-  table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
-  @media (max-width: 560px) {
-    table.cal td { height: 54px; padding: .25rem; }
-    table.cal td.has .tag, table.cal td.has .cell-head { display: none; } table.cal th { font-size: .58rem; }
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
   }
-
-  /* Landing: hero, stats, featured card */
-  .hero { margin: 0 0 1.6rem; }
-  .topbar { align-items: flex-start; }
-  .brand h1 { margin: 0; }
-  .tagline { color: var(--muted); font-size: .98rem; margin: .3rem 0 0; max-width: 48ch; }
-  .stats { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; color: var(--muted);
-           font-size: .85rem; margin: 1rem 0 0; }
-  .stats b { color: #e9e4da; font-weight: 700; }
-  .featured { display: block; background: #efe9dc; color: #26221e; border-radius: 20px;
-              padding: 1.5rem 1.7rem; margin: 0 0 2.2rem; transition: transform .15s ease;
-              box-shadow: 0 18px 40px -24px rgba(0,0,0,.65); }
-  .featured:hover { text-decoration: none; transform: translateY(-2px); }
-  .featured-label { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8a7f6d; }
-  .featured-date { font-family: "Lumiare", Georgia, serif; font-size: 2.1rem; letter-spacing: .04em; margin: .1rem 0 .7rem; }
-  .featured-heads { list-style: none; padding: 0; margin: 0 0 .9rem; }
-  .featured-heads li { font-weight: 600; font-size: .98rem; padding: .3rem 0;
-                       border-bottom: 1px solid rgba(38, 34, 30, .12); }
-  .featured-heads li:last-child { border-bottom: 0; }
-  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .8rem; }
-  .chip { background: #26221e; color: #efe9dc; border-radius: 999px; padding: .22rem .62rem;
-          font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
-  .featured-cta { font-weight: 700; color: #7a663f; }
-
-  /* Richer calendar cells */
-  table.cal td { height: 118px; }
-  table.cal td.has a { gap: .15rem; }
-  table.cal td.has .num { text-align: left; }
-  table.cal td.has:hover { border-color: var(--accent); background: rgba(110, 168, 254, .06); }
-  .cell-head { font-size: .72rem; line-height: 1.18; color: #b9b1a5; margin-top: .1rem;
-               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  table.cal td.today { outline: 2px solid var(--accent); outline-offset: -2px; }
-
-  /* Bubble digest page (dark) */
-  body.digest { background: #201d1a; color: #e9e4da; max-width: 960px; }
-  body.digest .back { color: #b8b0a4; }
-  .mast { background: #efe9dc; color: #26221e; border-radius: 24px; padding: 2rem 2.1rem 1.6rem; margin: 0 0 1.4rem; }
-  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: .02em; line-height: .9; text-transform: uppercase; }
-  .mast-title { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin-top: .35rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
-  .filter-btn { font: inherit; cursor: pointer; -webkit-appearance: none; border: 1px solid #4a453e;
-                background: transparent; color: #d9d2c6; border-radius: 999px; padding: .4rem .95rem;
-                font-size: .82rem; font-weight: 600; letter-spacing: .02em; }
-  .filter-btn:hover { border-color: #7a7266; }
-  .filter-btn.is-active { background: #efe9dc; color: #26221e; border-color: #efe9dc; }
-  .bubble[hidden] { display: none; }
-  .bubbles { column-count: 2; column-gap: 1.2rem; }
-  .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
-            background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
-  .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
-                 padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; white-space: nowrap; }
-  .bubble.tech .bubble-pill { background: var(--tech); }
-  .bubble.markets .bubble-pill { background: var(--markets); }
-  .bubble.finance .bubble-pill { background: var(--finance); }
-  .bubble-kicker { font-style: italic; text-transform: uppercase; font-size: .76rem; letter-spacing: .03em;
-                   color: #8a7f6d; margin: .9rem 0 .15rem; }
-  .bubble-title { font-size: 1.16rem; font-weight: 800; line-height: 1.25; margin: .15rem 0 .55rem; }
-  .bubble-title a { color: inherit; }
-  .bubble-body { font-size: .95rem; line-height: 1.55; color: #3a352e; margin: 0; }
-  @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
-
-  /* prev / next-day navigation */
-  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
-  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
-              padding: .75rem 1rem; color: #e9e4da; }
-  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
-  .daynav .dn-next { text-align: right; }
-  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
-                      color: #8a7f6d; }
-  .daynav .dn-date { font-weight: 700; }
-  .daynav .dn-spacer { flex: 1; }
-  /* recurring "threads" cross-links */
-  .threads { margin: 2rem 0 0; }
-  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
-               margin: 0 0 .7rem; }
-  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
-            margin: 0 0 .6rem; font-size: .9rem; }
-  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
-  .thread a { margin-right: .7rem; white-space: nowrap; }
-  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 </style>
 </head>
-<body class="digest">
-<a class="back" href="index.html">← calendar</a>
-<header class="mast"><div class="mast-month">July 18</div><div class="mast-title">WSJ Digest</div></header>
-<div class="filters" role="group" aria-label="Filter by category"><button class="filter-btn is-active" data-filter="all" aria-pressed="true">All<span class="fc">21</span></button><button class="filter-btn" data-filter="tech" aria-pressed="false">Tech<span class="fc">7</span></button><button class="filter-btn" data-filter="markets" aria-pressed="false">Markets<span class="fc">7</span></button><button class="filter-btn" data-filter="finance" aria-pressed="false">Finance<span class="fc">7</span></button></div>
-<div class="bubbles">
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">SpaceX in Talks to Provide Computing Power for Pentagon&#x27;s AI Push</div><p class="bubble-body">SpaceX is in talks with the U.S. Department of Defense to supply data-center computing capacity worth billions of dollars to power AI models across Pentagon operations, according to reporting surfaced July 17, 2026, though the discussions remain preliminary and could still collapse. A deal would push SpaceX&#x27;s computing business into defense and pit it against incumbent hyperscalers Amazon, Microsoft, Google, and Oracle, which already supply the Pentagon. The effort builds on SpaceX&#x27;s February 2026 acquisition of Elon Musk&#x27;s xAI, which folded xAI&#x27;s AI models and large data-center footprint into the company, and leans on emerging orbital infrastructure like its AI1 satellite program and the Starlink network. SpaceX already holds computing agreements with Google, Anthropic, and Reflection AI. The company argues it can undercut legacy hyperscalers because it built its compute stack alongside its satellite and AI operations rather than through traditional enterprise sales.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Trump Media to Sell Faster Access to President&#x27;s Social Posts</div><p class="bubble-body">Trump Media &amp; Technology Group announced it will sell Wall Street firms high-speed access to posts from the 10 most influential Truth Social accounts, including President Donald Trump&#x27;s, through a new product called &quot;Truth API.&quot; The feed is designed to deliver posts &quot;in milliseconds,&quot; far faster than a standard Truth Social push notification, targeting algorithmic trading firms &quot;most impacted by the cost of a delay in information.&quot; Trump&#x27;s posts routinely move markets, making low-latency access potentially lucrative for traders, and the company said it had already signed up customers ahead of the planned Aug. 1 launch. The rollout drew sharp criticism, with Sen. Adam Schiff calling it &quot;yet another scheme, this time to save his failing social media business&quot; and some Democrats questioning its legality. Trump owns roughly 41% of Trump Media through a revocable trust.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">China&#x27;s Moonshot AI Releases Model to Challenge Top U.S. Systems</div><p class="bubble-body">China&#x27;s Moonshot AI released Kimi K3, a 2.8-trillion-parameter model the company calls the largest open-source AI model in the world, positioning it as a direct challenge to leading proprietary U.S. systems from Anthropic and OpenAI. Benchmarks show K3 running neck-and-neck with the frontier: it ranked first in LMArena&#x27;s Frontend Code evaluation at 1,679 points and beat Claude Opus 4.8 and GPT-5.5 on coding and general-agent tests, while still trailing Anthropic&#x27;s Claude Fable 5 and OpenAI&#x27;s GPT-5.6 on overall performance. The release, reported around July 17, 2026, underscores how Chinese labs are pushing open-weight models to work around U.S. compute export limits. Full model weights are scheduled for public release on July 27, 2026. The launch extends Moonshot&#x27;s pivot toward open-source begun with Kimi K2 in July 2025.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Databricks Set to Hit $188 Billion Valuation With New Investment From Coatue</div><p class="bubble-body">Databricks said on July 16, 2026, that it has signed a term sheet for a strategic funding round at a $188 billion valuation, led by existing investor Coatue and expected to close later in the summer. Coatue is anchoring roughly $3 billion in new investment, a jump of about 40% above Databricks&#x27; December 2025 valuation, marking the company&#x27;s second raise of 2026. Databricks said it will use the capital to accelerate its AI strategy, doubling down on its Unity AI Gateway governance layer, its Genie AI &quot;coworker,&quot; and Lakebase, a serverless Postgres database built for AI agents. The round cements Databricks&#x27; status as one of the most richly valued private companies in AI. Additional new and existing investors are participating alongside Coatue.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Meta Plans to Hire Top Amazon Computing Executive as It Weighs Cloud Push</div><p class="bubble-body">Meta is set to hire Dave Brown, an AWS senior vice president who is leaving Amazon at the end of July after nearly 19 years, to help oversee its rapidly expanding data-center footprint. Brown will report to Meta&#x27;s head of infrastructure as the company accelerates AI buildout and weighs launching a cloud computing business, part of a broader &quot;Meta Compute&quot; initiative targeting hundreds of gigawatts of capacity. Meta&#x27;s flagship Louisiana AI data center is expanding from 2 gigawatts to 5 gigawatts, with investment there alone exceeding $50 billion. CEO Mark Zuckerberg has floated eventually selling surplus computing capacity and AI services if Meta builds more infrastructure than it needs. The company has guided to $125 billion to $145 billion in capital expenditures, much of it aimed at AI data centers.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">China&#x27;s Xi Touts Open-Source AI and Takes a Swipe at U.S. Dominance</div><p class="bubble-body">Speaking at the World AI Conference in Shanghai on Friday, July 17, 2026, Chinese leader Xi Jinping endorsed open-source AI models and cast China as a champion of openness and equality, implicitly criticizing U.S. moves to protect its lead in AI chips and models. Xi called AI a &quot;historic opportunity,&quot; urged nations to embrace open-source technology, and warned that unequal access could create &quot;new historical injustices,&quot; pledging to help developing countries build AI capabilities. He said the world &quot;should oppose overstretching the concept of national security in the field of AI or placing one country&#x27;s security over that of others.&quot; Xi celebrated the launch of the World AI Cooperation Organisation (WAICO), which has drawn 29 member countries, positioning China to shape international AI governance standards. The pitch aligns with China&#x27;s strategy of expanding open-model partnerships across BRICS, ASEAN, Africa, and Latin America.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">IBM CEO Arvind Krishna Has Nowhere to Hide From AI</div><p class="bubble-body">IBM shares plunged about 25% on July 14, 2026, the company&#x27;s worst single-day drop on record, surpassing the 23.7% decline of October 19, 1987. The rout followed a preliminary Q2 2026 warning in which IBM guided to roughly $17.2 billion in revenue and $2.93 adjusted EPS, missing consensus estimates of about $17.86 billion and $3.02. CEO Arvind Krishna blamed a &quot;substantial shift&quot; in corporate spending toward AI hardware — servers, storage, and memory — amid supply constraints, pressuring IBM&#x27;s software and consulting-heavy business, and candidly admitted the company &quot;did not adapt and move quickly enough.&quot; The warning rattled the broader software sector, signaling that enterprise budgets are being redirected to AI infrastructure at software&#x27;s expense. Analysts framed the drop as a reckoning for a company caught flat-footed by the AI capex wave.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Nasdaq Drops Again as Chip Slump Deepens</div><p class="bubble-body">The Nasdaq Composite fell 1.4% to close at 25,520.24 on Friday, July 17, 2026, while the S&amp;P 500 lost 1.02% to 7,457.69 and the Dow slipped 0.77% to 52,146 as the semiconductor rout deepened for another session. The Philadelphia Semiconductor Index had dropped more than 13% over the prior month, wiping out roughly 35% of the chip index&#x27;s 2026 gains, with the VanEck Semiconductor ETF (SMH) down over 17% in July alone. Catalysts included the debut of an advanced AI model from Chinese startup Moonshot AI that investors feared could undercut U.S. chipmakers&#x27; sales, plus renewed U.S.-Iran violence that fed a risk-off mood; Nvidia, AMD, and Intel all slid while Alphabet fell on reports its Gemini 3.5 Pro launch would be delayed. For the week, the S&amp;P 500 lost about 1.6% and the Nasdaq slid 2.9%.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Blockbuster Stock Sales Are Threatening to Overwhelm the Bull Market</div><p class="bubble-body">A rush by some of the world&#x27;s largest companies to raise cash through equity issuance is putting the multi-year bull market at risk, as analysts warn the surge in new supply echoes the late stages of prior rallies. Recent mega-deals include SpaceX&#x27;s record IPO, which raised $75 billion at pricing (climbing above $85 billion after the greenshoe overallotment and pushing its valuation past $2 trillion), and Alphabet&#x27;s roughly $85 billion equity raise earmarked for AI infrastructure, which included a $10 billion private placement to Berkshire Hathaway. On top of those, South Korea&#x27;s SK Hynix launched a $26 billion-plus sale of American depositary receipts. The core worry is market mechanics: bull markets rarely die of old age or high valuations alone, but they can stall when new issuance overwhelms investors and supply outstrips demand. SpaceX priced at $135 a share and jumped about 19% on debut, closing near $161.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">The Boardroom Debate That Led to IBM&#x27;s Historic 25% Stock Plunge</div><p class="bubble-body">IBM shares cratered about 25% on Tuesday, July 14, 2026, the worst single-day drop in the company&#x27;s history, exceeding its 23.7% fall on Oct. 19, 1987, after IBM preannounced weak second-quarter results. The company reported adjusted earnings of $2.93 a share on revenue of $17.2 billion, below Wall Street&#x27;s expectations of $3.01 a share and $17.86 billion. CEO Arvind Krishna, in an unusual letter to investors, admitted the company had failed to adapt quickly enough, saying numerous large deals failed to close on the expected timelines and that clients had sharply reprioritized capital spending in the final weeks of June, redirecting funds from IBM&#x27;s software and infrastructure offerings toward hardware such as servers, storage, and memory chips. At least a dozen analysts cut their ratings or targets, with some flagging $213 as a potential support level. The plunge erased tens of billions in market value in a single session.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Treasury Yields Slip Amid Solid Indicators, Middle East Tension</div><p class="bubble-body">Treasury yields fell Friday, July 17, 2026, as investors weighed resilient U.S. economic data against intensifying overnight hostilities between the U.S. and Iran. The benchmark 10-year Treasury yield dropped more than 4 basis points to 4.525%, while the 2-year yield shed 3 basis points to 4.122%. The University of Michigan&#x27;s consumer sentiment index rose to 54.4, beating a Dow Jones consensus of 50.5, and the decline in yields followed cooler-than-expected producer and consumer price readings earlier in the week. Middle East tensions pushed energy prices sharply higher, with U.S. WTI crude for August delivery settling 4.48% higher at $82.49 a barrel and Brent up 4.59% at $88.10. The moves reflected a mix of solid domestic indicators and geopolitical risk driving demand for safe-haven government debt.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S. Chip Stocks Extend Slide; Netflix Tumbles on Growth Warning</div><p class="bubble-body">U.S. chip stocks extended their slump into bear-market territory in mid-July 2026, with the group pressured after Taiwan Semiconductor raised its 2026 capital-expenditure forecast to a range of $60 billion to $64 billion (up from $52–56 billion), overshadowing a better-than-expected Q2 report and stoking fears the AI spending spree is harder to justify. Netflix shares tumbled roughly 7% Friday (down more than 10% premarket) after the streamer forecast third-quarter revenue growth of about 12% and quarterly earnings below Wall Street estimates, disappointing investors. At least 18 analysts cut their price targets, and Netflix said it would reduce its viewing-hours report to once a year from twice starting in 2027, following its earlier decision to stop reporting subscriber counts, leaving investors with less visibility amid rising competition from YouTube and traditional media. The twin pressures dragged the broader market lower, with the Nasdaq off more than 1%.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">South Korea Regulator Unveils Curbs on High-Risk ETFs</div><p class="bubble-body">South Korea&#x27;s Financial Services Commission announced Thursday, July 16, 2026, that it would suspend new listings of single-stock leveraged ETFs, effective immediately, to curb surging market volatility tied to products linked to Samsung Electronics and SK Hynix. The move came barely seven weeks after the products launched: the FSC approved them on Jan. 30, 2026, and they went live May 27 capped at 2x leverage, quickly generating enormous trading volumes. Regulators will also ban securities firms and asset managers from advertising or marketing the products and will triple the minimum cash deposit for new investments to 30 million won (about $20,000), a requirement slated to take effect Aug. 5. Traders will additionally need to complete a mandatory one-hour investor education session before accessing the products. The FSC had originally framed the leveraged ETFs as a modernization step to keep domestic capital from flowing overseas.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Here&#x27;s What Is Happening Behind the Market&#x27;s Swings, in Charts</div><p class="bubble-body">Mid-July 2026&#x27;s market turbulence was driven primarily by an unwinding of the AI trade, as chip stocks fell into a bear market on fears that the AI capital-spending spree had pushed valuations beyond what fundamentals could support; the VanEck Semiconductor ETF dropped more than 4% in a session and sold off over 17% for the month. Sentiment was further rattled by the debut of a new AI model from Chinese startup Moonshot, which claimed performance on par with leading systems from OpenAI and Anthropic, raising fears of pricing and demand pressure on U.S. chipmakers. A second driver was geopolitical: a fractured Middle East truce and renewed U.S. strikes on Iran disrupted energy flows through the Strait of Hormuz, which handles roughly 20% of the world&#x27;s oil traffic, lifting crude prices. The result was a sharp sector rotation, with capital moving out of high-valuation technology into industrials, financials, and defensive sectors, leaving the S&amp;P 500 down 1.01% at 7,457.69 and the Nasdaq down 1.4% at 25,520.24 on July 17.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Cooling Inflation, Surging Bank Earnings Power Stocks</div><p class="bubble-body">On Tuesday, July 14, 2026, the June CPI report and second-quarter earnings from five big banks landed the same morning, a rare &quot;double print&quot; that pushed U.S. stocks higher. Inflation cooled notably, with headline CPI easing on a monthly basis (helped by a roughly 10% drop in gasoline prices) and core CPI running near 2.9% year over year, softening expectations for any Fed rate hike at the July meeting. JPMorgan led the beats, reporting EPS of about $6.14 versus a roughly $5.85 consensus, while Goldman Sachs jumped about 9% on record quarterly results. All five banks — JPMorgan, Bank of America, Goldman Sachs, Wells Fargo and Citigroup — topped EPS estimates, extending the sector&#x27;s streak of consecutive beats. The combination of easing price pressure and strong financial-sector profits lifted Dow, S&amp;P 500 and Nasdaq futures.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">SpaceX and Pentagon Discuss Data-Center Deal</div><p class="bubble-body">In mid-July 2026, SpaceX entered talks to sell computing power to the U.S. Department of Defense in a deal that could be worth several billion dollars, according to reporting picked up by Bloomberg. Rather than selling data centers outright, SpaceX would lease its AI computing capacity to the Pentagon for a limited time, and the Defense Department indicated it wants to build data centers on its own installations. The arrangement would resemble commercial cloud-computing agreements SpaceX has struck with partners such as Google and Anthropic. Sources cautioned the negotiations remained fluid and could still collapse without a deal. The move signals SpaceX positioning its AI infrastructure business as a direct challenger to established cloud providers already serving defense clients.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">The Podcasting Tech Investor Now Busy Hyping Trump Accounts</div><p class="bubble-body">Trump Accounts, tax-advantaged investment accounts for U.S. children under 18, launched July 4, 2026, with the federal government seeding $1,000 for eligible kids born from 2025 through 2028. Funds must be invested in diversified U.S. equity index funds or ETFs, defaulting to a low-cost S&amp;P 500 fund, and notably crypto is excluded despite heavy promotion from finance-world boosters. A wave of promoters — corporate backers like Dell (matching contributions for employees) and Robinhood, plus celebrities such as Nicki Minaj pledging $150,000–$300,000 for fans — have publicly hyped the program. More than 6 million children have been registered, with about 1.4 million eligible for the $1,000 seed money, and philanthropic pledges have topped $6 billion. Critics warn the enthusiastic promotion oversells modest, market-dependent returns and channels attention toward loosely regulated financial products.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Debt Collectors Chase More Consumers in Court</div><p class="bubble-body">Debt-collection lawsuits have surged back to pre-pandemic highs across U.S. state courts as collectors ramp up filings against consumers. In Massachusetts, consumer debt cases jumped to roughly 146,000 in 2025, a more than 60% increase over two years, and consumer litigation filings under the FDCPA and FCRA rose sharply through early 2026. Large debt buyers dominate the dockets — LVNV Funding&#x27;s filings are up about 350% since 2019, and in states like Indiana the top 10 filers now account for a growing share of collection cases. The lawsuits are especially consequential because consumers are represented by attorneys in fewer than 10% of cases (sometimes below 1%), and most defendants never appear in court, leading to frequent default judgments. Advocates say many cases involve borrowers being misled or pressured over old or poorly documented debts.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">The Trigger Clause More Couples Want in Their Prenups</div><p class="bubble-body">A growing number of couples are asking to add &quot;infidelity clauses&quot; (also called no-cheating or lifestyle clauses) to prenuptial agreements, imposing a predetermined financial penalty, asset forfeiture, or loss of spousal support if one spouse has an affair. These are one type of broader lifestyle clause that can also cover matters like household responsibilities, weight, in-law visits, and other personal conduct, with noncompliance tied to financial consequences. Enforceability is the central problem: several no-fault divorce states — including California, Nevada, Iowa, and Hawaii — generally refuse to enforce infidelity clauses, and courts are reluctant to police personal behavior within a marriage. Family lawyers note the clauses often function more as a deterrent or a values statement than an enforceable financial term. They also carry interpersonal risk, since merely proposing one can breed distrust before the wedding.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Why High Credit Card Delinquencies Aren&#x27;t Showing Up at the Big Banks</div><p class="bubble-body">National credit-card delinquency stood at about 2.9% in Q1 2026, down from a 3.2% peak in 2024 but still above the roughly 2.6% pre-pandemic level, masking a sharp split by lender. Small-bank card delinquency runs around 6.4% — roughly double the big-bank rate — reflecting a K-shaped credit story in which stress concentrates among lower-income borrowers and smaller lenders. Big banks show stable-to-improving metrics: Bank of America&#x27;s delinquency rate fell to 1.39% in January 2026 from 1.48% a year earlier, and JPMorgan&#x27;s Chase Issuance Trust delinquency held near 0.88%. Their higher-income customer bases keep spending and paying balances down, so the deterioration among subprime and fintech-served borrowers doesn&#x27;t surface in headline big-bank numbers. Industry charge-offs of roughly 3.8% remain off the 4.6% cycle peak but slightly above pre-pandemic norms.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Nearly a Million People Have Left the SAVE Student-Loan Program</div><p class="bubble-body">Nearly 1 million borrowers have already exited the defunct SAVE repayment plan, which is winding down after nearly two years of litigation left roughly 7 million enrollees in limbo. Starting July 1, 2026, loan servicers began sending 90-day notices instructing SAVE borrowers to choose a new repayment plan or be automatically moved to another; no one will be forced off SAVE before September 29, 2026 at the earliest, with some notices arriving as late as early 2027. Borrowers had been in an involuntary forbearance during the legal fight, but interest resumed accruing on August 1, 2025, so balances have been growing without required payments. Available alternatives include IBR, PAYE, and ICR, plus the new Repayment Assistance Plan (RAP) that opened July 1, 2026. Borrowers pursuing PSLF must switch out of SAVE into a qualifying IDR plan to keep earning credit toward forgiveness.</p></div>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-07-17.html">‹ Jul 17</a> &nbsp;·&nbsp; <a href="digest-2026-07-19.html">Jul 19 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Saturday Issue · No. 11</div>
+    <div class="issue-date">July 18, 2026</div>
+    <div class="issue-sub">21 stories across tech, markets &amp; finance — a 14-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 21</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">SpaceX in Talks to Provide Computing Power for Pentagon&#x27;s AI Push</div>
+        <div class="art-sum">SpaceX is in talks with the U.S. Department of Defense to supply data-center computing capacity worth billions of dollars to power AI models across Pentagon operations, according to reporting surfaced July 17, 2026, though the discussions remain preliminary and could still collapse. A deal would push SpaceX&#x27;s computing business into defense and pit it against incumbent hyperscalers Amazon, Microsoft, Google, and Oracle, which already supply the Pentagon. The effort builds on SpaceX&#x27;s February 2026 acquisition of Elon Musk&#x27;s xAI, which folded xAI&#x27;s AI models and large data-center footprint into the company, and leans on emerging orbital infrastructure like its AI1 satellite program and the Starlink network. SpaceX already holds computing agreements with Google, Anthropic, and Reflection AI. The company argues it can undercut legacy hyperscalers because it built its compute stack alongside its satellite and AI operations rather than through traditional enterprise sales.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Trump Media to Sell Faster Access to President&#x27;s Social Posts</div>
+        <div class="art-sum">Trump Media &amp; Technology Group announced it will sell Wall Street firms high-speed access to posts from the 10 most influential Truth Social accounts, including President Donald Trump&#x27;s, through a new product called &quot;Truth API.&quot; The feed is designed to deliver posts &quot;in milliseconds,&quot; far faster than a standard Truth Social push notification, targeting algorithmic trading firms &quot;most impacted by the cost of a delay in information.&quot; Trump&#x27;s posts routinely move markets, making low-latency access potentially lucrative for traders, and the company said it had already signed up customers ahead of the planned Aug. 1 launch. The rollout drew sharp criticism, with Sen. Adam Schiff calling it &quot;yet another scheme, this time to save his failing social media business&quot; and some Democrats questioning its legality. Trump owns roughly 41% of Trump Media through a revocable trust.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China&#x27;s Moonshot AI Releases Model to Challenge Top U.S. Systems</div>
+        <div class="art-sum">China&#x27;s Moonshot AI released Kimi K3, a 2.8-trillion-parameter model the company calls the largest open-source AI model in the world, positioning it as a direct challenge to leading proprietary U.S. systems from Anthropic and OpenAI. Benchmarks show K3 running neck-and-neck with the frontier: it ranked first in LMArena&#x27;s Frontend Code evaluation at 1,679 points and beat Claude Opus 4.8 and GPT-5.5 on coding and general-agent tests, while still trailing Anthropic&#x27;s Claude Fable 5 and OpenAI&#x27;s GPT-5.6 on overall performance. The release, reported around July 17, 2026, underscores how Chinese labs are pushing open-weight models to work around U.S. compute export limits. Full model weights are scheduled for public release on July 27, 2026. The launch extends Moonshot&#x27;s pivot toward open-source begun with Kimi K2 in July 2025.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Databricks Set to Hit $188 Billion Valuation With New Investment From Coatue</div>
+        <div class="art-sum">Databricks said on July 16, 2026, that it has signed a term sheet for a strategic funding round at a $188 billion valuation, led by existing investor Coatue and expected to close later in the summer. Coatue is anchoring roughly $3 billion in new investment, a jump of about 40% above Databricks&#x27; December 2025 valuation, marking the company&#x27;s second raise of 2026. Databricks said it will use the capital to accelerate its AI strategy, doubling down on its Unity AI Gateway governance layer, its Genie AI &quot;coworker,&quot; and Lakebase, a serverless Postgres database built for AI agents. The round cements Databricks&#x27; status as one of the most richly valued private companies in AI. Additional new and existing investors are participating alongside Coatue.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Plans to Hire Top Amazon Computing Executive as It Weighs Cloud Push</div>
+        <div class="art-sum">Meta is set to hire Dave Brown, an AWS senior vice president who is leaving Amazon at the end of July after nearly 19 years, to help oversee its rapidly expanding data-center footprint. Brown will report to Meta&#x27;s head of infrastructure as the company accelerates AI buildout and weighs launching a cloud computing business, part of a broader &quot;Meta Compute&quot; initiative targeting hundreds of gigawatts of capacity. Meta&#x27;s flagship Louisiana AI data center is expanding from 2 gigawatts to 5 gigawatts, with investment there alone exceeding $50 billion. CEO Mark Zuckerberg has floated eventually selling surplus computing capacity and AI services if Meta builds more infrastructure than it needs. The company has guided to $125 billion to $145 billion in capital expenditures, much of it aimed at AI data centers.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China&#x27;s Xi Touts Open-Source AI and Takes a Swipe at U.S. Dominance</div>
+        <div class="art-sum">Speaking at the World AI Conference in Shanghai on Friday, July 17, 2026, Chinese leader Xi Jinping endorsed open-source AI models and cast China as a champion of openness and equality, implicitly criticizing U.S. moves to protect its lead in AI chips and models. Xi called AI a &quot;historic opportunity,&quot; urged nations to embrace open-source technology, and warned that unequal access could create &quot;new historical injustices,&quot; pledging to help developing countries build AI capabilities. He said the world &quot;should oppose overstretching the concept of national security in the field of AI or placing one country&#x27;s security over that of others.&quot; Xi celebrated the launch of the World AI Cooperation Organisation (WAICO), which has drawn 29 member countries, positioning China to shape international AI governance standards. The pitch aligns with China&#x27;s strategy of expanding open-model partnerships across BRICS, ASEAN, Africa, and Latin America.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">IBM CEO Arvind Krishna Has Nowhere to Hide From AI</div>
+        <div class="art-sum">IBM shares plunged about 25% on July 14, 2026, the company&#x27;s worst single-day drop on record, surpassing the 23.7% decline of October 19, 1987. The rout followed a preliminary Q2 2026 warning in which IBM guided to roughly $17.2 billion in revenue and $2.93 adjusted EPS, missing consensus estimates of about $17.86 billion and $3.02. CEO Arvind Krishna blamed a &quot;substantial shift&quot; in corporate spending toward AI hardware — servers, storage, and memory — amid supply constraints, pressuring IBM&#x27;s software and consulting-heavy business, and candidly admitted the company &quot;did not adapt and move quickly enough.&quot; The warning rattled the broader software sector, signaling that enterprise budgets are being redirected to AI infrastructure at software&#x27;s expense. Analysts framed the drop as a reckoning for a company caught flat-footed by the AI capex wave.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nasdaq Drops Again as Chip Slump Deepens</div>
+        <div class="art-sum">The Nasdaq Composite fell 1.4% to close at 25,520.24 on Friday, July 17, 2026, while the S&amp;P 500 lost 1.02% to 7,457.69 and the Dow slipped 0.77% to 52,146 as the semiconductor rout deepened for another session. The Philadelphia Semiconductor Index had dropped more than 13% over the prior month, wiping out roughly 35% of the chip index&#x27;s 2026 gains, with the VanEck Semiconductor ETF (SMH) down over 17% in July alone. Catalysts included the debut of an advanced AI model from Chinese startup Moonshot AI that investors feared could undercut U.S. chipmakers&#x27; sales, plus renewed U.S.-Iran violence that fed a risk-off mood; Nvidia, AMD, and Intel all slid while Alphabet fell on reports its Gemini 3.5 Pro launch would be delayed. For the week, the S&amp;P 500 lost about 1.6% and the Nasdaq slid 2.9%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Blockbuster Stock Sales Are Threatening to Overwhelm the Bull Market</div>
+        <div class="art-sum">A rush by some of the world&#x27;s largest companies to raise cash through equity issuance is putting the multi-year bull market at risk, as analysts warn the surge in new supply echoes the late stages of prior rallies. Recent mega-deals include SpaceX&#x27;s record IPO, which raised $75 billion at pricing (climbing above $85 billion after the greenshoe overallotment and pushing its valuation past $2 trillion), and Alphabet&#x27;s roughly $85 billion equity raise earmarked for AI infrastructure, which included a $10 billion private placement to Berkshire Hathaway. On top of those, South Korea&#x27;s SK Hynix launched a $26 billion-plus sale of American depositary receipts. The core worry is market mechanics: bull markets rarely die of old age or high valuations alone, but they can stall when new issuance overwhelms investors and supply outstrips demand. SpaceX priced at $135 a share and jumped about 19% on debut, closing near $161.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Boardroom Debate That Led to IBM&#x27;s Historic 25% Stock Plunge</div>
+        <div class="art-sum">IBM shares cratered about 25% on Tuesday, July 14, 2026, the worst single-day drop in the company&#x27;s history, exceeding its 23.7% fall on Oct. 19, 1987, after IBM preannounced weak second-quarter results. The company reported adjusted earnings of $2.93 a share on revenue of $17.2 billion, below Wall Street&#x27;s expectations of $3.01 a share and $17.86 billion. CEO Arvind Krishna, in an unusual letter to investors, admitted the company had failed to adapt quickly enough, saying numerous large deals failed to close on the expected timelines and that clients had sharply reprioritized capital spending in the final weeks of June, redirecting funds from IBM&#x27;s software and infrastructure offerings toward hardware such as servers, storage, and memory chips. At least a dozen analysts cut their ratings or targets, with some flagging $213 as a potential support level. The plunge erased tens of billions in market value in a single session.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Treasury Yields Slip Amid Solid Indicators, Middle East Tension</div>
+        <div class="art-sum">Treasury yields fell Friday, July 17, 2026, as investors weighed resilient U.S. economic data against intensifying overnight hostilities between the U.S. and Iran. The benchmark 10-year Treasury yield dropped more than 4 basis points to 4.525%, while the 2-year yield shed 3 basis points to 4.122%. The University of Michigan&#x27;s consumer sentiment index rose to 54.4, beating a Dow Jones consensus of 50.5, and the decline in yields followed cooler-than-expected producer and consumer price readings earlier in the week. Middle East tensions pushed energy prices sharply higher, with U.S. WTI crude for August delivery settling 4.48% higher at $82.49 a barrel and Brent up 4.59% at $88.10. The moves reflected a mix of solid domestic indicators and geopolitical risk driving demand for safe-haven government debt.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Chip Stocks Extend Slide; Netflix Tumbles on Growth Warning</div>
+        <div class="art-sum">U.S. chip stocks extended their slump into bear-market territory in mid-July 2026, with the group pressured after Taiwan Semiconductor raised its 2026 capital-expenditure forecast to a range of $60 billion to $64 billion (up from $52–56 billion), overshadowing a better-than-expected Q2 report and stoking fears the AI spending spree is harder to justify. Netflix shares tumbled roughly 7% Friday (down more than 10% premarket) after the streamer forecast third-quarter revenue growth of about 12% and quarterly earnings below Wall Street estimates, disappointing investors. At least 18 analysts cut their price targets, and Netflix said it would reduce its viewing-hours report to once a year from twice starting in 2027, following its earlier decision to stop reporting subscriber counts, leaving investors with less visibility amid rising competition from YouTube and traditional media. The twin pressures dragged the broader market lower, with the Nasdaq off more than 1%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">South Korea Regulator Unveils Curbs on High-Risk ETFs</div>
+        <div class="art-sum">South Korea&#x27;s Financial Services Commission announced Thursday, July 16, 2026, that it would suspend new listings of single-stock leveraged ETFs, effective immediately, to curb surging market volatility tied to products linked to Samsung Electronics and SK Hynix. The move came barely seven weeks after the products launched: the FSC approved them on Jan. 30, 2026, and they went live May 27 capped at 2x leverage, quickly generating enormous trading volumes. Regulators will also ban securities firms and asset managers from advertising or marketing the products and will triple the minimum cash deposit for new investments to 30 million won (about $20,000), a requirement slated to take effect Aug. 5. Traders will additionally need to complete a mandatory one-hour investor education session before accessing the products. The FSC had originally framed the leveraged ETFs as a modernization step to keep domestic capital from flowing overseas.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Here&#x27;s What Is Happening Behind the Market&#x27;s Swings, in Charts</div>
+        <div class="art-sum">Mid-July 2026&#x27;s market turbulence was driven primarily by an unwinding of the AI trade, as chip stocks fell into a bear market on fears that the AI capital-spending spree had pushed valuations beyond what fundamentals could support; the VanEck Semiconductor ETF dropped more than 4% in a session and sold off over 17% for the month. Sentiment was further rattled by the debut of a new AI model from Chinese startup Moonshot, which claimed performance on par with leading systems from OpenAI and Anthropic, raising fears of pricing and demand pressure on U.S. chipmakers. A second driver was geopolitical: a fractured Middle East truce and renewed U.S. strikes on Iran disrupted energy flows through the Strait of Hormuz, which handles roughly 20% of the world&#x27;s oil traffic, lifting crude prices. The result was a sharp sector rotation, with capital moving out of high-valuation technology into industrials, financials, and defensive sectors, leaving the S&amp;P 500 down 1.01% at 7,457.69 and the Nasdaq down 1.4% at 25,520.24 on July 17.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Cooling Inflation, Surging Bank Earnings Power Stocks</div>
+        <div class="art-sum">On Tuesday, July 14, 2026, the June CPI report and second-quarter earnings from five big banks landed the same morning, a rare &quot;double print&quot; that pushed U.S. stocks higher. Inflation cooled notably, with headline CPI easing on a monthly basis (helped by a roughly 10% drop in gasoline prices) and core CPI running near 2.9% year over year, softening expectations for any Fed rate hike at the July meeting. JPMorgan led the beats, reporting EPS of about $6.14 versus a roughly $5.85 consensus, while Goldman Sachs jumped about 9% on record quarterly results. All five banks — JPMorgan, Bank of America, Goldman Sachs, Wells Fargo and Citigroup — topped EPS estimates, extending the sector&#x27;s streak of consecutive beats. The combination of easing price pressure and strong financial-sector profits lifted Dow, S&amp;P 500 and Nasdaq futures.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">SpaceX and Pentagon Discuss Data-Center Deal</div>
+        <div class="art-sum">In mid-July 2026, SpaceX entered talks to sell computing power to the U.S. Department of Defense in a deal that could be worth several billion dollars, according to reporting picked up by Bloomberg. Rather than selling data centers outright, SpaceX would lease its AI computing capacity to the Pentagon for a limited time, and the Defense Department indicated it wants to build data centers on its own installations. The arrangement would resemble commercial cloud-computing agreements SpaceX has struck with partners such as Google and Anthropic. Sources cautioned the negotiations remained fluid and could still collapse without a deal. The move signals SpaceX positioning its AI infrastructure business as a direct challenger to established cloud providers already serving defense clients.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Podcasting Tech Investor Now Busy Hyping Trump Accounts</div>
+        <div class="art-sum">Trump Accounts, tax-advantaged investment accounts for U.S. children under 18, launched July 4, 2026, with the federal government seeding $1,000 for eligible kids born from 2025 through 2028. Funds must be invested in diversified U.S. equity index funds or ETFs, defaulting to a low-cost S&amp;P 500 fund, and notably crypto is excluded despite heavy promotion from finance-world boosters. A wave of promoters — corporate backers like Dell (matching contributions for employees) and Robinhood, plus celebrities such as Nicki Minaj pledging $150,000–$300,000 for fans — have publicly hyped the program. More than 6 million children have been registered, with about 1.4 million eligible for the $1,000 seed money, and philanthropic pledges have topped $6 billion. Critics warn the enthusiastic promotion oversells modest, market-dependent returns and channels attention toward loosely regulated financial products.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Debt Collectors Chase More Consumers in Court</div>
+        <div class="art-sum">Debt-collection lawsuits have surged back to pre-pandemic highs across U.S. state courts as collectors ramp up filings against consumers. In Massachusetts, consumer debt cases jumped to roughly 146,000 in 2025, a more than 60% increase over two years, and consumer litigation filings under the FDCPA and FCRA rose sharply through early 2026. Large debt buyers dominate the dockets — LVNV Funding&#x27;s filings are up about 350% since 2019, and in states like Indiana the top 10 filers now account for a growing share of collection cases. The lawsuits are especially consequential because consumers are represented by attorneys in fewer than 10% of cases (sometimes below 1%), and most defendants never appear in court, leading to frequent default judgments. Advocates say many cases involve borrowers being misled or pressured over old or poorly documented debts.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Trigger Clause More Couples Want in Their Prenups</div>
+        <div class="art-sum">A growing number of couples are asking to add &quot;infidelity clauses&quot; (also called no-cheating or lifestyle clauses) to prenuptial agreements, imposing a predetermined financial penalty, asset forfeiture, or loss of spousal support if one spouse has an affair. These are one type of broader lifestyle clause that can also cover matters like household responsibilities, weight, in-law visits, and other personal conduct, with noncompliance tied to financial consequences. Enforceability is the central problem: several no-fault divorce states — including California, Nevada, Iowa, and Hawaii — generally refuse to enforce infidelity clauses, and courts are reluctant to police personal behavior within a marriage. Family lawyers note the clauses often function more as a deterrent or a values statement than an enforceable financial term. They also carry interpersonal risk, since merely proposing one can breed distrust before the wedding.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Why High Credit Card Delinquencies Aren&#x27;t Showing Up at the Big Banks</div>
+        <div class="art-sum">National credit-card delinquency stood at about 2.9% in Q1 2026, down from a 3.2% peak in 2024 but still above the roughly 2.6% pre-pandemic level, masking a sharp split by lender. Small-bank card delinquency runs around 6.4% — roughly double the big-bank rate — reflecting a K-shaped credit story in which stress concentrates among lower-income borrowers and smaller lenders. Big banks show stable-to-improving metrics: Bank of America&#x27;s delinquency rate fell to 1.39% in January 2026 from 1.48% a year earlier, and JPMorgan&#x27;s Chase Issuance Trust delinquency held near 0.88%. Their higher-income customer bases keep spending and paying balances down, so the deterioration among subprime and fintech-served borrowers doesn&#x27;t surface in headline big-bank numbers. Industry charge-offs of roughly 3.8% remain off the 4.6% cycle peak but slightly above pre-pandemic norms.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Nearly a Million People Have Left the SAVE Student-Loan Program</div>
+        <div class="art-sum">Nearly 1 million borrowers have already exited the defunct SAVE repayment plan, which is winding down after nearly two years of litigation left roughly 7 million enrollees in limbo. Starting July 1, 2026, loan servicers began sending 90-day notices instructing SAVE borrowers to choose a new repayment plan or be automatically moved to another; no one will be forced off SAVE before September 29, 2026 at the earliest, with some notices arriving as late as early 2027. Borrowers had been in an involuntary forbearance during the legal fight, but interest resumed accruing on August 1, 2025, so balances have been growing without required payments. Available alternatives include IBR, PAYE, and ICR, plus the new Repayment Assistance Plan (RAP) that opened July 1, 2026. Borrowers pursuing PSLF must switch out of SAVE into a qualifying IDR plan to keep earning credit toward forgiveness.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 21 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">SpaceX in Talks to Provide Computing Power for Pentagon&#x27;s AI Push</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Trump Media to Sell Faster Access to President&#x27;s Social Posts</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">China&#x27;s Moonshot AI Releases Model to Challenge Top U.S. Systems</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Databricks Set to Hit $188 Billion Valuation With New Investment From Coatue</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Meta Plans to Hire Top Amazon Computing Executive as It Weighs Cloud Push</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">China&#x27;s Xi Touts Open-Source AI and Takes a Swipe at U.S. Dominance</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">IBM CEO Arvind Krishna Has Nowhere to Hide From AI</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Nasdaq Drops Again as Chip Slump Deepens</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Blockbuster Stock Sales Are Threatening to Overwhelm the Bull Market</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">The Boardroom Debate That Led to IBM&#x27;s Historic 25% Stock Plunge</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Treasury Yields Slip Amid Solid Indicators, Middle East Tension</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">U.S. Chip Stocks Extend Slide; Netflix Tumbles on Growth Warning</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">South Korea Regulator Unveils Curbs on High-Risk ETFs</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Here&#x27;s What Is Happening Behind the Market&#x27;s Swings, in Charts</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Cooling Inflation, Surging Bank Earnings Power Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">SpaceX and Pentagon Discuss Data-Center Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">The Podcasting Tech Investor Now Busy Hyping Trump Accounts</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Debt Collectors Chase More Consumers in Court</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">The Trigger Clause More Couples Want in Their Prenups</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">20</span><span class="toc-t">Why High Credit Card Delinquencies Aren&#x27;t Showing Up at the Big Banks</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">21</span><span class="toc-t">Nearly a Million People Have Left the SAVE Student-Loan Program</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">9 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">7 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">4 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-07-17.html">← Older · July 17, 2026 · AI&#x27;s Wider Availability Is Good for China, Not Great for OpenAI and Anthropic</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
 </div>
-<section class="threads"><h2 class="threads-h">Recurring threads</h2><div class="thread"><span class="thread-label">AI boom</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Chips</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">IPOs &amp; listings</span><span class="thread-days">also on <a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Iran &amp; oil</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Crypto</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div></section>
-<nav class="daynav"><a class="dn-prev" href="digest-2026-07-17.html"><span class="dn-label">← Older</span><span class="dn-date">Jul 17</span></a><a class="dn-next" href="digest-2026-07-19.html"><span class="dn-label">Newer →</span><span class="dn-date">Jul 19</span></a></nav>
-<script>
-(function () {
-  var bar = document.querySelector('.filters');
-  if (!bar) return;
-  var cards = document.querySelectorAll('.bubble');
-  var buttons = bar.querySelectorAll('.filter-btn');
-  function apply(f, push) {
-    var matched = false;
-    buttons.forEach(function (b) {
-      var on = b.getAttribute('data-filter') === f;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      if (on) matched = true;
-    });
-    if (!matched) { f = 'all'; buttons[0].classList.add('is-active');
-                    buttons[0].setAttribute('aria-pressed', 'true'); }
-    cards.forEach(function (c) {
-      c.hidden = !(f === 'all' || c.getAttribute('data-cat') === f);
-    });
-    if (push) {
-      var h = f === 'all' ? ' ' : '#' + f;
-      history.replaceState(null, '', h === ' ' ? location.pathname + location.search : h);
-    }
-  }
-  bar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (btn) apply(btn.getAttribute('data-filter'), true);
-  });
-  apply((location.hash || '').replace('#', '') || 'all', false);
-  window.addEventListener('hashchange', function () {
-    apply((location.hash || '').replace('#', '') || 'all', false);
-  });
-})();
-</script>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
 </body>
 </html>

@@ -3,209 +3,277 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WSJ Digest — July 14, 2026</title>
+  <title>The Deep Digest — July 14, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <style>
-  @font-face { font-family: "Lumiare"; src: url("fonts/Lumiare.otf") format("opentype"); font-display: swap; }
-  @font-face { font-family: "Dealerplate California"; src: url("fonts/DealerplateCalifornia.otf") format("opentype"); font-display: swap; }
-  :root { color-scheme: dark;
-          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
-          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
   * { box-sizing: border-box; }
-  body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-         max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; letter-spacing: .04em; color: #e9e4da; min-height: 100vh;
-         background: radial-gradient(1100px 560px at 18% -10%, #2c2721, #201d1a 58%); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
-    font-family: "Lumiare", Georgia, "Times New Roman", serif; letter-spacing: .05em; }
-  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .4rem; }
-  .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
 
-  /* Top-right search bar on the index */
-  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-            flex-wrap: wrap; margin: 0 0 .5rem; }
-  .topbar h1 { margin: 0; }
-  .topsearch input { font: inherit; color: #e9e4da; background: #2a2521; border: 1px solid #4a453e;
-                     border-radius: 999px; padding: .5rem 1rem; min-width: 210px; }
-  .topsearch input:focus { outline: none; border-color: var(--accent); }
-  @media (max-width: 520px) { .topsearch, .topsearch input { width: 100%; } }
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
 
-  /* "Read the latest" hero on the index */
-  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
-                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
-                 font-weight: 700; font-size: 1.02rem; }
-  .hero-latest:hover { text-decoration: none; opacity: .93; }
-  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
 
-  /* Calendar index */
-  table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
-  table.cal caption { caption-side: top; text-align: left; font-size: 1.3rem; font-weight: 700;
-                      letter-spacing: -0.01em; margin-bottom: .6rem; }
-  table.cal th { padding: .3rem .45rem; text-align: right; font-size: .68rem; font-weight: 600;
-                 text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-  table.cal td { border: 1px solid var(--border); height: 84px; vertical-align: top; padding: .35rem .45rem; }
-  table.cal td.empty { border-color: transparent; }
-  table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
-  /* days with a digest stay clickable, but are not "highlighted" */
-  table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--accent); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .85rem; color: var(--accent); font-weight: 600; }
-  /* only the current date is highlighted */
-  table.cal td.today { background: rgba(110, 168, 254, .14); }
-  table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
-  @media (max-width: 560px) {
-    table.cal td { height: 54px; padding: .25rem; }
-    table.cal td.has .tag, table.cal td.has .cell-head { display: none; } table.cal th { font-size: .58rem; }
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
   }
-
-  /* Landing: hero, stats, featured card */
-  .hero { margin: 0 0 1.6rem; }
-  .topbar { align-items: flex-start; }
-  .brand h1 { margin: 0; }
-  .tagline { color: var(--muted); font-size: .98rem; margin: .3rem 0 0; max-width: 48ch; }
-  .stats { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; color: var(--muted);
-           font-size: .85rem; margin: 1rem 0 0; }
-  .stats b { color: #e9e4da; font-weight: 700; }
-  .featured { display: block; background: #efe9dc; color: #26221e; border-radius: 20px;
-              padding: 1.5rem 1.7rem; margin: 0 0 2.2rem; transition: transform .15s ease;
-              box-shadow: 0 18px 40px -24px rgba(0,0,0,.65); }
-  .featured:hover { text-decoration: none; transform: translateY(-2px); }
-  .featured-label { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8a7f6d; }
-  .featured-date { font-family: "Lumiare", Georgia, serif; font-size: 2.1rem; letter-spacing: .04em; margin: .1rem 0 .7rem; }
-  .featured-heads { list-style: none; padding: 0; margin: 0 0 .9rem; }
-  .featured-heads li { font-weight: 600; font-size: .98rem; padding: .3rem 0;
-                       border-bottom: 1px solid rgba(38, 34, 30, .12); }
-  .featured-heads li:last-child { border-bottom: 0; }
-  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .8rem; }
-  .chip { background: #26221e; color: #efe9dc; border-radius: 999px; padding: .22rem .62rem;
-          font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
-  .featured-cta { font-weight: 700; color: #7a663f; }
-
-  /* Richer calendar cells */
-  table.cal td { height: 118px; }
-  table.cal td.has a { gap: .15rem; }
-  table.cal td.has .num { text-align: left; }
-  table.cal td.has:hover { border-color: var(--accent); background: rgba(110, 168, 254, .06); }
-  .cell-head { font-size: .72rem; line-height: 1.18; color: #b9b1a5; margin-top: .1rem;
-               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  table.cal td.today { outline: 2px solid var(--accent); outline-offset: -2px; }
-
-  /* Bubble digest page (dark) */
-  body.digest { background: #201d1a; color: #e9e4da; max-width: 960px; }
-  body.digest .back { color: #b8b0a4; }
-  .mast { background: #efe9dc; color: #26221e; border-radius: 24px; padding: 2rem 2.1rem 1.6rem; margin: 0 0 1.4rem; }
-  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: .02em; line-height: .9; text-transform: uppercase; }
-  .mast-title { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin-top: .35rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
-  .filter-btn { font: inherit; cursor: pointer; -webkit-appearance: none; border: 1px solid #4a453e;
-                background: transparent; color: #d9d2c6; border-radius: 999px; padding: .4rem .95rem;
-                font-size: .82rem; font-weight: 600; letter-spacing: .02em; }
-  .filter-btn:hover { border-color: #7a7266; }
-  .filter-btn.is-active { background: #efe9dc; color: #26221e; border-color: #efe9dc; }
-  .bubble[hidden] { display: none; }
-  .bubbles { column-count: 2; column-gap: 1.2rem; }
-  .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
-            background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
-  .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
-                 padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; white-space: nowrap; }
-  .bubble.tech .bubble-pill { background: var(--tech); }
-  .bubble.markets .bubble-pill { background: var(--markets); }
-  .bubble.finance .bubble-pill { background: var(--finance); }
-  .bubble-kicker { font-style: italic; text-transform: uppercase; font-size: .76rem; letter-spacing: .03em;
-                   color: #8a7f6d; margin: .9rem 0 .15rem; }
-  .bubble-title { font-size: 1.16rem; font-weight: 800; line-height: 1.25; margin: .15rem 0 .55rem; }
-  .bubble-title a { color: inherit; }
-  .bubble-body { font-size: .95rem; line-height: 1.55; color: #3a352e; margin: 0; }
-  @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
-
-  /* prev / next-day navigation */
-  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
-  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
-              padding: .75rem 1rem; color: #e9e4da; }
-  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
-  .daynav .dn-next { text-align: right; }
-  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
-                      color: #8a7f6d; }
-  .daynav .dn-date { font-weight: 700; }
-  .daynav .dn-spacer { flex: 1; }
-  /* recurring "threads" cross-links */
-  .threads { margin: 2rem 0 0; }
-  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
-               margin: 0 0 .7rem; }
-  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
-            margin: 0 0 .6rem; font-size: .9rem; }
-  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
-  .thread a { margin-right: .7rem; white-space: nowrap; }
-  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 </style>
 </head>
-<body class="digest">
-<a class="back" href="index.html">← calendar</a>
-<header class="mast"><div class="mast-month">July 14</div><div class="mast-title">WSJ Digest</div></header>
-<div class="filters" role="group" aria-label="Filter by category"><button class="filter-btn is-active" data-filter="all" aria-pressed="true">All<span class="fc">21</span></button><button class="filter-btn" data-filter="tech" aria-pressed="false">Tech<span class="fc">7</span></button><button class="filter-btn" data-filter="markets" aria-pressed="false">Markets<span class="fc">7</span></button><button class="filter-btn" data-filter="finance" aria-pressed="false">Finance<span class="fc">7</span></button></div>
-<div class="bubbles">
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Chinese AI Startup DFSX Releases Chip to Take on the West</div><p class="bubble-body">This headline reflects reporting that Hangzhou-based Chinese AI firm DeepSeek is developing its own AI chip, first reported by Reuters on July 7, 2026, citing three people familiar with the effort. The chip is designed for inference (generating responses from trained models) rather than for training, and would reportedly be fabricated by China&#x27;s largest foundry, SMIC, rather than Taiwan&#x27;s TSMC, which remains stuck on a roughly 7-nanometer process due to U.S. and Dutch export controls. The move aims to reduce DeepSeek&#x27;s dependence on Nvidia and Huawei silicon that powers its low-cost models, and news of the effort sent Nvidia shares lower. The project began around July 2025 and remains early-stage, with DeepSeek still in talks with outside foundry and memory partners; the company has not officially confirmed it, and U.S. curbs on advanced foundry access and high-bandwidth memory remain major obstacles.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Tower Semiconductor Shares Surge Premarket on Japanese Investment</div><p class="bubble-body">Israeli chipmaker Tower Semiconductor (NASDAQ: TSEM) saw its shares jump more than 18% premarket to about $271.90 on July 14, 2026, after announcing a $3 billion expansion of its chip production in Japan, of which roughly $1 billion comes from a Japanese government grant. The investment will ramp up 300mm silicon photonics and silicon germanium capacity, technologies central to the optical interconnects that power AI data centers, and proceeds in two phases: converting the Arai facility (formerly Fab 6) for silicon photonics by Q4 2027, then building a new fab adjacent to Fab 7 in Uozu. Tower raised its 2028 targets to $3.6 billion in revenue and $1.2 billion in net profit, saying more than 70% of the new capacity is already committed. The company cited $1.3 billion in silicon photonics contracts for 2027 and $290 million in customer prepayments in hand, and the stock is up more than 95% year-to-date.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Meta Lifts Cost of Louisiana Data Center to $50 Billion</div><p class="bubble-body">Meta announced on July 13, 2026, that it is expanding its Hyperion AI data center project in Richland Parish, rural northeast Louisiana, raising its planned investment to roughly $50 billion after previously committing about $10 billion, an additional $40 billion pledge. The facility is expected to span about five square miles and require roughly five gigawatts of electricity once fully operational, and Bloomberg reported the total price tag for the site could ultimately surpass $250 billion as it grows. Meta has committed $1 billion for local infrastructure upgrades including roads, water, and wastewater systems. The project is projected to support up to 7,500 construction jobs at peak, 1,000 permanent operational jobs, and an estimated 1,900 additional indirect jobs, aided by state tax incentives.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Intel&#x27;s Insiders</div><p class="bubble-body">This column examines the leadership shakeup driving Intel&#x27;s turnaround under CEO Lip-Bu Tan, who took over effective March 18, 2025, after David Zinsner and Michelle Johnston Holthaus served as interim co-CEOs (each receiving a one-time $1.5 million cash payment). Tan has restructured management by elevating engineers and cutting middle managers, and brought in senior executives poached from Qualcomm and Arm to lead Intel&#x27;s data center and AI divisions. He also secured strategic investments from Nvidia and SoftBank, while the board elected Dr. Craig H. Barratt as independent chair effective after the May 13, 2026 annual meeting, succeeding the retiring Frank Yeary. Holthaus resigned as CEO of Intel Products in September 2025 and remained in a non-executive role through March 1, 2026, part of a broad reshaping of the company&#x27;s insider ranks as the chipmaker fights to recover.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Can AI Make Better Drugs? Not on Wall Street&#x27;s Timeline</div><p class="bubble-body">This piece argues that while AI is making pharmaceutical research labs more productive, it has not yet changed the underlying economics, how many successful drugs emerge per research dollar, giving Wall Street little reason to rerate the sector as it has rewarded AI tool companies. A key point of skepticism is that biology, clinical validation, and regulation remain constraints that technology alone cannot compress, undercutting claims that AI would slash development timelines. As of March 2026, no AI-discovered drug had received full FDA approval, leaving the industry&#x27;s decade-long investment thesis unproven. Analysts describe 2026 as a pivotal inflection year of clinical tests and regulatory clarity, and note that smaller AI drug-discovery firms are already under existential pressure, with some shutting down and others cutting 20%+ of their workforces amid expected consolidation.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Are You Using the Wrong USB-C Charger? That Cheap Cable Can Fry Your Phone</div><p class="bubble-body">This consumer-tech piece warns that cheap, uncertified USB-C cables and chargers can damage phones because they often lack proper insulation, shielding, or a valid E-Marker chip, the component that tells a charger how much power the cable can safely carry. A counterfeit E-Marker may falsely claim a cable supports 100W when its wires can only handle around 30W, causing overheating that can melt plastic, damage USB-C port pins, or send a power spike into the phone&#x27;s power-management IC. Regulators back up the risk: Health Canada found that 30 of 50 uncertified chargers it tested posed electric-shock or fire hazards. Delivering too much power to a device rated for less can also degrade its battery over time, even if the phone initially seems fine. Experts recommend sticking to reputable, certified brands for both the charging brick and the cable.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">The White House Made Fixing Intel Its Pet Project. It&#x27;s Working.</div><p class="bubble-body">Under a deal struck with the Trump administration, the U.S. government purchased 433.3 million primary Intel shares at $20.47 each for a 9.9% stake, funded by the remaining $5.7 billion in CHIPS Act grants plus $3.2 billion from the Secure Enclave program. By late April 2026, that stake had quadrupled to roughly $36 billion following a resurgence in Intel&#x27;s sales outlook, and reporting indicates the position later swelled past $50 billion within about eight months. CEO Lip-Bu Tan secured the unconventional investment after a charm offensive to win over the White House and repair relations with President Trump, who had earlier called for his ouster. Commerce Secretary Howard Lutnick personally helped broker business for Intel with major clients including Nvidia, SpaceX, and Apple, and the White House has touted the surging stake as a windfall for taxpayers and a win for domestic chip manufacturing.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S. Stocks Fall as AI Selloff, Oil Jump Rattle Markets</div><p class="bubble-body">On Monday, July 13, 2026, U.S. equities fell as a selloff in AI and chip stocks combined with a surge in oil prices to rattle markets. The S&amp;P 500 lost 0.79% to close at 7,515.34, the Nasdaq Composite dropped 1.55% to 25,873.18, and the Dow slipped 138.37 points (0.26%) to 52,498.64. Oil spiked after President Trump announced a blockade on Iranian shipping, with WTI crude jumping about 9.4% to top $78 a barrel and Brent climbing roughly 9.6% to above $83. AI hyperscalers were hit hard, with Microsoft and Oracle each falling around 3% premarket, while rising oil prices pushed bond yields higher and stoked worries over whether massive AI investments justify lofty valuations.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Think the S&amp;P 500 Looks Cheap? Read the Fine Print</div><p class="bubble-body">On the surface the S&amp;P 500&#x27;s forward P/E of roughly 20 (about 19.98 as of July 8, 2026, on estimated forward earnings of $374.46 per share) can look defensible, but the fine print is market concentration. Stock market capitalization is the most concentrated on record, with the top tech names having accounted for about 53% of the S&amp;P 500&#x27;s total return in 2025, largely fueled by AI spending. That 20x forward multiple sits above the five- and 10-year averages of 19.9 and 18.9, and it implies an earnings yield near 5%, only modestly above what investors can now earn in bonds. Because a handful of megacaps lift the index average, headline valuation multiples can look reasonable even as underlying risk climbs, meaning the market is more expensive and more fragile than the aggregate number suggests.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">How Charles Schwab Turbocharged Trump&#x27;s Stock-Trading Frenzy</div><p class="bubble-body">Charles Schwab is riding a resurgent retail trading boom in 2026, and a Schwab account reportedly handled the bulk of President Trump&#x27;s trading over the past year. After a New York appeals court in August voided a roughly $500 million fraud penalty against the Trumps, the family was freed to redeploy funds previously reserved for potential fines, and the Schwab account subsequently surged into high-volume, automated stock trading. Schwab&#x27;s broader business boomed alongside it: the firm opened 461,000 new brokerage accounts in May 2026, up 37% year over year, and hit a record daily average of 11.8 million trades that month. Customer assets rose 27% year over year to $13.1 trillion in May, while margin loans climbed 38% from the end of 2025.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S.-Iran Escalation; AI-Related Stocks Slide Across Globe</div><p class="bubble-body">Escalating U.S.-Iran hostilities over the Strait of Hormuz sent a wave of selling through global markets in mid-July 2026, pushing a fragile ceasefire toward collapse. After Iran attacked oil and gas tankers, U.S. forces retaliated by striking more than 80 Iranian targets including air defenses and anti-ship missile capabilities. Oil jumped and equities slid worldwide: South Korea&#x27;s Kospi fell 8% and triggered a trading halt, Japan&#x27;s Nikkei 225 dropped 2%, and China&#x27;s CSI 300 lost 1.7%, while Nasdaq 100 and S&amp;P 500 futures pointed to opening losses of 1.2% and 0.5%. AI memory-chip makers took the sharpest hits as investors booked profits, with SK Hynix tumbling more than 13%, Kioxia falling over 12%, and Samsung Electronics retreating 9%.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">There&#x27;s an IPO Gold Rush—and Texas Is Coming for New York</div><p class="bubble-body">The Texas Stock Exchange (TXSE) began live trading operations on July 6, 2026, mounting the most serious challenge to the NYSE and Nasdaq in decades. Backed by a roughly $275 million war chest from financial heavyweights including BlackRock, Citadel Securities, Goldman Sachs, Charles Schwab, and JPMorgan Chase, the Dallas-based exchange aims to capitalize on the migration of corporate wealth to Texas and reverse a 25-year decline in U.S. public listings. Primary corporate listings are slated to begin in October 2026, with the venue targeting its first true IPOs by the first quarter of 2027. The launch coincides with a renewed IPO wave driven by AI, semiconductor, fintech, and high-growth tech firms, though TXSE&#x27;s core challenge is bootstrapping liquidity to lure issuers away from established New York exchanges.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S. Stock Market Ticks Higher With Memory Chip Maker&#x27;s Big Debut</div><p class="bubble-body">U.S. stocks edged higher on Friday, July 10, 2026, as South Korea&#x27;s SK Hynix staged a blockbuster Nasdaq debut. The memory chipmaker rose about 13% on its first day, closing at $168.01 after opening at $170, up from its $149 IPO price. The offering raised $26.5 billion, the largest-ever U.S. share sale by a foreign company, comprising 177.9 million American depositary receipts (with every 10 ADRs equal to one Seoul-listed share). SK Hynix, the leader in high-bandwidth memory used in Nvidia&#x27;s AI chips, holds roughly a 56.4% share of the HBM market, and its chairman told CNBC that &quot;demand is enormous&quot; as U.S. investors rushed for direct exposure to the AI memory buildout.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">South Korean Memory Chip Maker&#x27;s Historic U.S. Debut Jolts Stocks</div><p class="bubble-body">SK Hynix&#x27;s U.S. listing was historic in scale: its $26.5 billion raise topped Alibaba&#x27;s $25 billion 2014 offering to become the largest-ever U.S. debut by a non-American company. The company priced 177.9 million ADRs at $149 each on Thursday, July 9, a roughly 3% premium to its KOSPI close, and began trading on Nasdaq on Friday, July 10, under the temporary ticker SKHYV before moving to SKHY (regular trading opened Monday, July 13). The stock jumped about 12.8% on debut to close near $168, giving U.S. investors their first direct access to a top-three global memory maker alongside Micron and Samsung. The deal&#x27;s sheer size and SK Hynix&#x27;s dominance in AI memory jolted markets and fueled broader debate over stretched AI-chip valuations.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">He&#x27;s 17 Years Old and His Family&#x27;s Financial Adviser</div><p class="bubble-body">This human-interest angle reflects a real gap in youth financial literacy: only about 25 U.S. states require high school students to take a personal-finance course to graduate, and roughly 36% of Gen Z are considered financially literate, with nearly 80% getting money advice from social media. Advisers and educators increasingly recommend involving teenagers directly in household budgeting, bill-paying, and even sitting in on meetings with a family financial adviser, noting that age 13 is an apt time to start serious money education. Real-world practice—part-time jobs, commissions tied to work, and managing their own accounts—helps teens build habits that reduce costly mistakes later in life. Some financially precocious teens end up steering family decisions on saving, investing, and debt, an outgrowth of both rising access to online investing tools and parents&#x27; own gaps in financial confidence.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Nearly a Million People Have Left the SAVE Student-Loan Program. Here&#x27;s Where They Went.</div><p class="bubble-body">After a federal appeals court judgment on March 10, 2026 vacated the 2023 rule that created SAVE, the plan officially ended, leaving roughly 7 million borrowers who had been in interest-free administrative forbearance for about a year and a half needing to move to new plans. Starting July 1, 2026, loan servicers began sending 90-day notices—in tranches roughly two weeks apart through March 2027—telling borrowers to switch or be reassigned. Borrowers being moved administratively land on an amended version of Income-Based Repayment (IBR); those wanting the new Repayment Assistance Plan (RAP), which launched July 1, 2026 and bases payments on income and number of dependents, must actively apply. Anyone who fails to enroll by the end of their 90-day window is automatically placed on the Standard Repayment Plan, where payments are often far higher than under SAVE.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Student-Loan Debt Is Threatening the Best-Laid Retirement Plans</div><p class="bubble-body">More than 3 million Americans age 62 and older now owe federal student loans, up from 1.8 million in 2018—a 67% jump—while roughly 9.5 million people over 50 carry education debt averaging about $47,000. A Fidelity analysis found older workers with student debt have saved significantly less for retirement, since borrowers delay or shrink their retirement contributions during what should be peak saving years. The average student-loan payment of about $390 equals nearly a fifth of the typical 2026 Social Security check of $2,071, and among borrowers 50-plus, 22.4% of balances are 90-plus days delinquent. The government can garnish wages and withhold up to 15% of Social Security payments, exposing an estimated 452,000 people aged 62 and older who are in default to benefit offsets.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Gold&#x27;s Faithful Think Twice as Prices Slide From Record Highs</div><p class="bubble-body">Gold set 12 all-time highs in the first two weeks of January 2026, crossing above $5,500/oz and peaking at an intraday spot high of $5,595.47 on January 29, before sliding to roughly $4,038 per ounce by July 13—down about 28% from that peak. Analysts attribute the correction largely to the U.S.–Iran conflict pushing energy prices and inflation higher, which raised expectations for Federal Reserve rate hikes and lifted real yields and the dollar. Despite the dramatic drop from the peak, gold is actually down only about 7% year-to-date, since the reference point was an extraordinary two-week rally. Structural supports remain intact: central banks stayed net buyers through the drawdown at a pace above their five-year average, alongside rising sovereign debt and reserve diversification.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">A Broken Elbow Forces Two Retirees to Ponder Their Future Mobility</div><p class="bubble-body">Falls are the leading cause of injury among seniors, and most occur at home, making an injury like a broken elbow a common trigger for retirees to reassess whether their homes can support aging in place. Research consistently shows home modifications—grab bars, non-slip mats, stair railings, widened doorways, better lighting, and stair lifts—effectively reduce fall incidence, especially in high-risk areas like bathrooms, and are most effective when combined with balance and strength exercise. Experts stress planning before a crisis hits, since larger projects can pay for themselves within a year by preventing even one fall, given that a single hospital stay can cost more than a full bathroom remodel plus a quality stair lift. Early planning also gives retirees time to compare product options and costs rather than making rushed decisions after an accident.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Why White-Collar Men Are Obsessed With the Perfect Lawn</div><p class="bubble-body">The American lawn has grown into a roughly $189 billion industry blanketing about 40 million acres nationwide, an obsession rooted in the 1950s suburban migration when a manicured yard framed by a white picket fence became a badge of the American Dream. Lawn care carries heavy social pressure to keep grass &quot;crisp,&quot; with neglected yards inviting neighborhood judgment—a dynamic that resonates with status-conscious professionals. Modern enthusiasts increasingly chase a golf-course finish with precise edges and clean mowing patterns, fueling a robot-mower market projected to reach $2.74 billion in 2026 and $5.32 billion by 2031. The pursuit blends aspiration, competition, and a controllable weekend project, explaining its particular appeal among white-collar men.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Iran Hatched Fresh Plot to Kill Trump, Israel Told U.S.</div><p class="bubble-body">Around July 9, 2026, Israel shared intelligence with the United States indicating Iran had recently devised a new plan to assassinate President Trump, a warning that was new to U.S. officials who had not previously vetted or tracked the specific plot. The threat surfaced amid sharply heightened tensions, with a 60-day ceasefire between the U.S. and Iran &quot;in tatters&quot; as the two sides traded threats and strikes. Some U.S. officials cautioned the report could reflect an Israeli effort to influence Trump&#x27;s decision-making as he weighed intensifying military action against Iran, and later CNN reporting suggested the intelligence reflected a desire among Tehran&#x27;s hardline elements to target Trump rather than a specific operational plan. The U.S. has warned for years that Iran might seek to kill Trump in retaliation for the 2020 drone strike that killed Iranian general Qasem Soleimani.</p></div>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-07-13.html">‹ Jul 13</a> &nbsp;·&nbsp; <a href="digest-2026-07-15.html">Jul 15 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 7</div>
+    <div class="issue-date">July 14, 2026</div>
+    <div class="issue-sub">21 stories across tech, markets &amp; finance — a 13-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 21</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Chinese AI Startup DFSX Releases Chip to Take on the West</div>
+        <div class="art-sum">This headline reflects reporting that Hangzhou-based Chinese AI firm DeepSeek is developing its own AI chip, first reported by Reuters on July 7, 2026, citing three people familiar with the effort. The chip is designed for inference (generating responses from trained models) rather than for training, and would reportedly be fabricated by China&#x27;s largest foundry, SMIC, rather than Taiwan&#x27;s TSMC, which remains stuck on a roughly 7-nanometer process due to U.S. and Dutch export controls. The move aims to reduce DeepSeek&#x27;s dependence on Nvidia and Huawei silicon that powers its low-cost models, and news of the effort sent Nvidia shares lower. The project began around July 2025 and remains early-stage, with DeepSeek still in talks with outside foundry and memory partners; the company has not officially confirmed it, and U.S. curbs on advanced foundry access and high-bandwidth memory remain major obstacles.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Tower Semiconductor Shares Surge Premarket on Japanese Investment</div>
+        <div class="art-sum">Israeli chipmaker Tower Semiconductor (NASDAQ: TSEM) saw its shares jump more than 18% premarket to about $271.90 on July 14, 2026, after announcing a $3 billion expansion of its chip production in Japan, of which roughly $1 billion comes from a Japanese government grant. The investment will ramp up 300mm silicon photonics and silicon germanium capacity, technologies central to the optical interconnects that power AI data centers, and proceeds in two phases: converting the Arai facility (formerly Fab 6) for silicon photonics by Q4 2027, then building a new fab adjacent to Fab 7 in Uozu. Tower raised its 2028 targets to $3.6 billion in revenue and $1.2 billion in net profit, saying more than 70% of the new capacity is already committed. The company cited $1.3 billion in silicon photonics contracts for 2027 and $290 million in customer prepayments in hand, and the stock is up more than 95% year-to-date.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Lifts Cost of Louisiana Data Center to $50 Billion</div>
+        <div class="art-sum">Meta announced on July 13, 2026, that it is expanding its Hyperion AI data center project in Richland Parish, rural northeast Louisiana, raising its planned investment to roughly $50 billion after previously committing about $10 billion, an additional $40 billion pledge. The facility is expected to span about five square miles and require roughly five gigawatts of electricity once fully operational, and Bloomberg reported the total price tag for the site could ultimately surpass $250 billion as it grows. Meta has committed $1 billion for local infrastructure upgrades including roads, water, and wastewater systems. The project is projected to support up to 7,500 construction jobs at peak, 1,000 permanent operational jobs, and an estimated 1,900 additional indirect jobs, aided by state tax incentives.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Intel&#x27;s Insiders</div>
+        <div class="art-sum">This column examines the leadership shakeup driving Intel&#x27;s turnaround under CEO Lip-Bu Tan, who took over effective March 18, 2025, after David Zinsner and Michelle Johnston Holthaus served as interim co-CEOs (each receiving a one-time $1.5 million cash payment). Tan has restructured management by elevating engineers and cutting middle managers, and brought in senior executives poached from Qualcomm and Arm to lead Intel&#x27;s data center and AI divisions. He also secured strategic investments from Nvidia and SoftBank, while the board elected Dr. Craig H. Barratt as independent chair effective after the May 13, 2026 annual meeting, succeeding the retiring Frank Yeary. Holthaus resigned as CEO of Intel Products in September 2025 and remained in a non-executive role through March 1, 2026, part of a broad reshaping of the company&#x27;s insider ranks as the chipmaker fights to recover.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Can AI Make Better Drugs? Not on Wall Street&#x27;s Timeline</div>
+        <div class="art-sum">This piece argues that while AI is making pharmaceutical research labs more productive, it has not yet changed the underlying economics, how many successful drugs emerge per research dollar, giving Wall Street little reason to rerate the sector as it has rewarded AI tool companies. A key point of skepticism is that biology, clinical validation, and regulation remain constraints that technology alone cannot compress, undercutting claims that AI would slash development timelines. As of March 2026, no AI-discovered drug had received full FDA approval, leaving the industry&#x27;s decade-long investment thesis unproven. Analysts describe 2026 as a pivotal inflection year of clinical tests and regulatory clarity, and note that smaller AI drug-discovery firms are already under existential pressure, with some shutting down and others cutting 20%+ of their workforces amid expected consolidation.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Are You Using the Wrong USB-C Charger? That Cheap Cable Can Fry Your Phone</div>
+        <div class="art-sum">This consumer-tech piece warns that cheap, uncertified USB-C cables and chargers can damage phones because they often lack proper insulation, shielding, or a valid E-Marker chip, the component that tells a charger how much power the cable can safely carry. A counterfeit E-Marker may falsely claim a cable supports 100W when its wires can only handle around 30W, causing overheating that can melt plastic, damage USB-C port pins, or send a power spike into the phone&#x27;s power-management IC. Regulators back up the risk: Health Canada found that 30 of 50 uncertified chargers it tested posed electric-shock or fire hazards. Delivering too much power to a device rated for less can also degrade its battery over time, even if the phone initially seems fine. Experts recommend sticking to reputable, certified brands for both the charging brick and the cable.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The White House Made Fixing Intel Its Pet Project. It&#x27;s Working.</div>
+        <div class="art-sum">Under a deal struck with the Trump administration, the U.S. government purchased 433.3 million primary Intel shares at $20.47 each for a 9.9% stake, funded by the remaining $5.7 billion in CHIPS Act grants plus $3.2 billion from the Secure Enclave program. By late April 2026, that stake had quadrupled to roughly $36 billion following a resurgence in Intel&#x27;s sales outlook, and reporting indicates the position later swelled past $50 billion within about eight months. CEO Lip-Bu Tan secured the unconventional investment after a charm offensive to win over the White House and repair relations with President Trump, who had earlier called for his ouster. Commerce Secretary Howard Lutnick personally helped broker business for Intel with major clients including Nvidia, SpaceX, and Apple, and the White House has touted the surging stake as a windfall for taxpayers and a win for domestic chip manufacturing.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall as AI Selloff, Oil Jump Rattle Markets</div>
+        <div class="art-sum">On Monday, July 13, 2026, U.S. equities fell as a selloff in AI and chip stocks combined with a surge in oil prices to rattle markets. The S&amp;P 500 lost 0.79% to close at 7,515.34, the Nasdaq Composite dropped 1.55% to 25,873.18, and the Dow slipped 138.37 points (0.26%) to 52,498.64. Oil spiked after President Trump announced a blockade on Iranian shipping, with WTI crude jumping about 9.4% to top $78 a barrel and Brent climbing roughly 9.6% to above $83. AI hyperscalers were hit hard, with Microsoft and Oracle each falling around 3% premarket, while rising oil prices pushed bond yields higher and stoked worries over whether massive AI investments justify lofty valuations.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Think the S&amp;P 500 Looks Cheap? Read the Fine Print</div>
+        <div class="art-sum">On the surface the S&amp;P 500&#x27;s forward P/E of roughly 20 (about 19.98 as of July 8, 2026, on estimated forward earnings of $374.46 per share) can look defensible, but the fine print is market concentration. Stock market capitalization is the most concentrated on record, with the top tech names having accounted for about 53% of the S&amp;P 500&#x27;s total return in 2025, largely fueled by AI spending. That 20x forward multiple sits above the five- and 10-year averages of 19.9 and 18.9, and it implies an earnings yield near 5%, only modestly above what investors can now earn in bonds. Because a handful of megacaps lift the index average, headline valuation multiples can look reasonable even as underlying risk climbs, meaning the market is more expensive and more fragile than the aggregate number suggests.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">How Charles Schwab Turbocharged Trump&#x27;s Stock-Trading Frenzy</div>
+        <div class="art-sum">Charles Schwab is riding a resurgent retail trading boom in 2026, and a Schwab account reportedly handled the bulk of President Trump&#x27;s trading over the past year. After a New York appeals court in August voided a roughly $500 million fraud penalty against the Trumps, the family was freed to redeploy funds previously reserved for potential fines, and the Schwab account subsequently surged into high-volume, automated stock trading. Schwab&#x27;s broader business boomed alongside it: the firm opened 461,000 new brokerage accounts in May 2026, up 37% year over year, and hit a record daily average of 11.8 million trades that month. Customer assets rose 27% year over year to $13.1 trillion in May, while margin loans climbed 38% from the end of 2025.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S.-Iran Escalation; AI-Related Stocks Slide Across Globe</div>
+        <div class="art-sum">Escalating U.S.-Iran hostilities over the Strait of Hormuz sent a wave of selling through global markets in mid-July 2026, pushing a fragile ceasefire toward collapse. After Iran attacked oil and gas tankers, U.S. forces retaliated by striking more than 80 Iranian targets including air defenses and anti-ship missile capabilities. Oil jumped and equities slid worldwide: South Korea&#x27;s Kospi fell 8% and triggered a trading halt, Japan&#x27;s Nikkei 225 dropped 2%, and China&#x27;s CSI 300 lost 1.7%, while Nasdaq 100 and S&amp;P 500 futures pointed to opening losses of 1.2% and 0.5%. AI memory-chip makers took the sharpest hits as investors booked profits, with SK Hynix tumbling more than 13%, Kioxia falling over 12%, and Samsung Electronics retreating 9%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">There&#x27;s an IPO Gold Rush—and Texas Is Coming for New York</div>
+        <div class="art-sum">The Texas Stock Exchange (TXSE) began live trading operations on July 6, 2026, mounting the most serious challenge to the NYSE and Nasdaq in decades. Backed by a roughly $275 million war chest from financial heavyweights including BlackRock, Citadel Securities, Goldman Sachs, Charles Schwab, and JPMorgan Chase, the Dallas-based exchange aims to capitalize on the migration of corporate wealth to Texas and reverse a 25-year decline in U.S. public listings. Primary corporate listings are slated to begin in October 2026, with the venue targeting its first true IPOs by the first quarter of 2027. The launch coincides with a renewed IPO wave driven by AI, semiconductor, fintech, and high-growth tech firms, though TXSE&#x27;s core challenge is bootstrapping liquidity to lure issuers away from established New York exchanges.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stock Market Ticks Higher With Memory Chip Maker&#x27;s Big Debut</div>
+        <div class="art-sum">U.S. stocks edged higher on Friday, July 10, 2026, as South Korea&#x27;s SK Hynix staged a blockbuster Nasdaq debut. The memory chipmaker rose about 13% on its first day, closing at $168.01 after opening at $170, up from its $149 IPO price. The offering raised $26.5 billion, the largest-ever U.S. share sale by a foreign company, comprising 177.9 million American depositary receipts (with every 10 ADRs equal to one Seoul-listed share). SK Hynix, the leader in high-bandwidth memory used in Nvidia&#x27;s AI chips, holds roughly a 56.4% share of the HBM market, and its chairman told CNBC that &quot;demand is enormous&quot; as U.S. investors rushed for direct exposure to the AI memory buildout.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">South Korean Memory Chip Maker&#x27;s Historic U.S. Debut Jolts Stocks</div>
+        <div class="art-sum">SK Hynix&#x27;s U.S. listing was historic in scale: its $26.5 billion raise topped Alibaba&#x27;s $25 billion 2014 offering to become the largest-ever U.S. debut by a non-American company. The company priced 177.9 million ADRs at $149 each on Thursday, July 9, a roughly 3% premium to its KOSPI close, and began trading on Nasdaq on Friday, July 10, under the temporary ticker SKHYV before moving to SKHY (regular trading opened Monday, July 13). The stock jumped about 12.8% on debut to close near $168, giving U.S. investors their first direct access to a top-three global memory maker alongside Micron and Samsung. The deal&#x27;s sheer size and SK Hynix&#x27;s dominance in AI memory jolted markets and fueled broader debate over stretched AI-chip valuations.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">He&#x27;s 17 Years Old and His Family&#x27;s Financial Adviser</div>
+        <div class="art-sum">This human-interest angle reflects a real gap in youth financial literacy: only about 25 U.S. states require high school students to take a personal-finance course to graduate, and roughly 36% of Gen Z are considered financially literate, with nearly 80% getting money advice from social media. Advisers and educators increasingly recommend involving teenagers directly in household budgeting, bill-paying, and even sitting in on meetings with a family financial adviser, noting that age 13 is an apt time to start serious money education. Real-world practice—part-time jobs, commissions tied to work, and managing their own accounts—helps teens build habits that reduce costly mistakes later in life. Some financially precocious teens end up steering family decisions on saving, investing, and debt, an outgrowth of both rising access to online investing tools and parents&#x27; own gaps in financial confidence.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Nearly a Million People Have Left the SAVE Student-Loan Program. Here&#x27;s Where They Went.</div>
+        <div class="art-sum">After a federal appeals court judgment on March 10, 2026 vacated the 2023 rule that created SAVE, the plan officially ended, leaving roughly 7 million borrowers who had been in interest-free administrative forbearance for about a year and a half needing to move to new plans. Starting July 1, 2026, loan servicers began sending 90-day notices—in tranches roughly two weeks apart through March 2027—telling borrowers to switch or be reassigned. Borrowers being moved administratively land on an amended version of Income-Based Repayment (IBR); those wanting the new Repayment Assistance Plan (RAP), which launched July 1, 2026 and bases payments on income and number of dependents, must actively apply. Anyone who fails to enroll by the end of their 90-day window is automatically placed on the Standard Repayment Plan, where payments are often far higher than under SAVE.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Student-Loan Debt Is Threatening the Best-Laid Retirement Plans</div>
+        <div class="art-sum">More than 3 million Americans age 62 and older now owe federal student loans, up from 1.8 million in 2018—a 67% jump—while roughly 9.5 million people over 50 carry education debt averaging about $47,000. A Fidelity analysis found older workers with student debt have saved significantly less for retirement, since borrowers delay or shrink their retirement contributions during what should be peak saving years. The average student-loan payment of about $390 equals nearly a fifth of the typical 2026 Social Security check of $2,071, and among borrowers 50-plus, 22.4% of balances are 90-plus days delinquent. The government can garnish wages and withhold up to 15% of Social Security payments, exposing an estimated 452,000 people aged 62 and older who are in default to benefit offsets.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Gold&#x27;s Faithful Think Twice as Prices Slide From Record Highs</div>
+        <div class="art-sum">Gold set 12 all-time highs in the first two weeks of January 2026, crossing above $5,500/oz and peaking at an intraday spot high of $5,595.47 on January 29, before sliding to roughly $4,038 per ounce by July 13—down about 28% from that peak. Analysts attribute the correction largely to the U.S.–Iran conflict pushing energy prices and inflation higher, which raised expectations for Federal Reserve rate hikes and lifted real yields and the dollar. Despite the dramatic drop from the peak, gold is actually down only about 7% year-to-date, since the reference point was an extraordinary two-week rally. Structural supports remain intact: central banks stayed net buyers through the drawdown at a pace above their five-year average, alongside rising sovereign debt and reserve diversification.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Broken Elbow Forces Two Retirees to Ponder Their Future Mobility</div>
+        <div class="art-sum">Falls are the leading cause of injury among seniors, and most occur at home, making an injury like a broken elbow a common trigger for retirees to reassess whether their homes can support aging in place. Research consistently shows home modifications—grab bars, non-slip mats, stair railings, widened doorways, better lighting, and stair lifts—effectively reduce fall incidence, especially in high-risk areas like bathrooms, and are most effective when combined with balance and strength exercise. Experts stress planning before a crisis hits, since larger projects can pay for themselves within a year by preventing even one fall, given that a single hospital stay can cost more than a full bathroom remodel plus a quality stair lift. Early planning also gives retirees time to compare product options and costs rather than making rushed decisions after an accident.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Why White-Collar Men Are Obsessed With the Perfect Lawn</div>
+        <div class="art-sum">The American lawn has grown into a roughly $189 billion industry blanketing about 40 million acres nationwide, an obsession rooted in the 1950s suburban migration when a manicured yard framed by a white picket fence became a badge of the American Dream. Lawn care carries heavy social pressure to keep grass &quot;crisp,&quot; with neglected yards inviting neighborhood judgment—a dynamic that resonates with status-conscious professionals. Modern enthusiasts increasingly chase a golf-course finish with precise edges and clean mowing patterns, fueling a robot-mower market projected to reach $2.74 billion in 2026 and $5.32 billion by 2031. The pursuit blends aspiration, competition, and a controllable weekend project, explaining its particular appeal among white-collar men.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Iran Hatched Fresh Plot to Kill Trump, Israel Told U.S.</div>
+        <div class="art-sum">Around July 9, 2026, Israel shared intelligence with the United States indicating Iran had recently devised a new plan to assassinate President Trump, a warning that was new to U.S. officials who had not previously vetted or tracked the specific plot. The threat surfaced amid sharply heightened tensions, with a 60-day ceasefire between the U.S. and Iran &quot;in tatters&quot; as the two sides traded threats and strikes. Some U.S. officials cautioned the report could reflect an Israeli effort to influence Trump&#x27;s decision-making as he weighed intensifying military action against Iran, and later CNN reporting suggested the intelligence reflected a desire among Tehran&#x27;s hardline elements to target Trump rather than a specific operational plan. The U.S. has warned for years that Iran might seek to kill Trump in retaliation for the 2020 drone strike that killed Iranian general Qasem Soleimani.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 21 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Chinese AI Startup DFSX Releases Chip to Take on the West</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Tower Semiconductor Shares Surge Premarket on Japanese Investment</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Meta Lifts Cost of Louisiana Data Center to $50 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Intel&#x27;s Insiders</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Can AI Make Better Drugs? Not on Wall Street&#x27;s Timeline</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Are You Using the Wrong USB-C Charger? That Cheap Cable Can Fry Your Phone</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">The White House Made Fixing Intel Its Pet Project. It&#x27;s Working.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">U.S. Stocks Fall as AI Selloff, Oil Jump Rattle Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Think the S&amp;P 500 Looks Cheap? Read the Fine Print</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">How Charles Schwab Turbocharged Trump&#x27;s Stock-Trading Frenzy</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">U.S.-Iran Escalation; AI-Related Stocks Slide Across Globe</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">There&#x27;s an IPO Gold Rush—and Texas Is Coming for New York</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">U.S. Stock Market Ticks Higher With Memory Chip Maker&#x27;s Big Debut</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">South Korean Memory Chip Maker&#x27;s Historic U.S. Debut Jolts Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">He&#x27;s 17 Years Old and His Family&#x27;s Financial Adviser</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Nearly a Million People Have Left the SAVE Student-Loan Program. Here&#x27;s Where They Went.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Student-Loan Debt Is Threatening the Best-Laid Retirement Plans</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Gold&#x27;s Faithful Think Twice as Prices Slide From Record Highs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">A Broken Elbow Forces Two Retirees to Ponder Their Future Mobility</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">20</span><span class="toc-t">Why White-Collar Men Are Obsessed With the Perfect Lawn</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">21</span><span class="toc-t">Iran Hatched Fresh Plot to Kill Trump, Israel Told U.S.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">7 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-07-13.html">← Older · July 13, 2026 · The Hard-Line Activists Ramping Up for the War With AI</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
 </div>
-<section class="threads"><h2 class="threads-h">Recurring threads</h2><div class="thread"><span class="thread-label">AI boom</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Chips</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">IPOs &amp; listings</span><span class="thread-days">also on <a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Iran &amp; oil</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div><div class="thread"><span class="thread-label">Fed &amp; rates</span><span class="thread-days">also on <a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-09.html">Jul 9</a><a href="digest-2026-07-08.html">Jul 8</a></span></div></section>
-<nav class="daynav"><a class="dn-prev" href="digest-2026-07-13.html"><span class="dn-label">← Older</span><span class="dn-date">Jul 13</span></a><a class="dn-next" href="digest-2026-07-15.html"><span class="dn-label">Newer →</span><span class="dn-date">Jul 15</span></a></nav>
-<script>
-(function () {
-  var bar = document.querySelector('.filters');
-  if (!bar) return;
-  var cards = document.querySelectorAll('.bubble');
-  var buttons = bar.querySelectorAll('.filter-btn');
-  function apply(f, push) {
-    var matched = false;
-    buttons.forEach(function (b) {
-      var on = b.getAttribute('data-filter') === f;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      if (on) matched = true;
-    });
-    if (!matched) { f = 'all'; buttons[0].classList.add('is-active');
-                    buttons[0].setAttribute('aria-pressed', 'true'); }
-    cards.forEach(function (c) {
-      c.hidden = !(f === 'all' || c.getAttribute('data-cat') === f);
-    });
-    if (push) {
-      var h = f === 'all' ? ' ' : '#' + f;
-      history.replaceState(null, '', h === ' ' ? location.pathname + location.search : h);
-    }
-  }
-  bar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (btn) apply(btn.getAttribute('data-filter'), true);
-  });
-  apply((location.hash || '').replace('#', '') || 'all', false);
-  window.addEventListener('hashchange', function () {
-    apply((location.hash || '').replace('#', '') || 'all', false);
-  });
-})();
-</script>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
 </body>
 </html>

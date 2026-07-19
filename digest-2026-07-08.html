@@ -3,209 +3,277 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WSJ Digest — July 8, 2026</title>
+  <title>The Deep Digest — July 8, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <style>
-  @font-face { font-family: "Lumiare"; src: url("fonts/Lumiare.otf") format("opentype"); font-display: swap; }
-  @font-face { font-family: "Dealerplate California"; src: url("fonts/DealerplateCalifornia.otf") format("opentype"); font-display: swap; }
-  :root { color-scheme: dark;
-          --tech: #6ea8fe; --markets: #34d399; --finance: #fbbf24;
-          --accent: #6ea8fe; --border: #35302a; --muted: #9b9187; }
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
   * { box-sizing: border-box; }
-  body { font-family: "Dealerplate California", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-         max-width: 740px; margin: 0 auto; padding: 2.5rem 1.1rem 4rem;
-         line-height: 1.65; letter-spacing: .04em; color: #e9e4da; min-height: 100vh;
-         background: radial-gradient(1100px 560px at 18% -10%, #2c2721, #201d1a 58%); -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, table.cal caption, .mast-month, .mast-title, .bubble-title {
-    font-family: "Lumiare", Georgia, "Times New Roman", serif; letter-spacing: .05em; }
-  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 .4rem; }
-  .lead { color: var(--muted); margin: 0 0 1.4rem; font-size: .98rem; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .back { display: inline-block; margin-bottom: 1.1rem; font-size: .9rem; color: var(--muted); }
-  footer { margin-top: 2.5rem; color: #6f6658; font-size: .82rem; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
 
-  /* Top-right search bar on the index */
-  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-            flex-wrap: wrap; margin: 0 0 .5rem; }
-  .topbar h1 { margin: 0; }
-  .topsearch input { font: inherit; color: #e9e4da; background: #2a2521; border: 1px solid #4a453e;
-                     border-radius: 999px; padding: .5rem 1rem; min-width: 210px; }
-  .topsearch input:focus { outline: none; border-color: var(--accent); }
-  @media (max-width: 520px) { .topsearch, .topsearch input { width: 100%; } }
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
 
-  /* "Read the latest" hero on the index */
-  .hero-latest { display: inline-flex; align-items: baseline; gap: .55rem; margin: 0 0 2rem;
-                 background: #efe9dc; color: #26221e; border-radius: 14px; padding: .85rem 1.25rem;
-                 font-weight: 700; font-size: 1.02rem; }
-  .hero-latest:hover { text-decoration: none; opacity: .93; }
-  .hero-latest .hero-date { color: #6f6658; font-weight: 600; font-size: .9rem; }
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
 
-  /* Calendar index */
-  table.cal { width: 100%; border-collapse: collapse; margin: 0 0 2.4rem; table-layout: fixed; }
-  table.cal caption { caption-side: top; text-align: left; font-size: 1.3rem; font-weight: 700;
-                      letter-spacing: -0.01em; margin-bottom: .6rem; }
-  table.cal th { padding: .3rem .45rem; text-align: right; font-size: .68rem; font-weight: 600;
-                 text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-  table.cal td { border: 1px solid var(--border); height: 84px; vertical-align: top; padding: .35rem .45rem; }
-  table.cal td.empty { border-color: transparent; }
-  table.cal td .num { font-size: .95rem; color: var(--muted); text-align: right; display: block; }
-  /* days with a digest stay clickable, but are not "highlighted" */
-  table.cal td.has a { display: flex; flex-direction: column; height: 100%; }
-  table.cal td.has .num { color: var(--accent); font-weight: 700; }
-  table.cal td.has .tag { margin-top: auto; font-size: .85rem; color: var(--accent); font-weight: 600; }
-  /* only the current date is highlighted */
-  table.cal td.today { background: rgba(110, 168, 254, .14); }
-  table.cal td.today .num { font-weight: 800; font-size: 1.15rem; }
-  @media (max-width: 560px) {
-    table.cal td { height: 54px; padding: .25rem; }
-    table.cal td.has .tag, table.cal td.has .cell-head { display: none; } table.cal th { font-size: .58rem; }
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
   }
-
-  /* Landing: hero, stats, featured card */
-  .hero { margin: 0 0 1.6rem; }
-  .topbar { align-items: flex-start; }
-  .brand h1 { margin: 0; }
-  .tagline { color: var(--muted); font-size: .98rem; margin: .3rem 0 0; max-width: 48ch; }
-  .stats { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; color: var(--muted);
-           font-size: .85rem; margin: 1rem 0 0; }
-  .stats b { color: #e9e4da; font-weight: 700; }
-  .featured { display: block; background: #efe9dc; color: #26221e; border-radius: 20px;
-              padding: 1.5rem 1.7rem; margin: 0 0 2.2rem; transition: transform .15s ease;
-              box-shadow: 0 18px 40px -24px rgba(0,0,0,.65); }
-  .featured:hover { text-decoration: none; transform: translateY(-2px); }
-  .featured-label { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8a7f6d; }
-  .featured-date { font-family: "Lumiare", Georgia, serif; font-size: 2.1rem; letter-spacing: .04em; margin: .1rem 0 .7rem; }
-  .featured-heads { list-style: none; padding: 0; margin: 0 0 .9rem; }
-  .featured-heads li { font-weight: 600; font-size: .98rem; padding: .3rem 0;
-                       border-bottom: 1px solid rgba(38, 34, 30, .12); }
-  .featured-heads li:last-child { border-bottom: 0; }
-  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .8rem; }
-  .chip { background: #26221e; color: #efe9dc; border-radius: 999px; padding: .22rem .62rem;
-          font-size: .66rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
-  .featured-cta { font-weight: 700; color: #7a663f; }
-
-  /* Richer calendar cells */
-  table.cal td { height: 118px; }
-  table.cal td.has a { gap: .15rem; }
-  table.cal td.has .num { text-align: left; }
-  table.cal td.has:hover { border-color: var(--accent); background: rgba(110, 168, 254, .06); }
-  .cell-head { font-size: .72rem; line-height: 1.18; color: #b9b1a5; margin-top: .1rem;
-               display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  table.cal td.today { outline: 2px solid var(--accent); outline-offset: -2px; }
-
-  /* Bubble digest page (dark) */
-  body.digest { background: #201d1a; color: #e9e4da; max-width: 960px; }
-  body.digest .back { color: #b8b0a4; }
-  .mast { background: #efe9dc; color: #26221e; border-radius: 24px; padding: 2rem 2.1rem 1.6rem; margin: 0 0 1.4rem; }
-  .mast-month { font-size: 3.2rem; font-weight: 800; letter-spacing: .02em; line-height: .9; text-transform: uppercase; }
-  .mast-title { font-size: 1.5rem; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin-top: .35rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; }
-  .filter-btn { font: inherit; cursor: pointer; -webkit-appearance: none; border: 1px solid #4a453e;
-                background: transparent; color: #d9d2c6; border-radius: 999px; padding: .4rem .95rem;
-                font-size: .82rem; font-weight: 600; letter-spacing: .02em; }
-  .filter-btn:hover { border-color: #7a7266; }
-  .filter-btn.is-active { background: #efe9dc; color: #26221e; border-color: #efe9dc; }
-  .bubble[hidden] { display: none; }
-  .bubbles { column-count: 2; column-gap: 1.2rem; }
-  .bubble { break-inside: avoid; -webkit-column-break-inside: avoid; display: inline-block; width: 100%;
-            background: #efe9dc; color: #26221e; border-radius: 22px; padding: 1.4rem 1.5rem; margin: 0 0 1.2rem; }
-  .bubble-head { display: flex; justify-content: flex-start; align-items: flex-start; gap: .5rem; }
-  .bubble-pill { display: inline-block; background: #26221e; color: #efe9dc; border-radius: 7px;
-                 padding: .3rem .7rem; font-size: .68rem; font-weight: 700; letter-spacing: .09em;
-                 text-transform: uppercase; white-space: nowrap; }
-  .bubble.tech .bubble-pill { background: var(--tech); }
-  .bubble.markets .bubble-pill { background: var(--markets); }
-  .bubble.finance .bubble-pill { background: var(--finance); }
-  .bubble-kicker { font-style: italic; text-transform: uppercase; font-size: .76rem; letter-spacing: .03em;
-                   color: #8a7f6d; margin: .9rem 0 .15rem; }
-  .bubble-title { font-size: 1.16rem; font-weight: 800; line-height: 1.25; margin: .15rem 0 .55rem; }
-  .bubble-title a { color: inherit; }
-  .bubble-body { font-size: .95rem; line-height: 1.55; color: #3a352e; margin: 0; }
-  @media (max-width: 640px) { .bubbles { column-count: 1; } .mast-month { font-size: 2.4rem; } }
-
-  /* prev / next-day navigation */
-  .daynav { display: flex; justify-content: space-between; gap: .75rem; margin: 2.2rem 0 0; }
-  .daynav a { flex: 1; background: #2b2723; border: 1px solid #3a352e; border-radius: 14px;
-              padding: .75rem 1rem; color: #e9e4da; }
-  .daynav a:hover { text-decoration: none; border-color: #6f6658; }
-  .daynav .dn-next { text-align: right; }
-  .daynav .dn-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
-                      color: #8a7f6d; }
-  .daynav .dn-date { font-weight: 700; }
-  .daynav .dn-spacer { flex: 1; }
-  /* recurring "threads" cross-links */
-  .threads { margin: 2rem 0 0; }
-  .threads-h { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: #8a7f6d;
-               margin: 0 0 .7rem; }
-  .thread { background: #2b2723; border: 1px solid #3a352e; border-radius: 12px; padding: .7rem .95rem;
-            margin: 0 0 .6rem; font-size: .9rem; }
-  .thread-label { font-weight: 700; color: #efe9dc; margin-right: .5rem; }
-  .thread a { margin-right: .7rem; white-space: nowrap; }
-  .filter-btn .fc { opacity: .6; font-weight: 600; margin-left: .35rem; }
 </style>
 </head>
-<body class="digest">
-<a class="back" href="index.html">← calendar</a>
-<header class="mast"><div class="mast-month">July 8</div><div class="mast-title">WSJ Digest</div></header>
-<div class="filters" role="group" aria-label="Filter by category"><button class="filter-btn is-active" data-filter="all" aria-pressed="true">All<span class="fc">21</span></button><button class="filter-btn" data-filter="tech" aria-pressed="false">Tech<span class="fc">7</span></button><button class="filter-btn" data-filter="markets" aria-pressed="false">Markets<span class="fc">7</span></button><button class="filter-btn" data-filter="finance" aria-pressed="false">Finance<span class="fc">7</span></button></div>
-<div class="bubbles">
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Apple to Spend $30 Billion on U.S.-Made Chips From Broadcom</div><p class="bubble-body">Apple announced on July 8 a multiyear agreement worth more than $30 billion with Broadcom to design and produce custom wireless-connectivity chips in the United States. It is Apple&#x27;s largest domestic manufacturing commitment to date and is expected to yield more than 15 billion U.S.-made chips over its life. The deal includes a roughly $1.5 billion expansion of Broadcom&#x27;s Fort Collins, Colorado facility and runs via long-term contracts through 2031. It forms the biggest single piece of Apple&#x27;s previously announced $600 billion, four-year U.S. investment plan. Broadcom shares jumped about 5% on the news.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">China Says It Has Found Security Vulnerabilities in Anthropic&#x27;s Claude Code</div><p class="bubble-body">China&#x27;s Ministry of Industry and Information Technology warned on July 8 that its cybersecurity platform flagged a &quot;backdoor&quot; vulnerability in Anthropic&#x27;s Claude Code. It said versions released between April and June (roughly 2.1.91 through 2.1.196) contain a built-in monitoring mechanism that can transmit users&#x27; location and identity data to remote servers without consent. An Anthropic engineer characterized the feature as a March experiment meant to prevent account abuse by unauthorized resellers and to detect users tied to Chinese AI labs. In response, Alibaba reportedly ordered employees to stop using Anthropic tools for work starting July 10. The dispute lands amid broader U.S.–China friction over AI tooling and data security.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Nokia&#x27;s New Act: Supplying the AI Data Center Boom</div><p class="bubble-body">Nokia has repositioned itself as a key networking supplier for the AI data-center buildout, riding surging demand from AI and cloud customers to its highest stock price in more than 16 years. First-quarter orders from AI and cloud customers reached roughly €1 billion, with revenue from that group up about 49% year over year, led by its optical-networks business serving hyperscalers. On the strength of those results the company raised its full-year outlook for network infrastructure and elevated that unit to a growth segment. It also opened an AI Networking Innovation Lab at its Sunnyvale, California site to co-develop hardware for AI workloads.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">AI Giants Are Handing Out Tons of Free Computing Power to Grab Startup Share</div><p class="bubble-body">OpenAI, Anthropic, and Google are flooding early-stage startups with free compute and token credits to lock them into their ecosystems, competing on customer acquisition rather than price. OpenAI has offered packages such as $2 million in credits for equity plus a $500,000 no-equity tier; Anthropic countered with up to $500,000 (no equity, up sharply from a prior $30,000 offer); and Google Cloud offers up to $500,000 in credits plus early Gemini access. Y Combinator companies are especially targeted, and one founder — Dialogus&#x27; Hans Ibarra — said competing offers totaled more than $3 million in cloud and token credits. The strategy relies on lock-in: once a startup builds on one provider, migrating becomes costly and technically hard. It marks an escalation in the platform war for the next generation of AI-native companies.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Microsoft Is Cutting More Than 3,000 Jobs in Xbox Division</div><p class="bubble-body">Microsoft announced around July 6 that it is cutting roughly 4,800 jobs in total (about 2.1% of its workforce), with the Xbox division bearing the largest share. Xbox will lose about 3,200 positions phased in through July 2027, with roughly 1,600 taking effect immediately. The company also plans to spin off four studios — Compulsion Games, Double Fine, Ninja Theory, and Undead Labs. Xbox CEO Asha Sharma told staff the unit ran at margins three to 10 times lower than comparable platforms and lost 64 cents on every dollar invested in studios. The next-generation console (codenamed Helix, slated for late 2027/2028) remains on schedule.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Big Tech Has Suddenly Flipped on the AI Jobs Wipeout Scenario</div><p class="bubble-body">After a year of warnings that AI would wipe out large numbers of jobs, tech leaders have shifted to a more optimistic tone emphasizing that humans will stay central to AI-driven work. OpenAI&#x27;s Sam Altman conceded the industry was &quot;pretty wrong on the social and economic implications,&quot; while Anthropic&#x27;s Dario Amodei — who warned in May 2025 that AI could eliminate half of entry-level jobs — has since highlighted more positive scenarios. An EY-Parthenon survey found the share of CEOs expecting AI to cause significant headcount reductions fell from about 46% in January 2025 to just 20% by May 2026. MIT economist David Autor attributed the shift either to the labor market not moving as fast as expected, or to leaders realizing it is bad business to say your product will destroy the economy. The reversal doesn&#x27;t necessarily mean the jobs risk is gone — just that the messaging has changed.</p></div>
-<div class="bubble tech" data-cat="tech"><div class="bubble-head"><span class="bubble-pill">Tech</span></div><div class="bubble-title">Forget Wall Street. Elite Students Are Spending Their Summers on Startup Dreams.</div><p class="bubble-body">Elite university students are increasingly skipping finance, consulting, and Big Tech internships to launch AI startups, aided by new university-affiliated programs and a shakier entry-level job market. Examples include a Princeton student who turned down a Big Tech offer and a rocket-engineering role to build an AI startup in San Francisco, and Yale sophomore Leïa Ryan, who co-founded Cortex, a knowledge-systems startup for biolabs, instead of taking a biotech job. Supporting hubs include the alumni- and VC-backed Yale Hacker House (15 founders sharing a Nob Hill apartment) and TekTrek, a first-year incubator drawing mainly from MIT, Harvard, and Princeton at a temporary Presidio campus. A big driver is how much cheaper building software has become thanks to LLMs and open-source tools. The trend reflects a broader shift in where ambitious young talent sees the best risk-adjusted upside.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S. Stocks Decline After Trump Says Iran Ceasefire Is Over</div><p class="bubble-body">President Trump declared the U.S.–Iran ceasefire &quot;over,&quot; reigniting fears of regional escalation and threats to oil flows through the Strait of Hormuz. The Dow Jones Industrial Average fell about 623 points (1.2%) and the S&amp;P 500 slipped 0.4%, while Germany&#x27;s DAX dropped 2.2%. Oil surged roughly 6–7%, with Brent crude climbing to about $78.80 a barrel and WTI near $75, after Central Command said U.S. forces had struck more than 80 sites in Iran. The Strait of Hormuz carries roughly a fifth of the world&#x27;s seaborne oil, so any disruption there feeds directly into inflation fears. Safe-haven assets firmed as investors braced for further military action.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">SpaceX Shares Stumble in Nasdaq-100 Debut</div><p class="bubble-body">SpaceX shares fell about 6.8% on their first day in the Nasdaq-100 (Tuesday, July 7), closing near $149.47 and sliding further to around $148 the next day — below the $150 level where the stock began trading on June 12. The drop disappointed investors who bet that index inclusion would draw guaranteed demand from funds tracking the benchmark, which manage roughly $800 billion in assets. Analysts noted much of that buying may already have been priced in after the stock ran up nearly 6% the prior week. A weak broader tape — the Nasdaq Composite fell 1.2% on semiconductor weakness — added pressure. Still, Wall Street stayed bullish, with Deutsche Bank setting a $255 target citing reusable rockets and satellite-internet growth.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">Samsung Fails to Impress, Amazon Issues AI Bonds and Oil Jumps</div><p class="bubble-body">Samsung Electronics posted a roughly 19-fold (about 1,800%) surge in Q2 operating profit to around $58 billion, but its shares still fell about 7–8% as the results missed lofty AI expectations and sparked profit-taking after a ~150% run this year. The disappointment dragged chip peers lower, with Micron down 4.7% and AMD, Broadcom, and the SMH semiconductor ETF (-3%) all falling. Oil jumped after Iran attacked a Qatari LNG tanker near the Strait of Hormuz, sending Brent up about 3% to $74.16 and WTI up nearly 3% to $70.44. The session&#x27;s other theme was corporate AI financing, as large tech issuers tapped debt markets to fund infrastructure buildouts. The Nasdaq Composite fell 1.16% to 25,818.69 and the S&amp;P 500 slid 0.45% to 7,503.85.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-kicker">analysis</div><div class="bubble-title">World&#x27;s Hottest Market Risks Becoming a Squid Game</div><p class="bubble-body">The piece refers to South Korea&#x27;s stock market, the year&#x27;s best performer, with the KOSPI up roughly 165% over the past year. The concern is that extreme retail speculation could leave small investors holding steep losses if the rally reverses. Retail traders poured about ₩1.61 trillion ($1.1 billion) into leveraged ETFs tied to Samsung Electronics and SK Hynix, and the market logged a record 29,357 volatility-interruption triggers in the first half. Meanwhile foreign investors sold heavily, pulling out on a net basis with roughly $30 billion exiting in June alone. The &quot;Squid Game&quot; framing warns that a euphoric, speculation-driven run rarely ends well for latecomers.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">U.S. Stocks Retreat on Worries About AI Trade, Hormuz Fears</div><p class="bubble-body">All three major U.S. indices closed lower on July 7, led by tech on doubts about the durability of the AI rally. The Nasdaq Composite fell 1.16% to 25,818.69, the S&amp;P 500 dropped 0.45% to 7,503.85, and the Dow lost 0.25% to 52,925.15. The selling began in Asia, where South Korea&#x27;s Kospi tumbled nearly 5% after Samsung fell almost 7%, and was compounded by a report that China&#x27;s DeepSeek is developing its own AI chip. Oil rose after Iran struck a Qatari LNG tanker near the Strait of Hormuz — a waterway handling about 20% of the world&#x27;s oil traffic — after the White House revoked Iran&#x27;s oil-sales license. Taken together, the session captured the market&#x27;s two dominant anxieties: stretched AI valuations and Middle East supply risk.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-title">GM-Backed Momenta Makes Muted Hong Kong Debut After $751 Million IPO</div><p class="bubble-body">Momenta Global, the Chinese autonomous-driving firm backed by General Motors and Tencent, raised about $751 million (HK$5.89 billion) at HK$295.60 per share, valuing it near $9 billion. Shares rose as much as 3% at Wednesday&#x27;s open but faded to close about 2.1% below the IPO price, a reality check amid the broader tech selloff. The company drew 14 cornerstone investors — including Mercedes-Benz, BlackRock, and Singapore&#x27;s GIC — committing roughly $376 million. Founded in 2016 by former Microsoft researcher Cao Xudong, Momenta supplies automakers with software for steering, braking, lane changes, and parking. It posted a 2025 net loss of 3.46 billion yuan on revenue up 82.1% to 2.41 billion yuan.</p></div>
-<div class="bubble markets" data-cat="markets"><div class="bubble-head"><span class="bubble-pill">Markets</span></div><div class="bubble-kicker">sector roundup</div><div class="bubble-title">Tech, Media &amp; Telecom Roundup: Market Talk</div><p class="bubble-body">Semiconductors drove the sector, with a sharp selloff on July 7–8 that erased more than a trillion dollars in market value as investors questioned the sustainability of record AI capital spending. Samsung&#x27;s earnings triggered the rout: Intel and Applied Materials each dropped about 10%, AMD fell 8%, and the iShares Semiconductor ETF (SOXX) slid roughly 6%. Adding pressure was a report that China&#x27;s DeepSeek is building its own AI chip, which would threaten incumbents&#x27; pricing power. Several analysts characterized the drawdown as a &quot;mid-cycle reset&quot; rather than the end of the AI trade. They maintained high price targets on bellwethers like Nvidia and Micron.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-kicker">advice — underlying topic</div><div class="bubble-title">A Couple Living on One Income Wants to Buy a Home. Can They Afford It?</div><p class="bubble-body">A common affordability benchmark is the 28/36 rule: keep housing costs (principal, interest, taxes, insurance, and HOA) at or below 28% of gross monthly income and total debt at or below 36%, though many lenders permit debt-to-income ratios up to about 43–45% on conventional loans. Single-income households are typically advised to stress-test their budget against just one wage, since one salary must cover the mortgage plus emergencies. As a rough 2026 example, a $500,000 home with 20% down at a ~6.5% 30-year fixed rate runs about $2,528/month in principal and interest, requiring roughly $125,000 in annual income to stay within the 28% limit. Beyond the payment, buyers should budget for property taxes, insurance, maintenance, and a healthy emergency fund. On one income, keeping a larger cash cushion matters more because there&#x27;s no second paycheck to absorb a job loss.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-kicker">advice — underlying topic</div><div class="bubble-title">What It&#x27;s Like to Retire and Start a Business in America</div><p class="bubble-body">&quot;Encore entrepreneurship&quot; is a real and growing trend: self-employment among Americans 65 and older rose from 13.0% in 2013 to 16.3% in 2023, according to the SBA Office of Advocacy. Adults aged 55–64 now account for more than a quarter of U.S. startup activity. Research cited by AARP finds a 50-year-old founder is roughly 2.8 times more likely to launch a successful startup than a 25-year-old, thanks to deeper experience, networks, and capital. Older founders are typically motivated by purpose, flexibility, legacy, and supplemental income to extend financial security in retirement. Financial planners caution retirees to cap how much retirement savings they put at risk and to keep the venture from jeopardizing essential income.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-kicker">advice — underlying topic</div><div class="bubble-title">3 Questions to Ask Yourself About Your First 401(k)</div><p class="bubble-body">First-time enrollees should weigh three things. First, contribute at least enough to capture the full employer match — a common formula is 100% on the first 3% plus 50% on the next 2%, so contributing 5% earns a 4% match (effectively free money). Second, choose between Roth (contributions taxed now, withdrawals tax-free) and traditional (pre-tax now, taxed in retirement) based on whether you expect higher taxes later. Third, decide how much to contribute against the 2026 limits: $24,500 in employee deferrals, plus an $8,000 catch-up at 50+ (or $11,250 for ages 60–63), with a combined employee-plus-employer cap of $72,000. Note a 2026 rule change: catch-up contributions for those earning over $145,000 must generally be Roth.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Strategy Logs $8.3 Billion Loss as It Sells Off Bitcoin</div><p class="bubble-body">Strategy (formerly MicroStrategy) reported an $8.32 billion loss on its digital-asset holdings for Q2 2026 amid Bitcoin&#x27;s sharp decline from its October 2025 peak. In a major reversal from its long-standing buy-and-hold approach, the company sold 3,588 BTC for about $216 million between June 29 and July 5 at average prices near $59,000–$61,000 — below its roughly $75,476 average cost basis. It used the proceeds to cover preferred-stock distributions and rebuild cash reserves. Strategy now holds about 843,775 Bitcoin, still the largest corporate stash. Its shares slipped on the news as investors weighed whether the company&#x27;s leveraged bitcoin bet is starting to strain.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Trump&#x27;s Brokerage Accounts Made Big Trades Around &#x27;Liberation Day&#x27; Tariffs</div><p class="bubble-body">A financial disclosure showed investment accounts owned by President Trump made 327 previously undisclosed stock purchases worth as much as $12.8 million on April 8, 2025 — one day before he announced a pause on his April 2 &quot;Liberation Day&quot; tariffs. The buying spree concentrated in mega-cap tech names like Apple, Alphabet, Amazon, Microsoft, and Nvidia, which rebounded sharply after the tariff reversal. That reversal helped send the S&amp;P 500 up roughly 9.5% in one of its best days ever. Trump had posted it was a &quot;GREAT TIME TO BUY!!&quot; the day before the pause. The filing noted late-filing fees for transactions that had not been reported on time, adding to ethics scrutiny of the president&#x27;s trading.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Stock Funds Rallied 17.1% in a Quarter That Made Investors&#x27; Heads Spin</div><p class="bubble-body">The average diversified U.S. stock fund surged in a whipsaw quarter driven by tariff turmoil. After U.S. stocks fell nearly 12% between April 2 and April 8, hopes for softer trade deals sparked a rally that lifted the market about 25% from April 9 through quarter-end. The broad U.S. market rose more than 11% for the quarter — its best showing since Q3 2023. High-growth and cyclical categories led, with large-growth funds like Vanguard Growth (18.4%) and American Funds Growth Fund of America (18.1%) topping the largest funds. The episode is a reminder that trying to time such swings often backfires, since the sharpest gains clustered in just a few sessions.</p></div>
-<div class="bubble finance" data-cat="finance"><div class="bubble-head"><span class="bubble-pill">Finance</span></div><div class="bubble-title">Small Stocks Are Having Their Biggest Run in Decades</div><p class="bubble-body">The Russell 2000 small-cap index has surged roughly 22% in the first half of 2026, its best first half since 1991, as the AI-infrastructure boom broadened beyond mega-cap tech to smaller suppliers. Semiconductor and chip-equipment firms have been the standout winners, accounting for 16 of the index&#x27;s 50 top performers — names like Aehr Test Systems, Ichor Holdings, and MaxLinear have each rallied more than 400%. The rally has been fueled by Federal Reserve rate cuts, a narrowing earnings gap between small and large caps, and strong technical momentum. From its April 8, 2025 low, the Russell 2000 is up about 55.8% through mid-2026. Small caps had lagged for years, so the rotation marks a notable shift in market leadership.</p></div>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span> &nbsp;·&nbsp; <a href="digest-2026-07-09.html">Jul 9 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 1</div>
+    <div class="issue-date">July 8, 2026</div>
+    <div class="issue-sub">21 stories across tech, markets &amp; finance — a 12-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 21</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple to Spend $30 Billion on U.S.-Made Chips From Broadcom</div>
+        <div class="art-sum">Apple announced on July 8 a multiyear agreement worth more than $30 billion with Broadcom to design and produce custom wireless-connectivity chips in the United States. It is Apple&#x27;s largest domestic manufacturing commitment to date and is expected to yield more than 15 billion U.S.-made chips over its life. The deal includes a roughly $1.5 billion expansion of Broadcom&#x27;s Fort Collins, Colorado facility and runs via long-term contracts through 2031. It forms the biggest single piece of Apple&#x27;s previously announced $600 billion, four-year U.S. investment plan. Broadcom shares jumped about 5% on the news.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China Says It Has Found Security Vulnerabilities in Anthropic&#x27;s Claude Code</div>
+        <div class="art-sum">China&#x27;s Ministry of Industry and Information Technology warned on July 8 that its cybersecurity platform flagged a &quot;backdoor&quot; vulnerability in Anthropic&#x27;s Claude Code. It said versions released between April and June (roughly 2.1.91 through 2.1.196) contain a built-in monitoring mechanism that can transmit users&#x27; location and identity data to remote servers without consent. An Anthropic engineer characterized the feature as a March experiment meant to prevent account abuse by unauthorized resellers and to detect users tied to Chinese AI labs. In response, Alibaba reportedly ordered employees to stop using Anthropic tools for work starting July 10. The dispute lands amid broader U.S.–China friction over AI tooling and data security.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nokia&#x27;s New Act: Supplying the AI Data Center Boom</div>
+        <div class="art-sum">Nokia has repositioned itself as a key networking supplier for the AI data-center buildout, riding surging demand from AI and cloud customers to its highest stock price in more than 16 years. First-quarter orders from AI and cloud customers reached roughly €1 billion, with revenue from that group up about 49% year over year, led by its optical-networks business serving hyperscalers. On the strength of those results the company raised its full-year outlook for network infrastructure and elevated that unit to a growth segment. It also opened an AI Networking Innovation Lab at its Sunnyvale, California site to co-develop hardware for AI workloads.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Giants Are Handing Out Tons of Free Computing Power to Grab Startup Share</div>
+        <div class="art-sum">OpenAI, Anthropic, and Google are flooding early-stage startups with free compute and token credits to lock them into their ecosystems, competing on customer acquisition rather than price. OpenAI has offered packages such as $2 million in credits for equity plus a $500,000 no-equity tier; Anthropic countered with up to $500,000 (no equity, up sharply from a prior $30,000 offer); and Google Cloud offers up to $500,000 in credits plus early Gemini access. Y Combinator companies are especially targeted, and one founder — Dialogus&#x27; Hans Ibarra — said competing offers totaled more than $3 million in cloud and token credits. The strategy relies on lock-in: once a startup builds on one provider, migrating becomes costly and technically hard. It marks an escalation in the platform war for the next generation of AI-native companies.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Microsoft Is Cutting More Than 3,000 Jobs in Xbox Division</div>
+        <div class="art-sum">Microsoft announced around July 6 that it is cutting roughly 4,800 jobs in total (about 2.1% of its workforce), with the Xbox division bearing the largest share. Xbox will lose about 3,200 positions phased in through July 2027, with roughly 1,600 taking effect immediately. The company also plans to spin off four studios — Compulsion Games, Double Fine, Ninja Theory, and Undead Labs. Xbox CEO Asha Sharma told staff the unit ran at margins three to 10 times lower than comparable platforms and lost 64 cents on every dollar invested in studios. The next-generation console (codenamed Helix, slated for late 2027/2028) remains on schedule.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Big Tech Has Suddenly Flipped on the AI Jobs Wipeout Scenario</div>
+        <div class="art-sum">After a year of warnings that AI would wipe out large numbers of jobs, tech leaders have shifted to a more optimistic tone emphasizing that humans will stay central to AI-driven work. OpenAI&#x27;s Sam Altman conceded the industry was &quot;pretty wrong on the social and economic implications,&quot; while Anthropic&#x27;s Dario Amodei — who warned in May 2025 that AI could eliminate half of entry-level jobs — has since highlighted more positive scenarios. An EY-Parthenon survey found the share of CEOs expecting AI to cause significant headcount reductions fell from about 46% in January 2025 to just 20% by May 2026. MIT economist David Autor attributed the shift either to the labor market not moving as fast as expected, or to leaders realizing it is bad business to say your product will destroy the economy. The reversal doesn&#x27;t necessarily mean the jobs risk is gone — just that the messaging has changed.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Forget Wall Street. Elite Students Are Spending Their Summers on Startup Dreams.</div>
+        <div class="art-sum">Elite university students are increasingly skipping finance, consulting, and Big Tech internships to launch AI startups, aided by new university-affiliated programs and a shakier entry-level job market. Examples include a Princeton student who turned down a Big Tech offer and a rocket-engineering role to build an AI startup in San Francisco, and Yale sophomore Leïa Ryan, who co-founded Cortex, a knowledge-systems startup for biolabs, instead of taking a biotech job. Supporting hubs include the alumni- and VC-backed Yale Hacker House (15 founders sharing a Nob Hill apartment) and TekTrek, a first-year incubator drawing mainly from MIT, Harvard, and Princeton at a temporary Presidio campus. A big driver is how much cheaper building software has become thanks to LLMs and open-source tools. The trend reflects a broader shift in where ambitious young talent sees the best risk-adjusted upside.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Decline After Trump Says Iran Ceasefire Is Over</div>
+        <div class="art-sum">President Trump declared the U.S.–Iran ceasefire &quot;over,&quot; reigniting fears of regional escalation and threats to oil flows through the Strait of Hormuz. The Dow Jones Industrial Average fell about 623 points (1.2%) and the S&amp;P 500 slipped 0.4%, while Germany&#x27;s DAX dropped 2.2%. Oil surged roughly 6–7%, with Brent crude climbing to about $78.80 a barrel and WTI near $75, after Central Command said U.S. forces had struck more than 80 sites in Iran. The Strait of Hormuz carries roughly a fifth of the world&#x27;s seaborne oil, so any disruption there feeds directly into inflation fears. Safe-haven assets firmed as investors braced for further military action.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">SpaceX Shares Stumble in Nasdaq-100 Debut</div>
+        <div class="art-sum">SpaceX shares fell about 6.8% on their first day in the Nasdaq-100 (Tuesday, July 7), closing near $149.47 and sliding further to around $148 the next day — below the $150 level where the stock began trading on June 12. The drop disappointed investors who bet that index inclusion would draw guaranteed demand from funds tracking the benchmark, which manage roughly $800 billion in assets. Analysts noted much of that buying may already have been priced in after the stock ran up nearly 6% the prior week. A weak broader tape — the Nasdaq Composite fell 1.2% on semiconductor weakness — added pressure. Still, Wall Street stayed bullish, with Deutsche Bank setting a $255 target citing reusable rockets and satellite-internet growth.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Samsung Fails to Impress, Amazon Issues AI Bonds and Oil Jumps</div>
+        <div class="art-sum">Samsung Electronics posted a roughly 19-fold (about 1,800%) surge in Q2 operating profit to around $58 billion, but its shares still fell about 7–8% as the results missed lofty AI expectations and sparked profit-taking after a ~150% run this year. The disappointment dragged chip peers lower, with Micron down 4.7% and AMD, Broadcom, and the SMH semiconductor ETF (-3%) all falling. Oil jumped after Iran attacked a Qatari LNG tanker near the Strait of Hormuz, sending Brent up about 3% to $74.16 and WTI up nearly 3% to $70.44. The session&#x27;s other theme was corporate AI financing, as large tech issuers tapped debt markets to fund infrastructure buildouts. The Nasdaq Composite fell 1.16% to 25,818.69 and the S&amp;P 500 slid 0.45% to 7,503.85.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">World&#x27;s Hottest Market Risks Becoming a Squid Game</div>
+        <div class="art-sum"><span class="art-kicker">(analysis) </span>The piece refers to South Korea&#x27;s stock market, the year&#x27;s best performer, with the KOSPI up roughly 165% over the past year. The concern is that extreme retail speculation could leave small investors holding steep losses if the rally reverses. Retail traders poured about ₩1.61 trillion ($1.1 billion) into leveraged ETFs tied to Samsung Electronics and SK Hynix, and the market logged a record 29,357 volatility-interruption triggers in the first half. Meanwhile foreign investors sold heavily, pulling out on a net basis with roughly $30 billion exiting in June alone. The &quot;Squid Game&quot; framing warns that a euphoric, speculation-driven run rarely ends well for latecomers.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Retreat on Worries About AI Trade, Hormuz Fears</div>
+        <div class="art-sum">All three major U.S. indices closed lower on July 7, led by tech on doubts about the durability of the AI rally. The Nasdaq Composite fell 1.16% to 25,818.69, the S&amp;P 500 dropped 0.45% to 7,503.85, and the Dow lost 0.25% to 52,925.15. The selling began in Asia, where South Korea&#x27;s Kospi tumbled nearly 5% after Samsung fell almost 7%, and was compounded by a report that China&#x27;s DeepSeek is developing its own AI chip. Oil rose after Iran struck a Qatari LNG tanker near the Strait of Hormuz — a waterway handling about 20% of the world&#x27;s oil traffic — after the White House revoked Iran&#x27;s oil-sales license. Taken together, the session captured the market&#x27;s two dominant anxieties: stretched AI valuations and Middle East supply risk.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">GM-Backed Momenta Makes Muted Hong Kong Debut After $751 Million IPO</div>
+        <div class="art-sum">Momenta Global, the Chinese autonomous-driving firm backed by General Motors and Tencent, raised about $751 million (HK$5.89 billion) at HK$295.60 per share, valuing it near $9 billion. Shares rose as much as 3% at Wednesday&#x27;s open but faded to close about 2.1% below the IPO price, a reality check amid the broader tech selloff. The company drew 14 cornerstone investors — including Mercedes-Benz, BlackRock, and Singapore&#x27;s GIC — committing roughly $376 million. Founded in 2016 by former Microsoft researcher Cao Xudong, Momenta supplies automakers with software for steering, braking, lane changes, and parking. It posted a 2025 net loss of 3.46 billion yuan on revenue up 82.1% to 2.41 billion yuan.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech, Media &amp; Telecom Roundup: Market Talk</div>
+        <div class="art-sum"><span class="art-kicker">(sector roundup) </span>Semiconductors drove the sector, with a sharp selloff on July 7–8 that erased more than a trillion dollars in market value as investors questioned the sustainability of record AI capital spending. Samsung&#x27;s earnings triggered the rout: Intel and Applied Materials each dropped about 10%, AMD fell 8%, and the iShares Semiconductor ETF (SOXX) slid roughly 6%. Adding pressure was a report that China&#x27;s DeepSeek is building its own AI chip, which would threaten incumbents&#x27; pricing power. Several analysts characterized the drawdown as a &quot;mid-cycle reset&quot; rather than the end of the AI trade. They maintained high price targets on bellwethers like Nvidia and Micron.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Couple Living on One Income Wants to Buy a Home. Can They Afford It?</div>
+        <div class="art-sum"><span class="art-kicker">(advice — underlying topic) </span>A common affordability benchmark is the 28/36 rule: keep housing costs (principal, interest, taxes, insurance, and HOA) at or below 28% of gross monthly income and total debt at or below 36%, though many lenders permit debt-to-income ratios up to about 43–45% on conventional loans. Single-income households are typically advised to stress-test their budget against just one wage, since one salary must cover the mortgage plus emergencies. As a rough 2026 example, a $500,000 home with 20% down at a ~6.5% 30-year fixed rate runs about $2,528/month in principal and interest, requiring roughly $125,000 in annual income to stay within the 28% limit. Beyond the payment, buyers should budget for property taxes, insurance, maintenance, and a healthy emergency fund. On one income, keeping a larger cash cushion matters more because there&#x27;s no second paycheck to absorb a job loss.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">What It&#x27;s Like to Retire and Start a Business in America</div>
+        <div class="art-sum"><span class="art-kicker">(advice — underlying topic) </span>&quot;Encore entrepreneurship&quot; is a real and growing trend: self-employment among Americans 65 and older rose from 13.0% in 2013 to 16.3% in 2023, according to the SBA Office of Advocacy. Adults aged 55–64 now account for more than a quarter of U.S. startup activity. Research cited by AARP finds a 50-year-old founder is roughly 2.8 times more likely to launch a successful startup than a 25-year-old, thanks to deeper experience, networks, and capital. Older founders are typically motivated by purpose, flexibility, legacy, and supplemental income to extend financial security in retirement. Financial planners caution retirees to cap how much retirement savings they put at risk and to keep the venture from jeopardizing essential income.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">3 Questions to Ask Yourself About Your First 401(k)</div>
+        <div class="art-sum"><span class="art-kicker">(advice — underlying topic) </span>First-time enrollees should weigh three things. First, contribute at least enough to capture the full employer match — a common formula is 100% on the first 3% plus 50% on the next 2%, so contributing 5% earns a 4% match (effectively free money). Second, choose between Roth (contributions taxed now, withdrawals tax-free) and traditional (pre-tax now, taxed in retirement) based on whether you expect higher taxes later. Third, decide how much to contribute against the 2026 limits: $24,500 in employee deferrals, plus an $8,000 catch-up at 50+ (or $11,250 for ages 60–63), with a combined employee-plus-employer cap of $72,000. Note a 2026 rule change: catch-up contributions for those earning over $145,000 must generally be Roth.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Strategy Logs $8.3 Billion Loss as It Sells Off Bitcoin</div>
+        <div class="art-sum">Strategy (formerly MicroStrategy) reported an $8.32 billion loss on its digital-asset holdings for Q2 2026 amid Bitcoin&#x27;s sharp decline from its October 2025 peak. In a major reversal from its long-standing buy-and-hold approach, the company sold 3,588 BTC for about $216 million between June 29 and July 5 at average prices near $59,000–$61,000 — below its roughly $75,476 average cost basis. It used the proceeds to cover preferred-stock distributions and rebuild cash reserves. Strategy now holds about 843,775 Bitcoin, still the largest corporate stash. Its shares slipped on the news as investors weighed whether the company&#x27;s leveraged bitcoin bet is starting to strain.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Trump&#x27;s Brokerage Accounts Made Big Trades Around &#x27;Liberation Day&#x27; Tariffs</div>
+        <div class="art-sum">A financial disclosure showed investment accounts owned by President Trump made 327 previously undisclosed stock purchases worth as much as $12.8 million on April 8, 2025 — one day before he announced a pause on his April 2 &quot;Liberation Day&quot; tariffs. The buying spree concentrated in mega-cap tech names like Apple, Alphabet, Amazon, Microsoft, and Nvidia, which rebounded sharply after the tariff reversal. That reversal helped send the S&amp;P 500 up roughly 9.5% in one of its best days ever. Trump had posted it was a &quot;GREAT TIME TO BUY!!&quot; the day before the pause. The filing noted late-filing fees for transactions that had not been reported on time, adding to ethics scrutiny of the president&#x27;s trading.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Stock Funds Rallied 17.1% in a Quarter That Made Investors&#x27; Heads Spin</div>
+        <div class="art-sum">The average diversified U.S. stock fund surged in a whipsaw quarter driven by tariff turmoil. After U.S. stocks fell nearly 12% between April 2 and April 8, hopes for softer trade deals sparked a rally that lifted the market about 25% from April 9 through quarter-end. The broad U.S. market rose more than 11% for the quarter — its best showing since Q3 2023. High-growth and cyclical categories led, with large-growth funds like Vanguard Growth (18.4%) and American Funds Growth Fund of America (18.1%) topping the largest funds. The episode is a reminder that trying to time such swings often backfires, since the sharpest gains clustered in just a few sessions.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Small Stocks Are Having Their Biggest Run in Decades</div>
+        <div class="art-sum">The Russell 2000 small-cap index has surged roughly 22% in the first half of 2026, its best first half since 1991, as the AI-infrastructure boom broadened beyond mega-cap tech to smaller suppliers. Semiconductor and chip-equipment firms have been the standout winners, accounting for 16 of the index&#x27;s 50 top performers — names like Aehr Test Systems, Ichor Holdings, and MaxLinear have each rallied more than 400%. The rally has been fueled by Federal Reserve rate cuts, a narrowing earnings gap between small and large caps, and strong technical momentum. From its April 8, 2025 low, the Russell 2000 is up about 55.8% through mid-2026. Small caps had lagged for years, so the rotation marks a notable shift in market leadership.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 21 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Apple to Spend $30 Billion on U.S.-Made Chips From Broadcom</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">China Says It Has Found Security Vulnerabilities in Anthropic&#x27;s Claude Code</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Nokia&#x27;s New Act: Supplying the AI Data Center Boom</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">AI Giants Are Handing Out Tons of Free Computing Power to Grab Startup Share</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Microsoft Is Cutting More Than 3,000 Jobs in Xbox Division</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Big Tech Has Suddenly Flipped on the AI Jobs Wipeout Scenario</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Forget Wall Street. Elite Students Are Spending Their Summers on Startup Dreams.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">U.S. Stocks Decline After Trump Says Iran Ceasefire Is Over</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">SpaceX Shares Stumble in Nasdaq-100 Debut</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Samsung Fails to Impress, Amazon Issues AI Bonds and Oil Jumps</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">World&#x27;s Hottest Market Risks Becoming a Squid Game</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">U.S. Stocks Retreat on Worries About AI Trade, Hormuz Fears</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">GM-Backed Momenta Makes Muted Hong Kong Debut After $751 Million IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Tech, Media &amp; Telecom Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">A Couple Living on One Income Wants to Buy a Home. Can They Afford It?</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">What It&#x27;s Like to Retire and Start a Business in America</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">3 Questions to Ask Yourself About Your First 401(k)</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Strategy Logs $8.3 Billion Loss as It Sells Off Bitcoin</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">Trump&#x27;s Brokerage Accounts Made Big Trades Around &#x27;Liberation Day&#x27; Tariffs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">20</span><span class="toc-t">Stock Funds Rallied 17.1% in a Quarter That Made Investors&#x27; Heads Spin</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">21</span><span class="toc-t">Small Stocks Are Having Their Biggest Run in Decades</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">10 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">9 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">7 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">4 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">1 day</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span>&nbsp;</span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
 </div>
-<section class="threads"><h2 class="threads-h">Recurring threads</h2><div class="thread"><span class="thread-label">AI boom</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a></span></div><div class="thread"><span class="thread-label">Chips</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a></span></div><div class="thread"><span class="thread-label">IPOs &amp; listings</span><span class="thread-days">also on <a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-15.html">Jul 15</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a></span></div><div class="thread"><span class="thread-label">Iran &amp; oil</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-14.html">Jul 14</a><a href="digest-2026-07-13.html">Jul 13</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a></span></div><div class="thread"><span class="thread-label">Crypto</span><span class="thread-days">also on <a href="digest-2026-07-19.html">Jul 19</a><a href="digest-2026-07-18.html">Jul 18</a><a href="digest-2026-07-17.html">Jul 17</a><a href="digest-2026-07-16.html">Jul 16</a><a href="digest-2026-07-12.html">Jul 12</a><a href="digest-2026-07-11.html">Jul 11</a><a href="digest-2026-07-10.html">Jul 10</a><a href="digest-2026-07-09.html">Jul 9</a></span></div></section>
-<nav class="daynav"><span class="dn-spacer"></span><a class="dn-next" href="digest-2026-07-09.html"><span class="dn-label">Newer →</span><span class="dn-date">Jul 9</span></a></nav>
-<script>
-(function () {
-  var bar = document.querySelector('.filters');
-  if (!bar) return;
-  var cards = document.querySelectorAll('.bubble');
-  var buttons = bar.querySelectorAll('.filter-btn');
-  function apply(f, push) {
-    var matched = false;
-    buttons.forEach(function (b) {
-      var on = b.getAttribute('data-filter') === f;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      if (on) matched = true;
-    });
-    if (!matched) { f = 'all'; buttons[0].classList.add('is-active');
-                    buttons[0].setAttribute('aria-pressed', 'true'); }
-    cards.forEach(function (c) {
-      c.hidden = !(f === 'all' || c.getAttribute('data-cat') === f);
-    });
-    if (push) {
-      var h = f === 'all' ? ' ' : '#' + f;
-      history.replaceState(null, '', h === ' ' ? location.pathname + location.search : h);
-    }
-  }
-  bar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (btn) apply(btn.getAttribute('data-filter'), true);
-  });
-  apply((location.hash || '').replace('#', '') || 'all', false);
-  window.addEventListener('hashchange', function () {
-    apply((location.hash || '').replace('#', '') || 'all', false);
-  });
-})();
-</script>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
 </body>
 </html>
