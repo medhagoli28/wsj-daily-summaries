@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — July 21, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-07-20.html">‹ Jul 20</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 14</div>
+    <div class="issue-date">July 21, 2026</div>
+    <div class="issue-sub">9 stories across tech, markets &amp; finance — a 7-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 9</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">U.S.-Iran Tensions Jostle Markets</div>
+        <div class="art-sum">Markets were rattled on July 20, 2026 as the U.S. carried out roughly its 10th consecutive day of strikes on Iran, with President Trump vowing Tehran &quot;will pay&quot; after a third American service member was killed (raising the U.S. death toll to 17 since the conflict began in February) and Iran retaliating with missile and drone attacks on Kuwait. Oil surged on fears over tanker traffic through the Strait of Hormuz, which carries about 20% of global oil supply: Brent crude jumped roughly 3% to about $90.86 while U.S. WTI rose about 2.9% to $84.91, though prices had spiked even higher (Brent near $91.42) before easing. Equities slipped, with the S&amp;P 500 down 0.19% to 7,443.28 and the Nasdaq off 0.05% at 25,508.07, as higher oil prices revived fears of stalled Fed rate cuts. Safe havens firmed, with gold futures trading around $4,027 an ounce and the dollar strengthening, even as a hint of diplomacy from Iran&#x27;s Foreign Ministry spokesman briefly lifted sentiment.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China&#x27;s Top AI Event Delivers Message to the U.S.: We&#x27;re Coming for You</div>
+        <div class="art-sum">At the 2026 World AI Conference (WAIC) in Shanghai, held July 17-20 with over 1,100 companies, 3,000+ exhibits, more than 100,000 square meters of floor space and 300-plus product debuts, Chinese firms signaled they are rapidly closing the gap with U.S. AI leaders. Moonshot&#x27;s newly unveiled &quot;Kimi K3,&quot; a 2.8-trillion-parameter model that Morgan Stanley said ranks around fourth globally, rattled U.S. tech stocks, while Alibaba launched a preview of its flagship Qwen3.8 Max, billed as second only to Anthropic&#x27;s Fable 5. Huawei showcased its &quot;Atlas 950 SuperPoD&quot; linking 8,192 homegrown chips to circumvent U.S. export controls and challenge Nvidia, part of a broader &quot;chip bonding&quot; supercomputing push. President Xi Jinping took a veiled swipe at Washington, saying AI &quot;should not be a solo performance by one country, but a symphony played by the international community,&quot; pledging 5,000 AI training opportunities for developing nations over five years. China also launched the World AI Cooperation Organization (WAICO) with 29 countries including Russia, Brazil and Cuba, courting the Global South against the U.S.-led AI order.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AliExpress Fined $629 Million by EU Over Product-Safety Concerns</div>
+        <div class="art-sum">The European Commission on July 20, 2026 fined Alibaba&#x27;s AliExpress 550 million euros (about $629 million), the largest penalty ever imposed under the EU&#x27;s Digital Services Act, for failing to curb the sale of unsafe and counterfeit products. Regulators found the marketplace inadequately assessed and mitigated risks tied to illegal goods, letting counterfeit items, unsafe toys and dangerous cosmetics linger, while its recommendation algorithms actively amplified and pushed those listings toward shoppers. The action follows a June 2025 preliminary finding that AliExpress had breached the DSA over systemic risks. The company now has until October 20 to submit an action plan, with further penalties possible if the Commission judges its remedies inadequate in December; AliExpress said it would appeal, calling the fine disproportionate.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Something Weird Is Happening Beneath the Stock Market&#x27;s Surface</div>
+        <div class="art-sum">Beneath a headline S&amp;P 500 that gained roughly 1.8% and hit records into mid-July 2026, market internals showed unusual churn: the &quot;Magnificent 7&quot; mega-cap and AI leaders faced heavy profit-taking while breadth broadened dramatically into small caps, healthcare, financials and defensives. Through the first half of 2026 the S&amp;P 500 was up about 9.3% year-to-date, but the S&amp;P SmallCap 600 posted a one-year gain exceeding 30%, a rare reversal of the multi-year mega-cap dominance. Analysts flagged a &quot;bullish divergence&quot; in market breadth that ended nearly three months of deteriorating internals, even as the S&amp;P 500 and Nasdaq showed technical breakdowns under the surface. The concern is that narrow leadership masked by index highs, combined with AI-trade profit-taking, signals elevated risk if the rotation stalls.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">SBI Funds Management Shares Rise After India&#x27;s Largest IPO So Far This Year</div>
+        <div class="art-sum">SBI Funds Management, the SBI–Amundi joint venture that is India&#x27;s largest asset manager by AUM, listed Tuesday, July 21, 2026 at ₹613.30 on the NSE, a 6.85% premium over its ₹574 issue price (price band ₹545–₹574). The roughly $1 billion IPO — the largest issue of 2026 so far, per SBI Chairman Challa Sreenivasulu Setty — ran July 14–16, raised about ₹11,692 crore, and drew bids worth ₹2.97 trillion (~$30.7 billion), oversubscribed 41.6 times on strong institutional demand (QIB 50%, retail 35%, HNI 15%). The muted ~7% debut left market capitalization near ₹1.26 lakh crore, placing it behind ICICI Prudential AMC (~₹1.54 lakh crore) and ahead of HDFC AMC (~₹1.13 lakh crore). Brokerage Emkay initiated coverage with a &quot;Buy&quot; and a ₹750 target.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Edge Lower to Start Week; Chip Stocks Rebound</div>
+        <div class="art-sum">U.S. equities edged lower to open the week Monday, July 20, 2026: the Dow Jones Industrial Average fell 307.16 points (0.59%) to 51,839.26, the S&amp;P 500 slipped 0.19% to 7,443.28, and the Nasdaq Composite eased 0.05% to 25,508.07. Semiconductors bucked the weakness and rebounded after a roughly 8–10% weekly slump, with the Philadelphia Semiconductor Index up as much as 2.5% intraday before paring gains. AMD rose on news that Microsoft will deploy AMD Helios racks in Azure — joining Meta, OpenAI and Oracle — while Nvidia, Micron, Intel and Marvell also gained. The chip bounce provided partial support, but declines in other large caps such as Apple and Tesla, a firmer dollar and rising Treasury yields capped the broader market.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Tax Strategy for People Suffering From Stock-Market Success</div>
+        <div class="art-sum">Investors sitting on large, highly appreciated concentrated positions — often a single winning stock — face steep federal long-term capital gains taxes of up to 20% plus the 3.8% net investment income tax, prompting a menu of tax-efficient diversification strategies. Exchange funds let investors pool a concentrated stake into a diversified portfolio without an immediate taxable event, but require roughly a seven-year lock-up and a portion held in illiquid assets. Direct indexing surrounds the concentrated holding with index constituents while harvesting losses to offset gains as exposure is trimmed, and charitable remainder trusts (CRTs) let donors contribute appreciated stock, sell it tax-free inside the trust, take income for a term, and claim a deduction for the charitable remainder&#x27;s present value. Advisers also note a new wrinkle: beginning in 2026, itemized charitable deductions are subject to a 0.5%-of-AGI floor, which can make &quot;bunching&quot; gifts and outright donations of appreciated shares more attractive, typically executed as a coordinated multi-year sequence rather than a single move.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Man Who Runs the IRS Spied on Colleagues When He Worked at JPMorgan</div>
+        <div class="art-sum">The figure at the center is Frank Bisignano, who as of July 2026 holds a newly created IRS &quot;Chief Executive Officer&quot; role running the agency&#x27;s day-to-day operations while also serving as Social Security Administration Commissioner; the Senate-confirmed IRS Commissioner post has been vacant since Scott Bessent&#x27;s Vacancies Act authority expired March 6, 2026. Reporting summarized by non-WSJ outlets says that during his tenure as JPMorgan&#x27;s co-chief operating officer over a decade ago, Bisignano sponsored a security program that used as many as 120 Palantir &quot;forward-deployed engineers&quot; to vacuum up executives&#x27; and employees&#x27; emails, browser histories, GPS data from company smartphones, printer/download activity, and transcripts of recorded phone calls. The reporting alleges his aim was to keep tight control over staff and undermine internal rivals, and that matters came to a head around 2013 when other JPMorgan executives discovered they were being monitored. Bisignano&#x27;s attorney flatly denies the claims, stating he &quot;never directed anyone to look through any employee&#x27;s or executive&#x27;s communications or engaged in any form of surveillance,&quot; and Democratic senators have separately attacked the IRS &quot;CEO&quot; title as an unauthorized job created to bypass Senate confirmation.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Massive Supply Deals Feeding the AI Frenzy Are No Sure Thing</div>
+        <div class="art-sum">The AI buildout rests on a web of interlocking supply and financing commitments now estimated in the hundreds of billions to over $1 trillion: OpenAI agreed to pay Oracle roughly $300 billion over five years (about 4.5 gigawatts of capacity, starting 2027) in what was called the largest cloud deal ever, while Nvidia signed a letter of intent to invest up to $100 billion in OpenAI in exchange for non-voting shares, with OpenAI pledging to spend that cash on Nvidia chips. Additional layers include CoreWeave&#x27;s up-to-$22.4 billion infrastructure commitment to OpenAI (raised from $11.9 billion) and Nvidia&#x27;s agreement to backstop up to $6.3 billion of CoreWeave&#x27;s unsold capacity through 2032, plus separate AMD and Microsoft arrangements. Critics warn this &quot;circular financing,&quot; where Nvidia funds customers who then buy its chips and cloud providers that also buy its GPUs, creates skewed incentives reminiscent of the dot-com-era vendor-financing collapse. The core uncertainty is demand risk: if AI revenue fails to match lofty projections, or if a single link breaks (e.g., Nvidia deciding OpenAI is too risky to fund), the capital flow could stall, magnifying losses across the chain.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 9 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">U.S.-Iran Tensions Jostle Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">China&#x27;s Top AI Event Delivers Message to the U.S.: We&#x27;re Coming for You</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">AliExpress Fined $629 Million by EU Over Product-Safety Concerns</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Something Weird Is Happening Beneath the Stock Market&#x27;s Surface</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">SBI Funds Management Shares Rise After India&#x27;s Largest IPO So Far This Year</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Stocks Edge Lower to Start Week; Chip Stocks Rebound</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">The Tax Strategy for People Suffering From Stock-Market Success</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">The Man Who Runs the IRS Spied on Colleagues When He Worked at JPMorgan</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">The Massive Supply Deals Feeding the AI Frenzy Are No Sure Thing</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">14 days</span></div><div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">14 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">12 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">12 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-07-20.html">← Older · July 20, 2026 · Alibaba Says New AI Model Is Just Second to Anthropic&#x27;s Fable 5</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
