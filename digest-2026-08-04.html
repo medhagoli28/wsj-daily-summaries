@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — August 4, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-08-03.html">‹ Aug 3</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 28</div>
+    <div class="issue-date">August 4, 2026</div>
+    <div class="issue-sub">17 stories across tech, markets &amp; finance — a 16-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 17</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Developing Economies Have More to Gain and Less to Lose From AI, Says World Bank</div>
+        <div class="art-sum">The World Bank released its <em>World Development Report 2026: The Promise of Artificial Intelligence</em> on August 4, 2026, arguing that AI could let poorer countries &quot;do in a decade what might otherwise take a century.&quot; The report finds jobs in high-income countries are roughly three times as likely to be automated by generative AI — 14.2% at risk versus 4.5% in low- and middle-income countries — while the productivity upside is nearly comparable, with 16.2% of jobs in developing economies set to see AI-boosted output against 18.7% in rich ones. It also notes AI is diffusing far faster than prior technologies: middle-income countries accounted for half of ChatGPT&#x27;s global traffic within six months of launch, versus the roughly 40 years electricity took to reach lower-income countries. Co-author Gaurav Nayyar framed it as &quot;a golden opportunity,&quot; but warned countries that fail to build complements — reliable electricity, internet access, digital skills, local-language data and institutions — risk falling behind, and the Bank cautions AI could also worsen income inequality, misinformation and political repression. The prescribed framework is &quot;adopt, adapt, advance,&quot; favoring low-cost &quot;small AI&quot; delivered over text, voice and basic phones rather than trillion-dollar frontier models, citing examples like the UAE&#x27;s Falcon model tuned for local languages.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Security Flaw Placed 30 Years of DNA Evidence at Risk of Hacking</div>
+        <div class="art-sum">Thermo Fisher Scientific issued a security bulletin on July 31, 2026 patching CVE-2026-17583, a high-severity flaw (CVSS v4.0 score 8.2) in its Applied Biosystems Human Identification software that let attackers alter the .fsa and .hid data files crime labs generate from physical DNA evidence with essentially no forensic trace. Researchers Nathan Adams of Forensic Bioinformatics, Kevin Dyer and Laura Gaydosh Combs found the flaw and coordinated disclosure through CISA; Adams demonstrated modifying a file from a public dataset in about 45 minutes, and the team used AI coding tools to build the manipulation code, which is part of why a weakness dating to roughly 1995 became practically exploitable only now. Patches shipped for five product lines — 3500/3500xL Data Collection Software 4.0.3, 3730/3730xL 5.0.3, SeqStudio Genetic Analyzer 1.2.6, SeqStudio Flex 1.2.1, and GeneMapper ID-X 1.7.4 — while three end-of-life products get no fix at all. The updates add digital signatures so labs can verify files haven&#x27;t been altered, and Thermo Fisher recommends encrypted storage, restricted access, chain-of-custody controls and network isolation for systems that can&#x27;t be patched. As of August 3, 2026 the company said it was aware of no exploitation in the wild, and the CVE had not yet appeared on NVD or in CISA&#x27;s Known Exploited Vulnerabilities catalog.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Essay | Move Fast and Regulate Later: The Paradox of China&#x27;s Economic Dynamism</div>
+        <div class="art-sum">This is an opinion essay rather than a news event, so the summary covers its subject: China&#x27;s practice of letting new sectors scale in regulatory gray zones and imposing rules only after national champions emerge. The clearest case study is the roughly 32-month campaign that began in late 2020, when Beijing halted Ant Group&#x27;s IPO (which would have been the world&#x27;s largest), forced Didi Global to delist from the U.S., and gutted after-school tutoring — erasing more than $1 trillion in Chinese tech market value before easing from 2023, when Didi resumed new user registration, game licenses restarted, and Jack Ma reappeared publicly. The same sequencing is visible in 2026&#x27;s &quot;anti-involution&quot; campaign against ruinous price wars: regulators opened a formal antitrust probe into Trip.com and summoned a dozen tech giants including Alibaba, Tencent, ByteDance&#x27;s Douyin, Baidu, JD.com and Meituan over price competition ahead of the June shopping festival, and published Price Behaviour Compliance Guidelines for the Automotive Industry targeting below-cost car pricing. The economic backdrop shows why it is a paradox: auto-sector profit margins fell from 7.8% in 2017 to 4.3% in 2024 and 4.4% in 2025, deflation is in its fourth year with consumer prices near zero, and Beijing set its lowest growth target since the 1990s at 4.5–5% — even as Q1 2026 GDP grew 5.0% year over year, passenger-car exports jumped 60.6%, and 2026 fiscal plans allocate roughly 1.3 trillion yuan to science and technology. Analysts note the state now favors targeted enforcement over another blanket crackdown, but the underlying bargain — permissionless growth first, discipline afterward — is what the essay&#x27;s title flags.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Poised to Extend Gains Ahead of SpaceX&#x27;s First Earnings</div>
+        <div class="art-sum">U.S. stocks opened higher Tuesday, Aug. 4, 2026, with the S&amp;P 500 up about 0.5% at roughly 7,640 and on pace for its first record close since June 2, when it settled at 7,620.90, while the Dow built on Monday&#x27;s record 53,178.41 close. The main event is SpaceX&#x27;s (SPCX) first quarterly report as a public company, due after the bell at 4 p.m. ET with a 4:30 p.m. call; analysts model Q2 revenue of $6.8–6.9 billion and EPS of roughly 16–23 cents. The setup is tense: SpaceX priced its IPO at $135 a share on June 11 in an $85.7 billion raise, the largest ever, but the stock has slid to about $110–120, roughly 11–19% below issue and some 47–51% under its June 16 intraday high of $225.64, against a valuation near $1.4 trillion. SpaceX booked $18.7 billion of 2025 revenue with a net loss above $4.9 billion, lost about $4.3 billion in Q1 2026, and its AI segment generated $818 million in Q1; a lockup expiry Thursday could free more than 911 million shares worth roughly $100 billion. Elsewhere Tuesday, Palantir surged about 18% on its quarter and Caterpillar rose 12% after topping $20 billion in quarterly sales for the first time.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Indexes Rise in Strong Open as AI, Defense Stocks Gain</div>
+        <div class="art-sum">The pan-European STOXX 600 climbed 0.4% to 651.69 by 08:50 GMT and closed up 0.5% at 652.09, hovering just under its record, with most regional bourses higher; Germany&#x27;s DAX jumped as much as 1.5% to a fresh intraday record of 26,001 and France&#x27;s CAC 40 touched its first intraday record since February. Aerospace and defense was the standout sector, rising 2.6–2.7%, with Rheinmetall up around 4% and RENK, Hensoldt and Airbus also advancing, while the luxury index added 1.7%. The AI trade did the other half of the work: SAP led large-cap gainers at +4.4%, echoing an overnight Wall Street surge in which Microsoft rose 4.9%, Meta 6% and Alphabet 4.9% after capex-heavy but reassuring Big Tech results. Energy shares fell about 1% as crude futures slid more than 4% on Trump&#x27;s decision to hold off on fresh strikes against Iran while pursuing a deal to reopen the Strait of Hormuz. Laggards included AstraZeneca, down as much as 9% on merger reports, Ipsen off 8.4% after a Jefferies downgrade, and healthcare as a sector down 1.7%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Rally as Oil Drops on Hormuz Diplomatic Hopes</div>
+        <div class="art-sum">Wall Street surged Monday, Aug. 3, 2026, after President Trump said he had called off what he called &quot;massive&quot; strikes on Iran and that a deal covering the Strait of Hormuz and Iranian denuclearization was &quot;imminent,&quot; with new talks to begin that day. The Dow jumped 693.38 points, or about 1.3–1.4%, to a record 53,178.41; the S&amp;P 500 rose 1.5% to 7,600.50, within 0.1% of its June 2 record of 7,620.90; and the Nasdaq Composite climbed 2.1% to 25,913.9, still 4.3% below its June 2 peak of 27,093.90. Brent crude fell roughly 5% on the session, with October Brent near $85 and September WTI at $81.26 by Tuesday — a dramatic unwind from the crisis peak above $90 after Iran largely blocked the strait from Feb. 28, 2026. Megacap tech led the advance, with Meta +6%, Microsoft, Amazon and Alphabet between +4.4% and +4.9%, Tesla +3.5% and Nvidia +2.9%. The diplomatic picture stayed murky: Iran&#x27;s foreign ministry denied it was in talks with Washington, saying its focus was Oman-brokered negotiations over transit through the strait.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">AstraZeneca Shares Drop, Bristol Myers Squibb&#x27;s Climb After Merger Talks Reports</div>
+        <div class="art-sum">The Financial Times reported Aug. 2, 2026 that AstraZeneca and Bristol Myers Squibb held early-stage merger discussions over several months, a combination that would pair AstraZeneca&#x27;s roughly £196 billion ($264 billion) market value with Bristol&#x27;s about $133 billion for a company worth close to $400 billion. Investors split sharply on the news: AstraZeneca fell as much as 7% Monday and closed down about 9% in London, while Bristol Myers rose roughly 6% in U.S. premarket trading. The strategic logic centers on Bristol&#x27;s looming patent cliffs — blood thinner Eliquis and cancer drug Opdivo together account for about half of its sales — and on AstraZeneca gaining a larger U.S. footprint; Bristol&#x27;s most recent quarterly sales were about $13 billion, helped by newer drugs Breyanzi, Opdualag and Camzyos. Analysts were unconvinced: Citi called a deal a &quot;surprise&quot; given AstraZeneca&#x27;s &quot;best-in-class pipeline,&quot; and Jefferies said it was &quot;a bit perplexed&quot; by the rationale. Neither company confirmed the report — AstraZeneca declined to comment — and sources cautioned a transaction may never materialize.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Snap Loss Narrows on Higher Revenue After Cost Cuts</div>
+        <div class="art-sum">Snap reported Q2 2026 results on Aug. 3, with revenue up 19% year over year to $1.599 billion from $1.345 billion and the net loss narrowing 38% to $164 million from $263 million a year earlier. Adjusted EBITDA exploded to $250 million from $41 million, gross margin widened to 58% from 51%, free cash flow reached $121 million versus $24 million, and operating cash flow nearly doubled to $176 million — gains helped by restructuring charges of $128.5 million booked in the six months ended June 30 tied to workforce optimization. Daily active users rose 5% to 493 million, monthly actives grew 4% to 971 million, and ARPU climbed 13% to $3.25, while &quot;other revenue,&quot; which includes Snapchat+, jumped 85% to $316 million; World Cup ad spending gave the quarter an extra lift. For Q3, Snap guided to revenue of $1.70–1.74 billion and adjusted EBITDA of $300–350 million, and raised full-year infrastructure cost guidance by $50 million to $1.65–1.7 billion for added AI and machine-learning capacity. Shares jumped roughly 10% in after-hours trading.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | KKR Near Deal to Buy Integer Holdings</div>
+        <div class="art-sum">The deal was confirmed Aug. 3, 2026: KKR will acquire medical-device contract manufacturer Integer Holdings for $127 per share in an all-cash transaction valued at approximately $5.7 billion, taking the company private and delisting it from the NYSE. The price is a 51.8% premium to Integer&#x27;s April 29, 2026 closing price and 28.8% above its 30-day volume-weighted average as of July 31, and follows a board-led strategic review launched April 30, 2026. There is no financing contingency; KKR is funding the deal with equity from its investment funds plus committed debt arranged by Citi, KKR Capital Markets, Barclays, UBS and Jefferies. Integer, whose brands include Greatbatch Medical and Lake Region Medical and which serves cardio/vascular, cardiac rhythm management and neuromodulation markets, has about 11,000 employees who will be covered by a KKR employee ownership and engagement program — an approach KKR has used at more than 90 portfolio companies. Goldman Sachs and Davis Polk advised Integer; Centerview, Barclays, Citi, Raymond James and Kirkland &amp; Ellis advised KKR, with closing expected by the end of 2026 subject to regulatory and shareholder approvals.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">His Wedding Guests Were Arriving—Just as His $45 Billion Fund Was Falling Apart</div>
+        <div class="art-sum">Former OpenAI researcher Leopold Aschenbrenner watched his AI-focused hedge fund, Situational Awareness, shrink from about $45 billion in assets to roughly $10 billion in a matter of days during the week of July 31, 2026, even as guests gathered for his wedding at a Tuscan-style villa in Carmel, California. The fund ran 3–4x leverage, so a semiconductor rout — memory names including SK Hynix and SanDisk fell about 30% during the sector&#x27;s worst month since 2002 — triggered cascading margin calls; rival traders identified his positions and shorted them, and his forced selling pushed prices lower still. Situational Awareness finished the month down 67% despite having been up roughly 80% year to date beforehand, a dynamic Aschenbrenner likened to a &quot;bank run—vulnerability begetting more vulnerability.&quot; Ken Griffin&#x27;s Citadel bought the bulk of the public portfolio at more than 10% below market value, while an attempted sale of a $3.5 billion Anthropic stake fell through, leaving that private holding intact. Aschenbrenner, a twentysomething known for a viral AI manifesto, married Avital Balwit, chief of staff to Anthropic CEO Dario Amodei, whom he met through the FTX Future Fund.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Pfizer&#x27;s Quarterly Results Beat Expectations on Cancer, Heart Drugs</div>
+        <div class="art-sum">Pfizer reported second-quarter 2026 revenue of $15.03 billion on August 4, up about 3% year over year, with adjusted earnings of 77 cents a share topping the analyst consensus of roughly 68 cents. The beat was driven by legacy non-Covid franchises: blood thinner Eliquis brought in $2.43 billion, up 19% operationally and far above the roughly $1.93–$2.08 billion analysts modeled, while the heart drug Vyndaqel and the targeted bladder-cancer therapy Padcev also outperformed, offsetting continued declines in Comirnaty and Paxlovid. Revenue from acquired products rose 25% operationally. Pfizer lifted the low end of its full-year 2026 revenue guidance to $60.5–$62.5 billion from $59.5–$62.5 billion, reflecting an expected $1.5 billion more in non-Covid sales, and reaffirmed profit guidance including a $650 million hit from its Innovent Biologics licensing deal. CEO Albert Bourla flagged &quot;meaningful momentum&quot; in obesity following the roughly $10 billion Metsera acquisition, and the company announced an additional $2.5 billion in cost savings to be realized from 2027 through 2029.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">EchoStar&#x27;s Hughes Network Files for Bankruptcy as $1.5 Billion Debt Comes Due</div>
+        <div class="art-sum">Hughes Satellite Systems, the geostationary broadband arm of Charlie Ergen&#x27;s EchoStar, filed for Chapter 11 on August 3, 2026 in the U.S. Bankruptcy Court for the Southern District of Texas, saying it lacked the cash and capital-markets access to repay roughly $1.5 billion of debt maturing that same day. Chief restructuring officer Robert del Genio said Hughes broadband subscribers fell 21.7% over the past year to about 641,000, gutted by SpaceX&#x27;s Starlink and other low-Earth-orbit rivals whose 20–40 millisecond latency undercuts GEO&#x27;s roughly 600 milliseconds; the company notified about 400 employees of termination in late July. Hughes entered bankruptcy without a pre-negotiated creditor deal and plans to pivot toward enterprise, government and defense customers, citing a $1.5 billion contracted enterprise backlog plus recent commercial-airline and U.S. defense awards. It operates six GEO satellites and 69 terrestrial gateways worldwide. The filing lands roughly a month after EchoStar&#x27;s satellite-TV and abandoned 5G wireless units sought bankruptcy protection.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Northrop Grumman Enters $3 Billion Contracts to Increase Missile Defense Production</div>
+        <div class="art-sum">Northrop Grumman announced on August 3, 2026 two multiyear framework agreements worth more than $3 billion combined with the Department of War and prime contractor Lockheed Martin to scale interceptor output: roughly $2 billion over seven years for PAC-3 MSE solid rocket motors and ignition safety devices, and about $1 billion over seven years for THAAD motors. The PAC-3 deal makes Northrop a second-source motor supplier, with new production capability stood up at Allegany Ballistics Laboratory in West Virginia, while additional THAAD motor work goes to its San Diego facility. The agreements underpin a Pentagon goal of tripling PAC-3 production and quadrupling THAAD output, lifting annual PAC-3 MSE volumes from roughly 600 units today toward 2,000 interceptors a year by the end of 2030. Michael Duffey, the Pentagon&#x27;s top acquisition official, called supplier framework agreements &quot;vital&quot; to hitting those rates. Northrop says it has doubled tactical solid rocket motor capacity since 2021 and plans to triple it by 2027; the deals follow Lockheed&#x27;s own PAC-3 and THAAD framework agreements signed earlier in 2026 and a similar L3Harris agreement the prior week.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Marriott Says Middle East Conflict Weighed on Sales</div>
+        <div class="art-sum">Marriott International&#x27;s second-quarter 2026 results, released August 3, showed worldwide RevPAR up 3.4% (3.9% in actual dollars), but international RevPAR fell 0.5% as the Middle East conflict overwhelmed gains elsewhere. EMEA RevPAR dropped more than 5%, with growth in Europe swamped by a 43% collapse in Middle East RevPAR; by contrast U.S. and Canada RevPAR rose 5%, Asia-Pacific excluding China gained more than 5%, and Greater China rose over 3%. Marriott posted net income of $766 million, adjusted diluted EPS of $3.19, adjusted EBITDA of $1.592 billion and gross fee revenues of $1.578 billion, while adding roughly 17,900 net rooms and building its pipeline to a record 4,186 properties and about 629,000 rooms. Despite the Middle East drag, the company raised full-year global RevPAR guidance to 3%–3.5% growth from the 2%–3% range given in Q1, and guided to $5.965–$6.025 billion in adjusted EBITDA and $11.64–$11.81 in adjusted EPS. Marriott repurchased 3.0 million shares for $1.1 billion in the quarter and has returned about $2.6 billion to shareholders year to date; CEO Anthony Capuano cited &quot;strong travel demand&quot; and &quot;sustained development momentum.&quot;</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Pros and Cons of Using AI to Diagnose Your Car Problems</div>
+        <div class="art-sum">This is an advice column rather than a news event, but the underlying practice is now measurable: a FixMyCar survey of more than 2,500 drivers found 16% had used AI such as ChatGPT to get information about a car problem or repair in the previous 12 months, and a separate poll of over 950 drivers found 20% fully trust ChatGPT for repair or maintenance advice, 33% were unsure, and 12% fully distrust it. In a February 2026 test, FixMyCar ran three real-world symptom prompts past ChatGPT — grinding on gear changes, knocking while driving, and a burning-rubber smell — and had mechanic Inderjit Matharu of Mobile Mechanics and Tyres grade the answers; his verdict was that the responses were &quot;broadly accurate&quot; and followed a diagnostic flow a professional technician would recognize, with nothing inherently dangerous. The catch is execution: steps like checking transmission fluid, evaluating a clutch, or assessing internal transmission damage require lifts, tools and hands-on experience, so the tool is useful for understanding possible causes but not for self-repair. FixMyCar&#x27;s Matt Wrankmore urged drivers to confirm with a professional mechanic&#x27;s diagnosis before acting. A parallel wave of consumer apps now pairs LLMs directly with the OBD-II port — OBDAI, MECH AI and OBDAssistant among them — reading live sensor telemetry and cross-referencing technical service bulletins to rank likely causes rather than just returning a P-code, though these vendors&#x27; accuracy claims are self-reported and unaudited.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Grant Thornton Advisors to Buy CBIZ for More Than $3 Billion</div>
+        <div class="art-sum">Grant Thornton Advisors LLC announced on July 29, 2026 a definitive agreement to acquire CBIZ, Inc. (NYSE: CBZ) in an all-cash deal paying CBIZ shareholders $55.00 per share — roughly $3 billion in equity value and $5 billion in enterprise value — a premium of about 54% to CBIZ&#x27;s 30-day volume-weighted average price. It is the largest transaction of its kind in the accounting and professional-services sector in more than 25 years, and would make Grant Thornton the fifth-largest U.S. provider of professional, tax and advisory services with over $5 billion in annual domestic revenue. The combined platform is projected to span more than 20 countries and territories, generate nearly $7.5 billion in revenue, and employ over 34,500 professionals across the Americas, EMEA and Asia-Pacific. New Mountain Capital, which led the May 2024 investment in Grant Thornton Advisors, is providing incremental equity to fund the deal, with Deutsche Bank leading a bank group that includes J.P. Morgan, BMO, BofA Securities, RBC and UBS. Closing is targeted for the fourth quarter of 2026, subject to CBIZ shareholder approval and regulatory clearance; Jim Peko leads Grant Thornton Advisors and Jerry Grisko is CBIZ&#x27;s president and CEO.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Dodgers Owner at Center of Federal Probe Suffered Stroke in 2024</div>
+        <div class="art-sum">Mark Walter, 66, the owner of the Los Angeles Dodgers, Los Angeles Lakers and Chelsea FC, suffered a stroke midway through the Dodgers&#x27; 2024 World Series run against the Yankees; the recovery was described as arduous, with Walter struggling to speak clearly for months and some executives and investors saying his sharpness appeared diminished, and he was absent from the championship celebration at Yankee Stadium without the team disclosing why. He has since had public verbal stumbles, including misspeaking about charitable donations at the White House in April 2025 and appearing confused about which notes to use during a more recent White House visit, when manager Dave Roberts stepped in. Separately, federal prosecutors and securities regulators are investigating whether two Delaware-domiciled life insurers Walter owns failed to disclose roughly $16 billion in loans to businesses affiliated with him or his holding company TWG Global as related-party transactions — the insurers restated related-party exposure from about $1 billion to nearly $16 billion, and the loans were routed through a third party before reaching Walter-connected entities. Reporting indicates a whistleblower flagged revenue-booking practices, and the FBI has executed at least one search warrant, seizing a phone and laptop. Walter has not been charged, the probe is ongoing, and it does not appear to involve the Dodgers, Lakers or Chelsea directly; investigators are aware of his stroke, and there is no evidence reported that the health emergency affected his business decisions.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 17 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Developing Economies Have More to Gain and Less to Lose From AI, Says World Bank</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | Security Flaw Placed 30 Years of DNA Evidence at Risk of Hacking</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Essay | Move Fast and Regulate Later: The Paradox of China&#x27;s Economic Dynamism</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Stocks Poised to Extend Gains Ahead of SpaceX&#x27;s First Earnings</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">European Indexes Rise in Strong Open as AI, Defense Stocks Gain</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Stocks Rally as Oil Drops on Hormuz Diplomatic Hopes</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">AstraZeneca Shares Drop, Bristol Myers Squibb&#x27;s Climb After Merger Talks Reports</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Snap Loss Narrows on Higher Revenue After Cost Cuts</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Exclusive | KKR Near Deal to Buy Integer Holdings</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">His Wedding Guests Were Arriving—Just as His $45 Billion Fund Was Falling Apart</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Pfizer&#x27;s Quarterly Results Beat Expectations on Cancer, Heart Drugs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">EchoStar&#x27;s Hughes Network Files for Bankruptcy as $1.5 Billion Debt Comes Due</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Northrop Grumman Enters $3 Billion Contracts to Increase Missile Defense Production</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Marriott Says Middle East Conflict Weighed on Sales</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">The Pros and Cons of Using AI to Diagnose Your Car Problems</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Grant Thornton Advisors to Buy CBIZ for More Than $3 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Exclusive | Dodgers Owner at Center of Federal Probe Suffered Stroke in 2024</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">28 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">28 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">24 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">18 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">10 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-08-03.html">← Older · August 3, 2026 · Can Fast Fashion Fit Into Secondhand Clothes?</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
