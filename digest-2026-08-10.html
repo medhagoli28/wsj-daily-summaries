@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — August 10, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-08-09.html">‹ Aug 9</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 34</div>
+    <div class="issue-date">August 10, 2026</div>
+    <div class="issue-sub">30 stories across tech, markets &amp; finance — a 1-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 30</span><span class="tab" data-key="tech">Tech · 10</span><span class="tab" data-key="markets">Markets · 10</span><span class="tab" data-key="finance">Finance · 10</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQd0sxd0piWHUyX1lKbHhxTGVsUmNJckRFNXNjeGRfZzNJRUNYbUplVk52MEF1aFZ1dmxBVHJlbXdGOW5hNFFrWVdJaDA1dUUwRVNuYXRYWG1ETk80N3hKWkJoYXlVS0M1UlJJMjFyeVA5Y2FBaFR4UXluRXRUNFlFQXViTl95N3pDWTladnJuUjM0dlBZUmhEMVVYdw?oc=5">Mark Zuckerberg Lays Out New AI Vision in 6,500-Word Essay</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxPeUdJRTZaX1JVLW1VZkJQR21VWF9rUU5WVWJicndMQ0lYbG1wamtHWlZneXJ1RU95NDZ0V3RFSk9telFVTDluRkpYU1BwNU8zakM2cnlMdjR3SUp2UVYxbi1tZDFsN0xDRU9iVHhEZFFrZ3hGaE5NR08yUllmYl9POW1nanNVU2hadWdvS3VEeXFFaVZvYkl3?oc=5">Five Things to Know About Zuckerberg’s AI Manifesto</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxQUnUwTk1CZW1GVkxaVk5yako5OUdOSXB0eEVGMVdnaFVLblZ2Uy1fQVFyb19IMU5vV0ZKcjAybzh2djJxbk05anVyeHQwWkZMQi1DMGFfNV9ueW85X09nOWRsc3pBOElZNkI4OFZ6Rl9zMWFQdkw3cFVRckxsTHN5VFA2TFJSMnFEUGtpOEhKUjE5Vm80azZGb0dnN2pJZm4xWXpNdXBR?oc=5">‘What About Garmin?’ I Tested the Company’s Answer to Whoop</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxNMlR2QW5JZE9sLXYta285NU5Oa3kwdHhXQUk0WE5nT3lPbGxhSEJXQzlOUndnYnp3VzE3UmZJNzUya2NFS3pGUU1LWEFFbEZIaTVzajRrX09CYnBqRnBTSU1aXzgwSXlDTEVKMXNOc1BpcVA0M3BBSUVaQU1UWGc3NlZTempuTlZ0WDluUjdCZ0xtSm1D?oc=5">Apple Tests Chinese Memory Chips as Supply Squeeze Bites</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE5oUWlRZDIyTHJkVldYMlFVb3NIZ3VON3VDOFV1MVkwSXNCcVd5aFZsbGNvWW52RnBHcWFoQkR6LU1yRFNsWUdqS3F1VHVrSlE5aURSSU92a3ZxV1BOamRtbjdta1hMY3hkRHlLcVgxc0E4X3JFSjRINC1UelZRdHM?oc=5">The AI Therapist: A WSJ Podcast Series</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQWjUtVFpXLVlBTFVCUnZTMWdRa3o3NktaWjlsdGpXUUtFS1Z6MTJpSmtCVG5FTlBvcS1wZDhSRWZ2WVVSTmZ5T0sxejBtN0FhMDRwZU54WnU0WDU1N2hzMGgxV3JCbjY0a3FZXzhMd1pvR2tCRlFLY1ROSXQ0ZHdUdlZ4RU9OMWt1Z0RWdzExQQ?oc=5">Move 37 Is the Moment AI Changes Everything. It’s Suddenly Happening Everywhere.</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPZjNUTWV1UWhiQkpLWXhpWURhVlpuSm5GOVc3OWhOSFRxZWI5SnZxRkdnR0ZPaUxla0lCRFpXT2xYSmVNejVsaHFKTlhwM1BkU3RPc3c4NmtkeXRqYkVMZDB3UUI4VHJaQjZPNVZnUHFaVThVM1hrNDNaSjVILTgwMWJCeHNxTmlQc0JGZ0dtQUpMZkdGNnB3c0tLZ3NneFpQNE5EUW9hUENQejFFYmRkQg?oc=5">Exclusive | Situational Awareness Bets $400 Million on Stealth Chip Startup After Crash</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMigwFBVV95cUxNUGlzQ3lWMFVjd1ZENnhjaTc5c0Y5Q2RmbWN0TTNJdlI4bWdwY1BPZFVLaTZPSE1vYUZlZXhGQkVIOEg0eDlwYmFFclRYRmk1NFBXcEt5dFVUdEZZbnNqckY0OHgzX25OWjg5b2laMHhVOTFoX0dkYkQxTGcwQW54eFU2MA?oc=5">Facing AI ‘Apocalypse,’ Once-Hot Software Companies Race to Reinvent Themselves</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxPZ2tmTlJ1OFNOUlNlOEdxZTF1QlBHTXRSd21LRlpHMGVlQlBHVXl5a2R1ZWFpazJQLVBkcG9LVHhpVGpwUnRobER0S3RPWEtvNDduUDVJdTA1UTBuc0FVVVppQ1Y5WnhhU2hnbnhEUjhTUUVleHE1NG9PcDd0UEVoaUo5ZTlheEhQN2wxQ0YzVDBXQ2sxX2J2U09VQy0welEtOEIxX0hDQQ?oc=5">OpenAI Pauses Some Work on New AI Model Over Cybersecurity Concerns</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMizwFBVV95cUxONllQZDRfS1ZYbG8xLTloMGZHZU14MG1jdFRtTWdFbDJBeW4wbUJsamtiSVM5RFFqencxcEFQckhhQ0dQaDhlMHdXX3V2NGlSLUZOd3dTRVo5Q1F3d3lIWmN2ZlZZbzFmcTlxVkY3cmprZFAyczN0RFRXVVlBeHdHZWpTaGdlOFEteE94a2pNd1QtOE9SMGIxSUtUS0lRVXlqdU9vaEVMVmlIekliWGJvLUNaeVN6LXpqZ1lwaTZ1MmRlb1Y2OURNdkV4UC05dTg?oc=5">The Morning Risk Report: Prosecutors Probed Whistleblower Claims That JPMorgan Mishandled Fraud Cases</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxNRHZwTm1Bbnoxc1NEVHBjVE9hdzNiMFhjWGp5em1DcUZVYUoydFFKWDNNWXlRVXZ4SFNzX1lVeDZoNnhweERYVmVnMVlrTTBQSnV3VWl4ODhjdU1hRXRNZVR3WEhGY094eVFLd1BNbmFZeGZWaks4TmE2TS1uUEtqLXkwT2VlcGE3SVBGb1RoY1Y0bHd3bW1TTUVvd093UlY5S0pETzBKRGFJbGt6UWY5TTZBajcyYVI5NXl2cjd3Q0E3UVhLMlE?oc=5">London Needs Capital to Revive its Struggling Public Markets, LSE’s Deputy CEO Says</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxQWGxMdUZheE1QZ0FTRmpfSWxpOG9SUGVMcnpYQ1pHcTJQR3JoVFhrQmxlVzcxT2VWSXRQQ0loVlUyVXdnRW94ZGs0aTE4TmZRcG1RbnlGa2FPRW1XTmpkWERQTUVkVXRVeWMtSTVOcjlsb0Fhcl9YQVdvY1ZscFBPc2YtOUVwb2M?oc=5">Turbulent Month Leaves Stock Funds Up 10.6% So Far in 2026</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxObEJ3UVU2VTBEaDBBQ3JxOGZiVGc4SjhUaG9BUkdNUjlXcmJiNWtoNVFPc1ZEUkxIZENjMzVvVkg5UFMyTnF2eEI4MW1ESV9YenR4V2RieVAwMEFZbS1jdmtkZHBUM0lYeGdpZkx2VUd0MGFaTjVsZG10TU12dXpLVndJazZxNEx4WWhUNHhqckFBaUpSWFpyUA?oc=5">European Indexes Start Week Mixed</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxNSHRhMlVkajlMWE1EZGJucHc5ZzAwUm5GNWpGd2gzc2Nfc3NsbXBVRTFEZENyb2l6Nm11TEpmaDV0NFk3bkNyU0t4bXJWemNjdWdEQWV4cGpHNTgzTWZROE1kRWtjWkE5UE03WWhzMUhCNEdWeXcwSGI4YmdiVmE2a2hBWWxNOE40YlNPMGVUSERueDZxcmdreHpWYmhQMWl3UmVDVUxnYkozbmJtQmV5VWRrX3o5UW55N0c0LXNwSVo?oc=5">Retirees Love Dividends, but the Stock Market Surge Is Making Them Think Again</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxON3JrVzBGcExkY2hhZkg2QzdFXzcwTk5lampzMEVHc0FOQVh4RVRiSXFIa3JKa1NCZk00WTdUUmpHSjRCU1ZrTXdCNzRvRDhzVHQ0SUItVVkzX1BPUGd5cXpyWUtKSzZXcHl3eUQ2M1BESDVHMDRSZHl2bFFMUE4wNmJ5V25xbE91SGJWSEMyeGVTZk9VT1VOenFWSWRYZW54T0ZVNWxieEJYQQ?oc=5">How a Few Hot Stocks Can Make ‘Twin’ Funds Act Like Strangers</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxPV2ROelQ5Z0tQSWRfa0oySmhyNUR5Q2lDYzNIZTNoRUhBX3B2YURTU0g4c0c2cnJOQlVLc3ZMTEoxNUVDOEY2QzFKZEVmSE5XRU9BQnUtX21BTlFVZU84elBGajJjd2s5U3RDZnJ5Q20xZUNhQmdZUVN2LXl3RXdicXNRdXZFT1BpeldwQw?oc=5">Markets Rally on Surprise U.S. Job Losses, Airbnb Soars and Trade Desk Tanks | Markets P.M. for Aug. 7</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMirAFBVV95cUxNS3o2SS1qNTFZTi1XYk4wOWo2TW5UTElPRUdTVVU2TVZyb3hFTTFMVndySFh5NDdVVU9oOTZPdkNqUEM0OVJHcVR2SWhpTlZOVXZ4UHQ2aDFDbmZTUFlKS2hXamNXY2tRTlBMWjY0eElFeXU3R2xnanJGMFNWY2JHUmRyLW1ndmJJVE1CQk1WNjA3NUUwWXlfRG1rbEJKZWVkUzdwNVplVTFtaGRi?oc=5">Private-Equity Firms Eager for Exits Pounce on Hot IPO Market</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQa3lFd0luNEJvYmlqb0N2VW0yaWxLdENyYjhUX1V6TmpPcnJ2TFZxaXgwQW1Wa2p2WTJuNUx0UC1DTDcwOXh4STROOWZpWGJQMEFvRUFZb3pVVXdxYmk2Uk03Z1J1a0pLc2FiaDF3bWJNenh4elNwUllVNWc1dUpnTUhLYjNZcks0MkwzVW5TTTZoNFh4aTY1UG84by1SY3pRTlJLeQ?oc=5">U.S. Stocks Rise as Rate-Hike Odds Fall on Weak Jobs Report</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxQbnZNMHpuYzVsQ0dfWUpVRVBvVEdvb1RQYlhHUTRSV1YtU0RLNUIyd1FmVG9lRUtFOXY1c0dtb2lQQS0tSHh3bWkzaVpaMEZ2STdGZTlfdnBjck5GeWFjWTZOdGdwc002OFJPdGZWSk5seUJfSWxJVEFjSm45TnZXcV93?oc=5">Financial Services Roundup: Market Talk</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMingFBVV95cUxQbGRjWXRjQllNb0EwQXdVdFVGUUhGUXJzX25nRXNNbU9hbjJNXzhlQndBdFhycG1JRDlqSlRWZElIaWtYOWpkOUlpZUZXVHlyb203ajQ4T1R3VzhONmJwN19lNzgxYU9oV0JuS1c2TXhNM3BlRWFGcS04ZWFXdjFuOVFONk44VkJtQmVrVVNlaE5lV1kyeEFrd1ZfeVg5Zw?oc=5">SpaceX True Believers Propel Shares Past End of Epic Lockup</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxNUzZKckR4dUoyd1E0c0ZBSUJsNl9ob24tN1F5TWxST1R3b0xya2dRbzkzQ19lcXBJa1k2TTlGQkJXbjdLVHVMSjlIdDFpdTRWQjAwb3VLOXJVUTVXXzlDUFV5V1Vyd2RyNlBJWGNqRmJRY1FidWdOZVhkSjlLYnRVeVQ3UnhvRXhuVXB2NE1QVlBlX3pPNlBWdXN0bEI4SWFZSklEZE9nS2VlcFI1MGxxQWIyYw?oc=5">The Pros and Cons of Putting Extra Dollars in a Trump Account</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxNSHRhMlVkajlMWE1EZGJucHc5ZzAwUm5GNWpGd2gzc2Nfc3NsbXBVRTFEZENyb2l6Nm11TEpmaDV0NFk3bkNyU0t4bXJWemNjdWdEQWV4cGpHNTgzTWZROE1kRWtjWkE5UE03WWhzMUhCNEdWeXcwSGI4YmdiVmE2a2hBWWxNOE40YlNPMGVUSERueDZxcmdreHpWYmhQMWl3UmVDVUxnYkozbmJtQmV5VWRrX3o5UW55N0c0LXNwSVo?oc=5">Retirees Love Dividends, but the Stock Market Surge Is Making Them Think Again</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNTmNKb25IZHBMZXhRajhqZWgtaldPTEF0bkJ1VjY1SHZ6bDNwVDlkMl9PeDlTWmlPdmFvNUc3ZlhZdkp2U0NBYkhTRE83VFBpZWpKLVhCRFljS3U0a0k5YUFxVzd3aE15ekUxT0RfMzBFT0g2dGhGbzBKVzZ1MFBlc0tqS1pLaWJkdjlMMw?oc=5">Best High-Yield Savings Accounts for August 2026: Up to 4.50%</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxNYmxlall6Si1aS25vN1h0M20wejZKbTZYMWp6czZJbUlFRXpMVVVXYzdkYU93NEVJdjE5RUhDUk5sWDliLU5pVUZEQm5UYndzQ3FPNVRvTnBFdGNzbkdURnA0TUJtUE40Skh4S2ZvSEdxSUZMLXZodzNFeHE0OC13MEZlUVZpUEh3UWRMWnBn?oc=5">The Unexpected Joy of Downsizing Slowly in Retirement</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxOMVE0d2VFcnFYRTVBMndsbVZpeWcyNmphVzMwQzUwVHBMMXN1YTZWSklackpkbFNDWlM0MXRubGdPckpiWDRKbW93bmxmRXhoWjlxSEoxTzFkcXRnWE5YQll3Z3Y1c29LQUZUZXdVUTBaNjZVdlg5UTQ2dE8yWGx2ZkpLWXNJU1BLR2tPWXpNY0lRM00?oc=5">Take-Two Logs Higher Sales but Loss Widens</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxONE9WOWFnT0FOLS04emMteFNCNjlneFVid2dRNkRFOXlSOE8yYVpxbVE2MmpRMExManYtUC1qMU1JY1JFR2g3ZEdhNkxBS0J6aEpiVng5NmFKS2JUY0NrVjhoRUZncGs1ZGJZOHpsQ211VXh1YXA1R1ItMjExb3JyWVV1Zk5QaG9HWG16bVB5S2phSzhEdWFXeVdKT3paUlRw?oc=5">ConocoPhillips Names New CEO as Profit Boosted by Climbing Oil Prices</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxOcnozSHhXbFZBdy04TDRTVjVRYzJIUVZiVlpSTUJjbkVfYTB6UXdYNUt1ZkgzbGt3UG1WdjVNSUJwNWpCZVBtV1lVeWxWNXAyYzNkb0Y3VWxCTjZLUWkwejBBNDRzY2o1TExEanRBNDNDc1hVa1M0aG94V1V4T3JlVDZGSXhsUkR6MmZsTGppc0VMMUs2SVRrM0dCaEVPX2U5N3A4TGVuZmxLQjNoSUd0WTBUSDhzTFN2bjA1X2U2UXg?oc=5">Taylor Farms Recalls Products With Jalapeños Implicated in Salmonella Outbreak</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxNTmdjaW9HV0RjOUx1ejZ3SWR3UUg0WXM5ajZFVlMzRWlJd09qSlhJbGU0dVBSekRKT2l0RUVjUkN4c3BXVTNUT2dSaTNobkJLcTZLWHBudHpENEYtVjM4V0I4WFFqMWwySlJTLWhkV3FGMkVoc0JSRjlYRGJmMDJMejh0UThGZ3ZfUWllampuWWRLZ2JSUkRTb1JOeHRBMWk4Q3FVYjQ5b0ZaTlp4MDlBdnhVekJyQQ?oc=5">Versant Media Shares Jump After Raising Outlook on Strong Viewership</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQR1VHY2ROMXRmUjBuTVc4Z2VFRmpkRmVZZ3NZeC00QlNIaE1DdnhNb1F0aDRDaDdTZk1peTdWZ293ME9kYWJGVmJEcmx4QmdGYWlBV2FMT3VsNnVkSXFLeFBnTnpPT3BtNjk5SGNoVnZtVlFfeDM0WVltTGNXN3NSRg?oc=5">‘Ted Lasso’ Is a Leadership Masterclass</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxPU0VPd0FsR3gtSUdqRUdMS1NhUWVyd1hwM3VYV2tsQWxQNk5OQkh6ck1VNGhpSzdwX0QxOGRXYWZHYi00S1Rla0JBUDJmX1Y5TzM4ZzRTNlZKM004QmprUFhYdGNhT0o1ZTFNdVdkVlgyVDVQN04wX0NOTjU1VktMWTY5cHV6MWFWSlNmaVFocjBMSm4yVXV5X1VWd3Z5MVY0V1FsOW9kekRXOEM2YWR6ZVBHNUh6ejlKYURmTXgtQQ?oc=5">Author Whose $2 Million Book Deal Was Derailed by AI Concerns Says He’s Innocent</a></div>
+        
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 30 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Mark Zuckerberg Lays Out New AI Vision in 6,500-Word Essay</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Five Things to Know About Zuckerberg’s AI Manifesto</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">‘What About Garmin?’ I Tested the Company’s Answer to Whoop</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Apple Tests Chinese Memory Chips as Supply Squeeze Bites</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">The AI Therapist: A WSJ Podcast Series</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Move 37 Is the Moment AI Changes Everything. It’s Suddenly Happening Everywhere.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Exclusive | Situational Awareness Bets $400 Million on Stealth Chip Startup After Crash</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">Facing AI ‘Apocalypse,’ Once-Hot Software Companies Race to Reinvent Themselves</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">9</span><span class="toc-t">OpenAI Pauses Some Work on New AI Model Over Cybersecurity Concerns</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">10</span><span class="toc-t">The Morning Risk Report: Prosecutors Probed Whistleblower Claims That JPMorgan Mishandled Fraud Cases</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">London Needs Capital to Revive its Struggling Public Markets, LSE’s Deputy CEO Says</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Turbulent Month Leaves Stock Funds Up 10.6% So Far in 2026</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">European Indexes Start Week Mixed</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Retirees Love Dividends, but the Stock Market Surge Is Making Them Think Again</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">How a Few Hot Stocks Can Make ‘Twin’ Funds Act Like Strangers</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">Markets Rally on Surprise U.S. Job Losses, Airbnb Soars and Trade Desk Tanks | Markets P.M. for Aug. 7</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">17</span><span class="toc-t">Private-Equity Firms Eager for Exits Pounce on Hot IPO Market</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">18</span><span class="toc-t">U.S. Stocks Rise as Rate-Hike Odds Fall on Weak Jobs Report</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">19</span><span class="toc-t">Financial Services Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">20</span><span class="toc-t">SpaceX True Believers Propel Shares Past End of Epic Lockup</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">21</span><span class="toc-t">The Pros and Cons of Putting Extra Dollars in a Trump Account</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">22</span><span class="toc-t">Retirees Love Dividends, but the Stock Market Surge Is Making Them Think Again</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">23</span><span class="toc-t">Best High-Yield Savings Accounts for August 2026: Up to 4.50%</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">24</span><span class="toc-t">The Unexpected Joy of Downsizing Slowly in Retirement</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">25</span><span class="toc-t">Take-Two Logs Higher Sales but Loss Widens</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">26</span><span class="toc-t">ConocoPhillips Names New CEO as Profit Boosted by Climbing Oil Prices</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">27</span><span class="toc-t">Taylor Farms Recalls Products With Jalapeños Implicated in Salmonella Outbreak</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">28</span><span class="toc-t">Versant Media Shares Jump After Raising Outlook on Strong Viewership</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">29</span><span class="toc-t">‘Ted Lasso’ Is a Leadership Masterclass</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">30</span><span class="toc-t">Author Whose $2 Million Book Deal Was Derailed by AI Concerns Says He’s Innocent</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">34 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">32 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">23 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-08-09.html">← Older · August 9, 2026 · Apple Tests Chinese Memory Chips as Supply Squeeze Bites</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
