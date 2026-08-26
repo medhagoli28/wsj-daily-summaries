@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — August 26, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-08-25.html">‹ Aug 25</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 50</div>
+    <div class="issue-date">August 26, 2026</div>
+    <div class="issue-sub">30 stories across tech, markets &amp; finance — a 1-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 30</span><span class="tab" data-key="tech">Tech · 10</span><span class="tab" data-key="markets">Markets · 10</span><span class="tab" data-key="finance">Finance · 10</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMikgFBVV95cUxQN3FKTTFuZFd3UFZyQ1Jpd2R3NUlfY1VkTU0yVm1VY1RXc0h2RXc4TVZmbUlXa05zMEI5VW9penlpWGM4UzN3WTl5R1ZTRHZpaTN4NVJJVllvbzNvZWdqemM1bkNUdXdMcVJwVDZOOTJ2d2QtV1hneTMxRUNGYzV6Qy1JVHJheERrSGJIZXBVQ3A3Zw?oc=5">The Connections That Turned a Precocious Teen Into the Fallen ‘Nostradamus of AI’</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxOa0NFTHBxeFZocUhTd2FFUFhsU2pUdDM2d253SHVEVDVobUkyUDdsMjlxRjhoelpieU9pWlk3ZTdfWTVHZTVHa2dCU3hDdGJta3ZtbnJoMnZ0dng4UG5oUVZGeW1DSkhiQ0pCcXdPX1JwSkQ2VHZDSW4taVZyUkp0Z25EWWw4dV9vNmJwc1RFTlZtS0xUTUJQYzRDUzZQNXZ3a240eC0yam9OUy1SbFdZdVJIZ0dKWmM?oc=5">Druckenmiller’s Surprising Critique of Bessent Was Delivered With the Help of AI</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxNR1RrUjMxSkNzODB0a3VTU0kyVTZBVktqYUxEdUFKZFBXRl9uUzhnUjlaX3FsWUNfcHozYS1Oa1VKeW43MDM2eFluZlpwMWltb0pXeDgyT2tST0l1WHg5Q0pxaVB5RG9NRmY2aW9rWmE4d3FmcmMwOEp1TVlFeUFETERXVENDVTR5MWc?oc=5">Exclusive | OpenAI’s Head of Data Centers Has Left the Company</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxNSWNncXNZWG9FUXNNN2VJWmVNeno1eG5tYmZCQ3VmZElBZWFKU2JPRTlCVWRBUUtZaGFxeUZYX1QtUndBalAyWFdMeEhLU19oLVVkVTMtRW1XM0xhV3BESDVFeWxGM3RreEJVMzVmWmlJZllUalpzWmJ5MFlQMW1GNTF3cjhJLWhDMm5oMXhBTEFxd2dLeEE?oc=5">The $1.5 Trillion Question Nvidia’s Earnings Can’t Answer</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxQMjIxOHE0MUFHcnhtSUdqQzdlWUFtU3Yxay1OM3NGd0M3TzFjRjVwUUE5VGtVa1diOXN3NE5SSFpZaVF3cUJhamgzeUI5bHpDUXhRZE1uWG9hR2NxQzhJbGIzM1hEMUtmVEdqR1VBY3huTE05dDhxUGhQQjZlZEo2LWUxZDJQdnBzWXdFYWIyNWYxa1VwVGRpYjFSbkVuc2c1YXpMSTdSRkVJOWkwZjlOeQ?oc=5">Three Takeaways From Bill Gates’s 5,784-Word Warning on AI: ‘There Is No Plan’</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxPZjZaazBLZXFzWnlOOHJ2b24wZzZsOGd6Sy11ZGF2NXZ1NmJ0bWdYNklaOUszQ2NMT2J0YTh6X0V6ZUJNVl9LVF82blJCTHZadHEybHN1WEFBMy1NdXNoenIxNGdudjZscEVQT09xMjRjU3htekdoNk45SzdkbGRlMUdKWUJCVlpzcFlYM1RLSlVqWHBtZUM0azctZV8xaWpvbHJLcmxGNXQ5bV9Mc1JjQVJXcXZnaWJ1MmJN?oc=5">Exclusive | Anthropic Expected to Tell Investors It Sees Over $30 Trillion in Potential Revenue</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMingFBVV95cUxPblg0eTdnZjh6alA3MnZ1clJ1VGxyNlppOVBtbWJCOWU1RWRmVE9QTnNudWhFWUVyNXlpWjdFWVVjQTlDdkpNWjJxWVpma090SjgzV01idWtfMHhXYzhka2RfNGJDMVVGRE5oU3UxTmtMWWN0Z1hncDIxRTBtYlRqT00zWkpYbnNUYzczSXdydGFDdXRwMVRuUFJzWlhWZw?oc=5">Brain Drain Hits OpenAI and Google, But the Impact Isn’t Equal</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxON0p5ZXowMVJPS3l0NldhTGVtVHlZeER1YjVQZUJreEpXV2NEVzJmWmFsSE9lZFBhTWMxSlY4bFZianBSUkYxXzYtRkFLaGNHbnRDWlRFREkzNlExQUVWVW8zQXR1X3NHdU80U0dkdUVaUk9SaEl0UGdLYVNrc2oxQS1haVJVZDRyTXA2WWZ0Tk1TYzlROFBrTjhHdFppQ2ZoVzZ2UEdRdFoxd2tQS0E?oc=5">Nvidia Has Become a Banker to the AI Boom, Putting It on Dangerous Ground</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPSGYwdi0tVmNJanhFakY5d2xNM1RNS3JfYjV0cnEzWjk2MkVzbjV2OXJ5TjZlOS00Mi1DcHdGQ1AtZ3dIU3JGTHIyNzZHd1U1OXhrX2xUWlB6LTlWUjEwbEpKVFFzclJ3eTB6XzZYbGxpZlJfMWUxX3JuWGQ1TUFEYlFMWWJPU09SdnlXanBfWldoeG1HcVRIZzVNUEJtNXpTRnJxRDlQRWpoUktpZ2VCNDhCNA?oc=5">Flock Cameras Are Spreading Across America. The Backlash Is Growing Just as Fast.</a></div>
+        
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMikgFBVV95cUxNaElLeWpLZk1uNzJ4dTlORVdzczg1YUlfWkVHa1lVakZxcW9kV2xNS3hpVzNVbFlyTkRoNjMxOC1CZXdlQ3VJdHBMTmI5SWk0OHlGQ1F6S0xaRmNiXzJLa3hzZWZiVk5Ua01VaHQ3N2ZpZHlTMlVjZ0hwUTZQRmlXRXRYSmJmalRNNndXZm1IWWVZQQ?oc=5">There’s a New Mac Mini and Mac Studio. Good Luck Getting Your Hands on One.</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMigwFBVV95cUxOUHc1cktvMF9zTEkxYm0tVVhfR1doLVVORmZTZGdjanhnbEJTdEtnWEVFb3ZhT3ZTcnRrYXo1MjJDc0tMdmNwTHMyRnRFYnctZEtrVE9BWFNQRVZpOTJPZS1Gc3R2UjZzSFpkSDdOSkhZSk5pLXU2d2p3S1EwMUl2b0lCRQ?oc=5">The World’s Craziest Stock Market Has Turned Into a Fright Ride</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMib0FVX3lxTE9PdEFLaGozMDF3SXN1U2RYYzlVdHNfYWdJTThlakk5TVNJSkw0blFKd2NuZktOclk3UFh4bmh2ZTRuQVJrLTVES1Y5S212b3lpNHRGc0RqVG1qellRTDJaOFpic0x3ckwyMXFjMHNVdw?oc=5">Opinion | Let the Bond Market Speak</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxOdzFjRlJBY1lPeEVvX1c1RjMzc1h0LXVMY2hEYnpoa1E5QTNLbHBkMXpIWUVEQTNsakpPcEZPazFRQWV6dFNwcTR2SFdKX1k0dzQyd0IzRjZGMGRIMnRRRmEwc19TNDdLaTB2UU1LQnVCYXJudTBkR1dYTmtFR3M3SUZWS05NcUM5cm9kMDJPb1NYaXZEZmd0cWhqbnRXX3hFS1F3M1p6THVha1ZjRFFobzJpZ2hyX1U?oc=5">Regulators Probing Near-Collapse of Hedge Fund Situational Awareness</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQcEVGeXQwZFloV1dOS1JyclZMeDdyMmJZcF9KRVlwR1d6NVhITlh5Ml84cHhadmNpaTcxSHFneU16YTUweXUzY1c4eTVDV3Q5WjZmZF9sWlRPa3dzWUZoaGV3SjBhUkR4N2ZoQ1Q0YlY2cWloNVQ0cWl2bGJ0VG1xN0I1Vlg4QUQ0TG82emJDcS0zVTJ3Qk9vcFFMWHpNb09UY1YxV1NzQQ?oc=5">Wall Street Is Counting on Nvidia to Keep the AI Party Going</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxQMzFTa1RVa0JDZm95dUtfeVlWOHpnRHNwNERvUHFLaWV3NzhuSmlhaW9DWmJMb29ycV9Ka2FtbkRnTE9nM2d1ZE41bW9WUUlIT2RwUzRNajRJTmJCMGdYanZQZkRhSUFUX2JyLUxKQkFtVnBGdDV5RjJ0M3RPejU2MDVGZ29aNWVGV0pwVDFhMHVfbm5fYWc?oc=5">European Chip Stocks Mixed Ahead of Nvidia Earnings</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdjBKMTMyXzZSZkQ0TFVxakR2S0RrZVlJUm9vN1dfZnJ1X0dKU1JYNUFzZ1pwdGIxYXIzbXZDZDNiTlZ2c1cxakVBTFZDYlVSYnhKeDFfSmpEMUhVaUF1VDhLRjlSc1NWWFZieWRYd243bzhIckhBRVR4dmVyckNWT2JnZzhVc0RoUjJkbzc3M3ktRVlReFhEa0hkSk50RE9YanB0WGprVXREN1dmQVU1aFFWdVBlNm9L?oc=5">AI Jitters and Geopolitical Threats Mark Start of Busy Week in Markets</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxPSnRMTHA3aHhqZDNsQUZRZFVlWlYxb1VJY3V0NmNoc2FGNFZPeVRLZXRUbDcxbXk4Wk1RSnJxZmlVZ29PUDRDWkczcFVBaVdKZXVHUmIyTjBOV2NZdEwxR09rMzZRdFpnOER4bVdMV05OdmF6VkliOGpBSF9qbXNtYzN4bHdFRHAwb184amxGeDBkYWZQ?oc=5">Ditching SpaceX Didn’t Help You Beat the Market</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxPaTdvSkZfVUh4VnlWSUs3ZVdnVWVyR1JnT3dDLXRaM1BnWlZzeFFXOWhwek1DRGNYdWpHVVRPbHh6djhsSThXRmVLczAzb3lMaC1EREdHckE5a3l3bGJPRkxBVml1ZzJMSURsSnpLX1d0aDBWNWR5Yl9YZ0RvQXZRV3Bock1hYXFleFlkZnRWTmRxc19yUG9tNjJqYw?oc=5">U.S. Stocks Mixed on Artificial-Intelligence Jitters</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxQRG42VTNWcFhMZTZuSE0zekFlUkRyQk40djdma3hLNXFuRjNtM1VLU1N6ME9KcU5INmJZcGxWSGRtemhfaTBrWjd0aXBmRW9rbTZOWjdPbFBySDdJM09SZlhKNGVXVEhQUWJPdk1XYzA2bXFkWE5zd0RCWGoyQWtfVEVBMzg0TGx6WG52RlFKUV9KUGhf?oc=5">European Chip Stocks Edge Higher After Monday Rout</a></div>
+        
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxOVmNzZFdnbUtfVVBfS2Myd2NqVDFLb0hqc2ZQQjdJTFh3SUJlU3ZudUxfX0ZhY1l3RVNCN052ZUQyNVNYRlRSa2Jzc0JoR1FqdXFmWnRPcFJoYl8yNDkzV21zMDlpVnU1VndCT1Z2UVNSYVQzY0dhU21hbVY5UzkxTlhmNGtyWlhxekxrWk1MaFJZYVplbGR5NnhOMA?oc=5">European Indexes Turn Positive as Tech Stocks Steady</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPM0pSeTl5ZWVJOG96V1U4WllCcjNEb19wUUZJcXVuSmNpV3F3Rk5wWUcwUzBoc0RpclBFZjd1Yk5FdWhIX1R5M2FFVGhLaGRLeVZrS20tYXdraktQTkJOenNFWFlBLXgtNE9RVVNDbFpzN0QxUEFJd3J2TlZycHZadjRIRkFwOFdPNUcwZ3N4UXY1UEhUUENBOEhqdlJJb1JUWXN2TmtIUGo5cTV3V29rTVpnR2E?oc=5">When Your Bumper 401(k) Is a Tax Problem Waiting to Happen</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMivgFBVV95cUxNSmlHTHVQcXhIWW5PbERuMHBuekRGUUhjZXYtN19MZWV4cUl4d0hSaFlnWDZqaFFwM0gzNmFsMEQ3NVdncnhqLVdocTNJVHJOcHVTSU9KdzRfc3Y2ZG9zM0JYVk1qRGY5Y1RXV2FqSDdoWlhMM2VfN0swV0xva2poRHF0bTVyUGo5MVE5U3NkYUQ2UFAwd1VyQndEcC10V2JHNW1nWW5QTGo0THdlVUhjdVlwQ3FJSGJPUmh3LWp3?oc=5">Is Your Therapist Biased? Personal Agendas Are Creeping Into the Therapy Room</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiugFBVV95cUxNSm5CUk42YXdUbE1BU0dEY09NOFptZTlnNUZGajRZb1dZU0JoTEFqN1BNdjl0b0ZDaVowLVJ5R212WkhQTTFrd0pSc3RXaHdqUmFISVl2WnU3VFRzUHhJejFLVnZtdURyS3lJa21PUXJ1b2diM01xbjBEZ1diZ2kxRmg4b0lYazJKU01INWcwODRpeldsWTQ4Z3hJNDBycjIwNlpEb0xjN2NQUnU0dzJGZnVBZFRXdERQaFE?oc=5">Uncle Sam’s $40 Trillion Tab Is Living Rent-Free in Your Mortgage Payment</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPXzh5TTdqeGFSMHI4NEJ2bGo1MEVxUDgwTjVyOERiVk5JSVZfRkxPLUxicUNFaTR0WndXX0dPNkpURlVrLXJxRFlRRnZiTG5SX3VYUlRITUhUUDZRc1AzQ24xUlRoQ0R3TDRpQ01aYnluUXJyTU16S1F5Uk5qRHBmSlY0Y2YwQjJvb0NYT1RtYzZaZ21tLVk1Y01Ec1Q3YzIzXzI4MnoteHptQW9KQkVOXzIwWkg?oc=5">FDA Approves Alzheimer’s Blood Test Developed by Roche and Eli Lilly</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNS0F3RHJzcTJzTUl5WTRVRWE0cUxlMk04UDhXLXFEOU9oajRiUG1ReERqZ2U4RjFxbDVpdno4aXYzUzBNWEpGdzBwTldlTWJIM3VTSmtyLVRrcUlCN0FhLTNOV0RxZVRTZXU1N0FMMm90RkgtOXgwdG9OWGVBdk9ndnVURE9waWE4eTdlV3VrNWtxYkpSTW9Z?oc=5">The Heirs to Jack Daniel’s Are Fighting to Keep Control | The 10-Point for August 23</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPN1FCbF8tMGp1Nm9sTWNVRlZ6UzhuRmxPTmZSZ2MtMFdFLXpMY1JyZHY5cjcweXlYVlpPWk5BUkRoTFk1em1pRllfd2tiRHZVbUk3ektpSXJWTnVfYW8zdjVhNDVKNDlDVHNzbE40aF9pdTZjOC1EdmVKMkVEVUhlRXpHY3FOa1VRSXEwSkdtS1BlQnRmb1JpNWNmX2htTTJBd3I2YmZXdDY4YjRhVjVrTnUwbTRaUQ?oc=5">The WSJ Dollar Index Rises 0.13% to 95.45</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxPOEVNbGxwZkZ0OGZjVHZpQjVyZHA5NVpqendsNkZRNlVYYldSNjNHbkVZcThGWE01cUNNckF0MU5TcEJOS1U1RDY1T1NzYngwSVZuejRtbDVwNk42Mmd6SjFaRHNBb1ZjSWVDZldfMkVhMXN3T0IxcjJ0VFN0aGlrZi1pU1BvVzgwUkV1QTJRN3VSa1kxM00yUHR3?oc=5">NHTSA Expands Investigation Into GM Braking System</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxNa2g4X3ZuOXMxNjRtb0tGX1lqM21UT2hCV3ZFUDlyU3JaZXhLdjdsWFZfMTFWcWxkQ3dXUFJRNnQ5OGdSWVdwWXhtVXpWZlNqRHcxUFEwcXZxZDdicnN2QVZNWjVOVUNlTTZKVEZkMTZSY1poMDNvbHVqRDdKMG85SllocFVWS1ZqaTNZNEV6WWV1NUFOc0szLXFQOHhCZEtHQWNXZm5YZzJwaXN0TlZOZ0Fwc05KMXExWkZMUUo2NnE?oc=5">We Went to Wall Street’s Exclusive Wilderness Camp. Everyone Was Spooked by AI.</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxORmR2MzRNVjRDU284ZTBXWVIyR2xsQUFJY2RCOUt2WlVmYUtIaHpTVGM4QlZWV3FiTmtpUC0tbk1WaDRVNW5jWnZFNGgxbUVvVzdPWE9fN3VsZjlfc0hucjlNMG85cWVkcXV6enBidE81dVl5dE1kQ3BXeEpleFQ4ek4zYjhDcENlNGtGMGVPam1BXzdkUUdlMjg0VzBySjFIbXloVmRLaEZGN0M0QUFzSg?oc=5">The Wild Week When Scott Bessent Was Schooled by the Bond Market</a></div>
+        
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title"><a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxQU1huQnN3WlRhckVDMGY1N2VGY3JvMTNKVm55azdiYjNSSFZtRktfeHBOazRhSjIzdUc2SlRRaV83WXAtcXFRWHZQczlhZFg3dUl5b3Vzd3ZodlUxVFdtZDV0dWdtS1hvSXV0U3JSSnp5ZEREUkxYaGVfRGRRalJlbTlLc1AyM3VSUUlyVEViUXJuQl9CTmJsSk94YmpCYzVydUV6TmRDSFVpUnhWQllZVQ?oc=5">Dick’s Sporting Goods Cuts Guidance Amid Athletic Sector Challenges</a></div>
+        
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 30 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">The Connections That Turned a Precocious Teen Into the Fallen ‘Nostradamus of AI’</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Druckenmiller’s Surprising Critique of Bessent Was Delivered With the Help of AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Exclusive | OpenAI’s Head of Data Centers Has Left the Company</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">The $1.5 Trillion Question Nvidia’s Earnings Can’t Answer</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Three Takeaways From Bill Gates’s 5,784-Word Warning on AI: ‘There Is No Plan’</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Exclusive | Anthropic Expected to Tell Investors It Sees Over $30 Trillion in Potential Revenue</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Brain Drain Hits OpenAI and Google, But the Impact Isn’t Equal</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">Nvidia Has Become a Banker to the AI Boom, Putting It on Dangerous Ground</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">9</span><span class="toc-t">Flock Cameras Are Spreading Across America. The Backlash Is Growing Just as Fast.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">10</span><span class="toc-t">There’s a New Mac Mini and Mac Studio. Good Luck Getting Your Hands on One.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">The World’s Craziest Stock Market Has Turned Into a Fright Ride</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Opinion | Let the Bond Market Speak</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Regulators Probing Near-Collapse of Hedge Fund Situational Awareness</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Wall Street Is Counting on Nvidia to Keep the AI Party Going</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">European Chip Stocks Mixed Ahead of Nvidia Earnings</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">AI Jitters and Geopolitical Threats Mark Start of Busy Week in Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">17</span><span class="toc-t">Ditching SpaceX Didn’t Help You Beat the Market</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">18</span><span class="toc-t">U.S. Stocks Mixed on Artificial-Intelligence Jitters</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">19</span><span class="toc-t">European Chip Stocks Edge Higher After Monday Rout</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">20</span><span class="toc-t">European Indexes Turn Positive as Tech Stocks Steady</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">21</span><span class="toc-t">When Your Bumper 401(k) Is a Tax Problem Waiting to Happen</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">22</span><span class="toc-t">Is Your Therapist Biased? Personal Agendas Are Creeping Into the Therapy Room</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">23</span><span class="toc-t">Uncle Sam’s $40 Trillion Tab Is Living Rent-Free in Your Mortgage Payment</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">24</span><span class="toc-t">FDA Approves Alzheimer’s Blood Test Developed by Roche and Eli Lilly</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">25</span><span class="toc-t">The Heirs to Jack Daniel’s Are Fighting to Keep Control | The 10-Point for August 23</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">26</span><span class="toc-t">The WSJ Dollar Index Rises 0.13% to 95.45</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">27</span><span class="toc-t">NHTSA Expands Investigation Into GM Braking System</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">28</span><span class="toc-t">We Went to Wall Street’s Exclusive Wilderness Camp. Everyone Was Spooked by AI.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">29</span><span class="toc-t">The Wild Week When Scott Bessent Was Schooled by the Bond Market</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">30</span><span class="toc-t">Dick’s Sporting Goods Cuts Guidance Amid Athletic Sector Challenges</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">49 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">46 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-08-25.html">← Older · August 25, 2026 · Taiwan Charges Nine in Connection With Smuggling of AI Servers to China</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
