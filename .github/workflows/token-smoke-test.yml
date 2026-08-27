@@ -1,0 +1,40 @@
+name: Token smoke test (temporary)
+
+# TEMPORARY. Proves CLAUDE_CODE_OAUTH_TOKEN actually authenticates on a runner
+# before relying on it for the real daily digest. Manual dispatch only — no cron.
+# Commits nothing, publishes nothing, never touches gh-pages. Delete after use.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read              # read-only on purpose: this must not be able to write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install the Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Authenticate and answer one trivial prompt
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN is empty — the secret isn't reaching the runner."
+            exit 1
+          fi
+          out="$(claude -p "Reply with exactly: TOKEN_OK" \
+                   --allowed-tools "WebSearch" \
+                   --permission-mode bypassPermissions < /dev/null)"
+          echo "CLI said: $out"
+          case "$out" in
+            *TOKEN_OK*) echo "AUTH VERIFIED — the token works on a runner." ;;
+            *) echo "::error::Unexpected reply; token likely invalid or expired."; exit 1 ;;
+          esac
