@@ -30,9 +30,16 @@ jobs:
             echo "::error::CLAUDE_CODE_OAUTH_TOKEN is empty — the secret isn't reaching the runner."
             exit 1
           fi
+          echo "CLI version: $(claude --version 2>&1 || true)"
+          # `bash -e` would abort inside the command substitution and swallow the
+          # CLI's error, so capture stdout+stderr and the exit code explicitly.
+          set +e
           out="$(claude -p "Reply with exactly: TOKEN_OK" \
                    --allowed-tools "WebSearch" \
-                   --permission-mode bypassPermissions < /dev/null)"
+                   --permission-mode bypassPermissions < /dev/null 2>&1)"
+          rc=$?
+          set -e
+          echo "exit code: $rc"
           echo "CLI said: $out"
           case "$out" in
             *TOKEN_OK*) echo "AUTH VERIFIED — the token works on a runner." ;;
