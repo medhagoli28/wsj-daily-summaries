@@ -29,7 +29,8 @@ I try follow WSJ regularly but kept losing track of stories across the day — t
 - `search.py` — TF-IDF search index + ranking over the archive (stdlib only; the tested reference implementation).
 - `build_search_index.py` — writes `public/search-index.json` + the search page for the static site.
 - `search.html` — client-side search page (loads the prebuilt index; vanilla JS mirrors `search.py`).
-- `.github/workflows/daily-digest.yml` — cron that publishes the **free** headline digest to GitHub Pages daily.
+- `research_via_claude.py` — Stage 2 via the Claude Code CLI on a Claude subscription (free, no API key).
+- `.github/workflows/daily-digest.yml` — cron that researches and publishes the **full** digest to GitHub Pages daily.
 - `requirements.txt` — the one dependency (`anthropic`), needed only for the optional `--research` mode.
 - `digest-<date>.md` — a generated digest (committed daily by the workflow).
 
@@ -79,15 +80,32 @@ How Stage 2 works, in three small functions:
 - `split_summary_and_sources(text)` — parses the model's `SOURCES:` line and drops any wsj.com links.
 - `research_to_markdown(...)` — groups the results into a dated Markdown digest.
 
-### Automated daily run (GitHub Actions) — free
-`.github/workflows/daily-digest.yml` runs on a cron (`0 16 * * *` = noon ET) and is **completely free**:
-it fetches today's headlines (Mode A, stdlib only), commits `digest-<date>.md`, and publishes it to
-GitHub Pages. It uses only the built-in `GITHUB_TOKEN` — **no API keys, no secrets to add.** You can also
-trigger it manually from the Actions tab (`workflow_dispatch`).
+### Automated daily run (GitHub Actions) — free, hands-off
+`.github/workflows/daily-digest.yml` runs on a cron (`17 12 * * *` ≈ 8:17 AM ET) and produces the
+**researched** digest — real summaries, not just headline links — for **free**. It runs
+`research_via_claude.py`, which drives the Claude Code CLI on a Claude subscription instead of the
+metered API, so there is no `ANTHROPIC_API_KEY` and no per-token bill.
 
-The paid deep-research mode (`--research`) is intentionally **not** run by the workflow. Generate deep
-summaries on demand instead — run `--research` locally with an `ANTHROPIC_API_KEY`, or ask Claude to
-research a fetched headline list for you. De-duplication (`dedup.py`) is free either way (difflib, no API).
+One secret is required: **`CLAUDE_CODE_OAUTH_TOKEN`**, generated once with `claude setup-token`.
+Pages deployment still uses the built-in `GITHUB_TOKEN`. You can also trigger a run manually from the
+Actions tab (`workflow_dispatch`).
+
+Everything runs on GitHub's runners, so **nothing depends on a laptop being awake.** That matters:
+this pipeline previously split its work between a local scheduler (summaries) and CI (headlines), and
+whenever the local half didn't fire, CI silently published a headline-only digest that looked like a
+successful day. Two guards now prevent that:
+
+- **The run fails loudly on a headline-only day.** The fallback still publishes so the site never goes
+  dark, but the job then exits non-zero so GitHub emails you instead of the gap going unnoticed.
+- **`research_via_claude.py` exits 1 below `--min-entries`**, so a digest that is mostly
+  "could not research" lines is treated as a failure rather than published as normal.
+
+To tell a real digest from a fallback at a glance, check the H1: `# WSJ Deep Digest` is researched,
+`# WSJ Section Digest` is headline-only. De-duplication (`dedup.py`) is free either way (difflib, no API),
+and `seen_headlines.json` is committed by the workflow so the lookback window survives across runs.
+
+The paid `--research` path in `wsj_fetch.py` still exists for anyone who'd rather spend API credits;
+it is simply not what the daily automation uses.
 
 ---
 
@@ -205,10 +223,14 @@ Whole site uses one unified warm-dark theme, inline CSS, mobile-responsive (cale
 bubbles collapse to one column). Pure vanilla JS for the filter; degrades gracefully if JS off.
 
 ═══ AUTOMATION (.github/workflows/daily-digest.yml) ═══
-Runs on a daily cron + manual dispatch. Renders the markdown digests to HTML via
-generate_index.py and deploys the output to GitHub Pages. Include a no-overwrite guard so a
-manually-researched digest for a date is never clobbered by an automated headline-only run.
-Set git identity to github-actions[bot] when committing.
+Runs on a daily cron + manual dispatch, entirely on GitHub's runners — no dependency on a
+local machine being awake. Researches each headline via the Claude Code CLI on a Claude
+subscription (CLAUDE_CODE_OAUTH_TOKEN), so the daily run publishes real summaries for free.
+Renders the markdown digests to HTML via generate_index.py and deploys to GitHub Pages.
+Include a no-overwrite guard so a researched digest for a date is never clobbered by a
+headline-only run, and make a headline-only fallback FAIL the job after publishing, so a
+silent gap can't masquerade as a successful day. Commit seen_headlines.json alongside the
+digest so de-duplication survives across runs. Set git identity to github-actions[bot].
 
 ═══ ACCEPTANCE ═══
 - End to end runs for free (web search only, no paid API keys).

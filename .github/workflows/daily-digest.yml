@@ -1,15 +1,25 @@
 name: Daily WSJ digest
 
-# Free, no API keys: fetch today's WSJ headlines (Mode A), commit the digest, and
-# publish it to GitHub Pages. The paid deep-research mode (--research) is NOT run
-# here — run that on demand locally when you want AI summaries.
+# Fetch today's WSJ headlines, research each one into a real summary, commit the
+# digest, and publish it to GitHub Pages — entirely on GitHub's runners.
+#
+# The research runs through the Claude Code CLI on a Claude subscription
+# (CLAUDE_CODE_OAUTH_TOKEN), NOT the metered Anthropic API, so this stays free.
+# Nothing here depends on a laptop being awake, which is what used to leave the
+# site publishing headline-only digests for days at a time.
 on:
   schedule:
-    - cron: "0 12 * * *"   # 12:00 UTC = 08:00 ET (8 AM), daily
+    # 12:17 UTC ~= 8:17 AM ET. Deliberately off the hour: :00 is the most
+    # contended slot on GitHub's scheduler and gets delayed the longest.
+    - cron: "17 12 * * *"
   workflow_dispatch: {}     # allow manual runs from the Actions tab
 
 permissions:
   contents: write           # to commit the digest and push the gh-pages branch
+
+concurrency:
+  group: daily-digest       # a manual run racing the cron run would fight over the push
+  cancel-in-progress: false
 
 jobs:
   digest:
@@ -21,21 +31,44 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build the headline digest (only if none exists for today)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install the Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      # continue-on-error so a bad research day still publishes something. The
+      # run is failed explicitly in the last step instead — see the note there.
+      - name: Research today's digest
+        id: research
+        continue-on-error: true
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
           f="digest-$(date -u +%F).md"
-          if [ -f "$f" ]; then
-            echo "$f already exists (likely a researched digest) — keeping it."
-          else
-            python3 wsj_fetch.py --limit 10 > "$f"
+          if [ -f "$f" ] && head -1 "$f" | grep -q "Deep Digest"; then
+            echo "$f is already a researched digest — keeping it."
+            exit 0
           fi
+          python3 research_via_claude.py --limit 10 --out "$f" --min-entries 5
+
+      - name: Fall back to headlines if the research failed
+        if: steps.research.outcome == 'failure'
+        run: |
+          f="digest-$(date -u +%F).md"
+          python3 wsj_fetch.py --limit 10 > "$f"
 
       - name: Commit the digest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "digest-$(date -u +%F).md"
-          git diff --cached --quiet || git commit -m "Digest for $(date -u +%F)"
+          # seen_headlines.json travels with the digest — it's what stops the same
+          # story being re-researched every day, and CI is the only writer now.
+          git add "digest-$(date -u +%F).md" seen_headlines.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Digest for $(date -u +%F)"
+          git pull --rebase --autostash
           git push
 
       - name: Generate the Pages index
@@ -50,3 +83,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}   # built-in, no new secret needed
           publish_dir: ./public
           publish_branch: gh-pages
+
+      # The site is already updated by here, so it never goes dark. But a
+      # headline-only day IS a failure, and the whole reason past outages went
+      # unnoticed for weeks is that the fallback published silently and every day
+      # looked fine. Fail the run so GitHub emails about it.
+      - name: Flag a headline-only day
+        if: steps.research.outcome == 'failure'
+        run: |
+          echo "::error::Research failed — published the headline-only fallback for $(date -u +%F)."
+          exit 1
