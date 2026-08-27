@@ -100,6 +100,17 @@ successful day. Two guards now prevent that:
 - **`research_via_claude.py` exits 1 below `--min-entries`**, so a digest that is mostly
   "could not research" lines is treated as a failure rather than published as normal.
 
+The research subprocess runs with `--permission-mode bypassPermissions`, because an unattended run
+has nobody to answer a permission prompt and a blocked prompt is one of the ways this pipeline has
+quietly produced nothing before. The safety boundary is `--allowed-tools WebSearch` instead: the
+session gets one read-only tool and has no Bash, Edit, or Write, so it cannot touch the repo or the
+runner. A permission complaint that comes back as ordinary text (exit 0) is also detected and treated
+as a failure, so it can't publish dressed up as a summary.
+
+Session limits are waited out rather than failed on — a limit resets on a clock and a daily job has
+hours to spare (`RATE_LIMIT_WAIT`, `RATE_LIMIT_RETRIES`). Note that the research is one CLI session
+per headline (~13/day after de-dup), which does consume Claude subscription usage.
+
 To tell a real digest from a fallback at a glance, check the H1: `# WSJ Deep Digest` is researched,
 `# WSJ Section Digest` is headline-only. De-duplication (`dedup.py`) is free either way (difflib, no API),
 and `seen_headlines.json` is committed by the workflow so the lookback window survives across runs.
