@@ -12,6 +12,15 @@ on:
     # 12:17 UTC ~= 8:17 AM ET. Deliberately off the hour: :00 is the most
     # contended slot on GitHub's scheduler and gets delayed the longest.
     - cron: "17 12 * * *"
+    # Catch-up slots. GitHub's cron is best-effort and silently DROPS runs under
+    # load — it skipped 2026-08-27 and 2026-08-28 outright, and every run that
+    # did fire in August landed 43-59 min late. One slot a day is a single point
+    # of failure, so try again later. These are free on a normal day: the guard
+    # below sees a researched digest already exists and exits immediately.
+    # They also self-heal a fallback day, since a "Section Digest" does NOT
+    # satisfy the guard and gets replaced with the real thing.
+    - cron: "23 15 * * *"
+    - cron: "31 18 * * *"
   workflow_dispatch: {}     # allow manual runs from the Actions tab
 
 permissions:
