@@ -231,7 +231,13 @@ def _parse_articles(md):
         if line.startswith("## "):
             section, sec_cls = _strip_emoji(line[3:]), _section_class(line[3:])
             continue
-        m = re.match(r"^\*\*\s*(?:\d+\.\s*)?(.+?)\s*\*\*\s*(.*)$", line)   # a researched entry
+        # A researched entry, in either shape this repo has produced:
+        #   "**1. Title** — summary"   (older interactive digests)
+        #   "- **Title** — summary"    (research_to_markdown / research_via_claude)
+        # The leading "- " used to fall through to the bare-headline branch below,
+        # which keeps the title and DISCARDS the summary — so every entry rendered
+        # as a naked headline even though the markdown had a full brief.
+        m = re.match(r"^(?:-\s+)?\*\*\s*(?:\d+\.\s*)?(.+?)\s*\*\*\s*(.*)$", line)
         if m:
             title, rest = m.group(1), m.group(2)
             kicker = ""
@@ -240,7 +246,10 @@ def _parse_articles(md):
                 kicker, rest = t.group(1), t.group(2)
             rest = re.sub(r"^[—–\-]\s*", "", rest)
             body = rest.strip()
-            sm = re.search(r"\*Sources:\s*(.+?)\*\s*$", rest)
+            # Italics are written with '*' in the older digests and '_' in the ones
+            # research_to_markdown emits; accept either or the sources run leaks
+            # into the visible body text.
+            sm = re.search(r"[*_]Sources:\s*(.+?)[*_]\s*$", rest)
             if sm:
                 body = rest[: sm.start()].strip()
             articles.append({"cls": sec_cls, "title": title, "url": None, "kicker": kicker, "body": body})
