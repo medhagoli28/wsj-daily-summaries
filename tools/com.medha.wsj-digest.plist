@@ -8,11 +8,11 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/medhagoli/Downloads/wsj-daily-summaries/tools/run-digest.sh</string>
+        <string>/Users/medhagoli/wsj-daily-summaries/tools/run-digest.sh</string>
     </array>
 
     <key>WorkingDirectory</key>
-    <string>/Users/medhagoli/Downloads/wsj-daily-summaries</string>
+    <string>/Users/medhagoli/wsj-daily-summaries</string>
 
     <!-- Several shots a day, not one. The script exits immediately once the day's
          digest is researched, so the extra slots are free; they only do work if an
@@ -40,8 +40,8 @@
     <true/>
 
     <key>StandardOutPath</key>
-    <string>/Users/medhagoli/Downloads/wsj-daily-summaries/launchd.log</string>
+    <string>/Users/medhagoli/wsj-daily-summaries/launchd.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/medhagoli/Downloads/wsj-daily-summaries/launchd.log</string>
+    <string>/Users/medhagoli/wsj-daily-summaries/launchd.log</string>
 </dict>
 </plist>

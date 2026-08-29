@@ -22,7 +22,7 @@ GH="/opt/homebrew/bin/gh"
 GIT="/opt/homebrew/bin/git"
 PY="/Library/Frameworks/Python.framework/Versions/3.12/bin/python3"
 
-REPO="/Users/medhagoli/Downloads/wsj-daily-summaries"
+REPO="/Users/medhagoli/wsj-daily-summaries"
 LOG="$REPO/digest-run.log"
 LOCK="/tmp/wsj-digest.lock"
 
