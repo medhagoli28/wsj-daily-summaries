@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.medha.wsj-digest</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/medhagoli/Downloads/wsj-daily-summaries/tools/run-digest.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/medhagoli/Downloads/wsj-daily-summaries</string>
+
+    <!-- Several shots a day, not one. The script exits immediately once the day's
+         digest is researched, so the extra slots are free; they only do work if an
+         earlier one was missed or failed. If the Mac is asleep at a slot, launchd
+         runs the job when it next wakes. -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Hour</key><integer>7</integer>
+            <key>Minute</key><integer>48</integer>
+        </dict>
+        <dict>
+            <key>Hour</key><integer>12</integer>
+            <key>Minute</key><integer>15</integer>
+        </dict>
+        <dict>
+            <key>Hour</key><integer>17</integer>
+            <key>Minute</key><integer>22</integer>
+        </dict>
+    </array>
+
+    <!-- Also try on login/reboot. Safe because the script is idempotent, and it
+         rescues the case where the Mac was off through every slot above. -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/medhagoli/Downloads/wsj-daily-summaries/launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/medhagoli/Downloads/wsj-daily-summaries/launchd.log</string>
+</dict>
+</plist>
