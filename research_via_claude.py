@@ -205,8 +205,10 @@ def main():
     ap.add_argument("--limit", type=int, default=10, help="items per section")
     ap.add_argument("--out", metavar="PATH",
                     help="output path (default: digest-<date>.md)")
-    ap.add_argument("--min-entries", type=int, default=5,
+    ap.add_argument("--min-entries", type=int, default=1,
                     help="exit 1 if fewer than this many headlines got a real summary")
+    ap.add_argument("--max-failure-rate", type=float, default=0.5,
+                    help="exit 1 if this fraction of ATTEMPTED headlines errored")
     args = ap.parse_args()
 
     researched = research(wsj_fetch.build(args.limit))
@@ -220,8 +222,19 @@ def main():
     failed = len(researched) - len(good)
     print(f"[wrote {out}: {len(good)} summarized, {failed} failed]", file=sys.stderr)
 
-    # A digest that's mostly "could not research" lines is worse than no digest —
-    # say so loudly instead of letting it publish as if the day went fine.
+    # Health is about whether the research CALLS are working, not about how busy
+    # the news was. Once de-dup has a warm store most headlines are skipped as
+    # already-covered, so a quiet day legitimately yields only a few new stories —
+    # that's the feature working, not a failure. Judge the attempted ones.
+    attempted = len(researched)
+    if attempted and failed / attempted > args.max_failure_rate:
+        print(f"[FAIL] {failed}/{attempted} attempted headlines errored "
+              f"(limit {args.max_failure_rate:.0%}) — research looks broken",
+              file=sys.stderr)
+        return 1
+
+    # Separately: nothing new at all means there's nothing worth publishing, and
+    # overwriting a good digest with an empty one would be strictly worse.
     if len(good) < args.min_entries:
         print(f"[FAIL] only {len(good)} real summaries, need {args.min_entries}",
               file=sys.stderr)

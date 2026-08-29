@@ -62,8 +62,12 @@ if [ -f "$FILE" ]; then
   log "$FILE exists but is headline-only — replacing it with a researched digest"
 fi
 
+# --limit 12 (per section) on purpose. Now that seen_headlines.json is warm again,
+# de-dup skips most of a day's headlines as already-covered, so fetching a wider
+# net is what keeps the digest a reasonable size. The extra headlines are cheap:
+# skipped ones never reach the model.
 log "researching…"
-"$PY" research_via_claude.py --limit 6 --out "$FILE" --min-entries 5 >> "$LOG" 2>&1
+"$PY" research_via_claude.py --limit 12 --out "$FILE" --min-entries 1 >> "$LOG" 2>&1
 RC=$?
 
 if [ $RC -ne 0 ]; then
