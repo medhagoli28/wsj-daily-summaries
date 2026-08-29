@@ -24,6 +24,7 @@ Exit codes: 0 = digest written and healthy, 1 = wrote too few real summaries
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 import time
@@ -94,6 +95,45 @@ RATE_LIMIT_MARKERS = (
 # minutes of patience, comfortably inside a GitHub Actions job's 6-hour ceiling.
 RATE_LIMIT_WAIT = int(os.environ.get("RATE_LIMIT_WAIT", "600"))
 RATE_LIMIT_RETRIES = int(os.environ.get("RATE_LIMIT_RETRIES", "3"))
+
+
+# The renderer writes one entry per line ("- **Title** — summary"), so a summary
+# containing a newline SPLITS INTO A PHANTOM STORY on the site. Seen on 2026-08-29:
+# the model wrote scratch commentary, then "**Brief:** <the real summary>", and the
+# second paragraph rendered as its own untitled entry called "Brief:".
+# Matches all three bolding styles the model uses: "**Brief:**", "**Brief**:", "Brief:".
+# The colon can sit inside or outside the asterisks, hence the optional runs on both sides.
+BRIEF_LABEL_RE = re.compile(r"^\s*\*{0,2}(?:brief|summary)\*{0,2}\s*:\s*\*{0,2}\s*", re.I)
+
+# The other observed shape has no label, just a narrated hand-off:
+#   "I have solid confirmation from Yahoo and CNBC. Here's the brief: <real summary>"
+# Everything up to and including that lead-in is scratch. Requires the colon, so it
+# can't fire on a sentence that merely mentions a brief.
+HANDOFF_RE = re.compile(
+    r"(?is)^.*?\b(?:here(?:'|’)?s|below is|following is)\s+(?:the|my)\s+brief\s*:\s*")
+
+
+def clean_summary(text):
+    """Flatten a summary to one well-formed line, dropping any label/preamble.
+
+    Two independent guards, because the model only *usually* obeys the prompt:
+      1. If a line starts with a 'Brief:'/'Summary:' label, everything before it was
+         scratch — keep from that line on. Anchored to line start so ordinary prose
+         mentioning "summary:" mid-sentence is untouched.
+      2. Collapse all whitespace, so one entry can never occupy more than one line.
+    """
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        if BRIEF_LABEL_RE.match(line):
+            lines = lines[i:]
+            lines[0] = BRIEF_LABEL_RE.sub("", lines[0])
+            break
+    flat = re.sub(r"\s+", " ", " ".join(lines)).strip()
+
+    # Drop a narrated hand-off, but only if real text follows it — never return
+    # empty just because the model phrased things oddly.
+    stripped = HANDOFF_RE.sub("", flat).strip()
+    return stripped if stripped else flat
 
 
 def looks_rate_limited(text):
@@ -168,6 +208,7 @@ def research_headline(item, attempts=2):
             continue
 
         summary, sources = wsj_fetch.split_summary_and_sources(text)
+        summary = clean_summary(summary)
         if not summary:
             last_error = "response had no summary"
             attempts_left -= 1
