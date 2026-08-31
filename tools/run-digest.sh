@@ -43,14 +43,49 @@ fi
 
 cd "$REPO" || { log "FATAL: cannot cd to $REPO"; exit 1; }
 
-TODAY="$(date -u +%F)"
+# Normally today, but DIGEST_DATE=YYYY-MM-DD lets a missed day be backfilled by
+# hand. Without this a gap is permanent: every slot only ever targets the current
+# date, so nothing will ever go back for 2026-08-30.
+TODAY="${DIGEST_DATE:-$(date -u +%F)}"
 FILE="digest-$TODAY.md"
 
 log "=== run start (target $FILE) ==="
 
-# Get in sync first; CI may have published a headline-only fallback overnight.
-"$GIT" fetch -q origin && "$GIT" reset -q --hard origin/master
-if [ $? -ne 0 ]; then log "FATAL: git sync failed"; exit 1; fi
+# launchd runs a missed slot the moment the Mac wakes, which is usually BEFORE
+# Wi-Fi has reassociated. Every run on 2026-08-30 (08:56, 13:21, 18:34 — each about
+# an hour after its slot, i.e. at wake) died right here with
+# "Could not resolve host: github.com", and the day produced no digest at all.
+# So wait for the network instead of giving up the instant it isn't there.
+wait_for_network() {
+  local i
+  for i in $(seq 1 30); do
+    if /usr/bin/nc -z -G 5 github.com 443 >/dev/null 2>&1; then
+      [ "$i" -gt 1 ] && log "network came up after $((i * 20))s"
+      return 0
+    fi
+    log "no network yet (attempt $i/30) — waiting 20s"
+    sleep 20
+  done
+  return 1
+}
+
+if ! wait_for_network; then
+  log "FATAL: no network after 10 minutes — giving up; a later slot will retry"
+  exit 1
+fi
+
+# Get in sync first; a previous run may have left the tree behind origin.
+# Retry the fetch too: DNS can resolve while the link is still flaky.
+SYNCED=0
+for attempt in 1 2 3; do
+  if "$GIT" fetch -q origin && "$GIT" reset -q --hard origin/master; then
+    SYNCED=1
+    break
+  fi
+  log "git sync failed (attempt $attempt/3) — retrying in 15s"
+  sleep 15
+done
+if [ "$SYNCED" -ne 1 ]; then log "FATAL: git sync failed"; exit 1; fi
 
 # Already researched? Nothing to do. This is what makes repeat runs free.
 if [ -f "$FILE" ] && head -1 "$FILE" | grep -q "Deep Digest"; then
