@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — August 31, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-08-29.html">‹ Aug 29</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 54</div>
+    <div class="issue-date">August 31, 2026</div>
+    <div class="issue-sub">18 stories across tech, markets &amp; finance — a 11-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 18</span><span class="tab" data-key="tech">Tech · 6</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">G20 Warned Of Growing Threat to Financial Stability Posed By New AI Models</div>
+        <div class="art-sum">Andrew Bailey, chair of the Financial Stability Board and governor of the Bank of England, sent a letter dated August 31, 2026 to G20 central bank governors and finance ministers warning that new &quot;frontier&quot; AI models pose a growing threat to global financial stability. Bailey identified the potential for such models to conduct autonomous cyberattacks as the &quot;most immediate concern&quot; given the interconnected nature of the global financial system, and also flagged fragilities in sovereign debt markets, rising investor use of debt in equity markets, and stretched valuations in AI-related investments. He called for internationally aligned approaches to testing and releasing AI models, arguing no single country can manage the risks alone. The letter follows the FSB&#x27;s June 2026 consultation on &quot;sound practices&quot; for AI adoption by financial institutions, with a final report due in October 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | The $5.5 Billion Perk SoftBank’s Data-Center Venture Offered to Land OpenAI</div>
+        <div class="art-sum">SB Energy, the SoftBank-backed data-center developer majority-owned by Masayoshi Son, issued OpenAI stock warrants to secure it as a long-term tenant across three planned data centers; the warrants were valued at roughly $3.6 billion when granted in January and had risen to about $5.5 billion by the end of June. As part of the same agreement, SB Energy committed to purchasing at least $50 million worth of OpenAI&#x27;s software and services by 2028. The warrant deal comes as SB Energy prepares for a U.S. IPO that could raise $5 billion to $7 billion as soon as September 2026, and follows a separate $1.5 billion investment in SB Energy by Nvidia, which also agreed to guarantee up to $105 billion to help OpenAI lease an SB Energy data center in Ohio.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">EU to Hold ChatGPT, Reddit, Roblox to Higher Standard of Scrutiny</div>
+        <div class="art-sum">The European Commission on August 31, 2026 designated ChatGPT&#x27;s search function, Reddit, and Roblox as falling under the strictest tier of its Digital Services Act after each surpassed the 45-million-monthly-user threshold in the EU, with ChatGPT&#x27;s search feature averaging about 159 million monthly EU users, Reddit 57.2 million, and Roblox roughly 48 million; this marks the first time an AI chatbot has been classified this way. The three platforms now have four months, until the end of November 2026, to comply with obligations including annual systemic risk assessments covering illegal content, protection of minors, mental and physical wellbeing, fundamental rights, and electoral processes, plus independent audits and data-sharing with regulators and researchers. The designation brings the total number of services under the DSA&#x27;s strictest oversight tier to 28, with the Commission supervising compliance alongside Ireland&#x27;s Coimisiún na Meán (for ChatGPT and Reddit) and the Netherlands&#x27; Authority for Consumers and Markets (for Roblox).</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta’s Day of Reckoning</div>
+        <div class="art-sum">_(could not research: API Error: Can&#x27;t reach the API server — check your internet or DNS (ENOTFOUND))_</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia Wants to Run the World’s Robots. China Is an Eager Customer.</div>
+        <div class="art-sum">Nvidia has partnered with Chinese humanoid-robot maker Unitree to sell the U.S. chipmaker&#x27;s first publicly available humanoid robotics system, pairing Unitree&#x27;s roughly six-foot-tall H2 robot with Nvidia&#x27;s Jetson Thor hardware and Blackwell GPU, with initial sales aimed at research institutions such as Stanford and ETH Zurich starting in 2026. Nvidia&#x27;s Jetson Thor &quot;robot brain&quot; chip went on sale in August 2025 at $3,499 for a developer kit (about $2,999 per unit in bulk orders of 1,000+), and Chinese firms including Unitree, Xiaomi, UBTech, and Agile Robots have moved quickly to build it into humanoid and industrial robots. The push comes even as Washington tightens export controls on Nvidia&#x27;s more advanced AI chips to China, with U.S. officials in August 2026 reviewing how Chinese AI firms access Nvidia computing power through offshore cloud rentals. China&#x27;s status as the world&#x27;s largest market for industrial robots, combined with a rapidly localizing hardware supply chain, has made it one of Nvidia&#x27;s most aggressive robotics customers despite the broader chip-trade tensions.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Privacy vs. Security: Readers Clash Over Flock License-Plate Cameras</div>
+        <div class="art-sum">Flock Safety&#x27;s network of more than 120,000 automated license plate readers has triggered a growing nationwide backlash, with the advocacy tracker DeFlock reporting 47 jurisdictions that have canceled contracts, 22 that have deactivated cameras, and 25 that have rejected proposed agreements as of mid-2026, according to Newsweek. Denver cut ties with Flock in favor of Axon in February 2026, while Colorado&#x27;s Mountain View and El Cerrito also dropped or declined to renew their contracts, per Axios and other reports. Critics, including the ACLU, cite cases of police misuse and hundreds of documented immigration-related searches of the data; in response, Flock announced in August 2026 that it would require case numbers for searches, add automated auditing, and shorten default data retention to seven days starting January 1, though the ACLU says the changes don&#x27;t go far enough. Opposition has drawn support across the political spectrum, and in some cases activists have physically destroyed cameras, including at least thirteen cut down by one person in Virginia.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">America’s Biggest Companies Ring Up Hefty Sales and Raise Their Outlooks</div>
+        <div class="art-sum">Target reported second-quarter sales of $26.54 billion, up 5.3% year-over-year and above Wall Street&#x27;s $26.13 billion estimate, prompting it to raise its full-year net sales growth outlook to around 5%, a one-point increase from prior guidance, in results announced August 19, 2026. Cummins posted record second-quarter revenue of $9.5 billion and lifted full-year guidance to 10%-13% growth, while Vertiv reported net sales of $3.27 billion, up 24% year-over-year, and raised full-year 2026 guidance across all key metrics. Ross Stores likewise raised its outlook, now expecting comparable store sales growth of 6%-7% in the third quarter and 4%-5% in the fourth quarter. Across the S&amp;P 500, second-quarter results have been broadly strong, with 86% of the 440 companies that had reported by August 7 beating estimates and blended year-over-year earnings growth around 50%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Aon Strikes Roughly $17 Billion Deal for Insurance Brokerage USI</div>
+        <div class="art-sum">Aon confirmed on Monday, August 31, 2026 an all-cash deal to acquire USI Insurance Services from private-equity firm KKR for roughly $17 billion, including debt, with closing expected in the fourth quarter of 2026. USI is the tenth-largest U.S. insurance broker, generating about $3 billion in annual revenue and employing more than 10,500 people across nearly 200 offices. The deal marks Aon&#x27;s second major acquisition of a PE-backed brokerage in about two years, following its roughly $13.4 billion purchase of NFP Corp. in 2024, and deepens its push into the U.S. middle-market insurance segment, estimated at over $40 billion.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nikkei Falls 2.2%, Dragged by Chip Stocks</div>
+        <div class="art-sum">This confirms the story with concrete figures. I have enough to write the brief now. Japan&#x27;s Nikkei 225 tumbled 1,548 points, or 2.24%, to close at 67,672 on Tuesday, August 19, 2026, as electronics and chip-related shares led the selloff. Component maker Taiyo Yuden plunged 12.19%, Murata Manufacturing dropped 9.17%, and Citizen Holdings fell 6.68%, making semiconductor and electronics manufacturers the session&#x27;s steepest decliners. The rout followed a broader pullback in global tech and AI-linked stocks, echoing weakness that had also hit chip bellwethers Advantest and Tokyo Electron in the same period.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The World’s Drinks Order Is In. Distillers Were Expecting More.</div>
+        <div class="art-sum">Pernod Ricard, the maker of Martell cognac and Absolut vodka, reported a worse-than-expected 3.9% organic sales decline for the fiscal year ended June 30, 2026, marking its third consecutive year of falling sales as U.S. and Chinese demand stayed weak and Middle East conflict disrupted travel retail. The company trimmed its medium-term guidance, now expecting organic sales growth to land closer to the low end of a 3%-6% range for 2027-2029 rather than the midpoint previously targeted. IWSR data showed total beverage alcohol volumes down 2% across 22 major markets in 2025, with spirits underperforming other categories, while U.S. spirits sales fell 5.1% in volume and 5.9% in revenue in the first quarter of 2026 as drinkers traded down from premium price tiers ($100+ bottles down 9.3% over the past 12 months). Rivals including Diageo have flagged similar weakness, with large maturing whiskey and cognac inventories now weighing on pricing power industry-wide.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks</div>
+        <div class="art-sum">Kevin Warsh, delivering his first Jackson Hole keynote as Federal Reserve chair, said on Monday that inflation remains too high and that stronger summer readings haven&#x27;t convinced him underlying price trends have meaningfully improved, a stance widely read as hawkish; in response, S&amp;P 500 and Dow Jones futures each slipped about 0.2% while Nasdaq-100 futures were roughly flat. The remarks pushed up rate-hike expectations, with fed funds futures showing about a 56-58% chance of a quarter-point September hike, up sharply from around 35% before the speech, and short-term Treasury yields rose in tandem.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">High-End Credit Cardholders Find It’s Harder to Get Their Money’s Worth</div>
+        <div class="art-sum">Chase raised the Sapphire Reserve&#x27;s annual fee from $550 to $795 in June 2025, a 45% increase, while American Express lifted the Platinum Card&#x27;s fee from $695 to $895 (effective for renewals on or after January 2, 2026), a roughly 29% jump. In exchange, both issuers added more perks — Chase&#x27;s card now carries a $300 annual travel credit plus semiannual $250 credits for &quot;The Edit&quot; hotel collection, while Amex touts credits it values at over $3,500 a year — but redeeming that value increasingly requires tracking numerous monthly or category-specific statement credits, opt-in offers, and spending caps. Capital One has also tightened lounge access, adding a $45 per-person fee and a new $125 annual fee for authorized users to use its airport lounges as of February 2026, where such access was previously free. Industry analysts note the trend pressures cardholders to actively use every credit or risk the higher fees no longer being worth it.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Long-Delayed Tax Bill Comes Due for Opportunity Zone Investors</div>
+        <div class="art-sum">Roughly $75 billion in capital gains deferred by about 41,000 investors across roughly 12,800Qualified Opportunity Funds becomes taxable on December 31, 2026, regardless of whether the underlying investment has been sold, according to a Treasury Department Office of Tax Analysis working paper covering data through late 2024; investors who put money in by the end of 2019 and held at least seven years get a 15% basis step-up (owing tax on only 85% of the original gain), those who entered by the end of 2021 with a five-year hold get a smaller 10% reduction, and anyone investing after 2021 gets no reduction at all, with the resulting tax bill due by the standard April 15, 2027 filing deadline.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">‘A Roth IRA on Steroids’: Wealthy Americans Find Another Tax-Free Way to Invest</div>
+        <div class="art-sum">Wealthy Americans are increasingly funneling money into private-placement life insurance (PPLI), a customizable policy that lets investment gains grow and pass to heirs tax-free with no contribution cap, unlike a Roth IRA&#x27;s roughly $7,500 annual limit. The five largest carriers held over $44 billion in PPLI assets under administration at the end of 2025, according to advisory firm Life Insurance Strategies Group, up sharply as advisors shift focus from asset allocation to &quot;asset location.&quot; Access is restricted to accredited or qualified investors, typically requiring minimum premium commitments of $1 million to $2 million or more. The strategy has drawn scrutiny from Senate Finance Committee Chairman Ron Wyden, whose investigation found tens of billions of dollars held in PPLI by a few thousand ultra-wealthy individuals, and who has pushed legislation to close what he calls an abusive tax shelter.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">There’s a New Mac Mini and Mac Studio. Good Luck Getting Your Hands on One.</div>
+        <div class="art-sum">Apple opened pre-orders on August 25, 2026 for a new Mac Mini (starting at $899, its first M5 2nm chip) and a redesigned Mac Studio, with most configurations shipping starting September 22, but the higher-end M5 Ultra Mac Studio with 512GB of unified memory won&#x27;t ship until late October. The delayed availability stems from a severe global memory-chip shortage, as AI server demand has driven up RAM and NAND prices and squeezed supply; Apple had already been forced to pull several existing Mac Mini and Mac Studio configurations (including 32GB/64GB Mac Mini and the 256GB M3 Ultra Mac Studio) from sale earlier in 2026 due to the shortage. Tim Cook told investors the imbalance between supply and demand could persist for &quot;several months,&quot; and some memory upgrades on the outgoing lineup had pushed delivery estimates out to 16-18 weeks.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Nearly 770 Dead in Devastating Nepal, Tibet Floods</div>
+        <div class="art-sum">A flash flood triggered by a glacial collapse and landslide struck the Nepal-Tibet border region on Wednesday, August 26, 2026, near the Rasuwagadhi crossing, and by August 29-30 the confirmed death toll had climbed to roughly 770-788 in Nepal plus at least 16 in China&#x27;s Tibet region, with thousands still unaccounted for. Nepali officials reported nearly 4,800 people missing across both countries at that point, including hundreds of foreign nationals and hydropower workers along the Trishuli river. The disaster destroyed 32 bridges and nearly 25 miles of road, including the entire route linking Betrawati in Nuwakot district to the Rasuwagadhi border crossing with Tibet. A barrier lake formed by landslide debris later breached its banks on August 28, temporarily halting rescue operations on both sides of the border.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Most Insurers Invest for the Long Term. Mark Walter’s Did the Opposite.</div>
+        <div class="art-sum">Dodgers owner Mark Walter&#x27;s insurers, including Delaware Life, are under federal and SEC scrutiny after disclosing that related-party investments tied to Walter-controlled businesses totaled at least $16 billion to $17 billion, roughly 39% of invested assets, far above an original estimate of about $1 billion (roughly 3%); the companies attributed the gap to accounting &quot;errors&quot; disclosed in June 2026 regulatory filings. Walter, chief executive of Guggenheim Partners (over $270 billion in assets under management) and controlling partner of Guggenheim Baseball Management, is examined for potentially sitting on both sides of these financing deals—controlling the insurers extending loans and the businesses receiving them—raising conflict-of-interest concerns. In response to the probe, one of Walter&#x27;s insurers agreed to cut $6.5 billion in investments, and reports note the case highlights a broader industry trend of insurers shifting premiums into private-credit deals instead of traditional, safer bond portfolios.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">SLB to Buy Data Center Cooling Firm Kelvion for $4.1 Billion</div>
+        <div class="art-sum">SLB agreed to acquire Kelvion, a German thermal management and cooling firm, in a deal announced on August 31, 2026, paying roughly $3.4 billion in cash and assuming about $0.7 billion of debt, for a total enterprise value near $4.1 billion; the seller is Apollo-managed funds, which hold the majority stake, alongside a minority stake held by Triton-advised funds. SLB CEO Olivier Le Peuch cited surging AI-driven data center demand for liquid cooling and heat-exchange systems as the deal&#x27;s rationale, and SLB projects combined revenues of $4.5–5 billion and EBITDA of $700–800 million by 2028, with about $120 million in annual EBITDA synergies expected within three years of closing. The transaction is expected to close in the first half of 2027, pending regulatory approvals.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 18 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">G20 Warned Of Growing Threat to Financial Stability Posed By New AI Models</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | The $5.5 Billion Perk SoftBank’s Data-Center Venture Offered to Land OpenAI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">EU to Hold ChatGPT, Reddit, Roblox to Higher Standard of Scrutiny</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Meta’s Day of Reckoning</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Nvidia Wants to Run the World’s Robots. China Is an Eager Customer.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Privacy vs. Security: Readers Clash Over Flock License-Plate Cameras</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">America’s Biggest Companies Ring Up Hefty Sales and Raise Their Outlooks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Aon Strikes Roughly $17 Billion Deal for Insurance Brokerage USI</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Nikkei Falls 2.2%, Dragged by Chip Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">The World’s Drinks Order Is In. Distillers Were Expecting More.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">U.S. Stock Futures Little Changed as Markets Weigh Warsh’s Hawkish Remarks</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">High-End Credit Cardholders Find It’s Harder to Get Their Money’s Worth</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Long-Delayed Tax Bill Comes Due for Opportunity Zone Investors</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">‘A Roth IRA on Steroids’: Wealthy Americans Find Another Tax-Free Way to Invest</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">There’s a New Mac Mini and Mac Studio. Good Luck Getting Your Hands on One.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Nearly 770 Dead in Devastating Nepal, Tibet Floods</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Most Insurers Invest for the Long Term. Mark Walter’s Did the Opposite.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">SLB to Buy Data Center Cooling Firm Kelvion for $4.1 Billion</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">54 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">51 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">43 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">40 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">35 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">28 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-08-29.html">← Older · August 29, 2026 · An AI Oracle’s Rise and Fall</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
