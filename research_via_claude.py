@@ -246,6 +246,9 @@ def main():
     ap.add_argument("--limit", type=int, default=10, help="items per section")
     ap.add_argument("--out", metavar="PATH",
                     help="output path (default: digest-<date>.md)")
+    ap.add_argument("--date", metavar="YYYY-MM-DD",
+                    help="stamp the digest with this date instead of today "
+                         "(for backfilling a missed day)")
     ap.add_argument("--min-entries", type=int, default=1,
                     help="exit 1 if fewer than this many headlines got a real summary")
     ap.add_argument("--max-failure-rate", type=float, default=0.5,
@@ -254,6 +257,12 @@ def main():
 
     researched = research(wsj_fetch.build(args.limit))
     report = wsj_fetch.research_to_markdown(researched)
+
+    # research_to_markdown stamps the H1 with "now", so a backfill would write
+    # digest-2026-08-30.md with a 2026-08-31 header. Re-stamp it.
+    if args.date:
+        report = re.sub(r"^# WSJ Deep Digest — \d{4}-\d{2}-\d{2}",
+                        f"# WSJ Deep Digest — {args.date}", report, count=1)
 
     out = args.out or f"digest-{datetime.now(timezone.utc):%Y-%m-%d}.md"
     with open(out, "w") as f:
