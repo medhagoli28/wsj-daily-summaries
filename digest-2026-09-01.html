@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 1, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-08-31.html">‹ Aug 31</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 56</div>
+    <div class="issue-date">September 1, 2026</div>
+    <div class="issue-sub">12 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 12</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 3</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia</div>
+        <div class="art-sum">Anthropic has agreed to a $35 billion, six-year computing deal with Lambda, a cloud provider backed by Nvidia, to expand its AI computing capacity as it faces supply constraints. The deal gives Anthropic access to Nvidia-powered capacity at a roughly 350-megawatt data center being developed in Nueces County, Texas, by Hut 8 Corp, with Nvidia securing capacity at the site and Lambda deploying the chips. The agreement follows Anthropic&#x27;s earlier move this month to commit $45 billion over six years to another Nvidia-backed cloud provider, Nscale, for capacity in West Virginia, underscoring the aggressive pace at which Anthropic is locking up compute.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">FTC Sues Amazon, Alleging It Deceived Advertisers and Drove Up Prices</div>
+        <div class="art-sum">The FTC and 22 U.S. states sued Amazon on August 31, 2026, alleging the company secretly manipulated its search-advertising auctions starting around 2018-2019, quietly raising the minimum price advertisers had to pay and, in some cases, entering its own bids to inflate prices while concealing this from advertisers. The lawsuit claims Amazon extracted more than $20 billion from roughly 1.2 million advertisers, nearly half of them small or medium-sized businesses, and that these inflated advertising costs were ultimately passed on to shoppers through higher product prices. Amazon has denied the allegations, stating the FTC &quot;fundamentally misunderstands how advertisers operate&quot; and noting that average cost-per-click for advertisers stayed flat from 2019 to 2024 even as sales from those clicks rose.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Big Tech Blinded Itself to the Grassroots AI Revolt</div>
+        <div class="art-sum">I have enough concrete detail now to write the brief. A grassroots backlash against AI data centers has erupted across the U.S. in 2026, with a Gallup survey finding 71% of Americans would oppose a data center being built in their community, and Pew Research showing 40% expect AI to have a negative impact on society over the next 20 years versus just 16% who expect a positive one. The opposition has become bipartisan and politically potent enough that the National Republican Senatorial Committee, in a memo obtained by CNBC, warned data centers are a &quot;sleeper issue&quot; for the November 2026 midterms, while President Trump publicly criticized communities blocking new projects. Facing delayed projects and local moratoriums, companies including Amazon (whose own engineers testified before Seattle&#x27;s City Council in June 2026 calling for tighter regulation) have shifted from quiet dealmaking to public meetings and community-benefit offers worth hundreds of millions of dollars. The episode illustrates how Big Tech&#x27;s traditional playbook of leveraging growth metrics and Washington/Silicon Valley relationships failed to anticipate or contain organic local opposition to AI infrastructure&#x27;s power, water, and cost demands.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Andreessen Horowitz’s Martin Casado on Why Hardware Is Cool Again</div>
+        <div class="art-sum">Andreessen Horowitz closed its Machine Age Fund at $1.1 billion on August 28, 2026, marking the firm&#x27;s formal push into AI hardware and physical infrastructure after fifteen years of prioritizing software investments; the fund, led by general partners Martin Casado and Raghu Raghuram alongside Ben Horowitz, David Ulevitch, and David George, will target chips, memory, networking, cooling, and data-center infrastructure at both early and growth stages. Casado, who co-founded software-defined-networking pioneer Nicira before its $1.26 billion acquisition by VMware, points to the scale of AI training clusters — with individual data-center racks approaching 1 megawatt of power draw — as the reason physical infrastructure has become a binding constraint on AI progress. The fund&#x27;s launch came alongside an expansion of a16z&#x27;s growth fund to $8.5 billion.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Shein Makes Ho-Hum Market Debut After Years of Geopolitical Drama</div>
+        <div class="art-sum">Shein&#x27;s shares fell as much as 7-10% in their Hong Kong market debut on Tuesday, September 1, 2026, trading down from the IPO price of HK$48.56 to as low as HK$43.72, a lackluster reception after years of blocked attempts to list in New York and London. The Singapore-headquartered, China-founded fast-fashion retailer sold roughly 280 million shares to raise about HK$13.6 billion ($1.74 billion), valuing the company at around $26.5 billion — a steep drop from its $100 billion private valuation in 2022. Shein reported 2025 net revenue of $41.8 billion, up from $38.7 billion the prior year, but posted a $99 million loss in the first quarter of this year versus a $395 million profit a year earlier, as tariff changes in the U.S. and Europe and scrutiny over its China supply chain weighed on the offering.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">America’s Biggest Companies Ring Up Hefty Sales and Raise Their Outlooks | The 10-Point for Aug. 31</div>
+        <div class="art-sum">Walmart raised its full-year sales outlook to a range of 4% to 5%, up from 3.5% to 4.5%, and lifted its adjusted earnings-per-share guidance to $2.80–$2.87 after posting second-quarter revenue of $187.9 billion, a 5.9% increase from a year earlier, according to results reported the week of August 17, 2026. Target also raised its full-year net sales growth guidance by about a percentage point to roughly 5% after beating second-quarter expectations, while Dollar General reported Q2 net sales up 5.2% to $11.3 billion and EPS up 33% to $2.48, prompting it to raise its full-year revenue and earnings outlook as well. Home Depot beat top- and bottom-line estimates for the quarter but bucked the trend by trimming its full-year profit outlook, citing customers&#x27; hesitancy toward big-ticket purchases.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Basic Materials Roundup: Market Talk</div>
+        <div class="art-sum">Copper traded at $6.62 per pound on September 1, 2026, up 0.47% on the day and roughly 44.6% higher than a year earlier, according to Trading Economics data, after futures had eased toward $6.55 in the prior session on dollar strength. Supply pressures have been building in the sector: Chile&#x27;s copper output fell 9.4% in July from a year earlier, and additional disruptions in Indonesia and the Democratic Republic of Congo have tightened global supply, while traders have been rerouting shipments toward the U.S. ahead of possible new import tariffs. Gold, meanwhile, remains in a volatile correction after a multi-year rally, with J.P. Morgan Global Research forecasting prices to average $6,000/oz by the fourth quarter of 2026 and climb toward $6,300/oz by the end of 2027, citing continued central bank demand. Note: &quot;Basic Materials Roundup: Market Talk&quot; is WSJ&#x27;s own recurring digest format rather than a single reported story, so this brief instead reflects the underlying market moves in the sector as covered independently by other outlets.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Equities Largely Lower Though AI Stocks Gain</div>
+        <div class="art-sum">I have enough concrete detail to write the brief now. The pan-European Stoxx 600 fell 0.6% to 651.1 points on Monday, August 31, 2026, as fresh U.S.-Iran military strikes pushed oil prices and bond yields higher and trading volumes stayed thin with London markets closed for a bank holiday; Germany&#x27;s DAX led declines, dropping 1.2% after data showed German inflation accelerated in August. Energy stocks bucked the trend, rising 1.3-3.5% (TotalEnergies, Orlen, OMV) as Brent crude jumped more than 2% to around $90.5 a barrel after U.S. forces struck missile launchers on Iran&#x27;s Larak Island, prompting Iranian strikes on two U.S. air bases in Jordan. AI-linked and semiconductor names also gained, helped by a report that South Korean chip exports climbed 209% year-on-year in August to a record $98.25 billion on AI-infrastructure demand. Despite the daily pullback, a strong earnings season and continued AI enthusiasm left the Stoxx 600 up 0.9% for August, its fifth straight monthly gain.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Long-Term Global Government Bond Yields Hit Fresh Highs</div>
+        <div class="art-sum">Long-term government bond yields climbed to fresh multi-decade highs on Tuesday, September 1, 2026, after U.S. and Iranian forces exchanged retaliatory strikes near the Strait of Hormuz, reviving inflation fears; the U.S. 10-year Treasury yield rose 3 basis points to 4.788%, a roughly 20-month high, while the 30-year Treasury climbed toward 5.28%. Japan&#x27;s 10-year government bond yield jumped more than 6 basis points to 3%, its first time at that level since 1996, and Japan&#x27;s 2-year yield touched a 31-year high of 1.81%; Japan&#x27;s 30-year yield also neared record territory around 4.1%. UK 10-year gilt yields rose over 9 basis points to 5.234%, their highest since June, while UK 30-year gilts hit their highest level since 1998. Brent crude jumped about 2.2% to $92.38 a barrel amid the escalation, adding to the inflation pressure driving the global bond selloff.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Hedge-Fund Titan’s Divorce Is Putting Wall Street’s Staggering Wealth on Public View</div>
+        <div class="art-sum">John Overdeck, co-founder of the $80 billion quantitative hedge fund Two Sigma, is fighting his estranged wife Laura Overdeck in a Newark, New Jersey courtroom trial that began in August 2026, in what is being called the largest divorce case in state history. Laura, who married Overdeck in 2002 without a prenup, is seeking roughly $6.2 billion — a 35% share of his stake in the firm plus bonds and equal control of their family foundation (which holds about $900 million in assets) — while his lawyers have offered a settlement variously cited around $633 million to $723 million tax-free. Overdeck&#x27;s side argues Two Sigma predates their marriage by two years, so its value shouldn&#x27;t count as fully marital property, while Laura&#x27;s attorneys contend he &quot;methodically and strategically&quot; worked for decades to shield his wealth. The case has pulled back the curtain on the couple&#x27;s lifestyle, including a 6,000-square-foot home in Short Hills, N.J., and trust funds set up for family members.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Short-Term Treasury Yields Rise as Warsh Targets Inflation in Jackson Hole Speech</div>
+        <div class="art-sum">Federal Reserve Chairman Kevin Warsh delivered a hawkish keynote speech on August 28, 2026 at the Kansas City Fed&#x27;s Jackson Hole Economic Policy Symposium, reaffirming the central bank&#x27;s 2% PCE inflation target and warning that despite better-than-expected summer inflation readings, underlying price trends have not meaningfully improved. In response, short-term Treasury yields jumped, with the policy-sensitive 2-year note rising nearly 8 basis points to 4.31%, its highest level since late July. Traders&#x27; odds of a Fed rate increase to a 3.75%-4% range rose to roughly 56% in the minutes following the speech, while the 30-year yield, which had hit a 19-year high the prior week, remained elevated even after Treasury Secretary Scott Bessent&#x27;s announcement of an expanded long-term debt buyback program.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">SpaceX and Rivals Dodge Traffic as Satellites, Debris Crowd Low-Earth Orbit</div>
+        <div class="art-sum">SpaceX&#x27;s Starlink constellation, now numbering more than 10,000 satellites, performed roughly 355,000 automated collision-avoidance maneuvers between mid-2025 and May 2026 — nearly triple the total logged in 2024 — as it and rival operators like Amazon&#x27;s Project Kuiper (just over 100 satellites in orbit toward a 3,236-satellite plan, with 1,613 required by July 2026) and OneWeb crowd low-Earth orbit. SpaceX&#x27;s autonomous system triggers a dodge whenever collision probability exceeds roughly 3 in 10 million, and the company is also relocating about 4,400 Starlink satellites to a lower 480 km orbit in 2026 to cut collision risk with debris and other spacecraft. Amazon and SpaceX have also clashed before the FCC, with SpaceX alleging Kuiper satellites were operating above their permitted 400 km altitude in ways that could raise collision risk with Starlink. Researchers tracking the sector warn that, if current constellation growth continues, annual avoidance maneuvers across LEO operators could approach 1 million by 2027.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 12 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">FTC Sues Amazon, Alleging It Deceived Advertisers and Drove Up Prices</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">How Big Tech Blinded Itself to the Grassroots AI Revolt</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Andreessen Horowitz’s Martin Casado on Why Hardware Is Cool Again</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Shein Makes Ho-Hum Market Debut After Years of Geopolitical Drama</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">America’s Biggest Companies Ring Up Hefty Sales and Raise Their Outlooks | The 10-Point for Aug. 31</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Basic Materials Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">European Equities Largely Lower Though AI Stocks Gain</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Long-Term Global Government Bond Yields Hit Fresh Highs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">A Hedge-Fund Titan’s Divorce Is Putting Wall Street’s Staggering Wealth on Public View</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Short-Term Treasury Yields Rise as Warsh Targets Inflation in Jackson Hole Speech</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">SpaceX and Rivals Dodge Traffic as Satellites, Debris Crowd Low-Earth Orbit</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">55 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">53 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">45 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">41 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">36 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">29 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">17 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-08-31.html">← Older · August 31, 2026 · G20 Warned Of Growing Threat to Financial Stability Posed By New AI Models</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
