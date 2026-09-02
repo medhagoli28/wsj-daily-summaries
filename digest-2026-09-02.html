@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 2, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-01.html">‹ Sep 1</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 57</div>
+    <div class="issue-date">September 2, 2026</div>
+    <div class="issue-sub">16 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 16</span><span class="tab" data-key="tech">Tech · 6</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 4</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple to Give New CEO $3 Million Salary</div>
+        <div class="art-sum">Apple set new CEO John Ternus&#x27;s pay package at $3 million in base salary plus $55 million in target annual equity, along with a one-time prorated $2.5 million RSU grant for fiscal 2026, bringing his total compensation target to about $58 million, according to a proxy filing disclosed Tuesday, September 1, 2026. Ternus formally succeeded Tim Cook as CEO, with the transition effective around September 26, 2026. Cook, moving into the newly created role of executive chairman, will see his own pay cut to a $2 million salary plus a $45 million equity award for fiscal 2027. The disclosure came via Apple&#x27;s SEC filing (Form DEF 14A) marking the first day of Ternus&#x27;s tenure as chief executive.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | New Google AI Model Said to Narrow Gap on Coding Ability</div>
+        <div class="art-sum">Google DeepMind is preparing to launch a new coding-focused AI model, internally dubbed &quot;Skimaki&quot; and expected to be called Gemini 3.8 Flash, aimed at closing a software-development capability gap versus OpenAI and Anthropic, according to a Wall Street Journal report cited by other outlets. In head-to-head internal testing on Google&#x27;s &quot;Jetski&quot; developer platform, engineers reportedly preferred the unreleased model over Anthropic&#x27;s Claude Opus. Google co-founder Sergey Brin and DeepMind CTO Koray Kavukcuoglu have been directly involved, with Brin writing in an internal memo that the company must &quot;urgently bridge the gap in agentic execution&quot; to turn its models into &quot;primary developers&quot; of code. As of the report, there is no public benchmark data, changelog, or pricing confirming the model&#x27;s performance against rivals.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple Updates Maps to Show Lake America to U.S. Users</div>
+        <div class="art-sum">Apple updated its Maps app for U.S. users on September 1-2, 2026, renaming Lake Ontario as &quot;Lake America,&quot; following an executive order from President Trump issued about a week earlier. The change applies only to the U.S. version of Apple Maps, while the Canadian version still shows &quot;Lake Ontario&quot; and international versions display both names. Apple&#x27;s move came days after Alphabet made the same change to Google Maps for U.S. users on August 29-30, 2026. U.S. Interior Secretary Doug Burgum said Trump personally contacted Apple to request the change, part of a pattern that also included Apple&#x27;s earlier renaming of the Gulf of Mexico to &quot;Gulf of America&quot; and Denali to &quot;Mount McKinley.&quot;</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Broadcom’s AI Success Story Gets Complicated</div>
+        <div class="art-sum">This aligns with Broadcom&#x27;s earnings report due today, September 2, 2026, which likely prompted the WSJ piece. I now have solid, concrete facts from CNBC and TheStreet to write the brief. Broadcom&#x27;s AI semiconductor revenue more than doubled to $10.8 billion in its fiscal second quarter (reported June 2026), and CEO Hock Tan has guided for AI chip revenue to exceed $100 billion by fiscal 2027, with fiscal Q3 guidance calling for roughly $16 billion in AI revenue at over 200% year-over-year growth ahead of the company&#x27;s earnings report after market close on September 2, 2026. The growth is driven by custom AI chips built for just a handful of customers — Google, Meta, OpenAI, and Anthropic — with Meta&#x27;s agreement running through 2029 and Alphabet&#x27;s through 2031, raising investor concern about revenue concentration in a small number of hyperscaler relationships. Broadcom shares have swung sharply on this dynamic, including a slide after June&#x27;s report when strong results still fell short of elevated market expectations amid broader worries that AI infrastructure spending has outpaced demand.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Can Evan Spiegel Sell the World on $2,195 Smart Glasses?</div>
+        <div class="art-sum">Snap unveiled its next-generation augmented-reality glasses, called Specs, on June 16, 2026, at the AWE conference in Long Beach, California, pricing them at $2,195 with a $200 refundable deposit for preorders. CEO Evan Spiegel positioned the device as &quot;a new type of computer, a see-through computer,&quot; notable for lacking a tethered computing puck and using a proprietary liquid-crystal-on-silicon display with a 51-degree field of view and 16 million colors. The glasses weigh 132 grams (47mm frame) or 136 grams (51mm frame), run on two Qualcomm Snapdragon processors, and offer roughly four hours of battery life under mixed use. Specs are set to ship this fall in the U.S., U.K., and France, making them pricier than any other smart glasses currently on the market.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Can Apple’s New CEO Rev Up the Steve Jobs Innovation Engine?</div>
+        <div class="art-sum">John Ternus, Apple&#x27;s longtime senior vice president of hardware engineering, became CEO on September 1, 2026, succeeding Tim Cook, who moved to the newly created role of executive chairman after 15 years leading the company; Ternus, a 25-year Apple veteran who oversaw the iPad, AirPods, Apple Watch, and Mac hardware lines, takes over as the company faces pressure to accelerate its AI strategy and prepares for its September 9 iPhone event, expected to unveil Apple&#x27;s first foldable iPhone. In his first internal memo as CEO, Ternus teased a &quot;huge launch next week,&quot; signaling continuity with Apple&#x27;s product-driven culture even as investors watch whether he can reinvigorate the innovation pace associated with Steve Jobs.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Bond Yields Around the World Soar in Challenge to Government Borrowing</div>
+        <div class="art-sum">Yields on long-dated government debt surged to near two-decade highs in early September 2026, with the 30-year U.S. Treasury yield reaching roughly 5.29% and the 10-year hitting about 4.81%, its highest since November 2023. The selloff is global: 30-year UK gilt yields climbed to their highest since 1998, 30-year Japanese government bond yields neared record highs at around 4.19%, and a Bloomberg gauge of G7 government debt yields hit its highest average since September 2000. Investors are retreating from long-dated sovereign bonds on mounting fiscal deficits, stubborn inflation, an oil-price spike tied to Middle East tensions, and competition from a boom in AI-related corporate borrowing, with governments and companies expected to borrow a record $29 trillion from bond markets in 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall as Oil Surges After New Middle East Strikes</div>
+        <div class="art-sum">U.S. stocks fell on September 1, 2026, with the S&amp;P 500 down about 0.7% to 7,633, the Dow Jones Industrial Average off roughly 0.79%-0.9% (around 456 points) to near 52,767, and the Nasdaq Composite dropping about 1% to around 26,100, as the U.S. and Iran exchanged strikes for the first time in about a month, with American forces hitting an island in the Strait of Hormuz and Iran responding with attacks on the United Arab Emirates and Jordan. Oil prices jumped on the news, with Brent crude futures up 3.8% to $93.89 a barrel and U.S. West Texas Intermediate crude adding 3.7% to $89.41 a barrel. The escalation revived fears of supply disruptions through the Strait of Hormuz and stoked inflation concerns that pushed bond yields higher, adding pressure on equities already grappling with tech-sector weakness.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Equities Mixed in Muted Trade</div>
+        <div class="art-sum">I have enough to write this from the Irish Times/Reuters coverage. European stocks slid to a more-than-one-month low on September 1, 2026, with the pan-European STOXX 600 index falling 0.6% to 647.08 points as a global bond selloff pushed euro zone government bond yields to fresh multi-year highs. The retreat came after data showed euro zone inflation rose above 3% in August on higher energy costs, reinforcing expectations that the European Central Bank will raise interest rates at its upcoming meeting. Germany&#x27;s 30-year government bond yield hit a fresh 15-year high amid the broader bond rout, while individual bourses were mixed, with the FTSE MIB and CAC 40 outperforming losses in Frankfurt&#x27;s DAX. Reckitt Benckiser was a notable gainer, up over 5%, after a jury sided with the company in a trial over claims it failed to warn that its infant-formula products could cause a fatal bowel disease.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">London Stock Exchange Plans Tokenized Trading</div>
+        <div class="art-sum">The London Stock Exchange has partnered with Payward (Kraken&#x27;s parent company) to tokenize the 100 largest London-listed companies as &quot;xStocks,&quot; each backed 1:1 by the underlying share, with availability expected in the coming weeks through Kraken and other platforms in over 110 countries, though not initially for UK-based investors. Subject to regulatory approval, LSE plans to list and trade these tokenized shares directly on a new venue called LSE 24 starting in 2027, with testing set to begin by the end of 2026. LSE 24 is designed as a near-continuous, Monday-to-Friday trading venue running from 17:00 to 07:50 London time with a 30-minute end-of-day processing pause, aimed at attracting international retail investors and competing with crypto markets that never close. The partnership also includes plans to explore native equity tokens issued directly through LSE infrastructure, carrying the same shareholder rights as traditional shares while remaining fungible with them.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall as Iran War Inflation Heats Up</div>
+        <div class="art-sum">U.S. stock markets fell on June 13, 2025, after Israel launched military strikes on Iran, with the Dow Jones Industrial Average dropping close to 500 points (about 1.1%) in early trading as investors grew worried about a renewed spike in inflation. Oil prices spiked sharply on the news, with U.S. benchmark crude jumping $4.97, or 7.3%, to $72.91 per barrel — the biggest one-day jump in crude prices since Russia&#x27;s invasion of Ukraine more than three years earlier. Analysts warned that sustained higher oil prices could reverse the recent decline in gasoline costs that had been helping keep U.S. inflation in check, and JPMorgan noted that an all-out war could push oil toward $120 a barrel and U.S. CPI toward 5%. Global markets also slid in sympathy, with Japan&#x27;s Nikkei down 0.9%, South Korea&#x27;s Kospi down 0.9%, and Germany&#x27;s DAX falling 1.4%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Partners Group Switches CEOs as Private-Market Jitters Hit Performance</div>
+        <div class="art-sum">Partners Group announced on September 1, 2026 that Roberto Cagnati and Juri Jenkner will become co-CEOs starting January 1, 2027, replacing David Layton, who will shift to the role of chief investment officer; both incoming co-CEOs joined the Swiss private-markets firm in 2004, with Cagnati most recently serving as head of portfolio solutions and chief risk officer and Jenkner as president and head of business development. The leadership change was announced alongside first-half results showing a 13% year-on-year decline in net profit, driven partly by a roughly 39% drop in performance-related income, as the firm works through redemption pressure on some of its evergreen (open-ended) investment vehicles. Partners Group&#x27;s stock has come under pressure this year amid broader private-markets jitters and client withdrawal concerns tied to its evergreen fund liquidity.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Guide to Owning Bonds When They Are Selling Off</div>
+        <div class="art-sum">The 10-year U.S. Treasury yield hit 4.80%–4.81% on September 2, 2026, its highest level since November 2023, while the 30-year Treasury yield climbed above 5.3%, its highest since 2007, as investors weigh persistent inflation, a roughly $2 trillion federal deficit, and over $40 trillion in outstanding government debt; bond prices move inversely to yields, so the selloff has hit existing bondholders&#x27; portfolio values even as new buyers can lock in higher income. In response to the volatility, the U.S. Treasury said it would at least double the size of its long-term debt buybacks, from $2 billion to at least $4 billion, with purchases running through September to November to help support prices. Financial advisers are steering investors navigating the selloff toward ultra-short bond ETFs (which drew $12.8 billion in inflows in July) and intermediate-term bonds in the four- to ten-year maturity range, rather than concentrating in long-duration debt.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Natural Gas Futures Edge Down</div>
+        <div class="art-sum">I have solid, well-sourced facts from Barchart (a non-WSJ outlet) with concrete numbers for a September 1, 2026 move, which fits the &quot;edge down&quot; framing well. October Nymex natural gas futures (contract NGV26) fell 1.06%, closing down 3.1 cents to settle lower on Tuesday, September 1, 2026, as US weather forecasts turned cooler, with below-normal temperatures expected in the Northeast, reducing expected air-conditioning demand from power generators. Losses were limited by strength in European gas prices, which hit a 3.5-year high on concerns about a potential Strait of Hormuz closure amid US-Iran tensions. US dry gas production averaged 114.0 bcf/day, up 5.5% year-over-year, while the EIA projects US storage will reach 3,985 bcf by the end of October, the highest level in 10 years and about 5% above the five-year average.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Oil Prices Rise as Renewed U.S.-Iran Fighting Deepens Hormuz Supply Risks</div>
+        <div class="art-sum">Oil prices surged above $95 a barrel on September 2, 2026, extending a 4.6% rally as renewed fighting between the U.S. and Iran deepened fears over the Strait of Hormuz, with Brent crude up 0.87% to $95.47 and WTI trading 0.55% higher at $90.72; the strait, which carries roughly 20% of the world&#x27;s oil shipments, saw vessel crossings drop sharply from 23 the prior Wednesday to just 10 by Monday. The escalation followed U.S. strikes on Iranian targets near Hormuz, which Washington said were retaliation for Iranian sea mines and missile attacks on a U.S. base in Jordan, with Iran vowing reprisals and Kuwait, Jordan, and Bahrain reporting missile alerts and interceptions.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Judge Presses Mamdani Administration on Pied-à-Terre Tax Rollout</div>
+        <div class="art-sum">Staten Island Supreme Court Judge Wayne Ozzi pressed New York City&#x27;s attorneys on August 31, 2026 over the rollout of Mayor Zohran Mamdani&#x27;s pied-à-terre tax, questioning why a &quot;supplemental roll&quot; of more than 900,000 properties was published when only a small subset was actually meant to be flagged for the surcharge. The tax targets non-primary residences valued at $5 million or more (and condos/co-ops worth $1 million-plus), and is projected to raise roughly $500 million for the city budget; three homeowners sued after being mistakenly included on the published list, which exposed names and addresses. Ozzi had issued a temporary restraining order on August 10, 2026 halting the rollout, finding the city&#x27;s notices failed to explain why recipients were flagged and shifted an unfair burden onto property owners to prove they shouldn&#x27;t be taxed, but an appellate judge allowed implementation to continue while the city appeals. At the August 31 hearing, Ozzi weighed whether homeowners were actually harmed by the erroneous notices as the legal fight over the rollout&#x27;s legality continues.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 16 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Apple to Give New CEO $3 Million Salary</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | New Google AI Model Said to Narrow Gap on Coding Ability</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Apple Updates Maps to Show Lake America to U.S. Users</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Broadcom’s AI Success Story Gets Complicated</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Exclusive | Can Evan Spiegel Sell the World on $2,195 Smart Glasses?</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Can Apple’s New CEO Rev Up the Steve Jobs Innovation Engine?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Bond Yields Around the World Soar in Challenge to Government Borrowing</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">U.S. Stocks Fall as Oil Surges After New Middle East Strikes</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">European Equities Mixed in Muted Trade</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">London Stock Exchange Plans Tokenized Trading</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">U.S. Stocks Fall as Iran War Inflation Heats Up</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Partners Group Switches CEOs as Private-Market Jitters Hit Performance</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">A Guide to Owning Bonds When They Are Selling Off</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Natural Gas Futures Edge Down</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Oil Prices Rise as Renewed U.S.-Iran Fighting Deepens Hormuz Supply Risks</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Judge Presses Mamdani Administration on Pied-à-Terre Tax Rollout</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">56 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">54 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">46 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">37 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">24 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-01.html">← Older · September 1, 2026 · Exclusive | Anthropic Signs $35 Billion Cloud Deal Backed by Nvidia</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
