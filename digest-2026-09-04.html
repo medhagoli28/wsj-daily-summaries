@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 4, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-03.html">‹ Sep 3</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 59</div>
+    <div class="issue-date">September 4, 2026</div>
+    <div class="issue-sub">15 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 15</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 6</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Adobe Names Anil Chakravarthy as Chief Executive Amid AI Transformation</div>
+        <div class="art-sum">Adobe announced on September 3, 2026 that Anil Chakravarthy, currently president of its Customer Experience Orchestration business and worldwide field operations, will become the company&#x27;s next president and CEO effective December 1, 2026, succeeding Shantanu Narayen after roughly 18 years in the role; Narayen will shift to executive chair. Chakravarthy joined Adobe about seven years ago and previously served as CEO of Informatica for four years, with earlier executive stints at Symantec and VeriSign. At Adobe, he helped build out products like Adobe CX Enterprise and GenStudio and integrated the Workfront and Semrush acquisitions, and the move is framed as part of Adobe&#x27;s push to accelerate its position in AI amid competition from rivals.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Musk’s Boring Co. Pushes Investors for Recruiting, Business Help</div>
+        <div class="art-sum">Elon Musk&#x27;s tunneling startup, The Boring Company, closed a new funding round valuing the company at roughly $20 billion — up sharply from its $5.7 billion valuation in 2022 — after reportedly seeking about $4 billion in fresh capital, according to reports first surfacing in late July 2026. As part of the deal, some investors were told they&#x27;d need to actively help the business beyond just writing checks, such as helping recruit employees for open roles or making introductions to government officials in cities where the company is seeking tunnel permits; those unable to deliver risk having some of their shares bought back. The company currently operates the Vegas Loop tunnel-and-Tesla-shuttle system in Las Vegas and has pitched or is developing projects in Nashville, Dubai, Baltimore, Chicago, and Los Angeles. Before digging can start in new cities, Boring Company needs land access and government approvals, giving Musk leverage to ask backers for more than capital.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Spending Is Up. So Is the Guesswork.</div>
+        <div class="art-sum">I have enough concrete, non-WSJ-sourced facts to write the brief now. A Teneo survey of more than 350 CEOs at public companies with at least $1 billion in annual revenue, conducted in October-November 2025, found that 68% plan to increase AI spending in 2026, up only two percentage points from a year earlier, even though fewer than half of their current AI projects have generated returns exceeding their initial costs. The survey also found a widening expectations gap: 53% of institutional investors expect AI investments to pay off within six months, while 84% of CEOs at large companies say it will take longer than that. Adoption has been strongest in marketing and customer service, while higher-risk functions such as security, legal, and human resources have seen AI deliver less consistent results. Separately, a broader PwC Global CEO Survey found only about 12% of CEOs report AI has delivered both cost savings and revenue gains, underscoring the same gap between rising AI budgets and unproven payoff that has become a central theme heading into 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China’s Moonshot AI Confidentially Filed Hong Kong IPO</div>
+        <div class="art-sum">Chinese AI startup Moonshot AI, maker of the Kimi chatbot, confidentially filed for a Hong Kong IPO seeking to raise around $3 billion, according to a report Wednesday, September 3, 2026, citing people familiar with the matter. The three-year-old company is in the midst of a pre-IPO funding round targeting a valuation near $50 billion, up sharply from the roughly $20 billion valuation set in a Meituan-led round in May 2026. Moonshot&#x27;s flagship Kimi K3 model, a 2.8-trillion-parameter open-weight system launched in July, helped drive the company&#x27;s annualized revenue run rate from about $200 million in April to $300 million by July. The company is working with Goldman Sachs, CICC, and Deutsche Bank as advisers and is targeting a listing within about six months.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Climb As Rate Hike Fears Ebb</div>
+        <div class="art-sum">U.S. stocks rallied on Thursday, September 3, 2026, with the S&amp;P 500 climbing about 1.06% to close at 7,747.71 and the Dow Jones Industrial Average jumping 624.16 points, or 1.18%, to 53,686.11 in its best day in roughly a month, while the Nasdaq Composite surged about 1.4%. The rally followed remarks from Federal Reserve Governor Christopher Waller signaling he&#x27;d support holding interest rates steady at the Fed&#x27;s upcoming September meeting as long as inflation data doesn&#x27;t surprise to the upside. Fed funds futures traders&#x27; odds of a September rate hike fell to about 50.4%, down sharply from 63.2% the day before, as long-dated Treasury yields slipped and the dollar weakened. The moves also lifted Asian shares on Friday ahead of closely watched U.S. jobs data.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Rise as Waller Comments Weigh on Yields, Ease Rate Fears</div>
+        <div class="art-sum">All three major U.S. stock indexes closed at least 1% higher on Thursday, September 3, 2026, after Federal Reserve Governor Christopher Waller said he would be inclined to support holding the federal funds rate steady at the Fed&#x27;s September 15-16 meeting if incoming inflation data continues to show improvement, adding he&#x27;d back a hike only if price pressures fail to cool. Treasury yields fell across the curve in response, with the 2-year yield dropping to 4.322% and the 10-year yield ending at 4.761%, retreating for a second straight session after touching its highest level since November 2023. Market-implied odds of a rate hike at the September meeting fell to roughly 50-55% from about 63% the prior day, according to CME FedWatch data. The Nasdaq got an extra lift from &quot;Magnificent Seven&quot; AI megacap stocks, with consumer discretionary the top-performing S&amp;P 500 sector and energy the laggard.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">What Does a Bond Selloff Mean for American Consumers?</div>
+        <div class="art-sum">A global bond selloff pushed the 30-year Treasury yield to about 5.3%, its highest since 2007, while the 10-year yield—which most directly influences mortgage rates—climbed to roughly 4.7%, up from 4.2% at the start of 2026. The average 30-year fixed mortgage rate rose to 6.71%-6.75% this week, the highest level since June 2025, according to Freddie Mac data, and auto loan APRs are running around 7% for new vehicles and 10.6% for used. Analysts point to concerns over the U.S. conflict with Iran, higher energy costs, AI infrastructure spending, and a national debt that has topped $40 trillion as key drivers pushing yields—and therefore consumer borrowing costs on mortgages, auto loans, and variable-rate credit cards—higher.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Rise As Middle East Tensions Fray</div>
+        <div class="art-sum">U.S. stocks rallied on September 3, 2026, even as Middle East tensions worsened, with the S&amp;P 500 climbing 1.06% to close at 7,747.71, the Dow Jones Industrial Average gaining 624.16 points (1.18%) to 53,686.11, and the Nasdaq Composite advancing about 1.4%. The gains came despite an escalation in the region — the U.S. struck Iranian rocket launchers over the weekend and Iran retaliated with strikes against U.S. ally Jordan — as investors instead focused on Federal Reserve signals; New York Fed President John Williams said a September rate hike wasn&#x27;t necessarily required, and Governor Christopher Waller suggested improving inflation data could justify holding rates steady. That shifted market expectations for the Fed&#x27;s September decision to roughly a coin flip, outweighing the geopolitical risk for traders.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Climb as Treasury Yields Retreat on Waller’s Rate Comments</div>
+        <div class="art-sum">U.S. stocks rallied on September 3, 2026 after Federal Reserve Governor Christopher Waller signaled he would be inclined to support holding the federal funds rate steady at the Fed&#x27;s meeting later that month, provided upcoming inflation data continues to show disinflation. The S&amp;P 500 rose 1.06%, the Nasdaq Composite climbed 1.4%, and the Dow Jones Industrial Average jumped 624.16 points (1.18%). Treasury yields fell in response, with the 2-year yield dropping 7 basis points to 4.30%, and traders cut the odds of a September rate hike from roughly 60% to about 50%. Waller cautioned that inflation remains &quot;meaningfully above&quot; the Fed&#x27;s 2% target, framing his support for a hold as conditional on continued signs of disinflation rather than an unequivocal easing signal.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Japan Finance Minister Vows to Keep Eye on Fiscal Balance</div>
+        <div class="art-sum">I now have enough concrete, corroborated detail from non-WSJ outlets to write the brief. Japan&#x27;s Finance Minister Satsuki Katayama said on the sidelines of the G20 finance leaders&#x27; meeting in Asheville, North Carolina, that &quot;Japan will continue efforts to simultaneously achieve strong growth and fiscal sustainability,&quot; as the country&#x27;s benchmark 10-year government bond yield hit 3% in Tokyo on September 1, 2026, its first time at that level since September 1996. She declined to comment directly on the yield spike but told reporters Japan is committed to fiscal discipline through steadily reducing its debt burden, reforming the budget process, and funding consumption-tax relief without issuing additional deficit-financing bonds. The yield surge came amid record spending requests from Japanese ministries totaling roughly ¥143 trillion ($894 billion) for fiscal 2027, with the Finance Ministry raising its assumed long-term interest rate to 3.8% from 3.0% for debt-servicing calculations. Investors have grown increasingly wary of Prime Minister Sanae Takaichi&#x27;s ability to balance ambitious investment plans, including in semiconductors and AI, with fiscal sustainability.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">SB Energy Files for IPO With Nvidia Backing</div>
+        <div class="art-sum">SB Energy, a SoftBank-backed AI power infrastructure company, filed with the SEC on September 1, 2026 to go public on Nasdaq under the ticker &quot;SBE,&quot; seeking to raise between $5 billion and $7 billion. Nvidia has committed $3 billion to the offering, split between a concurrent private placement and a prepaid forward contract, while OpenAI received warrants for roughly 4.0 million shares valued near $5.5 billion and a board seat right tied to maintaining over 5% ownership. The company reported a $3.2 billion loss for the first half of 2026 and has yet to bring any of its data centers online or generate data-center revenue, though it cites a project backlog of about $439 billion.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Highlights From the Messy Divorce Trial of a Hedge-Fund Titan</div>
+        <div class="art-sum">Two Sigma Investments co-founder John Overdeck is on trial in New Jersey Superior Court in what&#x27;s being called the biggest contested divorce case in the state&#x27;s history, with his wife Laura seeking 35% of his stake in the $80 billion quantitative hedge fund, which she values at $6.2 billion. The dispute centers on a 2016 postnuptial agreement that Overdeck says entitles Laura to a $723 million settlement, while her lawyers argue she signed it under pressure and without adequate representation and want it thrown out to seek a far larger payout. Overdeck testified last week before Judge Bruce Buechler that maintaining equal control of the firm alongside co-founder David Siegel is a &quot;principal concern&quot; in any asset division, and the couple, married since 2002 without a prenup, had no premarital contract despite Two Sigma&#x27;s later growth into a multibillion-dollar business.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Docusign Raises Sales View on Higher Second-Quarter Revenue</div>
+        <div class="art-sum">Docusign reported second-quarter fiscal 2027 revenue of $875.7 million, up 9% year over year, with non-GAAP diluted earnings per share of $1.16, up 26% from a year earlier and above the $1.08 analyst forecast, sending shares up as much as 7-10% after the September 3, 2026 release. The e-signature and contract-management company raised its full-year fiscal 2027 revenue outlook to $3.499 billion-$3.507 billion, about 9% growth at the midpoint, and lifted its full-year ARR growth forecast to 8.5%-9.0% from 8.0% growth in fiscal 2026. Growth was driven by rising adoption of its Intelligent Agreement Management (IAM) platform and expanded AI capabilities, which the company expects will account for 18%-19% of total ARR by the end of the fourth quarter. For the third quarter, Docusign guided to revenue of $886 million-$890 million, roughly 9% year-over-year growth.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Lululemon Cuts Outlook Again After Another Tough Quarter for Sales</div>
+        <div class="art-sum">Lululemon cut its full-year 2026 revenue guidance for the second time in months after reporting quarterly results on September 3, 2026, sending shares plunging as much as 15-18% in trading. Second-quarter revenue fell 4% year-over-year to $2.4 billion, missing estimates, with comparable sales down 9% overall and Americas comparable sales sliding 12%; adjusted EPS of $2.92 beat estimates but was boosted by $0.86 per share in one-time tariff refunds. The company now expects full-year revenue of $10.35 billion to $10.5 billion, down 5-7% from last year and well below the roughly $11.03 billion Wall Street had projected, with full-year EPS guidance of $9.48-$9.73 also trailing consensus. Interim CEO Meghan Frank cited &quot;negative commentary&quot; on social media and a sharper-than-expected slowdown in core categories like leggings as factors weighing on performance.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Volkswagen Board Approves Doubling Job Cuts to 100,000 in Surprise Move</div>
+        <div class="art-sum">Volkswagen&#x27;s supervisory board unanimously approved a restructuring plan on September 3, 2026, adding 50,000 more job cuts globally on top of the 50,000 already agreed since late 2024, bringing the total to 100,000 positions — roughly 15% of the automaker&#x27;s worldwide workforce and the largest such reduction in automotive-industry history. The plan, covering the VW brand along with Audi, Porsche and Skoda, comes as the group&#x27;s operating margin fell to 3.8% in the first half of 2026 from a 2022 peak of 7.9%, pressured by U.S. tariffs, weak EV demand and Chinese competition. Management and unions also agreed that the future of four German plants — Hannover, Emden, Zwickau and Neckarsulm — cannot be guaranteed into the 2030s, which would mark Volkswagen&#x27;s first full factory closures in its home country. VW shares rose about 6% following the announcement.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 15 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Adobe Names Anil Chakravarthy as Chief Executive Amid AI Transformation</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | Musk’s Boring Co. Pushes Investors for Recruiting, Business Help</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">AI Spending Is Up. So Is the Guesswork.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">China’s Moonshot AI Confidentially Filed Hong Kong IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Stocks Climb As Rate Hike Fears Ebb</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Stocks Rise as Waller Comments Weigh on Yields, Ease Rate Fears</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">What Does a Bond Selloff Mean for American Consumers?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Stocks Rise As Middle East Tensions Fray</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">U.S. Stocks Climb as Treasury Yields Retreat on Waller’s Rate Comments</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">Japan Finance Minister Vows to Keep Eye on Fiscal Balance</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">SB Energy Files for IPO With Nvidia Backing</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Highlights From the Messy Divorce Trial of a Hedge-Fund Titan</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Docusign Raises Sales View on Higher Second-Quarter Revenue</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Lululemon Cuts Outlook Again After Another Tough Quarter for Sales</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Volkswagen Board Approves Doubling Job Cuts to 100,000 in Surprise Move</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">58 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">47 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">42 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">38 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">18 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-03.html">← Older · September 3, 2026 · Thoma Bravo-Owned Proofpoint in Advanced Talks to Buy Varonis</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
