@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 6, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-04.html">‹ Sep 4</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 60</div>
+    <div class="issue-date">September 6, 2026</div>
+    <div class="issue-sub">19 stories across tech, markets &amp; finance — a 13-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 19</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">He’s Letting AI Agents Invest His Money. They Even Have Names.</div>
+        <div class="art-sum">I wasn&#x27;t able to find this specific WSJ profile — about an individual who named his AI investing agents — covered by any other outlet; searches kept surfacing only the general &quot;AI agents trading&quot; trend (CNBC, Fortune, Bloomberg-style coverage of brokerages like Public, Robinhood, Coinbase, and Scalable Capital) rather than the same personal-profile story. This appears to be a WSJ-exclusive feature.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Betaworks Scores With Hugging Face Deal</div>
+        <div class="art-sum">Nvidia agreed on September 3, 2026 to acquire Hugging Face for $12.93 billion, with about $11.9 billion going to investors and up to $1 billion set aside in equity for employees joining Nvidia, in a deal expected to close in 2027; venture studio Betaworks was Hugging Face&#x27;s earliest backer, having taken it in through the first cohort of its BotCamp program in 2016 and investing again in its 2017 seed round, and its resulting stake — built from roughly $2 million invested — is now estimated to be worth $650 million to over $1 billion. Hugging Face, which now serves more than 18 million developers and hosts over 3 million AI models, had previously raised a $235 million Series D in 2023 at a roughly $4.5 billion valuation with backers including Sequoia, Coatue and Lux Capital.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Big Tech Can Build Data Centers People Won’t Hate</div>
+        <div class="art-sum">Community opposition has blocked $18 billion and delayed $46 billion worth of U.S. data-center projects since mid-2024, with at least 25 projects canceled in 2025 alone amid concerns over electricity costs, water use, and noise, prompting Microsoft to abandon a proposed Wisconsin data center after local pushback. In response, tech companies are redesigning facilities to look less like industrial bunkers and more like community assets—examples include a Phoenix, Arizona center with a rust-orange facade resembling a modern art museum and a Netherlands facility featuring vertical gardens—while also incorporating amenities like playgrounds and parking garages. Microsoft&#x27;s 2026 &quot;Community-First AI Infrastructure&quot; initiative pledges to cover local electricity costs, reduce and replenish water use, and invest in jobs and tax bases, while Google, Microsoft, and AWS have all committed to becoming &quot;water positive&quot; by 2030. Other proposals under discussion include &quot;data center dividends&quot;—Alaska oil-fund-style cash payouts to residents—as several U.S. states, including California, advance legislation to regulate the facilities.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">America’s Own Banks Are a Weak Link in the Campaign to Cut Off Iran</div>
+        <div class="art-sum">FinCEN&#x27;s Financial Crimes Enforcement Network identified roughly $9 billion in suspected Iranian shadow-banking activity that flowed through U.S. correspondent bank accounts in 2024, based on suspicious activity reports filed by American financial institutions between February 2024 and July 2025, in an analysis released October 23, 2025. Of that total, foreign shell companies accounted for about $5 billion, Iran-linked oil traders based mainly in the UAE and Singapore moved roughly $4 billion tied to concealed crude sales, and entities suspected of illicit technology procurement handled about $413 million. Iranian networks exploit the correspondent-banking system by routing dollar transactions through foreign banks—such as a UAE branch of Egypt&#x27;s Banque Misr, which processed about $1.8 billion for 103 firms tied to Iranian shadow banking between January 2024 and June 2026—that hold accounts at U.S. banks, effectively giving Tehran indirect access to the American financial system despite sanctions. The Treasury Department has since launched &quot;Operation Economic Outcast,&quot; announced August 24, 2026, to intensify pressure on the foreign banks and exchange houses facilitating these flows.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Computer Makers Are Selling Fewer PCs at Higher Prices. So Far, It’s Working</div>
+        <div class="art-sum">Global PC shipments fell 4% year-over-year in the second quarter of 2026, snapping a two-year growth streak, as an AI-driven memory chip shortage pushed DRAM and NAND prices sharply higher; in the US, shipments dropped 7% in Q1 2026 while the average selling price of a US PC surpassed $1,000, up 4% from a year earlier and forecast to climb as much as 12% by December. Entry-level machines have been hit hardest, with US shipments of sub-$500 PCs down 18.7% year-over-year as vendors shift toward pricier configurations to protect margins. Among major vendors in Q2 2026, Lenovo, HP, and Dell saw global shipments decline 2%, 8%, and 6% respectively, even as IDC projects the overall PC market&#x27;s total value will still rise to roughly $274 billion in 2026 on the back of higher prices, despite unit shipments falling as much as 9-11%.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia Agrees to Buy AI Platform Hugging Face for $13 Billion</div>
+        <div class="art-sum">Nvidia agreed on September 2, 2026 to acquire Hugging Face for approximately $12.93 billion, with roughly $11.9 billion going to investors and up to $1 billion set aside as an equity-based retention program for Hugging Face employees joining Nvidia. The deal marks a sharp jump from Hugging Face&#x27;s $4.5 billion valuation in 2023, after the startup had previously turned down a $500 million Nvidia investment last year that would have valued it at $7 billion. Hugging Face&#x27;s platform hosts about 3 million models, 1 million applications, and half a million datasets used by over 18 million developers, and CEO Jensen Huang said it will remain an open platform not requiring Nvidia chips. The acquisition is expected to close in the first half of 2027.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Soitec Shares Jump After Guidance Upgrade on Strong AI Demand</div>
+        <div class="art-sum">Soitec shares surged as much as 15.1% after the French semiconductor materials maker raised its second-quarter fiscal 2027 revenue growth forecast to around 50% year-on-year at constant currency and scope, up from its prior guidance of over 30%, citing accelerating demand for Photonics-SOI wafers used in AI data center optical interconnects. Soitec expects Photonics-SOI revenue in Q2&#x27;27 to be roughly three times the approximately $25 million level seen in Q2&#x27;26, and now forecasts full fiscal-2027 Photonics-SOI revenue of $250-300 million, more than doubling from a level just above $100 million projected for fiscal 2026. The upgrade follows the company locking in customers through multi-year supply agreements with deposits and fixed pricing, with about 80% of its photonics capacity-reservation agreements set to be signed within one to two weeks.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Slip, Short-Term Treasury Yields Climb After Strong Jobs Report</div>
+        <div class="art-sum">U.S. nonfarm payrolls jumped by 162,000 in August 2026, far above the roughly 53,000 economists polled by Dow Jones had expected, while the unemployment rate held steady at 4.1%. The stronger-than-forecast data boosted expectations that the Federal Reserve could raise interest rates at its September 15-16 meeting, with the probability of a quarter-point hike climbing to about 58% on the CME Group&#x27;s FedWatch tool, up roughly 9 percentage points from the prior day. Stocks fell on the news Friday, September 4, 2026, with the Dow Jones Industrial Average dropping 271.86 points (0.51%) to 53,414.25, the S&amp;P 500 sliding 0.38% to 7,718.60, and the Nasdaq Composite down 0.29% to 26,506.99. Short-term Treasury yields rose in response, with the 2-year yield climbing to about 4.37%, its highest level since January 2025.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Treasury Yields, Fed Rate-Hike Bets Rise After Strong U.S. Jobs Data</div>
+        <div class="art-sum">The U.S. economy added 162,000 jobs in August 2026, far above the consensus forecast of roughly 53,000, while the unemployment rate held steady at 4.1% and average hourly earnings rose 0.3% to $37.75, up 3.1% year-over-year, according to the Bureau of Labor Statistics report released September 4, 2026. The surprisingly strong data pushed Treasury yields higher, with the 10-year yield climbing nearly 3 basis points to 4.79% and the 2-year yield hitting its highest level since January 2025. Rather than dampening rate-cut hopes, the report instead fueled bets on a rate hike at the Fed&#x27;s September 15-16 meeting, with CME FedWatch data showing the probability of a quarter-point increase jumping to 58%, up about 9 percentage points in a single day. The Dow fell more than 260 points on the news as investors recalibrated expectations for the Fed&#x27;s next move.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Netherlands Moves Gold From New York to London, Citing Geopolitical Unrest</div>
+        <div class="art-sum">De Nederlandsche Bank (DNB), the Dutch central bank, announced on September 2-3, 2026 that it relocated approximately 86 metric tons of gold from New York and Ottawa to London between March and August 2026 as part of a &quot;crisis preparedness&quot; strategy amid geopolitical unrest, moving it out of a combined 313-ton North American holding. The shift was executed partly by physically transferring over 27 tons to Dutch soil and on to London, and partly by selling about 59 tons of gold in New York and using the proceeds to buy gold in London. As a result, both the U.S. and Canada now each hold 18.5% of the Netherlands&#x27; total 612.4-ton gold reserve (valued at roughly €72.2 billion at year-end 2025), down from 31.3% and 19.7% respectively; DNB said Bank of England-held gold is considered the world&#x27;s most tradable in a crisis.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Fall After Hot Jobs Report</div>
+        <div class="art-sum">U.S. employers added 162,000 jobs in August 2026, far above the 53,000 economists polled by Dow Jones had expected, while the unemployment rate held steady at 4.1%, according to the Labor Department&#x27;s report released September 4, 2026. Average hourly earnings rose 0.3% to $37.75, up 3.1% year-over-year. The stronger-than-expected data pushed Treasury yields higher and reduced hopes for near-term Fed rate cuts, sending stocks lower: the Dow fell 271.86 points (0.51%) to 53,414.25, the S&amp;P 500 slid 0.38% to 7,718.60, and the Nasdaq dropped 0.29% to 26,506.99. Odds of a September rate move shifted accordingly, with markets pricing in a 63% chance of a hike per Bloomberg data cited in coverage.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Looking to Diversify Your U.S.-Heavy Portfolio? Don’t Let the Fund Name Fool You</div>
+        <div class="art-sum">Funds branded &quot;world,&quot; &quot;global,&quot; or &quot;international&quot; often carry far more U.S. exposure than their names suggest, because index providers like MSCI build broad benchmarks that fold developed-market U.S. stocks in alongside non-U.S. names. The $8-billion-plus iShares MSCI World ETF (URTH), for example, holds roughly 1,300 stocks but has more than 60% of assets in U.S. companies, with Nvidia (5.3%), Apple (4.9%) and Microsoft (3.0%) among its top holdings — a profile that closely tracks the S&amp;P 500. Morningstar UK data cited in May 2025 showed the average fund in the UK&#x27;s IA Global sector held about 61% of assets in U.S. stocks, and analysts have flagged the concentration as a valuation risk given how much global portfolios now hinge on the fortunes of a handful of American mega-caps. Advisors recommend checking a fund&#x27;s actual country breakdown rather than relying on its &quot;international&quot; or &quot;world&quot; label, and considering ex-U.S. options such as Vanguard&#x27;s FTSE Developed Markets fund (VEA) or emerging-markets funds (VWO, IEMG) for genuine diversification.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Global Bond Markets Take a Breather</div>
+        <div class="art-sum">Global bond markets pulled back from a rout this week as the U.S. 10-year Treasury yield eased to around 4.76% on Friday after touching a nearly three-year high of 4.818% on Wednesday, its highest level since November 2023; the pause followed Fed Governor Christopher Waller signaling he&#x27;d support holding rates steady at the Fed&#x27;s meeting in two weeks, which cut market-implied odds of a September rate hike to roughly 50% from about 63% a day earlier. The broader selloff had pushed UK 30-year gilt yields to their highest since 1998, Germany&#x27;s 10-year Bund yield to its highest since 2011, and Japan&#x27;s 10-year yield to 3% for the first time since 1996, driven by worries over government spending, sticky inflation, and oil prices rising amid a fresh Middle East conflict. Despite the relief rally, strategists cautioned the underlying pressures—elevated fiscal deficits and bets that central banks will keep rates higher for longer—remain largely intact.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">You’re Not Tough Enough to Earn These Huge Returns</div>
+        <div class="art-sum">I now have solid, concrete, non-WSJ sourced facts on this story (leveraged/single-stock ETFs and the risk of chasing their outsized returns). Leveraged and single-stock ETFs, which promise two or three times the daily return of an index or stock, have proven far tougher to hold than to buy: 63 leveraged single-stock ETFs closed in the U.S. through mid-2026, versus just 3 closures in all of 2025, even as a record 244 leveraged ETFs launched by mid-August 2026 (compared with 229 for all of 2025). Average assets per leveraged ETF have collapsed from $272.2 million at the end of 2024 to $63.3 million currently, with half of all such funds holding less than $7 million, well below the roughly $50-100 million threshold analysts consider necessary for a fund to survive its first one to two years. One stark example came on July 14, 2026, when GraniteShares was forced to liquidate a 2x leveraged ETF tied to Lucid Group after Lucid&#x27;s stock plunged about 51% in a single session, a drop severe enough to wipe out the fund&#x27;s net asset value entirely. As Morningstar analyst Daniel Sotiroff put it, &quot;the market for these is saturated and there&#x27;s only so much money out there chasing this kind of product.&quot;</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How to Play the Retirement Tax Guessing Game</div>
+        <div class="art-sum">This WSJ headline is a personal-finance advice/opinion column — about the impossibility of predicting future tax rates on retirement account withdrawals — rather than a reported news story with facts that other outlets picked up; the only other results are a tax-blog summary of the same WSJ piece and an MSN syndication of it, not independent reporting from Reuters/AP/Bloomberg/CNBC.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How to Break It to Your Parents That They’re Being Scammed</div>
+        <div class="art-sum">This appears to be a WSJ personal-finance advice column with no equivalent coverage on other outlets, but the topic connects to widely reported FTC data: financial fraud losses among adults 60+ are estimated to have reached as much as $81.5 billion in 2024, and the FTC&#x27;s December 2025 report found combined losses from older adults who lost more than $100,000 in a single scam jumped eight-fold since 2020, from $55 million to $445 million, according to CNBC and AARP. Impersonation scams targeting older adults rose more than four-fold in reports to the FTC as of August 2025, often involving callers posing as government officials, tech support, or family members in distress. Consumer advocates recommend approaching suspected victims with curiosity rather than confrontation, since research cited by FINRA shows people aware of a specific scam tactic are about 80% less likely to engage with it. Because this WSJ piece is a how-to advice column rather than a reported news story, no other outlet has covered the specific article; the figures above are independently reported context on the broader elder-fraud trend, not a substitute for the WSJ column itself.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">You Can Give Your Child More Tax-Free Money Than You Think</div>
+        <div class="art-sum">In 2026 the IRS lets individuals give any one person, including a child, up to $19,000 tax-free ($38,000 for married couples splitting gifts) without touching their lifetime exemption or filing Form 709, and up to five years of 529-plan contributions can be &quot;superfunded&quot; at once, letting an individual front-load $95,000 (or a couple $190,000) into a child&#x27;s education account tax-free. Beyond the annual exclusion, payments made directly to a school for tuition or directly to a medical provider for a child&#x27;s medical bills are excluded entirely from gift tax with no dollar cap, as long as the payment goes straight to the institution rather than through the child. Separately, the lifetime gift-and-estate tax exemption rises to $15 million per person ($30 million per married couple) in 2026, up from $13.99 million in 2025, giving families even more room to transfer larger sums without triggering gift tax.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Investor David Booth on Life, Stocks and (Not) Trying to Beat the Market</div>
+        <div class="art-sum">David Booth, who founded Dimensional Fund Advisors in 1981 after working as a research assistant to Nobel laureate Eugene Fama at the University of Chicago, has built the firm into a roughly $1.1 trillion asset manager with more than 1,600 employees by applying academic research to markets rather than trying to pick stocks or time them. Booth discussed his career and investing philosophy in a September 2026 appearance on Barry Ritholtz&#x27;s &quot;Masters in Business&quot; podcast, timed to the September 1, 2026 release of his new book, &quot;Stay Calm: Learn to Embrace Uncertainty in Investing and Life,&quot; which argues that staying calm through market swings is backed by roughly a century of data. Forbes and other outlets estimate his net worth in the multi-billion-dollar range (estimates range from about $2.9 billion to $5 billion), and he joined the Giving Pledge in 2018, committing to donate at least half his fortune to philanthropy, including a $300 million gift to the University of Kansas.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">G-20 Squabbling Overshadows Summit as Global Bond Markets Strain</div>
+        <div class="art-sum">G20 finance ministers and central bank governors met August 31–September 1, 2026 in Asheville, North Carolina, closing without consensus on a communiqué after China objected to language on &quot;non-market policies&quot; driving global imbalances, while both short- and long-term government bond yields hit fresh 2026 highs, with the 10-year U.S. Treasury yield reaching 4.818%, its highest since October 2023. Treasury Secretary Scott Bessent argued the selloff reflected confidence in stronger growth rather than fiscal alarm, noting U.S. debt near $40 trillion and pointing out Treasurys had outperformed global peers; he also announced Treasury would double its long-term debt buyback capacity from $2 billion to $4 billion per operation starting that week through November 4. The gathering was further overshadowed by diplomatic friction, including European officials refusing a group photo with their Russian counterpart and sparring between the U.S. and Canada.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 19 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">He’s Letting AI Agents Invest His Money. They Even Have Names.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | Betaworks Scores With Hugging Face Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Big Tech Can Build Data Centers People Won’t Hate</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">America’s Own Banks Are a Weak Link in the Campaign to Cut Off Iran</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Computer Makers Are Selling Fewer PCs at Higher Prices. So Far, It’s Working</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Nvidia Agrees to Buy AI Platform Hugging Face for $13 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Soitec Shares Jump After Guidance Upgrade on Strong AI Demand</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">U.S. Stocks Slip, Short-Term Treasury Yields Climb After Strong Jobs Report</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Treasury Yields, Fed Rate-Hike Bets Rise After Strong U.S. Jobs Data</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Netherlands Moves Gold From New York to London, Citing Geopolitical Unrest</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Stocks Fall After Hot Jobs Report</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Looking to Diversify Your U.S.-Heavy Portfolio? Don’t Let the Fund Name Fool You</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Global Bond Markets Take a Breather</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">You’re Not Tough Enough to Earn These Huge Returns</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">How to Play the Retirement Tax Guessing Game</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">How to Break It to Your Parents That They’re Being Scammed</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">You Can Give Your Child More Tax-Free Money Than You Think</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Investor David Booth on Life, Stocks and (Not) Trying to Beat the Market</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">G-20 Squabbling Overshadows Summit as Global Bond Markets Strain</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">59 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">55 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">48 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">39 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">30 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-04.html">← Older · September 4, 2026 · Adobe Names Anil Chakravarthy as Chief Executive Amid AI Transformation</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
