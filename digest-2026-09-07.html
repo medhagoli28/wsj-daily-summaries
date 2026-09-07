@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 7, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-06.html">‹ Sep 6</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 61</div>
+    <div class="issue-date">September 7, 2026</div>
+    <div class="issue-sub">17 stories across tech, markets &amp; finance — a 12-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 17</span><span class="tab" data-key="tech">Tech · 6</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">CXMT Highlights Smartphone, AI Advances as Market Share Climbs</div>
+        <div class="art-sum">CXMT, China&#x27;s largest DRAM maker, held 10% of the global DRAM revenue market in the second quarter of 2026, up from under 1% in 2023 and 8% in the first quarter of 2026, marking the first time the Samsung-SK Hynix-Micron oligopoly has fallen below a combined 90% share in over a decade. Samsung still led with 38% revenue share, followed by SK Hynix at 25% and Micron at roughly 24%, as the two Korean giants shifted focus toward higher-margin AI memory like HBM. On August 29, 2026, CXMT began mass production of LPDDR6 mobile DRAM, with Xiaomi&#x27;s upcoming 18 Fold foldable phone set to be the first commercial device to use it in September 2026. CXMT has also started small-batch production of HBM3E for AI chips and is targeting HBM output by the end of 2026, with analysts at Nomura projecting its DRAM share could reach 18% by 2028.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Who’s Boring Now?</div>
+        <div class="art-sum">I have enough concrete, corroborated facts from CNBC/Yahoo Finance to write the brief. Apple&#x27;s stock is up roughly 24% year-to-date in 2026, far outpacing AI-boom leader Nvidia&#x27;s roughly 4-9% gain, as investors reward Apple&#x27;s comparatively conservative, &quot;boring&quot; approach to AI capital spending over rivals&#x27; massive infrastructure buildouts. Apple briefly overtook Nvidia as the world&#x27;s most valuable company on July 17, 2026, reaching a market cap near $4.95 trillion, though Nvidia has since reclaimed the top spot (around $5.58 trillion versus Apple&#x27;s roughly $4.70 trillion as of September 2026). The reversal has made Apple a de facto hedge against turbulence in the AI trade, with shares rising even as the broader tech sector sold off, ahead of its September 9, 2026 product event unveiling the iPhone 18 Pro lineup and Apple&#x27;s first foldable iPhone under new CEO John Ternus, who took over September 1. Not all analysts are convinced the &quot;boring&quot; strategy will keep paying off — KeyBanc has an Underweight rating and $250 price target on Apple, calling the iPhone event a likely negative catalyst once pricing details emerge.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Vance Called AI Satanic. He Struck a Chord Among Christian Republicans.</div>
+        <div class="art-sum">Vice President JD Vance told Christian podcaster Bryce Crawford in an interview released around September 2, 2026, that some uses of AI are &quot;kind of satanic,&quot; citing a friend whose spouse used an AI chatbot for marriage counseling and got validation instead of pushback on selfish behavior; he added that some AI companies carry &quot;some really, really weird spiritual dark energy.&quot; Vance also said he wouldn&#x27;t be shocked if the Antichrist were already walking among us in the &quot;end times,&quot; a remark that resonated with Christian conservative audiences even though it cuts against the Trump administration&#x27;s broader push to deregulate AI and win the global AI race. NBC News, Axios, and IBTimes UK all reported on the podcast remarks and the reaction among Christian Republicans.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Upset About Data Centers? Big Tech and Trump Think You’re a Socialist Dupe</div>
+        <div class="art-sum">On September 2, 2026, President Trump posted on Truth Social that communities opposing new data centers &quot;should not want&quot; them unless they &quot;want to end up being backwards and poor,&quot; adding that China &quot;could not be happier with this anti Data Center movement,&quot; as he defended a roughly $700 billion AI data-center buildout facing bipartisan pushback ahead of the November midterms. The backlash has become a major political flashpoint: more than 99% of campaign ad spending on data centers this year has gone toward spots opposing the projects, and a record number of planned data centers were canceled in the first quarter of 2026. Big Tech and utilities have responded by ramping up lobbying — CalMatters found millions of dollars spent lobbying state lawmakers in just the first six months of 2026 — while disputing claims that data centers are the main driver of rising electricity bills, pointing instead to power-plant retirements, grid modernization costs and other factors. Some conservative outlets, including Fox News, have also tied part of the opposition to left-leaning advocacy funding, such as ties between CodePink and megadonor Neville Roy Singham, though most reporting characterizes the backlash as genuinely bipartisan, driven by both property-rights conservatives and environmentally-minded progressives.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Insilico’s Co-CEO Has Big Hopes That Fibrosis Drug Can Reverse Aging Too</div>
+        <div class="art-sum">Insilico Medicine&#x27;s rentosertib, an oral small-molecule inhibitor of the TNIK protein designed using the company&#x27;s AI-driven Pharma.AI platform, showed signs of reversing biological age by roughly three to four years (and up to six years on some measures) in a 42-patient Phase IIa trial for idiopathic pulmonary fibrosis, based on six separate proteomic aging clocks, according to results published in Nature Medicine. Researchers cautioned the effect can&#x27;t yet be separated from the drug&#x27;s benefit to lung function itself, so it&#x27;s unclear whether it reflects true systemic anti-aging activity or simply improvement of the fibrotic disease. Insilico, co-led by Feng Ren, has since advanced the drug into a Phase III trial recruiting 320 IPF patients across China, who will take a once-daily dose for 52 weeks to further test efficacy and safety.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The ‘Deeply Nerdy’ Founders Behind Nvidia’s $13 Billion Bet on Hugging Face</div>
+        <div class="art-sum">Nvidia agreed on September 3, 2026 to acquire AI developer platform Hugging Face for roughly $13 billion, with the deal expected to close in the first half of 2027. Hugging Face was founded in 2016 by French entrepreneurs Clément Delangue (CEO), Julien Chaumond, and Thomas Wolf, each of whom will now be worth about $1.8 billion according to the Bloomberg Billionaires Index. Nvidia had previously tried and failed to buy a stake, offering $500 million for a slice of the company at roughly a $7 billion valuation less than a year earlier, a bid the founders rejected because they didn&#x27;t want a single chipmaker holding outsized influence over a platform meant to stay neutral; Nvidia had also participated in a 2023 funding round that valued Hugging Face at $4.5 billion. Delangue told CNBC that Hugging Face approached Nvidia over the summer, saying open-source AI was &quot;at a turning point&quot; and needed more resources and scale.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stock Funds Are Up 12.6% for Year So Far</div>
+        <div class="art-sum">Diversified U.S. stock mutual funds and ETFs are up an average of 12.6% for the year through early September 2026, closely tracking the S&amp;P 500&#x27;s roughly 12-13% year-to-date advance, according to Lipper fund-performance data; the rally has been broad enough to lift the Dow Jones Industrial Average above 54,000 and push the S&amp;P 500 to fresh closing records above 7,800 in August, even as cooling inflation readings and steady Federal Reserve policy supported equities through the summer. International-stock funds have also participated, gaining roughly 11% year-to-date as of late August 2026. Historically, September tends to be Wall Street&#x27;s weakest month, so strategists caution the pace of 2026&#x27;s gains could slow even as the broader up-year trend remains intact.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Oil Higher on Hormuz Escalation, Weighing on Sentiment</div>
+        <div class="art-sum">Brent crude briefly topped $98 a barrel during thin holiday trading on September 6-7, 2026, as risks to oil flows through the Strait of Hormuz continued to support prices after US strikes on Iranian vessels over the weekend and Iranian attacks on two bases used by US forces in Jordan. The escalation followed the expiration of a 60-day US-Iran ceasefire in mid-August, which had briefly raised hopes of restoring pre-war levels of maritime traffic through the strait, a conduit that normally carries about one-fifth of global oil supply. Iran said a deal with Oman to manage shipping through Hormuz was imminent, but Tehran also warned that vessels near the Omani coastline still face the risk of attack, leaving the outlook for the waterway highly uncertain.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Chip Stocks Rise, Buoyed By Asian Peers</div>
+        <div class="art-sum">Samsung Electronics and SK Hynix shares jumped about 8% in Seoul trading on Wednesday, August 12, 2026, after a local media report said Singapore&#x27;s sovereign wealth fund Temasek plans to make its first direct investment in the two chipmakers, with Samsung closing up 6.7% and SK Hynix up 5.5% as the benchmark Kospi gained 3.7%. The optimism spread to European semiconductor stocks, with Dutch equipment makers ASML, ASMI and BE Semiconductor Industries — all of which count the Korean chipmakers as customers — gaining between 4% and 6%, while Infineon, Melexis, AMS-Osram, Aixtron and STMicroelectronics rose 2-3%. Temasek already holds stakes in Nvidia, TSMC and ASML, and had said in July it wants AI-related investments to grow from 6% to as much as 15% of its portfolio by 2031.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Retail Investors Hand Control of Stock Portfolios to AI</div>
+        <div class="art-sum">U.S. retail investors are increasingly ceding day-to-day trading decisions to artificial intelligence, with a March 2026 survey of 938 U.S. retail investors finding 62% now use AI tools in their investment process and 23.6% doing so regularly. Brokerages are racing to meet the demand: eToro rolled out a feature letting users delegate trades to their own AI agents through sub-accounts with a budget starting at $200 and defined risk limits, tied to a scoped API key, then unveiled a fuller &quot;AI-first&quot; app with its proactive agent Tori at a London event on July 7, 2026. Rival Moomoo followed with &quot;API Skills,&quot; which converts plain-English trading instructions into executable orders across U.S., Canadian, Hong Kong, Singapore and Japanese markets. Even as adoption grows, CNBC reported in August 2026 that many retail investors are turning more cautious on AI-related stocks, hedging concentrated bets in names like Nvidia and Micron with a near-doubling of put-buying activity compared with the first quarter.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Higher Bond Yields Have a Silver Lining</div>
+        <div class="art-sum">The 10-year U.S. Treasury yield climbed above 4.81% in early September 2026, its highest level since November 2023, while the 30-year yield touched 5.27% on July 31, 2026, a level not seen since 2007, as investors reacted to persistent inflation concerns and mounting worries over federal deficits. While the sell-off has pushed up borrowing costs for mortgages and businesses, it has been a boon for savers and retirees: real (inflation-adjusted) yields across much of the curve are near multi-year highs, letting income-focused investors lock in returns of roughly 4-5% from Treasurys, CDs, and annuities that were unavailable during the near-zero-rate years of the 2010s and early 2020s. Annuity payouts have risen correspondingly — in the U.K., a healthy 65-year-old can now secure over £8,000 a year in guaranteed income from a £100,000 pension pot, versus well under £5,000 at the market lows a decade ago.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks, Bonds Rally After Dovish Fed Comments</div>
+        <div class="art-sum">On September 3, 2026, U.S. stocks and bonds rallied after Federal Reserve Governor Christopher Waller said he would be &quot;inclined to support&quot; holding the policy rate steady at 3.5%-3.75% at the September 15-16 FOMC meeting, citing continued progress toward the Fed&#x27;s 2% inflation goal. The comments pushed the market-implied probability of a September rate hike down to roughly 50% from about 70% earlier in the week, and the 10-year Treasury yield eased 4 basis points to 4.75% (after touching 4.81% earlier), while the 2-year yield fell 5 basis points to 4.34%. The relief rally was broad-based, with rate-sensitive areas such as software, small-cap stocks, and crypto-linked shares leading the gains across the major indexes.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Young People Are Obsessed With This Simple Retirement-Savings Formula</div>
+        <div class="art-sum">I have enough concrete detail now to write the brief. Coast FIRE — a formula that calculates how much money someone needs invested at a given age so compound growth alone, with no further contributions, carries them to a full retirement nest egg by around age 65 — has become a viral touchstone among young savers on platforms like TikTok, popularized by creators such as Humphrey Yang, who cite benchmarks like roughly $100,000 saved by age 25 leading to over $1 million by retirement. NerdWallet Wealth Partners CEO Ryan Sterling notes the appeal is that reaching one&#x27;s &quot;Coast number&quot; frees up income for spending today, such as travel or a home purchase, rather than continuing to save aggressively. Financial planners caution the strategy carries real risks: it depends heavily on assumed market returns, poor performance early in the &quot;coasting&quot; years can derail the projection, and the number is often based on rough spending estimates rather than a person&#x27;s actual future needs, leaving a gap if circumstances change or someone is laid off. The approach positions itself as a less extreme alternative to traditional FIRE (Financial Independence, Retire Early), letting people ease off retirement savings mid-career while still working.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Pensions Were on the Brink of Extinction. Now Companies Are Bringing Them Back.</div>
+        <div class="art-sum">Some U.S. employers are reviving pensions after decades of phasing them out: IBM announced in November 2023 that it would revive its long-frozen pension (frozen since 2008) by creating a new &quot;Retirement Benefits Account,&quot; a cash-balance plan into which it contributes 5% of salary with a guaranteed 6% return for the first three years, while ending its 5% 401(k) match. Meat processor JBS Foods and New York/Connecticut health system Northwell Health have also reopened or started pension plans in recent years. At Philadelphia utility PECO, a three-day strike by roughly 1,500 IBEW Local 614 workers over the July 4, 2026 weekend won a new contract restoring defined-benefit cash-balance pensions for about 600 newer hires who had been shifted to 401(k)s since 2021. Industry analysts describe this as a small but growing trend driven by well-funded plans, competitive labor markets, and union bargaining, though most experts don&#x27;t expect a broad, industry-wide pension resurgence.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">These Sisters Knew Their Mom Was Being Scammed. Telling Her Was the Hard Part.</div>
+        <div class="art-sum">No other outlet appears to have covered this specific WSJ story about sisters confronting their mom about a scam — I could not find it republished or reported elsewhere despite multiple targeted searches.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Hunter Biden (and His Laptop) Enter the Cryptosphere With New Meme Coin</div>
+        <div class="art-sum">Hunter Biden confirmed on X that he will launch a meme coin called LAPTOP on September 9, 2026, on Base, Coinbase&#x27;s Ethereum layer-2 network, with a total supply of 1 billion tokens; founders retain 30% vested over two years, while 20% funds a two-round airdrop aimed at wallets that lost money trading Donald Trump&#x27;s TRUMP token. A burn mechanism tied to 30 preset events—such as Bitcoin hitting a new all-time high or a Democrat winning the 2028 election—could destroy up to 30% of the supply, with unmet-condition tokens donated to charity instead. The coin&#x27;s name references the laptop Hunter Biden left at a Wilmington, Delaware repair shop in 2018, whose contents became a flashpoint in Republican attacks on the Biden family before the 2020 election. Within an hour of the report, at least 14 copycat LAPTOP tokens appeared on four other blockchain networks, trading $6.9 million between them.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">European Gas Climbs on LNG Supply Concerns Ahead of Winter</div>
+        <div class="art-sum">European natural gas prices jumped above €70 per megawatt-hour in late August 2026, topping €72 by early September and marking their highest level since January 2023, driven by fears that Middle East tensions—including a US strike on Iranian forces near the Strait of Hormuz and retaliatory attacks on American bases—would disrupt Gulf LNG shipments, since roughly one-fifth of global LNG trade transits that route, largely from Qatar. The disruption is especially damaging because it comes as Europe races to refill storage ahead of winter; inventories were only about 65% full, the lowest seasonal level since records began in 2009, and BofA estimates each month of lost Qatari and Emirati LNG supply equals roughly 10% of total European storage capacity. Analysts including Goldman Sachs warn that if Middle East energy flows normalize only gradually into 2027, December 2026 TTF futures could climb above €100/MWh, pressuring household and industrial energy costs across the continent this winter.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 17 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">CXMT Highlights Smartphone, AI Advances as Market Share Climbs</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Who’s Boring Now?</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Vance Called AI Satanic. He Struck a Chord Among Christian Republicans.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Upset About Data Centers? Big Tech and Trump Think You’re a Socialist Dupe</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Insilico’s Co-CEO Has Big Hopes That Fibrosis Drug Can Reverse Aging Too</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">The ‘Deeply Nerdy’ Founders Behind Nvidia’s $13 Billion Bet on Hugging Face</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Stock Funds Are Up 12.6% for Year So Far</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Oil Higher on Hormuz Escalation, Weighing on Sentiment</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">European Chip Stocks Rise, Buoyed By Asian Peers</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Retail Investors Hand Control of Stock Portfolios to AI</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Higher Bond Yields Have a Silver Lining</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Stocks, Bonds Rally After Dovish Fed Comments</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Young People Are Obsessed With This Simple Retirement-Savings Formula</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Pensions Were on the Brink of Extinction. Now Companies Are Bringing Them Back.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">These Sisters Knew Their Mom Was Being Scammed. Telling Her Was the Hard Part.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Exclusive | Hunter Biden (and His Laptop) Enter the Cryptosphere With New Meme Coin</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">European Gas Climbs on LNG Supply Concerns Ahead of Winter</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">60 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">56 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">49 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">40 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">25 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-06.html">← Older · September 6, 2026 · He’s Letting AI Agents Invest His Money. They Even Have Names.</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
