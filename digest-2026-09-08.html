@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 8, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-07.html">‹ Sep 7</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 62</div>
+    <div class="issue-date">September 8, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 2</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 4</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Mistral AI Exceeds $24 Billion Valuation After Samsung-Led Investment Round</div>
+        <div class="art-sum">Mistral AI raised €3 billion (about $3.5 billion) in a Series D round led by Samsung Electronics, with participation from the EU-backed Scaleup Europe Fund (managed by EQT) and existing investor PSG Equity, pushing the French AI startup&#x27;s valuation past €21 billion (roughly $24 billion). That marks a sharp jump from the €11.7 billion valuation Mistral achieved in September 2025, when ASML invested €1.3 billion to become a major shareholder. Mistral called the round the largest equity fundraising ever completed by a European tech company, and plans to use the funds to expand computing infrastructure and train more powerful models; the company now operates in 20 countries, serves over 125 enterprise clients including Airbus and HSBC, and had surpassed $400 million in annual recurring revenue as of February 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The 33-Year-Old AI Hotshot Taking Silicon Valley Swagger Back to Beijing</div>
+        <div class="art-sum">Yang Zhilin, the 33-year-old founder of Beijing-based Moonshot AI, has emerged as one of China&#x27;s most closely watched AI entrepreneurs after his startup&#x27;s Kimi K3 model — a 2.8-trillion-parameter open-weight system released in July 2026 — drew comparisons to top OpenAI and Anthropic products; Yang, a Tsinghua graduate with a Carnegie Mellon PhD who previously worked at Google and Meta, turned down offers including one from Apple to build the company instead. Moonshot AI&#x27;s valuation has surged in 2026, from about $10 billion in January to $18 billion in May and then $35 billion after closing a $3.5 billion round in late July, with the state-backed National Artificial Intelligence Industry Investment Fund among the lead investors. The company is now pursuing a further round targeting a roughly $50 billion valuation and has moved toward a confidential Hong Kong IPO filing seeking about $3 billion, positioning it as a leading contender in China&#x27;s push to rival U.S. AI labs.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Stock Markets Mixed, Investors Await U.S. CPI Data</div>
+        <div class="art-sum">This matches known events well; I have enough for the brief. Asian equity markets traded in a mixed pattern on Tuesday, September 8, 2026, as elevated oil prices tied to prolonged U.S.-Iran tensions and firmer Treasury yields kept risk appetite in check even as a rally in chipmakers lifted regional tech shares; South Korea&#x27;s KOSPI rose 2.3%, Japan&#x27;s Nikkei 225 was roughly flat, and Hong Kong&#x27;s Hang Seng fell 0.5%. Investors were focused on the upcoming U.S. Producer Price Index and Consumer Price Index reports for August, due later in the week, which are expected to shape expectations for the Federal Reserve&#x27;s next policy move at its September 16 meeting. Markets were pricing in roughly a 60% probability of a 25-basis-point rate hike ahead of the data.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Robinhood Wins a New Role in the Oura IPO: Underwriter</div>
+        <div class="art-sum">Smart-ring maker Oura&#x27;s S-1 filing lists Robinhood Securities among its IPO underwriters, marking the first time Robinhood has formally served in that role since gaining regulatory approval to underwrite deals in June 2026. Goldman Sachs is the lead underwriter for the Nasdaq listing (ticker &quot;OURA&quot;), with the syndicate also including Morgan Stanley, J.P. Morgan, BofA Securities, Barclays and Wells Fargo Securities; Robinhood ranks last among the roughly 18 underwriters. Oura is seeking to raise as much as $3 billion at a valuation topping $16 billion, and reported revenue of about $1.4 billion for the 12 months ended June 30, 2026, up 74% year-over-year. Oura&#x27;s board has also recently added Robinhood&#x27;s former CFO Jason Warnick and ex-Netflix marketing chief Leslie Kilgore ahead of the offering.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Does Your Portfolio Need an Inflation Tax Break?</div>
+        <div class="art-sum">This is a WSJ personal-finance advice column about whether investors should hold Treasury Inflation-Protected Securities (TIPS) in tax-advantaged accounts like IRAs to avoid the &quot;phantom income&quot; tax on annual inflation adjustments, rather than a reported news event with a verifiable set of facts covered elsewhere; no other outlet has published the same story to check it against.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Indexes Edge Lower as Inflation Concerns Loom</div>
+        <div class="art-sum">European shares edged lower on Tuesday, September 8, 2026, as rising oil prices fueled fresh inflation worries amid a prolonged Middle East conflict; the pan-European STOXX 600 fell about 0.2% to roughly 648.41 points, Germany&#x27;s DAX shed 0.3%, France&#x27;s CAC 40 slipped 0.4%, and London&#x27;s FTSE was roughly flat. Health care and banking stocks outperformed while retail and construction shares lagged. The declines followed a six-day surge in crude prices tied to renewed U.S.-Iran tensions, which pushed European markets toward a one-month low earlier in the week and kept bond yields elevated as investors weighed the outlook for central bank policy.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">EQT to Buy Insurance Broker McGill in $2 Billion Deal</div>
+        <div class="art-sum">EQT has agreed to acquire specialty insurance broker McGill and Partners for $2 billion, buying out the majority stake held by Warburg Pincus, which had backed the London-based firm since its founding in 2019. Founder and CEO Steve McGill will continue leading the company, with chairman John Lloyd and employees reinvesting to retain a stake alongside EQT. McGill and Partners has grown to more than 600 employees across seven countries with revenue exceeding $250 million, posting organic revenue growth of over 20% and a 79% jump in adjusted EBITDA in the first half of 2025 versus a year earlier. The deal is subject to customary regulatory approvals and is expected to close in the first half of 2027.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Norway’s Massive Oil Fund Proposes Selling Roughly $80 Billion in U.S. Treasurys</div>
+        <div class="art-sum">Norges Bank Investment Management, which runs Norway&#x27;s roughly $2.3 trillion Government Pension Fund Global, on September 4, 2026 proposed cutting the government-bond share of its benchmark bond index to 50% from 70%, a shift that would trim about $80 billion from its roughly $215 billion in U.S. Treasury holdings (as of end-June 2026). The freed-up allocation would go toward riskier fixed-income assets such as mortgage-backed securities, which the fund removed from its bond index in 2012, in a bid to boost returns. Fund governor Ida Wolden Bache and CEO Nicolai Tangen said in a letter that a 50% government-bond share &quot;will be sufficient to cover the liquidity needs, including in periods of turbulence in financial markets.&quot; The proposal now goes to Norway&#x27;s Ministry of Finance for a final decision, with implementation potentially stretching into 2027.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Rates Climb, Stocks Dip After Strong U.S. Jobs Data</div>
+        <div class="art-sum">U.S. nonfarm payrolls jumped by 162,000 in August 2026, far exceeding the 53,000 economists had forecast, while the unemployment rate held steady at 4.1%, according to the Bureau of Labor Statistics data released September 4, 2026. The stronger-than-expected report cooled expectations for aggressive Federal Reserve rate cuts and even raised talk of a possible rate hike, sending Treasury yields higher, with the 2-year yield hitting its highest level since January 2025. Stocks fell on the news: the Dow dropped 271.86 points (0.51%), the S&amp;P 500 slid 0.38%, and the Nasdaq Composite lost 0.29%. June and July payroll figures were also revised upward, adding to the picture of a labor market more resilient than markets had priced in.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Stocks Fall as Robust August Jobs Data Spurs Yields, Rate-Hike Bets</div>
+        <div class="art-sum">U.S. employers added 162,000 jobs in August 2026, far exceeding the roughly 53,000-55,000 expected by economists, while the unemployment rate held steady at 4.1%, according to the Labor Department&#x27;s September 4 report; average hourly earnings rose 0.3% to $37.75, up 3.1% year-over-year, and June-July payroll figures were revised up by a combined 55,000. The stronger-than-expected data pushed Treasury yields higher, with the 10-year note rising toward 4.78% and the 2-year yield climbing above 4.4%, as traders raised bets on a Federal Reserve rate hike at the September 16 policy meeting to roughly 58% from lower odds beforehand. Major U.S. stock indexes fell in response, with the Dow Jones Industrial Average dropping about 0.5%, the S&amp;P 500 declining 0.4%, and the Nasdaq Composite slipping 0.3%, as investors weighed the prospect of tighter monetary policy against a still-resilient labor market.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Mistral AI Exceeds $24 Billion Valuation After Samsung-Led Investment Round</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">The 33-Year-Old AI Hotshot Taking Silicon Valley Swagger Back to Beijing</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Asian Stock Markets Mixed, Investors Await U.S. CPI Data</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Robinhood Wins a New Role in the Oura IPO: Underwriter</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Does Your Portfolio Need an Inflation Tax Break?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">European Indexes Edge Lower as Inflation Concerns Loom</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">7</span><span class="toc-t">EQT to Buy Insurance Broker McGill in $2 Billion Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">Norway’s Massive Oil Fund Proposes Selling Roughly $80 Billion in U.S. Treasurys</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">Rates Climb, Stocks Dip After Strong U.S. Jobs Data</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">U.S. Stocks Fall as Robust August Jobs Data Spurs Yields, Rate-Hike Bets</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">61 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">57 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">50 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">43 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">41 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-07.html">← Older · September 7, 2026 · CXMT Highlights Smartphone, AI Advances as Market Share Climbs</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
