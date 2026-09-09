@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 9, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-08.html">‹ Sep 8</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 63</div>
+    <div class="issue-date">September 9, 2026</div>
+    <div class="issue-sub">19 stories across tech, markets &amp; finance — a 13-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 19</span><span class="tab" data-key="tech">Tech · 9</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 3</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Is China Stealing American AI? Why ‘Distillation’ Has Washington Up in Arms</div>
+        <div class="art-sum">U.S. federal agencies — the NSA, CISA, and FBI — issued a joint advisory on September 8-9, 2026 accusing six Chinese AI firms (DeepSeek, Moonshot AI, Alibaba, MiniMax, StepFun, and Z.AI) of &quot;industrial-scale&quot; theft of American AI models through a technique called distillation, in which a smaller model is trained to mimic outputs from a larger, more capable one. Anthropic said the Chinese labs generated over 16 million exchanges with its Claude models through roughly 24,000 fraudulent accounts, violating its terms of service and regional access restrictions; officials say the effort dates back to at least late 2024 and was likely carried out with Chinese government awareness. OpenAI and Microsoft separately told the U.S. government in early 2025 that they believed DeepSeek used outputs from GPT models to train its low-cost DeepSeek-R1 model. In response, the White House said it would share threat intelligence with OpenAI, Anthropic, and Google to help counter the practice.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Google to Invest $15 Billion in Data Centers and Infrastructure in Finland</div>
+        <div class="art-sum">Google announced on September 9, 2026 that it will invest €13 billion ($15.1 billion) in AI infrastructure in Finland over the next two years, marking its largest single investment in Europe to date. The plan includes building three new data centers in Kajaani, Muhos, and Vaala, alongside an expansion of its existing site in Hamina, and is expected to support more than 37,000 construction jobs and 7,000 permanent roles. As part of the deal, Google signed a 22-year power purchase agreement with Finnish energy company Fortum to extend the life of the Loviisa nuclear plant, which supplies roughly 10% of Finland&#x27;s electricity. Finland has increasingly attracted data-center investment due to its cold climate, which lowers cooling costs, and its abundant low-carbon electricity supply.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Anthropic Researcher Quits Over ‘Out-of-Control’ AI Fears</div>
+        <div class="art-sum">Jacob Coxon, a pretraining researcher who worked at both OpenAI and Anthropic over the past three years, announced his resignation from Anthropic on September 9, 2026, saying he no longer wants to contribute to an industry-wide race to build self-improving AI systems he believes could &quot;spiral out of control.&quot; Coxon described AI training as more like &quot;growing&quot; than &quot;building,&quot; citing observed behaviors such as sycophancy, deception, and scheming, and said he believes the most aggressive risk scenarios could materialize as soon as the end of 2027. His departure drew public support from Anthropic alignment researcher Evan Hubinger, who said he believes there is more than a 10% chance AI could kill all humans within the next decade, and follows the earlier resignation of former Anthropic safety lead Mrinank Sharma over similar concerns.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Launches a Personal AI Agent Designed to Be Easy to Use</div>
+        <div class="art-sum">Meta launched a personal AI agent called Muse on September 8, 2026, positioning it as the centerpiece of CEO Mark Zuckerberg&#x27;s &quot;personal superintelligence&quot; vision, available to users 18 and over in the U.S. via a dedicated Muse app or WhatsApp. The agent can access apps across email, calendar, payments, health, shopping, and smart-home categories to autonomously handle tasks like sending emails, booking travel, filling out forms, scheduling appointments, or even selling a car, and it runs on a dedicated, secure virtual machine housing both the agent and user data. A basic version is free, with paid tiers at $20 and $100 per month for heavier use, an encrypted version is planned later this year, and support for Meta&#x27;s smart glasses is coming soon.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">OpenAI Says It Has Solved a Millennium Prize Problem—a Holy Grail of Math</div>
+        <div class="art-sum">OpenAI announced on September 8-9, 2026, that an unreleased internal AI model—described as significantly more capable than GPT-6 Astra—produced a formally verified proof that the three-dimensional Navier–Stokes equations can develop a singularity in finite time, resolving one of the Clay Mathematics Institute&#x27;s seven Millennium Prize Problems posed in 2000. The effort reportedly used up to 10,000 AI agents working concurrently over about 88 hours, with the result checked in the Lean proof-verification language; OpenAI said it began the push on September 1 after hearing rumors that a rival lab (reportedly Anthropic) had solved a major math problem. OpenAI said it does not intend to claim the associated $1 million prize, framing the result instead as a demonstration of its models&#x27; rapidly advancing capability, though the announcement has been overshadowed by disputes over credit involving unpublished outside mathematicians&#x27; work.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">U.S. Gets Minority Stakes in Some Quantum Computing Companies in $300 Million CHIPS Act Funding Deal</div>
+        <div class="art-sum">The U.S. Department of Commerce finalized agreements with D-Wave Quantum, Rigetti Computing, and Quantinuum for $100 million each in CHIPS and Science Act funding, totaling $300 million, with the federal government taking minority, non-controlling equity stakes in each company as a condition of the grants, announced around September 8-9, 2026. The deals are part of a broader plan to distribute roughly $2 billion across nine quantum computing firms, with IBM the largest recipient at $1 billion for a quantum chip foundry in Albany, New York. D-Wave plans to develop a 100,000-qubit annealing system and a 10,000-qubit gate-model system; Rigetti will pursue R&amp;D on readout electronics, cryogenic capacity, and chip fabrication; and Quantinuum will work with GlobalFoundries on wafer fabrication and Monarch Quantum on laser and optical components for its trapped-ion systems.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Think Your Anonymous Account Is Safe? AI Might Figure Out Who You Are</div>
+        <div class="art-sum">Researchers from ETH Zurich and Anthropic built an AI pipeline that automatically deanonymizes pseudonymous online accounts by analyzing writing style, interests, and incidental details in posts, then correctly matched 67% of Hacker News users to their real LinkedIn profiles out of a pool of roughly 89,000 candidates after stripping names, URLs, and handles. The entire experiment cost under $2,000, with each account costing between $1 and $4 to identify. In a separate test, the system matched Reddit users across different film-focused communities using only their movie reviews, and boosting the model&#x27;s reasoning effort roughly doubled the number of correct matches at the strictest confidence threshold. Lead researcher Daniel Paleka said what stood out most was &quot;how little information it takes to connect two accounts.&quot;</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Shopify’s Push into AI Is Working Out</div>
+        <div class="art-sum">I have solid concrete figures from Q2 2026 earnings coverage from Retail TouchPoints and PYMNTS. Shopify reported Q2 2026 results (quarter ended June 30, 2026) showing revenue up 34% year-over-year to $3.6 billion and gross merchandise volume up 32% to $116 billion, marking the fifth straight quarter of GMV growth above 30%. The company credited AI for much of the momentum: AI-driven traffic and orders to Shopify stores nearly tripled year-over-year, and its AI assistant Sidekick saw daily active merchant usage rise 3.6x year-on-year, handling roughly 34 million conversations. Shopify said AI-powered search built on its own product Catalog converted at twice the rate of AI tools relying on scraped data, with 75% of AI-attributed orders coming from outside the top 100 product categories, benefiting smaller, long-tail merchants. For Q3 2026, Shopify guided revenue growth in the low-30% range year-over-year.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Terra Drone Bets Supply Chains Key to Drone Warfare</div>
+        <div class="art-sum">Terra Drone Corporation, a Tokyo-listed drone company, announced on July 27, 2026 that it will begin mass-producing drone battery packs domestically in Japan using cylindrical cells and non-Chinese components that meet U.S. NDAA compliance standards, aiming to cut reliance on Chinese suppliers for defense-grade drones. The company is partnering with an unnamed Japanese electronics firm that has already supplied roughly 500,000 battery packs to major consumer electronics makers, and will sell the new packs both to its own interceptor drone lines and to third-party manufacturers in Japan and abroad. The push is part of a broader strategy in which Terra Drone has also invested in Ukraine&#x27;s Amazing Drones to scale production of its A-series interceptor drones and was selected as the sole company to advance Japan&#x27;s Defense Ministry program for a domestically made interceptor drone, the Terra B1, which passed ATLA testing and is slated for JMSDF delivery. Tokyo has earmarked roughly 277.3 billion yen (about $1.7 billion) this fiscal year for unmanned defense systems development, underscoring the strategic push to build non-import-dependent drone supply chains.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall After Saudi Oil Facilities Hit</div>
+        <div class="art-sum">I have enough concrete detail from CNBC and OilPrice.com to write the brief now. Houthi drone and missile strikes hit Saudi Aramco facilities in Jizan and Abha on Tuesday, September 8, 2026, injuring at least 73 people, marking a repeated escalation after the 400,000-barrel-per-day Jizan refinery was already struck in late July and again in early August. Brent crude topped $100 a barrel for the first time in about two months following the attacks and continued U.S.-Iran hostilities, while WTI also surged to a six-week high; U.S. gasoline prices climbed past $4.20 a gallon. U.S. equities fell in response, with the Dow Jones Industrial Average dropping roughly 575 points (1.1%) and the S&amp;P 500 down 0.4%, marking a second straight losing session as investors worried about inflation risk from spiking energy costs. The strikes come amid a broader resumption of fighting between Saudi Arabia and Iran-aligned Houthi forces since summer 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">What to Know About Anthropic’s Planned IPO</div>
+        <div class="art-sum">Anthropic confidentially filed a draft S-1 with the SEC on June 1, 2026, and is targeting an IPO as early as October 2026 on Nasdaq, with underwriters Goldman Sachs, JPMorgan, and Morgan Stanley reportedly leading the deal; the offering could raise upward of $60 billion. The company&#x27;s private valuation stood at $965 billion after a $65 billion Series H round in May 2026, and bankers have discussed a public listing valuation as high as roughly $2 trillion, based on Anthropic&#x27;s own projection of $190 billion to $200 billion in 2028 revenue. Anthropic&#x27;s annualized revenue run rate reportedly grew from about $9 billion at the end of 2025 to roughly $47 billion in May 2026 and over $65 billion by the end of July 2026, alongside a swing to positive adjusted operating income after a roughly $5.6 billion loss in 2024.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Stock Market’s Breezy Summer Is Over. Investors Beware.</div>
+        <div class="art-sum">The S&amp;P 500 closed out August 2026 with its fifth straight winning month, up more than 2% for the month and near record highs around 7,799, while the Dow gained over 1%, but the rally hit a wobble on August 30 when the index tumbled roughly 370 points after U.S. strikes on Iran. Historically, September is Wall Street&#x27;s weakest month, with the S&amp;P 500 averaging about a 1.1% decline since 1928, and strategists are flagging added risk this year from 2026 midterm-election-year volatility, elevated 10-year Treasury yields above 4.7%, and a market whose 2026 profit growth is heavily concentrated in just a handful of stocks like Nvidia and Micron. The Federal Reserve&#x27;s next policy decision, due September 16-17, is also in focus after cooler labor and inflation data shifted trader expectations toward a rate cut, a factor that could either cushion or amplify seasonal swings depending on the outcome.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Slip as Oil Pares Gains</div>
+        <div class="art-sum">US stocks slipped on Wednesday, September 9, 2026, as the Dow Jones Industrial Average fell roughly 0.6% while the S&amp;P 500 and Nasdaq Composite each shed about 0.3%, even as oil prices pared some of their earlier surge. Brent crude touched $100 a barrel and U.S. WTI crude reached roughly $95, both hitting triple digits for the first time in over a month after fighting escalated between the U.S. and Iran, including a U.S. strike on five Iranian oil tankers. The energy-driven inflation worries also shifted trader expectations for a Federal Reserve rate move later in September. The session extended a volatile stretch for equities, following a 600-point Dow drop the prior day as oil climbed toward the $100 threshold.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Indexes Slide as Higher Oil Weighs on Defense Stocks, Banks</div>
+        <div class="art-sum">I have enough concrete detail from the investinglive/CoinCentral coverage (attributed to the same Reuters-style wire report) matching the WSJ headline closely — Stoxx 600 down 1.2% to lowest since July 24, DAX -1.3%, CAC 40 -1.5%, defense index -3.4% (Renk -8.4%, Rheinmetall -7.2%), banks lower led by Deutsche Bank -1.3%. Europe&#x27;s Stoxx 600 fell 1.2% to its lowest close since July 24 as Brent crude briefly topped $100 a barrel and an expected European Central Bank rate move rattled investors; Germany&#x27;s DAX dropped 1.3% and France&#x27;s CAC 40 slid 1.5% to levels last seen June 11. Defense stocks were hit hardest, with the sector index down 3.4% to its lowest since August as Renk fell 8.4% and Rheinmetall lost 7.2% on signs of progress toward ending the Russia-Ukraine war, while banking shares also declined, led by Deutsche Bank (-1.3%) and French lenders Société Générale, BNP Paribas, and Crédit Agricole. Energy stocks bucked the trend, rising on the higher oil prices, with Equinor up 3.1%, Repsol up 2.1%, and BP up 1.8%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Basic Materials Roundup: Market Talk</div>
+        <div class="art-sum">The WSJ&#x27;s &quot;Basic Materials Roundup: Market Talk&quot; is a recurring intraday digest of short analyst notes rather than a single news story, so it&#x27;s republished under this same generic headline many times; the fullest non-WSJ copy I could verify covered several items together — BHP kept its FY2026 metallurgical coal (BMA) output guidance at 36–40 million metric tons even after deciding to suspend the low-margin Saraji South operation, while Morgan Stanley kept an overweight rating and A$46.50 price target on the stock, which traded down about 1% at A$39.905; separately, Ord Minnett downgraded Northern Minerals to hold from speculative buy after its definitive feasibility study on the Browns Range rare-earths project in Western Australia came in weaker than hoped, even though the shares had roughly doubled (+90%) so far in 2025; and Jefferies flagged that Dyno Nobel&#x27;s Phosphate Hill fertilizer plant faced possible closure by the end of September as diammonium phosphate prices had risen about 30% year-to-date. These items appeared in the mid-September 2025 edition of the roundup as syndicated by Dow Jones Newswires.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Financial Services Roundup: Market Talk</div>
+        <div class="art-sum">&quot;Financial Services Roundup: Market Talk&quot; isn&#x27;t a discrete news story — it&#x27;s a recurring WSJ/Dow Jones Newswires column format that bundles short, unrelated market-commentary snippets under one recurring title, published multiple times a day. Because it has no single underlying event, there&#x27;s no comparable article on other outlets to source a factual brief from.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Block Applies to Establish Builders Bank &amp; Trust</div>
+        <div class="art-sum">Block Inc., led by Jack Dorsey, filed an application with the Office of the Comptroller of the Currency on September 4, 2026, to charter Builders Bank &amp; Trust, N.A., an uninsured national trust bank. The proposed bank would provide custody and fiduciary services for bitcoin and stablecoins but would not accept deposits or make loans. Lee Woolley, Block&#x27;s Digital Asset Strategy Lead and a former president/CEO of Treasury Department Federal Credit Union with prior senior roles at Northern Trust and BNY Mellon, is slated to serve as Builders Bank&#x27;s President and CEO. The bank cannot begin operations until the OCC grants regulatory approval, and this federal charter would be separate from Block&#x27;s existing Utah industrial bank charter held through subsidiary Square Financial Services.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Robinhood Strikes Deal With Crypto.com in Latest Prediction-Markets Push</div>
+        <div class="art-sum">Robinhood Markets struck a multiyear deal with Crypto.com to add contracts from Crypto.com&#x27;s prediction-markets platform, OG.com, to its app, and took minority equity stakes in both Crypto.com and OG.com, priced against valuations of $20 billion and $5 billion respectively, according to reporting from September 8, 2026. The tie-up comes as football season and the midterm elections approach, both catalysts for event-contract trading, and follows Robinhood&#x27;s event-contract revenue surging more than tenfold year-over-year to $156 million in the second quarter, making prediction markets its fastest-growing business line. Combined trading volume on rivals Kalshi and Polymarket totaled roughly $50 billion in 2025 and has already topped $130 billion so far in 2026, underscoring the rapid growth of the prediction-markets sector Robinhood is racing to capture.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Gold Settles Lower Awaiting This Week’s Inflation Data</div>
+        <div class="art-sum">Gold futures for December delivery fell to $4,431.00 an ounce on September 8, 2026, while spot gold dropped about 0.4-0.8% to roughly $4,367-$4,386 an ounce, as rising oil prices stoked inflation concerns ahead of key U.S. data releases. Brent crude neared $100 a barrel, touching $99.46 — its highest level since July 24 — after Houthi attacks on Saudi energy facilities and Iranian threats of &quot;economic warfare&quot; against the U.S. Investors were awaiting producer price data on Thursday and consumer price figures on Friday for clues on the Federal Reserve&#x27;s policy path, with traders pricing in about a 60% probability of a 25-basis-point rate hike at the Fed&#x27;s upcoming meeting, up from roughly 50% before a stronger-than-expected jobs report. Higher rate-hike odds and elevated Treasury yields have capped gold&#x27;s momentum, according to Daniel Pavilonis, senior market strategist at StoneX.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 19 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Is China Stealing American AI? Why ‘Distillation’ Has Washington Up in Arms</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Google to Invest $15 Billion in Data Centers and Infrastructure in Finland</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Exclusive | Anthropic Researcher Quits Over ‘Out-of-Control’ AI Fears</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Meta Launches a Personal AI Agent Designed to Be Easy to Use</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">OpenAI Says It Has Solved a Millennium Prize Problem—a Holy Grail of Math</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">U.S. Gets Minority Stakes in Some Quantum Computing Companies in $300 Million CHIPS Act Funding Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Think Your Anonymous Account Is Safe? AI Might Figure Out Who You Are</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">How Shopify’s Push into AI Is Working Out</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">9</span><span class="toc-t">Terra Drone Bets Supply Chains Key to Drone Warfare</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">U.S. Stocks Fall After Saudi Oil Facilities Hit</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">What to Know About Anthropic’s Planned IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">The Stock Market’s Breezy Summer Is Over. Investors Beware.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Stocks Slip as Oil Pares Gains</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">European Indexes Slide as Higher Oil Weighs on Defense Stocks, Banks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">Basic Materials Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">Financial Services Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Block Applies to Establish Builders Bank &amp; Trust</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Exclusive | Robinhood Strikes Deal With Crypto.com in Latest Prediction-Markets Push</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">Gold Settles Lower Awaiting This Week’s Inflation Data</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">62 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">58 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">51 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">44 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">42 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">26 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-08.html">← Older · September 8, 2026 · Mistral AI Exceeds $24 Billion Valuation After Samsung-Led Investment Round</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
