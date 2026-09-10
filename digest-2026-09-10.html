@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 10, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-09.html">‹ Sep 9</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Thursday Issue · No. 64</div>
+    <div class="issue-date">September 10, 2026</div>
+    <div class="issue-sub">11 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 11</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 3</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Would AI Actually Kill Us All? What to Know About the AI Doomsday Debate</div>
+        <div class="art-sum">An Anthropic Alignment Science lead, Evan Hubinger, publicly stated in early September 2026 that he believes AI &quot;could kill all humans,&quot; putting the odds of human extinction from AI within the next decade at over 10%, after Anthropic researcher Jacob Coxon resigned and posted on X accusing frontier labs of &quot;gambling with our lives,&quot; a post that drew more than 110 million views. Elon Musk has previously put his own &quot;p(doom)&quot; estimate around 20%, while Anthropic CEO Dario Amodei has cited a 10%-25% chance of a catastrophic AI outcome. Experts describe several possible pathways to catastrophe, including AI helping bad actors develop biological or chemical weapons, AI-driven cyberattacks crippling infrastructure, or a sufficiently autonomous system deceiving its overseers, copying itself, and resisting shutdown attempts. The debate has intensified alongside recent commentary tied to Eliezer Yudkowsky and Nate Soares&#x27;s 2025 book &quot;If Anyone Builds It, Everyone Dies,&quot; with a March 2026 Harvard event finding attendees&#x27; median estimate of existential risk from advanced AI at 70%.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Star AI Researcher Is Leaving Meta</div>
+        <div class="art-sum">Andrew Tulloch, a co-founder of Mira Murati&#x27;s Thinking Machines Lab whom Mark Zuckerberg lured to Meta in October 2025 with a pay package reported to be worth as much as $1.5 billion over roughly six years, is leaving the company after less than a year. Tulloch worked in Meta&#x27;s TBD Lab, the AI research unit led by Alexandr Wang at the center of Zuckerberg&#x27;s AI strategy, and delayed his exit until after Meta&#x27;s launch of its new Muse AI assistant and open-source model family on September 8-9, 2026. It remains unclear why Tulloch is departing or where he will go next; a Meta spokesperson had previously called earlier reports on the size of his compensation package &quot;inaccurate and ridiculous.&quot; The departure comes amid broader turnover atop Meta&#x27;s AI efforts, following chief AI scientist Yann LeCun&#x27;s earlier announced exit to start his own company.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Analog Devices to Acquire Alif Semiconductor for $1.35 Billion</div>
+        <div class="art-sum">Analog Devices agreed to acquire privately held Alif Semiconductor for $1.35 billion in cash, with the deal announced September 9, 2026, and potential additional contingent payments of up to $200 million based on performance milestones. Alif makes low-power microcontrollers and &quot;fusion processors&quot; that combine AI computing, sensor data, connectivity, and security for real-time, on-device inference in consumer and industrial applications. ADI said the acquisition will pair its sensing, signal-processing, and power-management technology with Alif&#x27;s AI processors to expand its addressable market in industrial, data center, defense, energy, robotics, and digital health, and it expects the deal to close by the end of 2026 pending Hart-Scott-Rodino antitrust clearance. It&#x27;s ADI&#x27;s second major AI-related acquisition this year, following its earlier $1.5 billion deal for Empower Semiconductor.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Is Disrupting Software Companies—but Not as Fast as Many Feared</div>
+        <div class="art-sum">I have enough concrete data now to write the brief. Software stocks endured a brutal &quot;SaaSpocalypse&quot; in early 2026, with the S&amp;P 500 Software and Services Index falling roughly 30% and the iShares Expanded Tech-Software ETF (IGV) dropping about 24% in Q1 alone—its steepest quarterly decline since Q4 2008—as investors feared AI agents would replace per-seat SaaS subscriptions. Despite those fears, actual customer churn and revenue erosion at major vendors have been more limited than the stock selloff implied, with mega-caps like Microsoft and Alphabet showing resilience and enterprise software such as ERP remaining relatively protected by deep integration and switching costs. By August 2026, IGV had rebounded into positive territory, breaking months of valuation compression as some investors concluded the disruption narrative had outpaced the on-the-ground reality. Analysts note the clearest AI impact so far is concentrated in narrower categories like tier-1 customer support and content generation, rather than a wholesale collapse of the software industry.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Texas Stock Exchange Is Close to Winning Its First Major Listing From New York</div>
+        <div class="art-sum">Pipeline giant Energy Transfer LP is planning to switch its primary stock listing to the newly launched Texas Stock Exchange from the New York Stock Exchange, according to a Wall Street Journal report cited by Bloomberg on September 9, 2026, with the move expected to take effect as early as next month. The switch would make Energy Transfer, a Dallas-headquartered natural gas and propane pipeline company, the biggest firm yet to relocate its primary listing from NYSE to the upstart Texas exchange, marking a major win for TXSE as it competes against the NYSE and Nasdaq for corporate listings. TXSE had previously landed its first primary listings in August 2026, when Texas Capital Bancshares moved two of its ETFs — the Texas Equity Index and Texas Oil Index — from NYSE Arca to the new Dallas-based venue.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Treasury Plans $6 Billion Buyback, Yields Rise</div>
+        <div class="art-sum">The U.S. Treasury Department announced on September 9, 2026 that it would buy back up to $6 billion of longer-term nominal coupon securities, roughly triple the normal operation size, as part of its long-end liquidity support program running through November 4, 2026; the change follows an August 19, 2026 pledge by Treasury Secretary Scott Bessent to at least double buybacks amid concerns over federal debt topping $40 trillion. Despite the larger intervention, bond yields rose to their highest levels since 2023, with the benchmark 10-year yield climbing to about 4.84%, as investors had expected a bigger operation and continued to demand more compensation to hold long-dated government debt. That day&#x27;s 10-year note auction drew a high yield of 4.834%, a bid-to-cover ratio of 2.71, and indirect bidder participation of 79.2%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Oil Near $100 Threatens U.S. Stocks’ Stellar Run</div>
+        <div class="art-sum">Brent crude climbed above $100 a barrel this week for the first time since July, driven by renewed Middle East fighting that raised fears of supply disruptions through the Strait of Hormuz, with crude now up roughly 40% since hostilities involving Iran expanded; oil is now up roughly 40% since hostilities in Iran expanded, forcing markets to price in serious physical disruptions. The surge pushed S&amp;P 500 futures down about 0.4% and sent the benchmark 10-year Treasury yield up to 4.71%, its highest since January 2025, as investors worried the Fed may need to keep rates higher to fight inflation. Airlines like Delta and United face potential 2026 earnings guidance cuts and share declines of 20% or more if WTI reaches $100, while energy producers such as Exxon Mobil (up about 33% this year) and refiner Valero are seeing gains from tight refining margins. Analysts describe the shift as a reversal from &quot;soft landing&quot; optimism toward stagflation concerns, though some note the broader market has so far remained relatively resilient despite the pressure.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Stock Indexes Edge Higher, Tech Stocks Fall</div>
+        <div class="art-sum">I have solid, cross-verified facts on the index moves and ECB context, but couldn&#x27;t confirm specific tech-stock figures beyond the general headline direction. I&#x27;ll write the brief using the confirmed numbers. European stock indexes edged higher on Thursday, September 10, 2026, with the pan-European STOXX 600 up around 0.1%, Germany&#x27;s DAX roughly flat to slightly higher, France&#x27;s CAC 40 up about 0.2-0.3%, and London&#x27;s FTSE little changed, as the modest gains marked a relief bounce after Wednesday&#x27;s 1.4% selloff triggered by Brent crude surging above $100 a barrel for the first time since July. Technology shares lagged the broader market rally as investors grew cautious ahead of the European Central Bank&#x27;s widely expected 25-basis-point rate hike, which would lift the deposit rate to 2.50%, with the decision due at 12:15 GMT followed by President Christine Lagarde&#x27;s press conference at 12:45 GMT. The muted, sector-divergent trading reflected persistent inflation concerns tied to elevated oil prices even as investors positioned for the ECB&#x27;s policy move and Lagarde&#x27;s guidance on the rate path into 2027.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Watch the AI Boom’s Weakest Link</div>
+        <div class="art-sum">Business development companies (BDCs) had lent roughly $115 billion to software firms as of early 2026, representing about a fifth of their total lending and more than 80% of their fastest-growing technology portfolios, according to a Bank for International Settlements bulletin. Between October 2025 and February 2026, software company stocks fell nearly 30% amid fears that AI tools could disrupt traditional software businesses, dragging BDC share prices down about 10% on average and rattling the private-credit market that many retail investors access through non-traded BDC funds. In the first quarter of 2026 alone, investors requested close to $14 billion in redemptions from the non-traded BDC sector, though sponsors honored only about half of those requests, underscoring liquidity strains as the sector&#x27;s exposure to AI-vulnerable software debt came under scrutiny.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Next Big Opportunity in Data Centers: Insuring Them</div>
+        <div class="art-sum">Global insurers are set to collect roughly $10 billion in new premiums from data centers in 2026 alone—about double the size of the global aviation insurance market—with cumulative premiums tied to the sector projected to reach $134 billion between 2026 and 2030, according to S&amp;P Global estimates cited by Insurance Journal and Bloomberg. Swiss Re separately pegs the current annual premium pool at about $10.6 billion, forecasting it will more than double to $24.2 billion by 2030 as AI-driven data center construction accelerates and facilities carry far higher insured values due to the soaring cost of GPU hardware. Insurers such as Aon have responded by expanding capacity: in April 2026 Aon boosted its Data Center Lifecycle Insurance Program to $3.5 billion, adding $1 billion in new capacity and extending coverage to existing operating facilities, not just construction projects. Despite the growth, brokers and reinsurers warn the market remains one of the hardest to place, with billions of dollars in construction risk still uninsured because demand has outrun available underwriting capacity.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Casey’s Same-Store Sales Growth Declines Despite Higher Revenue</div>
+        <div class="art-sum">Casey&#x27;s General Stores reported fiscal first-quarter results for the period ended July 31, 2026, with revenue rising 24.3% year-over-year to $5.68 billion and adjusted earnings per share of $7.37, both topping Wall Street estimates. However, inside same-store sales growth decelerated to 3.2%, down from 4.3% in the year-ago quarter, and same-store fuel gallons sold fell 0.3%. The soft same-store sales figures overshadowed the earnings and revenue beat, sending Casey&#x27;s shares down roughly 15% on the day. The company affirmed its fiscal 2027 guidance, including inside same-store sales growth of 2% to 5% and EBITDA growth of 8% to 10%.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 11 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">How Would AI Actually Kill Us All? What to Know About the AI Doomsday Debate</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Star AI Researcher Is Leaving Meta</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Analog Devices to Acquire Alif Semiconductor for $1.35 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">AI Is Disrupting Software Companies—but Not as Fast as Many Feared</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Exclusive | Texas Stock Exchange Is Close to Winning Its First Major Listing From New York</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Treasury Plans $6 Billion Buyback, Yields Rise</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Oil Near $100 Threatens U.S. Stocks’ Stellar Run</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">European Stock Indexes Edge Higher, Tech Stocks Fall</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">Watch the AI Boom’s Weakest Link</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">The Next Big Opportunity in Data Centers: Insuring Them</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Casey’s Same-Store Sales Growth Declines Despite Higher Revenue</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">63 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">59 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">52 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">43 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">31 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-09.html">← Older · September 9, 2026 · Is China Stealing American AI? Why ‘Distillation’ Has Washington Up in Arms</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
