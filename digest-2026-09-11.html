@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 11, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-10.html">‹ Sep 10</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 65</div>
+    <div class="issue-date">September 11, 2026</div>
+    <div class="issue-sub">18 stories across tech, markets &amp; finance — a 11-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 18</span><span class="tab" data-key="tech">Tech · 8</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Pentagon in Talks to Get Into AI Infrastructure Funding With a $5 Billion Loan</div>
+        <div class="art-sum">The Pentagon is in talks to lend roughly $5 billion to AI cloud-computing startup Fluidstack through its Office of Strategic Capital, a deal that if finalized would be the largest loan the office has ever issued. The financing would help Fluidstack shore up the U.S. supply chain and manufacturing capacity for data-center components like power and cooling equipment, rather than fund construction of a new AI facility outright. The Office of Strategic Capital, established under the Biden administration and expanded under Trump, provides loans to firms in sectors Washington deems critical to national security, and has previously backed companies including Vulcan Elements, Phoenix Tailings, Energy Fuels, and Neros. The Fluidstack deal is still being negotiated as of September 11, 2026, so its size and terms could still change.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Chinese AI Firms Tried to Clone U.S. AI Models</div>
+        <div class="art-sum">The NSA, CISA and FBI issued a joint cybersecurity advisory accusing six Chinese AI companies—DeepSeek, Moonshot AI, Alibaba, MiniMax, StepFun and Z.AI—of systematically &quot;distilling&quot; American frontier models, including OpenAI&#x27;s ChatGPT, Anthropic&#x27;s Claude, Google&#x27;s Gemini and xAI&#x27;s Grok, since at least late 2024, extracting billions of tokens through millions of queries; officials say the campaigns likely had Chinese government awareness. Separately, Anthropic reported on September 10, 2026, that Alibaba alone conducted 151 million exchanges with Claude between May and July 2026, peaking near three million exchanges a day, often routed through commercial proxy services to bypass Anthropic&#x27;s restrictions on commercial access from China. China&#x27;s Ministry of Commerce formally rejected the US claims as groundless on September 9, 2026, and warned of &quot;resolute countermeasures&quot; if they&#x27;re used to justify new restrictions, while OpenAI, Google and Anthropic are now sharing threat intelligence via the Frontier Model Forum to detect such automated distillation attacks.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Positron Valued at $5 Billion in New Funding as Demand for AI Chips Surges</div>
+        <div class="art-sum">Positron AI, a maker of AI inference chips, raised $875 million in a Series C financing round that values the company at $5 billion, up sharply from the $1 billion valuation it had after a $230 million raise in February 2026. The round was split into a $375 million Series C at a $3.5 billion pre-money valuation, co-led by NEA, Atreides Management, Valor Equity Partners, Andra Capital, and SemiAnalysis Capital, plus a follow-on Series C-1 of up to $500 million anchored by NEA and Netscape co-founder Jim Clark. Proceeds will fund the tapeout of Positron&#x27;s &quot;Asimov&quot; chip on TSMC&#x27;s N3P process (expected in late 2026, with production in the second half of 2027), a 2-megawatt engineering data center, and production of &quot;Titan,&quot; an inference system combining four to eight Asimov chips per node with up to 2,304 GB of memory per chip.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How to Shop the New iPhone Lineup Without Losing Your Mind</div>
+        <div class="art-sum">Apple&#x27;s current iPhone lineup spans seven models with U.S. prices from $599 for the budget iPhone 17e up to $1,199 for the iPhone 17 Pro Max (and as much as $1,999 for a 2TB Pro Max configuration), while the standard iPhone 17 starts at $799 and the ultra-thin iPhone Air starts at $999. Buyers can offset costs through trade-ins: Apple&#x27;s own program offers $35 to $885 off depending on the device traded in, while carriers offer deeper bill-credit deals, including T-Mobile&#x27;s up to $1,100 over 24 months and AT&amp;T&#x27;s up to $830 over 36 months, both tied to eligible trade-ins on unlimited plans. Verizon is separately offering up to $1,000 off the iPhone Air with a new line or trade-in. Most carrier promotions apply as monthly bill credits over two to three years, meaning shoppers must keep the line active on an installment plan to capture the full discount rather than getting it upfront.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Star AI Researcher Is Leaving Meta for Anthropic</div>
+        <div class="art-sum">Andrew Tulloch, an AI researcher whose reported $1.5 billion pay package from Meta made him a symbol of Silicon Valley&#x27;s AI talent war, is leaving Meta&#x27;s Superintelligence Labs (specifically its TBD Lab, under Alexandr Wang) to join Anthropic after less than a year at the company. Tulloch will join Anthropic&#x27;s inference and performance team, focusing on AI model efficiency; the move was first reported by Semafor and the Wall Street Journal in September 2026. He had spent 11 years at Meta before leaving in 2023 for OpenAI, where he worked on GPT-4o, GPT-4.5 and o3, then co-founded Thinking Machines Lab with former OpenAI CTO Mira Murati before rejoining Meta. News of the departure coincided with a dip in Meta&#x27;s stock.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic Gives EU’s Cybersecurity Agency Access to Mythos 5 AI Model</div>
+        <div class="art-sum">The European Union&#x27;s cybersecurity agency ENISA gained access to Anthropic&#x27;s Mythos 5 AI model on September 10, 2026, more than three months after the company first signaled it would grant the access, following negotiations that began in late May and were complicated by US export controls on advanced AI technology. Anthropic had launched a preview of Mythos 5 in April 2026 under a restricted rollout called Project Glasswing, which started with about 50 mostly US-based partner organizations before expanding to roughly 200 partners across more than 15 countries by June. ENISA&#x27;s access remains partial, as it was not given the newer Mythos 5.1 iteration. The model has drawn scrutiny for its cyber capabilities, reportedly identifying over 10,000 zero-day vulnerabilities in preliminary testing with an exploit success rate above 83% on first attempts.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple Debuts New Foldable iPhone Duo, New CEO and New (Higher) Prices</div>
+        <div class="art-sum">Apple unveiled its first foldable iPhone, the iPhone Duo, on September 9, 2026 at a corporate headquarters event, marking new CEO John Ternus&#x27;s debut keynote after succeeding Tim Cook. The iPhone Duo starts at $1,999 in the US (about $3,499 in Australia) and features a 5.4-inch display when closed and a 7.6-inch display when open, making it the most expensive iPhone Apple has ever sold. Apple also eliminated baseline iPhone 18 models, pushing buyers toward pricier Pro and Pro Max tiers, with executives citing surging DRAM costs squeezing margins as a factor. Pre-orders begin October 16, with in-store availability starting October 23, 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | OpenAI’s Fidji Simo to Join Board of Cloud Provider Nscale Ahead of IPO</div>
+        <div class="art-sum">Nscale, a London-based AI infrastructure company that reached a $14.6 billion private valuation after a $2 billion Series C round in March 2026, has added Fidji Simo to its board of directors as it prepares for a US IPO targeted around September 2026. Simo, who stepped down in July 2026 from her role as OpenAI&#x27;s CEO of Applications amid a chronic illness, will remain a part-time advisor to OpenAI while joining Nscale&#x27;s board. She joins other recent additions including Sheryl Sandberg, Susan Decker, and Nick Clegg, with Goldman Sachs and JPMorgan reportedly working on the IPO preparations since February 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">What Are Bond Yields ‘Saying’ About Stocks?</div>
+        <div class="art-sum">The 10-year U.S. Treasury yield climbed to roughly 4.97% on September 11, 2026, its highest level since 2023, as a weaker-than-expected Treasury buyback operation and an August producer-price report showing inflation accelerating amid Iran-war-driven oil price gains pushed borrowing costs higher. The rise has rattled equities, with the Dow posting a three-day, roughly 400-point slide as Brent crude topped $101 a barrel; in a Bloomberg poll of 122 investors and strategists, about 30% said 10-year yields reaching 5% to 5.25% would be enough to trigger a 10% stock market correction. Markets are also split on the Fed&#x27;s next move, with futures pricing roughly a 71% chance of a rate move at the upcoming meeting even as Fed Governor Christopher Waller has signaled he favors holding rates steady. The rising-yield, rising-oil combination is being read by strategists as a warning sign for stock valuations after a run-up earlier in the year.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Indexes Rise as Banks Gain, Software Stocks Fall</div>
+        <div class="art-sum">_(could not research: API Error: Can&#x27;t reach the API server — check your internet or DNS (ENOTFOUND))_</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">India’s National Stock Exchange Seeks $46 Billion Valuation in IPO</div>
+        <div class="art-sum">India&#x27;s National Stock Exchange has set a price band of ₹1,700 to ₹1,785 per share for its IPO, implying a valuation of roughly ₹4.4 trillion, or about $46.4 billion, at the top of the range. The exchange trimmed the offering size by more than 15%, to 126.4 million shares from the previously planned 148.9 million, as an offer-for-sale by existing shareholders. Anchor investor bidding is set to begin September 16, with the public subscription window running September 17-21 and listing expected around September 24, 2026. The deal follows years of delay tied to a co-location regulatory dispute, which was recently cleared after the Supreme Court dismissed the long-running SEBI case.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall as War Escalation, Oil Spike Continue</div>
+        <div class="art-sum">U.S. stocks fell for a fourth straight session on Thursday, September 10, 2026, as the Dow Jones Industrial Average dropped 316.56 points (0.6%) to 52,064.10, the S&amp;P 500 slid 0.58% to 7,591.70, and the Nasdaq Composite lost 0.65% to 26,081.72. The declines came as crude oil surged, with WTI closing at $102.48 a barrel (up 6.7%) and Brent settling at $107.63 (up 5.9%), both hitting their highest levels since May, after the U.S.-Iran war escalated further, including U.S. strikes that destroyed five Iranian tankers. Every S&amp;P 500 sector fell except energy, which gained as Exxon Mobil rose 2.2% and Chevron added 1.9%, while retailers like Amazon (-1.8%) and Starbucks (-1.9%) led losses on inflation fears tied to the seven-month-old conflict disrupting the Strait of Hormuz.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stock Futures Nudge Up, Yields Slip, But Markets Remain on Edge</div>
+        <div class="art-sum">U.S. stock index futures edged modestly higher before the opening bell on Friday, September 11, 2026, while Treasury yields eased slightly, as investors stayed cautious ahead of the closely watched August Consumer Price Index report; the wariness followed a rough stretch in which oil prices had topped $100 a barrel on Middle East tensions and pushed the 10-year Treasury yield to its highest level since November 2023. When the CPI data landed, it showed prices rose 0.4% in August and 3.4% year-over-year, matching forecasts, while core CPI ticked up 0.3% monthly and 2.4% annually; futures markets responded by pushing the odds of a quarter-point Fed rate hike at the September 16-17 FOMC meeting to roughly 86%, up sharply from about 50% a week earlier. Crude oil pulled back about 3.5% to near $98.90 a barrel on the day, and by the close the S&amp;P 500, Dow, and Nasdaq Composite each rallied around 1%.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Polymarket Appoints First Finance Chief Amid U.S. Growth Plans</div>
+        <div class="art-sum">Polymarket named Warren Jenson, 69, as its first-ever chief financial officer on September 10, 2026, a hire aimed at bolstering the prediction-market platform as it competes with rival Kalshi. Jenson previously served as finance chief at Amazon, Electronic Arts, Delta Air Lines, NBC, LiveRamp, and most recently Nielsen, where he was president and CFO until departing in January 2025. The appointment follows Polymarket&#x27;s $112 million acquisition of QCEX to build a CFTC-regulated U.S. exchange, and comes as the company pursues a $1 billion funding round that would value it at roughly $21 billion. Kalshi has pulled ahead in the category, posting about $40 billion in trading volume in August versus Polymarket&#x27;s smaller total.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">CVC Names TPG’s Todd Sisitsky as Co-CEO</div>
+        <div class="art-sum">CVC Capital Partners announced on September 8, 2026 that it will appoint Todd Sisitsky, president of rival buyout firm TPG, as co-CEO alongside current CVC president Peter Rutland, with both set to take over from current chief executive Rob Lucas by the first quarter of 2028; Sisitsky spent more than 23 years at TPG, most recently serving as its president and co-chair of the management committee, and at CVC he will also chair the firm&#x27;s partner board. Lucas, who has led CVC since 2018, will remain CEO through the transition period before stepping back. The move marks a rare instance of a major private equity firm recruiting a rival&#x27;s top executive for its top leadership role, and comes as CVC continues to expand following its 2024 stock market listing.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Defending Ukraine Is Getting More Expensive, and Europe Is Struggling to Foot the Bill</div>
+        <div class="art-sum">Ukraine faces an unexpected $27 billion (about €23 billion) shortfall in its 2026 defense budget, driven largely by military spending that rose more than 17% in the first eight months of 2026 compared with a year earlier, President Volodymyr Zelenskyy said. European leaders had already agreed on April 23, 2026 to an additional $104 billion loan package for 2026-2027, split roughly $70 billion for military aid and $34 billion for budget support, but Brussels is now scrambling to close the new gap. One proposal under discussion is a &quot;reparations loan&quot; of up to €140 billion backed by roughly €194 billion in frozen Russian central bank assets held mainly in Belgium, though Belgium has resisted, citing legal risk and the threat of Russian retaliation amid an active lawsuit from Russia&#x27;s central bank against Euroclear. Germany separately moved to add €3 billion to its 2026 Ukraine support for artillery, drones, armored vehicles and Patriot air-defense replacements.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Macy’s Bets on Pricier Products to Win Wealthy Shoppers</div>
+        <div class="art-sum">Macy&#x27;s has been pushing further upmarket under CEO Tony Spring&#x27;s &quot;Bold New Chapter&quot; turnaround, launched in 2024, expanding higher-end labels and full-price merchandise to court affluent shoppers while closing weaker stores. The strategy paid off in the fiscal first quarter ended May 2, 2026, with Bloomingdale&#x27;s comparable sales up 10.2% and Bluemercury up 6.4%, as shoppers with household incomes above $100,000 now make up more than half of Macy&#x27;s customer base. In June 2026, Macy&#x27;s raised its full-year forecast, now projecting fiscal 2026 net sales of $21.50 billion to $21.75 billion and adjusted per-share profit of $2 to $2.20, citing its first quarterly sales growth in nearly four years. The results reflect a broader &quot;K-shaped&quot; pattern in U.S. retail, with higher-income consumers continuing to spend on discretionary and luxury goods even as lower-income households pull back.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">JetBlue Cuts Capacity-Growth Outlook, Citing Bad Weather and Fuel Costs</div>
+        <div class="art-sum">JetBlue Airways cut its third-quarter capacity outlook, now expecting available seat miles to rise 1.5% to 3.5% year-over-year, down from a prior forecast of 3% to 6% growth, citing weather and air traffic control disruptions that snarled operations in the northeastern U.S. this summer. The New York-based carrier also raised its average fuel-price estimate for the quarter to about $3.96 a gallon, up from the $3.49 it had forecast in July. Despite the capacity pullback, JetBlue raised its revenue-per-available-seat-mile guidance to growth of 17% to 20%, up from 12.5% to 16.5%, and shares fell around 3% on the news announced September 10, 2026, as the carrier continues working through a broader financial turnaround.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 18 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Pentagon in Talks to Get Into AI Infrastructure Funding With a $5 Billion Loan</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">How Chinese AI Firms Tried to Clone U.S. AI Models</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Exclusive | Positron Valued at $5 Billion in New Funding as Demand for AI Chips Surges</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">How to Shop the New iPhone Lineup Without Losing Your Mind</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Star AI Researcher Is Leaving Meta for Anthropic</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Anthropic Gives EU’s Cybersecurity Agency Access to Mythos 5 AI Model</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Apple Debuts New Foldable iPhone Duo, New CEO and New (Higher) Prices</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">Exclusive | OpenAI’s Fidji Simo to Join Board of Cloud Provider Nscale Ahead of IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">What Are Bond Yields ‘Saying’ About Stocks?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">European Indexes Rise as Banks Gain, Software Stocks Fall</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">India’s National Stock Exchange Seeks $46 Billion Valuation in IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">U.S. Stocks Fall as War Escalation, Oil Spike Continue</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Stock Futures Nudge Up, Yields Slip, But Markets Remain on Edge</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Polymarket Appoints First Finance Chief Amid U.S. Growth Plans</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">CVC Names TPG’s Todd Sisitsky as Co-CEO</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Defending Ukraine Is Getting More Expensive, and Europe Is Struggling to Foot the Bill</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Macy’s Bets on Pricier Products to Win Wealthy Shoppers</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">JetBlue Cuts Capacity-Growth Outlook, Citing Bad Weather and Fuel Costs</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">64 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">60 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">53 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">45 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">44 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">32 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-10.html">← Older · September 10, 2026 · How Would AI Actually Kill Us All? What to Know About the AI Doomsday Debate</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
