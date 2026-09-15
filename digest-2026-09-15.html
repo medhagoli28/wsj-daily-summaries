@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 15, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-14.html">‹ Sep 14</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 69</div>
+    <div class="issue-date">September 15, 2026</div>
+    <div class="issue-sub">17 stories across tech, markets &amp; finance — a 11-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 17</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | OpenAI Buys Startup Developing Smartphone Camera</div>
+        <div class="art-sum">OpenAI has acquired Glass Imaging, a smartphone camera software startup, in a deal reported on September 14, 2026 to be worth more than $300 million, up sharply from the roughly $100 million valuation it received in a funding round last year. Glass Imaging, founded in 2019 by former Apple computational-photography engineers Ziv Attar and Tom Bishop, makes GlassAI, a neural image processor that handles demosaicing, noise reduction, and frame fusion and is already used in Honor&#x27;s 600-series phones. The deal follows OpenAI&#x27;s $6.5 billion stock acquisition of Jony Ive&#x27;s hardware startup io Products in May 2025, extending its push into consumer devices ahead of an expected 2027 IPO. Neither OpenAI nor Glass Imaging has publicly confirmed the acquisition.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Microsoft Sets Limits for AI Models as Altman Details Control Risks</div>
+        <div class="art-sum">Microsoft published a draft &quot;Humanist Superintelligence&quot; code of conduct on September 14, 2026, a 37-page document requiring that its AI models never resist human interruption, correction, or shutdown, avoid setting their own goals, and remain barred from autonomous weapons development, offensive cyber operations, or concealed chain-of-thought reasoning; the policy is open for a six-week public comment period before a revised version guides model development starting in 2027. Microsoft AI chief Mustafa Suleyman told Reuters and Fortune it&#x27;s &quot;clearly now time to coordinate among the labs&quot; to keep the technology under human control, saying he&#x27;d rather ship a slower or less capable model than one that can&#x27;t be controlled. Separately, OpenAI CEO Sam Altman told Fortune in an interview last week that current safety standards aren&#x27;t yet solid enough to justify simply pushing capabilities further, and he acknowledged AI moving beyond human control is possible, following calls from Anthropic&#x27;s Dario Amodei and Elon Musk to slow the pace of frontier AI development.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How the Clash Between Money and Safety Created a Monumental Crisis for AI</div>
+        <div class="art-sum">Amodei&#x27;s roughly 3,800-word essay published Saturday, September 12, 2026 called for the industry to slow development of the most advanced AI systems to prevent catastrophic loss of control, and it was publicly endorsed by OpenAI&#x27;s Sam Altman and xAI/SpaceX&#x27;s Elon Musk. President Trump responded on Monday, September 14 with a series of social-media posts dismissing the safety warnings as &quot;a hoax&quot; and suggesting the slowdown push was politically motivated, a stance he reiterated on stage at the All-In Summit in Los Angeles via a call taken by Nvidia CEO Jensen Huang. The clash triggered a selloff in tech stocks and raised doubts about the durability of the data-center investment boom, even as Anthropic&#x27;s revenue ($11.6 billion last quarter) overtook OpenAI&#x27;s ($6.7 billion) while OpenAI&#x27;s losses swelled to $12.3 billion. Separately, Sam Altman told Fortune that OpenAI would not pursue an IPO in 2026, citing unresolved AI safety and alignment work as the reason to delay going public.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Is Powerful Enough to Crack Our Hardest Math Problems—and Kill Us All</div>
+        <div class="art-sum">OpenAI announced on September 8, 2026 that an internal AI model, described as significantly more capable than GPT-6 Astra, produced a proof that three-dimensional Navier-Stokes equations can develop a singularity in finite time, tackling one of math&#x27;s seven Millennium Prize Problems, using roughly 10,000 AI agents working concurrently over about 88 hours; OpenAI said it will not seek the $1 million prize, and the proof has not yet been verified by the Clay Mathematics Institute. The announcement, made after OpenAI heard rumors that outside researchers—including someone at Anthropic—were close to a similar breakthrough, has been contested by mathematicians questioning credit and rigor. Days later, Anthropic safety researcher Evan Hubinger said AI could carry more than a 10% chance of causing human extinction within the next decade, a claim that followed the resignation of former Anthropic researcher Jacob Coxon, who said neither Anthropic nor OpenAI was acting responsibly as AI capabilities accelerate.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Trump Pushes Back on AI Industry Pleas</div>
+        <div class="art-sum">I have enough concrete detail to write the brief now. President Trump on September 14, 2026 posted on Truth Social that &quot;the only control or &#x27;guardrails&#x27; that AI needs is a STRONG AND SMART (High IQ!) PRESIDENT, and the U.S.A. has that, in spades,&quot; directly rejecting calls for new federal oversight of artificial intelligence. The remarks came in response to Anthropic CEO Dario Amodei, who over the preceding weekend argued that leading AI companies should slow development until safety measures catch up, warning the technology&#x27;s rapid advance poses serious risks; OpenAI&#x27;s Sam Altman and Elon Musk have also pushed for greater scrutiny. Trump singled out Amodei by name, calling warnings about AI risk exaggerated and the product of &quot;negative forces,&quot; and reiterated that the U.S. must keep winning the AI race against China. The clash follows Trump&#x27;s December 11, 2025 executive order aimed at preempting state AI regulations, which created a Justice Department AI Litigation Task Force to challenge state laws seen as overly burdensome.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Wall Street Confronts Prospect of a New Era After Treasury Yield Hits 5%</div>
+        <div class="art-sum">The yield on the 10-year U.S. Treasury note briefly touched 5% on Monday, September 14, 2026, peaking at roughly 5.014% before easing back to about 4.947%, marking its highest level since 2023 and only the second time it has crossed that threshold since 2007. The move rattled equities, with the S&amp;P 500 and Nasdaq falling as investors weighed pressure from rising oil prices and stretched tech valuations, and it came just days ahead of a Federal Open Market Committee meeting on interest rates. The selloff also pushed borrowing costs higher across the economy, with the average 30-year fixed mortgage rate climbing to 6.76%, up from 6.15% at the start of the year. Analysts pointed to concerns over energy prices, geopolitical tension tied to Iran, and mounting U.S. government debt as drivers of the global bond selloff, fueling talk that the decades-long era of ultra-low interest rates may be ending.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall on Fears AI Companies, Fed Will Slam the Brakes</div>
+        <div class="art-sum">I have enough concrete detail from CNBC/NBC to write the brief now. U.S. stocks fell on September 14, 2026, after Anthropic CEO Dario Amodei, OpenAI&#x27;s Sam Altman and Elon Musk called for slowing AI development amid safety concerns, with the Nasdaq Composite closing down 0.56%, the S&amp;P 500 off 0.48%, and the Dow Jones Industrial Average down 152 points; the Philadelphia Semiconductor Index plunged 5.8% in its worst day since July, dragging down chipmakers including Nvidia (-3.4%), Arm Holdings (-9.7%) and ASML (-7.2%). Altman also told Fortune that OpenAI would delay its planned IPO, citing safety concerns. Adding to the pressure, markets were pricing in roughly 85-88% odds of a Federal Reserve rate hike at its meeting that Wednesday, while Treasury yields hit multi-year highs, with the 10-year near 5.01% and the 30-year at 5.38%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Inflation Comes In Hot</div>
+        <div class="art-sum">The U.S. Consumer Price Index rose 0.4% in August 2026, pushing the annual inflation rate to 3.4%, according to Bureau of Labor Statistics data released September 11, 2026, with both figures matching Dow Jones consensus estimates. Core CPI, which excludes food and energy, climbed 0.3% for the month—slightly above the 0.2% forecast—while its annual rate held at 2.4%, per CBS News and CNBC. The upside surprise was driven largely by non-housing services prices, which posted their strongest monthly gain since January and remain above a 3% annual pace, signaling sticky underlying inflation. The hotter-than-expected core reading raised market odds of a Federal Reserve interest-rate move at its meeting the following week.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Euronext, Deutsche Boerse Shares Rise After CEO’s Merger Comments</div>
+        <div class="art-sum">Euronext CEO Stéphane Boujnah told the Financial Times on September 14, 2026, that he would be open to a merger of the exchanges&#x27; stock-market businesses with German rival Deutsche Börse, envisioning a pan-European market infrastructure of &quot;planetary scale.&quot; Shares in both companies rose in response, with Euronext up roughly 2.2% and Deutsche Börse up about 2.5%, outperforming a broader European market that was little changed. Boujnah cautioned that no formal talks are currently underway between the two groups and noted three prior merger attempts have failed, adding that any deal driven top-down by politicians risked collapsing like the abandoned Franco-German SCAF fighter jet project; he is due to step down as CEO in May 2027.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Rise as Oil Retreats</div>
+        <div class="art-sum">U.S. stocks snapped a four-session losing streak on Friday, September 11, 2026, with the S&amp;P 500 gaining 0.96%, the Dow Jones Industrial Average advancing 1.15%, and the Nasdaq Composite rising 0.88%, as crude oil prices pulled back from recent highs. The rally came even as the August consumer price index showed inflation holding firm, up 0.4% for the month and 3.4% year-over-year, with core CPI up 0.3% monthly and 2.4% annually — both in line with economist forecasts. Investors looked past the sticky inflation data, helped by Oracle&#x27;s better-than-expected fiscal first-quarter results and raised profit guidance, which lifted AI and tech-sector sentiment early in the session. Brent crude&#x27;s retreat from levels near $109 a barrel earlier in the week eased some of the cost-pressure concerns that had weighed on equities in prior sessions.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Here’s What It’s Like to Retire to a Low-Tax State</div>
+        <div class="art-sum">This is a WSJ feature piece built on interviews with individual retirees about their personal move to low-tax states, and it does not appear to have been independently reported by other major outlets (Reuters, AP, Bloomberg, CNBC, etc.) — other coverage on the general topic (Kiplinger, Yahoo Finance) discusses the broader &quot;is it worth it&quot; question but does not report the same specific retiree accounts. Per the rules, I won&#x27;t reconstruct or quote the WSJ story from search snippets alone.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Accenture to Pay $25 Million to Resolve DOJ Discrimination Claims</div>
+        <div class="art-sum">Accenture Federal Services, Accenture plc, and Accenture LLP agreed to pay the U.S. government $25 million to resolve False Claims Act allegations that the company discriminated in hiring and promotion decisions based on race and sex while falsely certifying compliance with federal anti-discrimination requirements on government contracts from 2017 to the present, the Justice Department announced September 14, 2026. The DOJ alleged Accenture used demographic targets in employment decisions in violation of civil rights and contracting laws. Accenture denied any admission of liability, with a spokesperson saying the company cooperated with the government&#x27;s review and settled &quot;to avoid the costs and resource demands of prolonged litigation.&quot; The settlement follows similar Trump administration DEI-related probes that led Deloitte to pay $21.5 million and IBM to pay $17 million in comparable settlements.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Gold Futures Pressured By Dollar Gains, Rate Expectations</div>
+        <div class="art-sum">Gold futures fell to around $4,263 an ounce on September 15, 2026, down about 0.84% from the previous session and marking a third straight weekly decline as traders positioned ahead of the Federal Reserve&#x27;s two-day policy meeting that began that day. A stronger U.S. dollar, elevated Treasury yields, and rising oil prices weighed on bullion, with futures pressured further by data showing U.S. consumer inflation accelerated in August. Markets were pricing in roughly a 90-92% probability that the Fed would raise its benchmark rate by 25 basis points when it announces its decision on Wednesday, September 17, a move that would boost real yields and make non-yielding gold less attractive relative to interest-bearing assets. Despite the pullback, gold remained about 15% higher than a year earlier.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Natural Gas Futures Start Week With Gains</div>
+        <div class="art-sum">U.S. natural gas futures climbed at the start of the trading week on Monday, September 14, 2026, with the front-month October contract rising roughly 1.78% to about $2.88/MMBtu, up from the prior session, after touching around $2.898/MMBtu (up 6.7 cents) intraday. The gains were driven by hotter-than-expected weekend weather forecasts that pushed September cooling demand close to record highs, along with stronger LNG feedgas flows—averaging about 18.3 bcfd in early September versus 17.2 bcfd in August as Texas export facilities returned from maintenance. Further upside was capped by ample supply, with U.S. gas inventories running about 5.2% above the five-year seasonal average as of August 28 and Lower 48 production holding near record levels.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Dave &amp; Buster’s Swings to Loss as Entertainment Sales Keep Falling</div>
+        <div class="art-sum">Dave &amp; Buster&#x27;s swung to a net loss of $12.5 million, or $0.36 per diluted share, in its fiscal second quarter ended roughly early August 2026, reversing a $11.4 million profit ($0.32 per share) a year earlier. Total revenue fell 2.4% to $544.1 million, with comparable-store sales down 2.9% as the sales mix continued shifting away from higher-margin entertainment/amusement offerings toward food and beverage, squeezing margins. The results, reported September 14, 2026, missed Wall Street expectations (analysts had forecast roughly $0.19 per share in earnings), and shares fell after the report; the stock had already been down about 48% for the year heading into the release.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Crypto Scam Victims Fighting the U.S. to Get Their Money Back</div>
+        <div class="art-sum">The U.S. government seized $225.3 million in Tether (USDT) tokens tied to &quot;pig butchering&quot; investment scams in June 2025, calling it the largest crypto seizure in Secret Service history, but the money is now locked in a federal civil forfeiture case that hundreds of victims must fight to claim. Among them is Nivie Kaul, founder of the advocacy group Digital Defenders Group, who spent nearly three years tracing her stolen funds, paying for forensic blockchain analysis and obtaining court orders before pressing investigators to freeze the assets. The case is complicated by a British Virgin Islands-registered gaming company, Infiniweb, which has asserted its own competing ownership claim to the tokens. As of August 2026, a Justice Department lawyer signaled the parties were moving toward a settlement that could appoint an administrator and prioritize victims able to link their losses to specific wallets.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Wall Street’s Favorite AI Startup Sets Its Sights on Wealth Management</div>
+        <div class="art-sum">Rogo, the AI startup building a ChatGPT-style research and workflow assistant for investment banks and asset managers, is now moving into wealth management, with advisers at major banks already piloting the platform. The New York-based company raised a $160 million Series D in April 2026 led by Kleiner Perkins at a $2 billion valuation, following a $75 million Series C in January 2026 at a $750 million valuation led by Sequoia Capital. Rogo&#x27;s backers include nine global banks with roughly $20 trillion in combined assets — among them J.P. Morgan, Barclays, BNP Paribas, Citi Ventures, MUFG, Societe Generale and Wells Fargo — and the platform now serves more than 35,000 professionals across 250-plus institutions such as Rothschild &amp; Co, Jefferies, Lazard, Moelis and Nomura. The wealth-management push would pit Rogo against established wealthtech vendors by offering advisers research tools built to the same institutional security standards used by its investment-banking clients.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 17 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | OpenAI Buys Startup Developing Smartphone Camera</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Microsoft Sets Limits for AI Models as Altman Details Control Risks</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">How the Clash Between Money and Safety Created a Monumental Crisis for AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">AI Is Powerful Enough to Crack Our Hardest Math Problems—and Kill Us All</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Trump Pushes Back on AI Industry Pleas</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Wall Street Confronts Prospect of a New Era After Treasury Yield Hits 5%</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">U.S. Stocks Fall on Fears AI Companies, Fed Will Slam the Brakes</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Inflation Comes In Hot</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Euronext, Deutsche Boerse Shares Rise After CEO’s Merger Comments</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">U.S. Stocks Rise as Oil Retreats</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Here’s What It’s Like to Retire to a Low-Tax State</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Accenture to Pay $25 Million to Resolve DOJ Discrimination Claims</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Gold Futures Pressured By Dollar Gains, Rate Expectations</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">U.S. Natural Gas Futures Start Week With Gains</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Dave &amp; Buster’s Swings to Loss as Entertainment Sales Keep Falling</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">The Crypto Scam Victims Fighting the U.S. to Get Their Money Back</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Exclusive | Wall Street’s Favorite AI Startup Sets Its Sights on Wealth Management</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">68 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">62 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">54 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">49 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">47 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">35 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">29 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-14.html">← Older · September 14, 2026 · Chip Stocks Tumble After AI Leaders Call For Slowdown in AI Development - wsj.com</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
