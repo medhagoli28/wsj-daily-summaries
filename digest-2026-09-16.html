@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 16, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-15.html">‹ Sep 15</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 70</div>
+    <div class="issue-date">September 16, 2026</div>
+    <div class="issue-sub">17 stories across tech, markets &amp; finance — a 12-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 17</span><span class="tab" data-key="tech">Tech · 6</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How a Chinese Hacking Firm Tapped AI to Supercharge Cyber-Spying</div>
+        <div class="art-sum">I have solid, corroborated details from Bloomberg&#x27;s reporting (via CyCraft&#x27;s findings) to write the brief now. Cybersecurity researchers at Taiwan-based CyCraft found that a small Chinese hacking-tool vendor, roughly 10 employees, used ChatGPT to help build a software module to decrypt a Signal messaging database it had stolen from an employee at a Western think tank, according to screenshots reviewed by Bloomberg News. The discovery stemmed from a publicly exposed shared drive containing thousands of Chinese-language screenshots, some as recent as this past February, documenting the firm&#x27;s development and sale of hacking tools priced between 300,000 and 500,000 yuan (roughly $44,600 to $74,400) to at least four separate hacking groups. Investigators found that activity tied to one of those customer groups overlapped with tactics previously attributed to Mustang Panda, a hacking operation the U.S. Justice Department has linked to the Chinese government. OpenAI said it is committed to identifying and disrupting attempts to abuse its models for such purposes.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Mistral Aims to Grow AI Consumer Base Through Mozilla Partnership</div>
+        <div class="art-sum">Mistral AI and Mozilla announced a partnership under which Mistral&#x27;s open-weight models will power Firefox&#x27;s new &quot;Smart Window&quot; AI browsing assistant, currently in beta and rolling out to users in France and North America first, with the UK and Germany to follow later in 2026. Smart Window helps users navigate complex searches, recall previously visited content, and pull context from open browser tabs, and Mistral is fine-tuning its models on regional languages and dialects to support localized responses. Under the deal, conversations are not stored on Mozilla&#x27;s servers by default and Mistral has agreed to zero data retention, aligning the partnership with Firefox&#x27;s privacy-focused positioning as both companies emphasize open-source AI development.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | AI Coding Startup Factory More Than Triples Valuation to $5 Billion</div>
+        <div class="art-sum">Factory, a San Francisco-based startup building &quot;Droid&quot; AI agents for enterprise software engineering, raised $200 million in a new funding round that more than tripled its valuation to $5 billion, according to Reuters. The company&#x27;s valuation jumped rapidly over just five months: $1.5 billion after a $150 million Series C in April 2026, $4 billion after a $120 million Series C-2 extension in July 2026, and now $5 billion with this latest round. Investors include Blackstone, Sequoia Capital, Khosla Ventures, Insight Partners, and NEA, while customers of its autonomous coding agents include Nvidia, Blackstone, RBC, Adobe, and T-Mobile.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Live Q&amp;A: Ask Me Your Questions About iPhone Duo, iOS 27, the New Siri and More</div>
+        <div class="art-sum">Apple unveiled its first foldable iPhone, the iPhone Duo, at a September 2026 media event, featuring a 5.4-inch outer display and a 7.6-inch inner display when unfolded, with a titanium hinge and Liquid Metal components designed to minimize crease and set for an October launch; alongside it, Apple released iOS 27 on September 14-15, 2026, bringing a redesigned Siri AI powered by Apple Intelligence that offers personal-context understanding and onscreen awareness, currently rolling out in beta via a waitlist and limited to English, with French, Japanese, Korean, Portuguese, and Spanish support planned for October 2026; a second-generation iPhone Duo is reportedly planned for the second half of 2027.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Trump Says AI Doesn’t Need More Guardrails and Calls Safety Fears a Hoax</div>
+        <div class="art-sum">President Trump declared on Monday, September 14, 2026, that AI needs no new federal guardrails, writing on social media that &quot;the only control or &#x27;guardrails&#x27; that AI needs is a STRONG AND SMART (High IQ!) PRESIDENT,&quot; and dismissed fears of AI-driven catastrophe as a &quot;hoax,&quot; later calling himself the &quot;Hoax Buster&quot; and likening the concern to the &quot;Global Warming Scam.&quot; He also accused Anthropic CEO Dario Amodei of &quot;pretending to be a perfect little angel&quot; and claimed nationwide protests against AI data centers are part of a &quot;sick conspiracy&quot; benefiting China. The remarks, part of a four-day streak of pushback against calls for AI regulation, reportedly worried some White House officials privately even as allies like AI adviser David Sacks echo the view that AI-safety alarm is manufactured by a &quot;Doomer Industrial Complex.&quot;</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Essay | For the Love of God, Please Put on Headphones</div>
+        <div class="art-sum">A Wall Street Journal essay by Jamie Waters, published September 15, 2026, argues that public speakerphone use has become rampant, with people blasting work calls, TikToks, and livestreams in cafes, on buses, and on planes; a 2025 survey from NumberBarn found 37% of Americans admit to using speakerphone in public, rising to nearly half of Gen Z, with Miami ranked the worst U.S. city for phone etiquette and New York second. MIT&#x27;s Sherry Turkle says smartphones trap people in &quot;asocial digital bubbles,&quot; while Brown University epidemiologist Erica Walker notes that &quot;personal listening devices are supposed to be personal,&quot; making the public broadcasts especially grating. In response, the UK pub chain Wetherspoons has banned speakerphone use in its venues, and United Airlines says it reserves the right to remove or ban repeat offenders.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Oil Falls, Asian Stocks Rise Ahead of Fed Rate Decision</div>
+        <div class="art-sum">Asian stocks climbed on Wednesday, September 16, 2026, as investors awaited the Federal Reserve&#x27;s rate decision, with Japan&#x27;s Nikkei 225 rising 0.69% to 63,923, South Korea&#x27;s Kospi gaining 1.37% to 6,717.97, Australia&#x27;s S&amp;P/ASX 200 up 0.28% to 8,696.5, and Hong Kong&#x27;s Hang Seng and China&#x27;s CSI 300 also higher; crude oil prices eased, with WTI slipping roughly 1% to around $104.68 a barrel. The moves came ahead of the FOMC&#x27;s policy statement, due at 2:00 p.m. ET that day, with CME FedWatch data showing traders pricing in a roughly 93% probability of a 25-basis-point rate hike to a 3.75%-4.00% target range, which would mark the Fed&#x27;s first rate increase since 2023 amid elevated inflation and energy-driven price pressures. New Fed Chair Kevin Warsh was set to hold a press conference following the announcement.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Oil Pares Gains, Stock Futures Steady as Cautious Optimism Heralds Fed Day</div>
+        <div class="art-sum">Oil prices eased on Wednesday, September 16, 2026, with WTI crude pulling back roughly 1% to near $104.68 a barrel after climbing earlier in the week on Middle East supply disruptions, including an attack that shut Saudi Arabia&#x27;s East-West pipeline, which normally routes about 7 million barrels per day to the Red Sea; Brent held above $107. U.S. stock futures were little changed heading into the Federal Reserve&#x27;s rate decision, with S&amp;P 500 futures up about 0.28% to 7,677.50, Dow futures up 0.26%, and Nasdaq futures up 0.51%. The FOMC&#x27;s two-day meeting concluded Wednesday, with fed funds futures pricing in roughly a 92-93% chance of a quarter-point rate hike from the prior 3.62% target rate, alongside Fed Chair Kevin Warsh&#x27;s post-meeting press conference and updated dot plot. Investors weighed the inflationary risk from elevated oil prices against the Fed&#x27;s policy path, producing the cautious, wait-and-see tone in equity markets ahead of the announcement.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Oil Futures Rise as More Oil Routes Are Obstructed</div>
+        <div class="art-sum">Oil futures climbed further this week as renewed attacks choked off key global shipping routes, with Brent crude pushing above $100 a barrel — its highest level in roughly six weeks — after Iranian forces said they targeted vessels near the Strait of Hormuz and Iran-backed Houthi rebels seized a strategic port on Yemen&#x27;s western coast on September 10, 2026. The Strait of Hormuz, which normally carries about a fifth of the world&#x27;s oil and gas supply, has been effectively shut to most shipping since March amid drone, missile, mine and small-boat attacks. The disruption has also hit consumers directly: the U.S. national average diesel price hit a record $5.94 a gallon this week, according to AAA data. Separately, Ukrainian drone strikes have continued to hammer Russian oil infrastructure, including the Black Sea export terminal at Novorossiysk, compounding the supply pressure driving futures higher.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Indexes Rise as Banks, AI Stocks Recover</div>
+        <div class="art-sum">I found the &quot;European stocks rise from 3-month lows&quot; Investing.com article, which corroborates the Bloomberg piece for the same day. I have enough to write the brief now. European stock indexes climbed on Wednesday, September 16, 2026, with the pan-European Stoxx 600 rising about 0.2% and snapping two straight days of losses as it rebounded from three-month lows. Bank shares led the advance after JPMorgan Chase forecast stronger third-quarter trading and investment-banking revenue, while miners also gained on higher gold prices; the rally came a day after chip and AI-linked stocks had sold off sharply on AI-slowdown concerns. The gains came as oil prices eased and investors awaited the Federal Reserve&#x27;s rate decision later that day, with markets pricing roughly a 92% chance of a 25-basis-point hike, following the European Central Bank&#x27;s move last week to raise its deposit rate to 2.50%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">AXA Targets More Growth With New Targets</div>
+        <div class="art-sum">AXA unveiled its 2027-2029 strategic plan, dubbed &quot;Growing Forward,&quot; at an investor day in Paris on September 15, 2026. The French insurer raised its underlying earnings-per-share growth target to a compound annual rate of 7% to 9% for 2027-2029, up from the 6% to 8% range under its prior 2024-2026 plan, alongside a new underlying return-on-equity goal of 15% to 17%. AXA also targets a mid-teens compound annual growth rate in book value per share including cumulative dividends through 2029, and roughly 25 billion euros in cumulative organic cash upstream over 2027-2029 with a 75% total payout ratio. The plan emphasizes customer-driven organic growth and scaling artificial intelligence to widen its competitive edge.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Hedge Funds Are the Wild Card in the Turbulent Bond Market</div>
+        <div class="art-sum">Hedge funds held roughly $2 trillion in US Treasuries at the start of 2026, more than double their holdings five years earlier and a record share of the market, according to Federal Reserve and Office of Financial Research data; a Fed note from June 2026 found large funds&#x27; gross Treasury exposure (cash and derivatives combined) reached about $4 trillion by September 2025, split between roughly $2.4 trillion long and $1.6 trillion short. Much of this growth is driven by the Treasury cash-futures &quot;basis trade,&quot; which hit about $830 billion in outstanding positions in September 2025, nearly double its prior peak from early 2020, funded largely through more than $6.6 trillion in repo and prime-brokerage borrowing. Regulators including the Fed, OFR, and Dallas Fed have flagged the concentrated, highly leveraged positioning as a financial-stability concern, warning that a spike in repo rates or a sudden jump in futures margin requirements could force rapid unwinds and amplify volatility across the $31 trillion Treasury market.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | How BlackRock Plans to Make the Corporate 401(k) Look More Like a Pension</div>
+        <div class="art-sum">BlackRock has been pushing to make workplace 401(k) plans function more like traditional pensions by embedding guaranteed lifetime income directly into target-date funds: its LifePath Paycheck product, launched in April 2024, automatically shifts about 10% of a participant&#x27;s balance into an income-generating allocation starting at age 55, rising to roughly 30% by age 65, with an annuity-purchase window open from age 59½ to 71 through insurers Equitable and Brighthouse Financial. As of January 2025, six employer retirement plans holding a combined $16 billion in assets had adopted the product, making it available to more than 200,000 eligible U.S. workers, at a cost comparable to BlackRock&#x27;s standard LifePath Index target-date fund (about a 0.14% expense ratio) with no added commissions or surrender fees. BlackRock is also moving to add private equity and private credit into target-date funds in the first half of 2026, targeting allocations of roughly 5% to 20% of a fund, which the firm estimates could boost annual returns by about 50 basis points. Together, the moves aim to give 401(k) savers pension-like features — diversified private-market exposure and a built-in path to guaranteed retirement income — that defined-contribution plans have historically lacked.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Crypto Exchange That Was Hub for Illicit Iran Cash Closes Suddenly</div>
+        <div class="art-sum">The U.S. Treasury&#x27;s Office of Foreign Assets Control sanctioned Dubai-based crypto exchange Shelbit General Trading LLC on August 7, 2026, saying it helped Iran&#x27;s Islamic Revolutionary Guard Corps move money and evade sanctions, with IRGC-linked wallets sending more than $1 million in crypto to Shelbit and over $2 million flowing back from Shelbit to Iranian wallets. Treasury said the unlicensed exchange had processed roughly $6.3 billion in transactions between May 2024 and March 2026, despite prior enforcement action by Dubai&#x27;s Virtual Assets Regulatory Authority in January 2025. Shelbit&#x27;s website had already gone dark and was inoperative for months before the sanctions, leaving customers unable to complete transactions, and it was designated alongside another Iran-linked exchange, Aban Tether, on the same day. The action extended a broader 2026 U.S. crackdown that in June had already sanctioned Iran&#x27;s largest exchange, Nobitex, and three other Iranian platforms.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Mark Walter’s Financial Empire Was Fueled by Retirement Savers</div>
+        <div class="art-sum">Federal prosecutors in Manhattan and the SEC are investigating Delaware Life Insurance Co. and Clear Spring Life and Annuity Co., two life insurers controlled by Dodgers and Lakers owner Mark Walter through his Group 1001 holding company, over whether they properly disclosed that ordinary customers&#x27; annuity and life-insurance premiums were funneled into private-credit loans backing other parts of Walter&#x27;s business empire. Delaware Life and Clear Spring received grand jury subpoenas in February 2026, and June 2026 regulatory filings revealed the companies had understated their related-party investments, revising the figure from roughly $1 billion to about $16 billion, or as much as 40% of invested assets according to some reports. The probe runs alongside an earlier inquiry, opened in 2025, into Walter&#x27;s $362 billion Guggenheim Partners asset-management arm, where he serves as CEO; one insurer has since agreed to cut $6.5 billion in investments amid the fallout. The case follows a whistleblower complaint and centers on whether Walter&#x27;s retirement-product businesses used everyday savers&#x27; money to prop up his broader sports and finance holdings, including the Dodgers.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">DOJ Says Binance Customers Used Crypto Exchange to Funnel Iran Oil Money</div>
+        <div class="art-sum">The U.S. Attorney&#x27;s Office for the Southern District of New York filed a civil forfeiture complaint on Monday, September 14, 2026, seeking to seize roughly $61 million in cryptocurrency that prosecutors say represents proceeds from black-market sales of sanctioned Iranian oil; the complaint alleges Iran laundered more than $1.5 billion in illicit oil money through crypto overall. Prosecutors named two Chinese entities, Blessed Trust and Hexa Whale, which allegedly used trading accounts on Binance to funnel the funds to Iran&#x27;s government and its proxies, including the Islamic Revolutionary Guard Corps. Binance itself was not charged, and the exchange remains under a three-year compliance monitorship stemming from its 2023 guilty plea to U.S. anti-money-laundering and sanctions violations, which carried $4.3 billion in penalties. The case follows an August 2026 Reuters investigation that found an unlicensed Dubai exchange tied to Iranian sanctions evasion had sent Binance at least $676 million.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Precious Metals Settle Lower With Yields in Focus</div>
+        <div class="art-sum">Comex gold settled at $4,291.60 an ounce on Tuesday, September 15, 2026, down 0.43%, while silver settled at $63.236 an ounce, down 0.4%, as elevated crude oil prices, a firmer U.S. dollar, and a 10-year Treasury yield nearing 5% weighed on the non-yielding metals ahead of the Federal Reserve&#x27;s decision the next day. Interest-rate futures were pricing an 86% to 93% probability of a 25-basis-point Fed rate hike, with the 10-year Treasury yield briefly touching 5.04%, its highest level since 2007. Recent inflation data and an oil-driven geopolitical shock reinforced the case for a hike rather than a pause, and U.S. equities also fell, with the S&amp;P 500 down 34.25 points to 7,585.73.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 17 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">How a Chinese Hacking Firm Tapped AI to Supercharge Cyber-Spying</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Mistral Aims to Grow AI Consumer Base Through Mozilla Partnership</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Exclusive | AI Coding Startup Factory More Than Triples Valuation to $5 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Live Q&amp;A: Ask Me Your Questions About iPhone Duo, iOS 27, the New Siri and More</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Trump Says AI Doesn’t Need More Guardrails and Calls Safety Fears a Hoax</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Essay | For the Love of God, Please Put on Headphones</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Oil Falls, Asian Stocks Rise Ahead of Fed Rate Decision</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Oil Pares Gains, Stock Futures Steady as Cautious Optimism Heralds Fed Day</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Oil Futures Rise as More Oil Routes Are Obstructed</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">European Indexes Rise as Banks, AI Stocks Recover</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">AXA Targets More Growth With New Targets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Hedge Funds Are the Wild Card in the Turbulent Bond Market</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Exclusive | How BlackRock Plans to Make the Corporate 401(k) Look More Like a Pension</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Crypto Exchange That Was Hub for Illicit Iran Cash Closes Suddenly</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Mark Walter’s Financial Empire Was Fueled by Retirement Savers</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">DOJ Says Binance Customers Used Crypto Exchange to Funnel Iran Oil Money</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Precious Metals Settle Lower With Yields in Focus</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">69 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">63 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">55 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">48 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">36 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">30 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-15.html">← Older · September 15, 2026 · Exclusive | OpenAI Buys Startup Developing Smartphone Camera</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
