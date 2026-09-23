@@ -136,6 +136,25 @@ def clean_summary(text):
     return stripped if stripped else flat
 
 
+# An org-level auth block is a hard stop, not a flaky headline: retrying 32 times
+# just burns minutes and buries the reason under 32 identical error lines. This is
+# what silently killed every run from 2026-09-20 onward.
+AUTH_MARKERS = (
+    "organization has disabled",
+    "use an anthropic api key instead",
+    "invalid bearer token",
+    "authentication_error",
+    "please run /login",
+    "credit balance is too low",
+)
+
+
+def looks_like_auth_failure(text):
+    """True if the CLI can't authenticate at all — no point trying more headlines."""
+    low = text[:400].lower()
+    return any(marker in low for marker in AUTH_MARKERS)
+
+
 def looks_rate_limited(text):
     """True if the CLI bailed because the subscription is temporarily tapped out."""
     low = text[:400].lower()
@@ -202,6 +221,10 @@ def research_headline(item, attempts=2):
             attempts_left -= 1
             continue
 
+        if looks_like_auth_failure(text):
+            # Exit code 0 with an auth complaint on stdout — don't let it become a "summary".
+            return {**item, "summary": "", "sources": [], "error": text.strip()[:200]}
+
         if looks_like_refusal(text):
             last_error = f"blocked by permissions: {text[:120]}"
             attempts_left -= 1
@@ -234,7 +257,18 @@ def research(digest):
             print(f"[{i}/{len(digest)}] skip (already covered): {title[:60]}", file=sys.stderr)
             continue
         print(f"[{i}/{len(digest)}] {title[:60]}", file=sys.stderr)
-        researched.append(research_headline(item))
+        result = research_headline(item)
+
+        # An auth block fails identically for every headline. Stop now, and do NOT
+        # record these titles as covered — otherwise de-dup would suppress them on
+        # the retry after auth is fixed, and the stories would be lost for good.
+        if result.get("error") and looks_like_auth_failure(result["error"]):
+            print(f"[ABORT] authentication failed, giving up on this run:\n"
+                  f"        {result['error'][:200]}", file=sys.stderr)
+            dedup.save_store(dedup.prune_store(store))
+            return None
+
+        researched.append(result)
         store[title] = {"date": today}
 
     dedup.save_store(dedup.prune_store(store))
@@ -256,6 +290,10 @@ def main():
     args = ap.parse_args()
 
     researched = research(wsj_fetch.build(args.limit))
+    if researched is None:
+        print("[FAIL] authentication is broken — wrote nothing", file=sys.stderr)
+        return 2
+
     report = wsj_fetch.research_to_markdown(researched)
 
     # research_to_markdown stamps the H1 with "now", so a backfill would write

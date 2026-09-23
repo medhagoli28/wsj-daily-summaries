@@ -88,9 +88,32 @@ done
 if [ "$SYNCED" -ne 1 ]; then log "FATAL: git sync failed"; exit 1; fi
 
 # Already researched? Nothing to do. This is what makes repeat runs free.
-if [ -f "$FILE" ] && head -1 "$FILE" | grep -q "Deep Digest"; then
+#
+# But "has a Deep Digest header" is NOT enough. A run whose every headline errored
+# still writes a file full of "could not research" lines under that same header.
+# From 2026-09-20 to 09-23 that file then satisfied the old guard, so every later
+# slot logged "nothing to do" and exited — a failed day permanently blocked its own
+# retries, and the site silently stopped updating for four days.
+# Require that most entries are real.
+is_usable_digest() {
+  local f="$1" entries failures
+  [ -f "$f" ] || return 1
+  head -1 "$f" | grep -q "Deep Digest" || return 1
+  entries=$(grep -c '^- \*\*' "$f")
+  failures=$(grep -c 'could not research' "$f")
+  [ "$entries" -gt 0 ] || return 1
+  [ $(( failures * 2 )) -lt "$entries" ] || return 1
+  return 0
+}
+
+if is_usable_digest "$FILE"; then
   log "$FILE is already a researched digest — nothing to do"
   exit 0
+fi
+
+if [ -f "$FILE" ] && head -1 "$FILE" | grep -q "Deep Digest"; then
+  log "$FILE is a failed digest (mostly 'could not research') — redoing it"
+  rm -f "$FILE"
 fi
 
 if [ -f "$FILE" ]; then
@@ -106,9 +129,19 @@ log "researching…"
 RC=$?
 
 if [ $RC -ne 0 ]; then
-  # Leave whatever CI published alone rather than committing a broken digest.
   log "FAIL: research exited $RC — not publishing. See the lines above for why."
-  "$GIT" checkout -- "$FILE" 2>/dev/null
+  # Don't leave the broken file behind. `git checkout --` only restores a TRACKED
+  # file; for a brand-new day the file is untracked, so that was a no-op and the
+  # wreckage stayed on disk to block every later retry. Delete it instead.
+  if "$GIT" ls-files --error-unmatch "$FILE" >/dev/null 2>&1; then
+    "$GIT" checkout -- "$FILE" 2>/dev/null
+    log "restored the previously committed $FILE"
+  else
+    rm -f "$FILE"
+    log "removed the unpublishable $FILE so a later slot can retry"
+  fi
+  # Surface the most common reason so the log says WHY, not just that it failed.
+  log "top error: $(grep -o '_(could not research: [^)]*)_' "$LOG" 2>/dev/null | tail -1 | cut -c1-160)"
   exit 1
 fi
 
