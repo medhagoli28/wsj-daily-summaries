@@ -260,6 +260,38 @@ def published_on(item, day):
         return False
 
 
+# A headline-only "Section Digest" lists its stories as "- [Title](link)" under
+# "## Section" headings.
+SECTION_HEADING_RE = re.compile(r"^##\s+(.+?)\s*$")
+HEADLINE_LINK_RE = re.compile(r"^-\s+\[(.+?)\]\((https?://\S+?)\)\s*$")
+HEADLINE_BOLD_RE = re.compile(r"^-\s+\*\*(.+?)\*\*\s*$")
+
+
+def items_from_digest(path):
+    """Read the headlines back out of an existing headline-only digest.
+
+    Upgrading an old Section Digest in place beats re-querying the feeds for that
+    date: these are the exact headlines WSJ ran that day, captured at the time,
+    so nothing is lost to whatever a search happens to still surface weeks later.
+    """
+    items, section = [], ""
+    with open(path) as fh:
+        for line in fh:
+            line = line.rstrip("\n")
+            m = SECTION_HEADING_RE.match(line)
+            if m:
+                section = m.group(1)
+                continue
+            hit = HEADLINE_LINK_RE.match(line)
+            link = hit.group(2) if hit else None
+            if not hit:
+                hit = HEADLINE_BOLD_RE.match(line)
+            if hit and section:
+                items.append({"section": section, "title": hit.group(1),
+                              "dek": "", "link": link or "", "published": ""})
+    return items
+
+
 def research(digest):
     """Run every fetched headline through the CLI, skipping recent near-duplicates.
 
@@ -298,6 +330,9 @@ def main():
     ap.add_argument("--limit", type=int, default=10, help="items per section")
     ap.add_argument("--out", metavar="PATH",
                     help="output path (default: digest-<date>.md)")
+    ap.add_argument("--from-digest", metavar="PATH",
+                    help="research the headlines already listed in an existing "
+                         "headline-only digest, instead of fetching new ones")
     ap.add_argument("--published-on", metavar="YYYY-MM-DD",
                     help="only research headlines actually published that day")
     ap.add_argument("--date", metavar="YYYY-MM-DD",
@@ -309,7 +344,15 @@ def main():
                     help="exit 1 if this fraction of ATTEMPTED headlines errored")
     args = ap.parse_args()
 
-    if args.published_on:
+    if args.from_digest:
+        items = items_from_digest(args.from_digest)
+        print(f"[{args.from_digest}] {len(items)} headlines read from the file",
+              file=sys.stderr)
+        if not items:
+            print("[FAIL] no headlines found in that digest", file=sys.stderr)
+            return 3
+
+    elif args.published_on:
         # Explicit date operators reach back past the rolling when:Nd window, which
         # is the only way to recover a day that has already aged out of the feed.
         # Ask for a day either side, then filter exactly on each item's pubDate.
