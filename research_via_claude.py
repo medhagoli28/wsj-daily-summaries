@@ -242,6 +242,24 @@ def research_headline(item, attempts=2):
     return {**item, "summary": "", "sources": [], "error": last_error}
 
 
+def published_on(item, day):
+    """True if this headline's own pubDate falls on `day` (YYYY-MM-DD, UTC).
+
+    Backfilling needs each day to get ITS stories, not the whole current feed
+    stamped with an old date. Items without a parsable date are excluded rather
+    than guessed at — a wrong date is worse than a missing entry.
+    """
+    import email.utils
+    raw = (item.get("published") or "").strip()
+    if not raw:
+        return False
+    try:
+        return email.utils.parsedate_to_datetime(raw).astimezone(
+            timezone.utc).strftime("%Y-%m-%d") == day
+    except Exception:
+        return False
+
+
 def research(digest):
     """Run every fetched headline through the CLI, skipping recent near-duplicates.
 
@@ -280,6 +298,8 @@ def main():
     ap.add_argument("--limit", type=int, default=10, help="items per section")
     ap.add_argument("--out", metavar="PATH",
                     help="output path (default: digest-<date>.md)")
+    ap.add_argument("--published-on", metavar="YYYY-MM-DD",
+                    help="only research headlines actually published that day")
     ap.add_argument("--date", metavar="YYYY-MM-DD",
                     help="stamp the digest with this date instead of today "
                          "(for backfilling a missed day)")
@@ -289,7 +309,18 @@ def main():
                     help="exit 1 if this fraction of ATTEMPTED headlines errored")
     args = ap.parse_args()
 
-    researched = research(wsj_fetch.build(args.limit))
+    items = wsj_fetch.build(args.limit)
+    if args.published_on:
+        before = len(items)
+        items = [i for i in items if published_on(i, args.published_on)]
+        print(f"[{args.published_on}] {len(items)} of {before} headlines "
+              f"were published that day", file=sys.stderr)
+        if not items:
+            print("[FAIL] no headlines from that day are still in the feeds",
+                  file=sys.stderr)
+            return 3
+
+    researched = research(items)
     if researched is None:
         print("[FAIL] authentication is broken — wrote nothing", file=sys.stderr)
         return 2
