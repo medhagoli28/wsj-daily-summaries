@@ -38,19 +38,24 @@ def gnews(query: str) -> str:
             + urllib.parse.quote(query)
             + "&hl=en-US&gl=US&ceid=US:en")
 
+# The query for each section, minus the time clause — that gets appended below so
+# the same search can run either as "the last few days" or over an explicit window.
+SECTION_QUERIES = {
+    "Tech": "site:wsj.com/tech",
+    "Markets & Finance": "stock market site:wsj.com",
+    "Personal Finance": '"personal finance" site:wsj.com',
+}
+
+# Default recency per section. PF is quieter, so it needs a longer reach.
+SECTION_RECENCY = {
+    "Tech": "when:4d",
+    "Markets & Finance": "when:4d",
+    "Personal Finance": "when:7d",
+}
+
 SECTIONS = {
-    "Tech": {
-        "type": "gnews",
-        "url": gnews("site:wsj.com/tech when:4d"),
-    },
-    "Markets & Finance": {
-        "type": "gnews",
-        "url": gnews("stock market site:wsj.com when:4d"),
-    },
-    "Personal Finance": {
-        "type": "gnews",
-        "url": gnews('"personal finance" site:wsj.com when:7d'),
-    },
+    name: {"type": "gnews", "url": gnews(f"{q} {SECTION_RECENCY[name]}")}
+    for name, q in SECTION_QUERIES.items()
 }
 
 TAG = re.compile(r"<[^>]+>")
@@ -101,13 +106,26 @@ def parse_items(xml_bytes: bytes, is_gnews: bool, section: str, limit: int):
     return out
 
 
-def build(limit: int):
+def build(limit: int, after: str = None, before: str = None):
+    """Fetch headlines per section.
+
+    By default this is the rolling `when:Nd` window, which only reaches back a few
+    days — anything older has aged out of the feed and is unrecoverable. Passing
+    `after`/`before` (YYYY-MM-DD) swaps in Google News' explicit date operators
+    instead, which DO still return older items and are how a missed day gets
+    backfilled. Both bounds read as inclusive-ish, so ask for a day either side of
+    what you want and filter precisely on each item's pubDate afterwards.
+    """
     digest = []
     for section, cfg in SECTIONS.items():
+        if after and before:
+            url = gnews(f"{SECTION_QUERIES[section]} after:{after} before:{before}")
+            is_gnews = True
+        else:
+            url, is_gnews = cfg["url"], cfg["type"] == "gnews"
         try:
-            raw = fetch(cfg["url"])
-            items = parse_items(raw, cfg["type"] == "gnews", section, limit)
-            digest.extend(items)
+            raw = fetch(url)
+            digest.extend(parse_items(raw, is_gnews, section, limit))
         except Exception as e:  # noqa
             print(f"[warn] {section}: {e}", file=sys.stderr)
     return digest

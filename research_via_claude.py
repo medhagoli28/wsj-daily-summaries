@@ -29,7 +29,7 @@ import subprocess
 import sys
 import time
 import tempfile
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import dedup
 import wsj_fetch
@@ -309,8 +309,16 @@ def main():
                     help="exit 1 if this fraction of ATTEMPTED headlines errored")
     args = ap.parse_args()
 
-    items = wsj_fetch.build(args.limit)
     if args.published_on:
+        # Explicit date operators reach back past the rolling when:Nd window, which
+        # is the only way to recover a day that has already aged out of the feed.
+        # Ask for a day either side, then filter exactly on each item's pubDate.
+        day = date.fromisoformat(args.published_on)
+        items = wsj_fetch.build(
+            args.limit,
+            after=(day - timedelta(days=1)).isoformat(),
+            before=(day + timedelta(days=1)).isoformat(),
+        )
         before = len(items)
         items = [i for i in items if published_on(i, args.published_on)]
         print(f"[{args.published_on}] {len(items)} of {before} headlines "
@@ -319,6 +327,9 @@ def main():
             print("[FAIL] no headlines from that day are still in the feeds",
                   file=sys.stderr)
             return 3
+
+    else:
+        items = wsj_fetch.build(args.limit)
 
     researched = research(items)
     if researched is None:
