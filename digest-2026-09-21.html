@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 21, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-20.html">‹ Sep 20</a> &nbsp;·&nbsp; <a href="digest-2026-09-22.html">Sep 22 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 75</div>
+    <div class="issue-date">September 21, 2026</div>
+    <div class="issue-sub">14 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 14</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">These Tiny Startups Are Getting Even Smaller With Help From AI</div>
+        <div class="art-sum">AI-native startups now run about 25% leaner than pre-AI-era peers, employing fewer junior staff and middle managers, according to a joint Harvard Business School and INSEAD study cited in recent coverage of the trend. Concrete examples include Butternut AI, which shrank from nine employees to four while keeping operations running around the clock with automation, and Halifax-based Floqer, which reached seven-figure annual recurring revenue in under two years with a team of nine and aims to build a billion-dollar business with fewer than 20 staff. At the larger end, OpenEvidence, a startup valued at $12 billion, operates with fewer than 100 employees while its platform is used by doctors treating an estimated 300 million Americans this year. Investors are increasingly citing &quot;revenue per employee&quot; rather than headcount growth as the key metric for evaluating these AI-native companies.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Shopify to Use Meta’s Muse for Agentic Checkout</div>
+        <div class="art-sum">Shopify announced on September 21, 2026 that it is partnering with Meta&#x27;s AI assistant Muse to enable &quot;agentic checkout&quot; across its merchant stores, letting Muse search Shopify&#x27;s product catalog and complete purchases via Shop Pay without the shopper leaving the chat interface. The integration runs on the Universal Commerce Protocol, is on by default for eligible merchants, and is available to shoppers in the United States, Canada, and Mexico with no fee beyond standard payment processing. The move stands in contrast to Amazon, which has blocked Meta&#x27;s Muse agent from accessing its retail site, positioning Shopify as an early adopter of agentic commerce among major e-commerce platforms.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">British Columbia Sues OpenAI, Alleging ChatGPT Aided Mass School Shooting</div>
+        <div class="art-sum">British Columbia&#x27;s provincial government filed a lawsuit against OpenAI and CEO Sam Altman on September 22, 2026, in federal court in San Francisco, alleging the company failed to warn authorities about violent activity in a user&#x27;s ChatGPT conversations before a February 2026 mass shooting at Tumbler Ridge Secondary School that killed eight people, including five students and an education assistant, after the shooter first killed his mother and half-brother at home. The suit claims OpenAI detected the shooter&#x27;s violent interactions as early as June 2025 but deactivated the account without alerting law enforcement, and that Altman later, in April 2026, publicly apologized for the company&#x27;s failure to warn the community. British Columbia is seeking financial compensation for emergency-response and recovery costs plus a court order forcing OpenAI to overhaul how it identifies and escalates conversations that signal a threat of violence.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">OpenAI Urges Washington to Lead Global Effort to Create AI-Safety Standards</div>
+        <div class="art-sum">OpenAI published a policy paper on Monday, September 21, 2026, calling on the U.S. government to lead a coordinated international effort to set technical safety standards for advanced AI, arguing that &quot;leading now will determine whether the United States shapes the global AI framework or watches a fragmented, uneven, and conflict-ridden system take hold around it.&quot; The release came during a week of U.S.-China diplomatic talks on AI safety coordination, and as roughly 20 other countries have already moved to establish AI oversight frameworks without direct U.S. or Chinese involvement. OpenAI&#x27;s proposal favors voluntary standards over government mandates, urging use of a network of national AI safety institutes — citing South Korea among roughly ten countries that have already built such bodies — to align on incident reporting, cross-border cooperation, and compute access.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">‘The Fuel for AI’ at FedEx</div>
+        <div class="art-sum">FedEx CEO Raj Subramaniam said at the company&#x27;s Investor Day on February 12, 2026, that &quot;the fuel for AI is data,&quot; pointing to the roughly 2 petabytes of data FedEx generates daily from its global shipping network as the foundation for its AI push; the company projects revenue growing at about a 4% compound annual rate to roughly $98 billion and operating income reaching about $8 billion (a ~17% CAGR) by fiscal 2029, driven by AI, automation, and network integration. FedEx also said it aims to have AI agents participating in more than half of its core operational workflows by 2028, and cited results such as a 90% cut in aircraft maintenance research time and a 50% improvement in delivery-time precision from AI already deployed. The strategy includes replacing hundreds of legacy IT systems with a cloud-first platform to better organize that data for AI use.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Kuehne+Nagel Strikes Deal With Amazon For Supply Chain, Cloud Capabilities</div>
+        <div class="art-sum">Kuehne+Nagel announced a long-term strategic collaboration with Amazon on September 21, 2026, expanding its role beyond air freight into ocean, road, and contract logistics to support the buildout, maintenance, and expansion of Amazon Web Services&#x27; global data center infrastructure. The deal is backed by a call option on existing Kuehne+Nagel shares that vests based on commercial milestones and services delivered over as long as seven years, settleable in cash unless Amazon opts for shares; a third-party financial institution has been arranged to hedge the exposure. Kuehne+Nagel shares rose as much as 5.2% on the news, and the company had already been moving servers and other AWS-related cargo by air for roughly two years prior to this expanded agreement.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Google Fined $463 Million By Irish Data Watchdog Over Location Data Handling</div>
+        <div class="art-sum">Ireland&#x27;s Data Protection Commission fined Google €403 million (about $463 million) on September 21, 2026, following an inquiry into how the company processes location data across Web &amp; App Activity, Location History, and Location Accuracy settings; the investigation began in early 2020. The DPC found Google failed to adequately inform users their location data was being used to build profiles for targeted advertising and to infer personal interests, meaning people could lose control over that data without realizing it. This marks the first time the DPC has sanctioned Google, though other tech firms like Meta and TikTok have faced repeated fines from the regulator; Google has also been ordered to bring its data-processing practices into compliance within six months.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Magnificent Seven Is Roaring Back, Fueled by Meta’s Rally</div>
+        <div class="art-sum">Meta shares surged roughly 30% in September 2026, climbing from about $572 at the end of August to a 52-week high of $779.82 on September 24, marking the stock&#x27;s best monthly performance since July 2013. The rally accelerated after Meta launched its Muse AI agent on September 8, which topped App Store downloads with 2.5-2.8 million installs in 12 days, and after Wells Fargo raised its price target on the stock to $796 from $640 ahead of the Meta Connect 2026 conference. The broader Roundhill Magnificent Seven ETF (MAGS) rose about 5% in September through late in the month, outpacing the S&amp;P 500, even as Treasury yields climbed above 5%, as investors treated the megacap tech names as cash-flow havens better able to absorb higher capital costs than smaller growth firms. Meta&#x27;s single-day gain on September 21 was its best since the market turmoil of April 2025.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The IRS Is Cracking Down on a Favorite Way the Ultrawealthy Pass On Money</div>
+        <div class="art-sum">I have enough concrete detail now to write the brief. The IRS has hit Nashville heiress Trisha Elcan and her husband with a $736 million tax bill over their use of grantor-retained annuity trusts (GRATs), a widely used technique that lets wealthy families pass appreciating assets to heirs largely tax-free; the couple is fighting the assessment in U.S. Tax Court (Elcan v. Commissioner, No. 3405-25). Elcan funded the GRATs with holding-company interests tied to HCA Healthcare stock and later repurchased assets from the trusts using interest-bearing promissory notes, with the trustee then forgiving portions of those notes to cover the annuity payments; the IRS argues this note-forgiveness maneuver was an improper &quot;indirect&quot; step that could make the entire $687.5 million originally transferred into the trusts a taxable gift. Estate lawyers say the case, first reported by the Wall Street Journal on September 21, 2026, doesn&#x27;t threaten the basic GRAT structure itself but signals the IRS is scrutinizing how aggressively taxpayers can push the technique. The dispute comes as the federal estate, gift and generation-skipping tax exemption rises to $15 million per person ($30 million per married couple) starting January 1, 2026 under the One Big Beautiful Bill Act.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">A Safer Way to Bet on Nuclear</div>
+        <div class="art-sum">The Wall Street Journal&#x27;s Heard on the Street column argued that Centrus Energy (NYSE: LEU) offers a less speculative way to invest in the nuclear buildout than newer, unprofitable small-modular-reactor startups, noting the company relies on proven uranium-enrichment technology rather than unproven designs, prompting shares to surge on the coverage. Centrus, based in Bethesda, Maryland, is working to rebuild domestic enrichment capacity after the U.S. banned Russian enriched-uranium imports, and it holds a $900 million Department of Energy contract to scale up production of HALEU (high-assay, low-enriched uranium) fuel, with new commercial-scale capacity targeted for 2029. The piece framed Centrus as benefiting from an &quot;energy security premium&quot; given that the U.S. previously sourced up to a quarter of its enriched uranium from Russia, supply that is being phased out under import restrictions with waivers ending January 1, 2028.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Apartment Landlords Have a $2 Trillion Debt Problem That Is Only Getting Worse</div>
+        <div class="art-sum">Apartment landlords across the U.S. owe roughly $1.8 trillion in multifamily debt coming due over the next decade, including about $757 billion by 2028 and nearly $300 billion maturing in 2026 alone, per data cited by The Real Deal and Rental Housing Journal. Many borrowed heavily during 2020-2021 when rates were near 3%, and now face refinancing at roughly double those rates while property values have fallen more than 20% from their 2022 peak. The squeeze has been compounded by a glut of new luxury supply in Sunbelt markets like Phoenix, Atlanta, and Austin that has outpaced demand and slowed rent growth, pushing some owners toward distressed sales, handing keys back to lenders, or restructuring debt.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | U.S. Proposes $5 Billion to Kickstart Fund to Rebuild Gulf Energy Sites</div>
+        <div class="art-sum">The Trump administration has proposed seeding a new Gulf reconstruction fund with $5 billion, asking Saudi Arabia, the UAE, Qatar, Bahrain, Kuwait, Oman, Iraq and Jordan to match the contribution for a total of roughly $10 billion, according to a Wall Street Journal report cited by other outlets on September 21, 2026. The vehicle, reportedly dubbed the Partnership for Allied Construction and Trust (PACT), would be managed by the U.S. International Development Finance Corporation and aims to repair energy sites, pipelines, and refineries damaged during the ongoing war with Iran, now in its seventh month. A stated secondary goal is reducing the region&#x27;s dependence on shipping oil and gas through the blockaded Strait of Hormuz.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">I Went Home to Detroit to See What Voters Want From the Midterms</div>
+        <div class="art-sum">Detroit voters heading into the 2026 midterms are focused overwhelmingly on affordability, with gas prices in the city hitting roughly $4.11 a gallon (up from about $2.81-$2.92 in January) and residents citing rising costs for groceries, rent and insurance, according to Fox News reporting on the same Michigan battleground the Journal profiled. Detroit&#x27;s median household income sits below $40,000, with roughly a third of residents below the federal poverty line, and many voters expressed skepticism toward President Trump&#x27;s proposed $5,000 &quot;dividend&quot; check, recalling an earlier $2,000 tariff-funded payout promised in 2025 that never materialized. Michigan, which Trump carried by 1.4 points in 2024, remains a top battleground for Senate control in 2026, and a national Reuters/Ipsos poll of 951 registered voters (released around August 2026) found Democrats holding a 36%-28% edge over Republicans on handling the cost of living, their largest advantage on that issue since October 2025. A separate Americans for Prosperity canvass of nearly 43,000 voters across seven competitive Senate states, including Michigan, found affordability outweighing every other issue combined, including immigration, healthcare and crime.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">In the Baltics, NATO Forces Are Trying to Learn the New Way of War</div>
+        <div class="art-sum">NATO has been staging large-scale exercises across the Baltic region to integrate drone warfare and counter-hybrid tactics learned from the Ukraine war, including roughly 10,000 troops from 13 countries drilling on Germany&#x27;s Baltic coast and Latvia&#x27;s Baltic Trust 26 (August 3-14) bringing about 650 allied, Ukrainian, Australian and Japanese participants together for counter-drone exercises. Lithuania ran Iron Wolf 2026 (June 8-22) with UK and Polish forces emphasizing heavy drone integration, while Latvia&#x27;s NAMEJS 26 (September 2-October 8) involves around 12,000 Latvian soldiers alongside Canadian, US, Estonian and Lithuanian units. The push comes after actual Russian-linked drone incursions into Baltic and Finnish airspace in March and May 2026, prompting a Latvia-based NATO brigade to accelerate efforts to close its drone-warfare gap, per Israel Hayom. Baltic states have also seen a wave of defense-tech startups building AI-and-drone systems designed to operate under GPS jamming, aiming to deter Russia&#x27;s broader hybrid toolkit of cyberattacks, sabotage and disinformation.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 14 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">These Tiny Startups Are Getting Even Smaller With Help From AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Shopify to Use Meta’s Muse for Agentic Checkout</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">British Columbia Sues OpenAI, Alleging ChatGPT Aided Mass School Shooting</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">OpenAI Urges Washington to Lead Global Effort to Create AI-Safety Standards</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">‘The Fuel for AI’ at FedEx</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Kuehne+Nagel Strikes Deal With Amazon For Supply Chain, Cloud Capabilities</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Google Fined $463 Million By Irish Data Watchdog Over Location Data Handling</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">The Magnificent Seven Is Roaring Back, Fueled by Meta’s Rally</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">The IRS Is Cracking Down on a Favorite Way the Ultrawealthy Pass On Money</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">A Safer Way to Bet on Nuclear</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Apartment Landlords Have a $2 Trillion Debt Problem That Is Only Getting Worse</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Exclusive | U.S. Proposes $5 Billion to Kickstart Fund to Rebuild Gulf Energy Sites</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">I Went Home to Detroit to See What Voters Want From the Midterms</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">In the Baltics, NATO Forces Are Trying to Learn the New Way of War</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">80 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">63 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">21 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-20.html">← Older · September 20, 2026 · Gemini Joins the Hacker Club</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — September 22, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-09-21.html">‹ Sep 21</a> &nbsp;·&nbsp; <a href="digest-2026-09-23.html">Sep 23 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 76</div>
+    <div class="issue-date">September 22, 2026</div>
+    <div class="issue-sub">12 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 12</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 3</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Vigilante Who’s Taking Down Recruitment Scammers, One Fake Job Ad at a Time</div>
+        <div class="art-sum">Jay Jones, a 39-year-old laid-off copywriter in the Chicago area who now drives for Uber, has spent nearly two years since his late-2023 layoff tracking down fraudulent job postings and getting them removed, mostly from LinkedIn, under the online handle &quot;The Profiler&quot;; he says he has helped take down nearly 60,000 fake job listings and flagged roughly 7,000 suspicious recruiter profiles. His investigation found scammers using stolen photos to mass-produce fake recruiter accounts, hijacking dormant verified LinkedIn profiles for credibility, and posting through real company pages before redirecting applicants to outside sites or emails. LinkedIn says its automated systems catch 98.7% of scam/spam content and 99.5% of fake accounts before members see them, but Jones argues scammers are adapting quickly, including using AI to tailor outreach. The FTC estimates Americans lost more than $490 million to fake jobs and business-opportunity scams in 2023 alone.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Leaders Are Standing On a Liability Landmine</div>
+        <div class="art-sum">Law firm Edelson PC has filed 19 separate wrongful-death and injury lawsuits against OpenAI, arguing product liability, negligence, and public nuisance claims tied to ChatGPT&#x27;s design, while similar suits target Character.AI and Google over chatbot interactions linked to teen suicides, including the Raine v. OpenAI case filed in August 2025 by the parents of a teenage user. Character.AI settled the first such case, Garcia v. Character.AI, in January 2026, after a federal judge in May 2025 rejected the company&#x27;s First Amendment and Section 230 defenses and let product-liability claims proceed. Florida escalated the pressure in June 2026 with an 83-page complaint against OpenAI and CEO Sam Altman, and insurers have begun responding to the exposure, with Lloyd&#x27;s of London launching a policy in May 2025 covering AI-hallucination losses and other carriers rolling out chatbot-error coverage. Separately, Nippon Life Insurance Company of America sued OpenAI in March 2026 over an employee&#x27;s use of ChatGPT for pro se litigation, alleging tortious interference and unauthorized practice of law.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">K-Pop Is Betting on AI and Robots. Will Fans Buy It?</div>
+        <div class="art-sum">Galaxy Corporation, an entertech startup founded by former G-Dragon manager Choi Yong-ho and backed by agencies managing G-Dragon, Taemin and Kim Jong-kook, is developing humanoid robot idols it says could hit stages within five years, alongside AI-generated music and virtual content meant to cut production costs; the company has raised roughly 200 billion won since starting with just 1 million won in capital, reached a valuation of 1 trillion won (about $850 million) by December 2025, drew a 7% stake investment from Taiwanese star Jay Chou&#x27;s Star Plus Legend, and is targeting a U.S. and Seoul IPO as early as next year. Meanwhile virtual K-pop act Plave has shown fans will pay for non-human performers, selling over 560,000 copies of its &quot;Asterum: 134-1&quot; album in its first week and filling Gocheok Sky Dome for a combined 40,000 concertgoers, even as many fans and critics remain wary that AI undercuts the &quot;visible human effort&quot; long central to K-pop&#x27;s appeal.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | $5 Billion Flurry of Nearly Identical Kalshi Trades Draws Scrutiny</div>
+        <div class="art-sum">Since August 2026, roughly one million trades clustered around fixed sizes such as $5,500 have taken place in a single Kalshi ether perpetual-futures market, together accounting for more than $5 billion in volume over the past month, with about half of Kalshi&#x27;s perpetual futures volume in that period concentrated in a handful of repetitive, fixed-dollar trade sizes. The Commodity Futures Trading Commission is examining the activity before deciding whether to open a formal enforcement investigation, and researchers flagged a near-simultaneous shift in dominant trade sizes on August 24, when bitcoin&#x27;s common sizes moved from about $4,000/$2,100 to $5,000/$2,500 and ether&#x27;s shifted from roughly $4,500 to $5,500. Kalshi says the trades are legitimate, involve hundreds of distinct traders, and stem from liquidity incentives — including fee waivers, cash stipends, and equity opportunities tied to volume targets — for a new market, not wash trading, and as of late September the company says the CFTC has not contacted it directly about the trades.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Activist Jana Partners Urges Six Flags to Explore Sale</div>
+        <div class="art-sum">Activist investor Jana Partners, led by Barry Rosenstein, is pressing Six Flags Entertainment to hire an investment bank and explore a sale of the company, according to a letter reported on September 23, 2026, marking the second time the fund has pushed for such a move since building its stake last October. Jana and co-investors, including a group involving Kansas City Chiefs tight end Travis Kelce as a brand ambassador, hold roughly a 9% stake in Six Flags that was worth about $200 million when acquired. The push follows a rough stretch for the amusement park operator, whose most recent quarterly net loss widened to $202.6 million from $99.6 million a year earlier, while its shares have fallen about 42% over the past twelve months, leaving Six Flags with a market capitalization of roughly $1.2 billion. Six Flags has not indicated it will launch a formal sale process.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Meta’s Muse Comes for Financial Stocks</div>
+        <div class="art-sum">Meta&#x27;s Muse AI agent has driven Meta shares up roughly 11% in a single day and about 27% over three weeks in late September 2026, as analysts including J.P. Morgan&#x27;s Doug Anmuth upgraded the stock (to &quot;Overweight&quot;) on the app&#x27;s rapid climb up download charts. Beyond ad and e-commerce use cases, Muse is being positioned as a personal financial agent — CNBC reported on September 27 that giving the assistant access to bank and credit-card data lets it act as a budgeting coach, and that Muse-style agents could eventually sweep idle checking-account cash (averaging about 0.1% in national interest) into accounts paying 3.3%-5.0%, threatening the cheap deposit base banks rely on for lending. Meta has continued expanding Muse&#x27;s reach, launching a version for small businesses on September 29 that connects to software like Intuit, Asana, and Canva as well as Meta ad accounts.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Sundance Growth Hits $250 Million Upper Limit for Sophomore Fund</div>
+        <div class="art-sum">Sundance Growth closed its second flagship fund at $250 million, hitting the vehicle&#x27;s hard cap roughly 15 months after wrapping its $125 million debut fund. The San Francisco-based growth equity firm, founded by Christian Stewart (formerly of Accel-KKR), invests in mission-critical, vertical B2B software companies generating $5–10 million in annual recurring revenue. Fund II doubles the size of the firm&#x27;s first vehicle, which itself closed oversubscribed in just over 30 days, reflecting strong limited-partner demand for the strategy.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Looking for Real-Estate Bargains? Watch These Apartment Loans</div>
+        <div class="art-sum">The multifamily CMBS delinquency rate climbed to 7.23% in June 2026, up from 6.64% six months earlier and 5.91% a year prior, according to Trepp data cited by Multifamily Dive, with the special-servicing rate for apartment loans running even higher, above 8%. The distress is concentrated in bridge loans originated in 2021-2022, when borrowing was cheap and floating-rate debt was popular; roughly $930 billion in commercial real estate loans are set to mature in 2026, with at least $126 billion already considered distressed as of late 2025. Separately, delinquencies on multifamily loans held by FDIC-insured banks hit their highest level since 2013 in the first quarter of 2026, even as banks&#x27; multifamily loan books grew to a record $665.3 billion. Analysts note this wave of maturing, underwater loans is expected to force more owners into foreclosure or discounted sales, creating buying opportunities for investors waiting for prices to reset.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Gold Futures Slip As U.S. Dollar Gains</div>
+        <div class="art-sum">Gold futures for December delivery opened at $4,150.10 per troy ounce on Tuesday, September 29, 2026, down 0.4% from Monday&#x27;s close and touching their lowest level since August 5, while spot gold traded around $4,150-4,151 per ounce early in the session, per CNBC. The pullback comes as markets price in at least one, and possibly two, additional Federal Reserve rate increases before year-end, a dynamic tied to broader dollar strength that has pressured the metal even as it remains up about 9.5% year-to-date, according to Yahoo Finance. Brent crude also fell sharply to $97.51 a barrel from over $101 the prior day, adding to the risk-off, dollar-supportive tone in commodity markets even amid ongoing Iran-related geopolitical tensions.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">In 200-Page Report, Cornell Confronts the Crisis in American Higher Education</div>
+        <div class="art-sum">A Cornell faculty committee released a 200-plus-page report on September 22-23, 2026, warning that American research universities face an &quot;unprecedented&quot; set of pressures from unstable federal funding, declining public trust, rising costs, and the rapid rise of artificial intelligence. The 18-member Committee on the Future of the American University spent roughly a year consulting more than 6,000 stakeholders—faculty, staff, students, alumni, and outside advisors—through town halls and webinars before issuing its recommendations. The report urges Cornell to diversify revenue sources, rethink its tuition model, and broaden the range of viewpoints on campus, while explicitly rejecting a shift to three-year degrees or a major pivot toward online learning. It also argues that universities&#x27; sprawling mission across teaching, research, and public service has left them unable to clearly articulate their core purpose to a skeptical public.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Vance-Led Task Force Removing 760,000 Allegedly Fraudulent Obamacare Enrollments</div>
+        <div class="art-sum">The Centers for Medicare and Medicaid Services announced on September 22-23, 2026, that it is canceling roughly 315,000 Affordable Care Act marketplace enrollments covering about 760,000 people after finding unauthorized or fraudulent sign-ups, an action led by Vice President JD Vance&#x27;s White House Task Force to Eliminate Fraud. CMS is separately requiring an additional 419,000 people to reverify their legal residency and income eligibility to keep their coverage. Officials estimate the crackdown, which also includes termination notices for some agents and brokers and a temporary freeze on new broker registrations, will save about $2.2 billion in taxpayer-funded subsidies, out of an estimated $6.6 billion in potential improper spending in 2026. Vance pointed to one alleged fraud ring of roughly 40 agents that funneled 50,000 fabricated names into the system.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The MLB Team Upending Everything You Thought You Knew About Batting Orders</div>
+        <div class="art-sum">I have enough concrete detail to write the brief. The Philadelphia Phillies have drawn attention for a lineup approach that breaks with a century of conventional wisdom by stacking Trea Turner, Kyle Schwarber and Bryce Harper — their three best hitters — in the top three spots so all of them bat in the first inning of nearly every game, rather than spreading talent through the order with a traditional cleanup hitter. Manager Rob Thomson has stuck with this top-three arrangement through much of the 2026 season even as results fluctuated, including a late-season stretch when Harper, Schwarber, Turner and J.T. Realmuto combined to go just 10-for-59 with no home runs during a four-game losing skid. The strategy paid off as Philadelphia clinched its fifth consecutive playoff berth on the final day of the 162-game regular season, powered by a Zack Wheeler win over the Tampa Bay Rays, with Harper finishing the year having played all 162 games while hitting 29 home runs and drawing 107 walks.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 12 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">The Vigilante Who’s Taking Down Recruitment Scammers, One Fake Job Ad at a Time</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">AI Leaders Are Standing On a Liability Landmine</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">K-Pop Is Betting on AI and Robots. Will Fans Buy It?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Exclusive | $5 Billion Flurry of Nearly Identical Kalshi Trades Draws Scrutiny</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Exclusive | Activist Jana Partners Urges Six Flags to Explore Sale</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Meta’s Muse Comes for Financial Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Exclusive | Sundance Growth Hits $250 Million Upper Limit for Sophomore Fund</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Looking for Real-Estate Bargains? Watch These Apartment Loans</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Gold Futures Slip As U.S. Dollar Gains</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">In 200-Page Report, Cornell Confronts the Crisis in American Higher Education</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Vance-Led Task Force Removing 760,000 Allegedly Fraudulent Obamacare Enrollments</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">The MLB Team Upending Everything You Thought You Knew About Batting Orders</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">80 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">63 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">56 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">52 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">34 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-09-21.html">← Older · September 21, 2026 · These Tiny Startups Are Getting Even Smaller With Help From AI</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
