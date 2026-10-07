@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 7, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-06.html">‹ Oct 6</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 91</div>
+    <div class="issue-date">October 7, 2026</div>
+    <div class="issue-sub">18 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 18</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Solved One Math Problem and Everyone Freaked Out. It Just Cracked Hundreds More.</div>
+        <div class="art-sum">I have enough concrete detail to write the brief now. Since October 2025, AI tools—most notably OpenAI&#x27;s GPT-5 and successor models—have helped move roughly 100 of the late mathematician Paul Erdős&#x27;s open problems into the &quot;solved&quot; column, according to a public tracker maintained by Fields Medalist Terence Tao; most of these resolutions amount to AI surfacing forgotten or obscure solutions already buried in the literature rather than genuine new proofs. The saga began when Columbia researchers Mehtaab Sawhney and Mark Sellke used ChatGPT to dig up solutions or partial solutions to roughly 20 Erdős problems, and escalated in mid-2026 when OpenAI said an internal model (and later an unreleased model called Astra) helped crack more significant, decades-old problems, including disproving the Erdős unit distance conjecture and resolving a problem open for 60 years in about 80 minutes. Tao has cautioned that most of these are &quot;lowest-hanging fruit&quot; solvable with existing techniques rather than profound mathematical breakthroughs, and that an earlier October 2025 claim that GPT-5 &quot;solved&quot; ten Erdős problems was walked back after it turned out the model had merely found pre-existing solutions, not made original discoveries.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | AI-Computing Startup Lambda Is Raising $4 Billion in Final Round Before Planned IPO</div>
+        <div class="art-sum">Nvidia-backed AI cloud provider Lambda is raising up to $4 billion in a final private funding round that would value the company at $14.5 billion excluding the new cash, with Coatue and Blackstone leading the investment, according to reports from October 6, 2026. The round is intended to be Lambda&#x27;s last before a planned IPO targeted for 2027. The company&#x27;s contracted backlog reportedly jumped from $15 billion to $50 billion, driven in part by a $35 billion compute deal with Anthropic, and Lambda has recently bolstered its leadership with former AT&amp;T CEO John Donovan joining its board and former Charter Communications executive Charles Fisher named CFO.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">A Data-Center Crunch is Coming</div>
+        <div class="art-sum">US data center capacity is set to tighten sharply as AI demand outpaces the grid&#x27;s ability to keep up: industry trackers project power demand nearly doubling to roughly 18 GW in 2026 and climbing toward 35 GW by 2027, while only about 5 GW of the 12-16 GW of new capacity planned for 2026 is actually under active construction, leaving the rest delayed or canceled. The binding constraint isn&#x27;t chips but electrical equipment — transformers now take three to five years to deliver and switchgear is sold out through 2028 — pushing some analysts to estimate a supply gap as large as 57 GW by 2029. Hyperscalers including Microsoft, Amazon, and Google have already disclosed project delays tied to power and grid-interconnection bottlenecks rather than GPU availability. The crunch is reshaping investment, with billions flowing into transformer and turbine manufacturers and utilities as the industry races to add megawatts fast enough to match AI compute growth.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Mistral to Release New AI Model to Better Compete With U.S. Rivals</div>
+        <div class="art-sum">Mistral AI launched Mistral Large 4 on October 6, 2026, a roughly 1-trillion-parameter model (nicknamed &quot;Le Chonk&quot;) trained using around 4,000 Nvidia GPUs, which the French startup says outperforms some Chinese open-weight models and rivals top US and global systems, particularly in cybersecurity tasks. CEO Arthur Mensch said the model surpasses Chinese competitors &quot;on certain aspects, including cyber,&quot; positioning Mistral as Europe&#x27;s strongest AI challenger to US and Chinese labs. The model is currently accessible only via a guarded API endpoint, with Mistral planning to release the full model weights publicly on October 27, 2026 after completing additional safety testing.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Becton Dickinson to Invest $19 Billion in U.S. in Exchange for Tariff Relief</div>
+        <div class="art-sum">Becton Dickinson, the Franklin Lakes, N.J.-based medical device maker, agreed to invest $19 billion in U.S. manufacturing over several years in exchange for relief from future tariffs, becoming the first major U.S. medical device company to strike such a deal with the Trump administration. The company will put roughly $3 billion toward expanding domestic manufacturing, including over $1 billion in Nebraska, aiming to raise U.S. production of essential medical consumables by about 5 billion units annually and bringing the domestically supplied share to roughly 80%; it also plans to manufacture all U.S.-used needles domestically with American-made steel. Becton Dickinson said it is not yet quantifying the deal&#x27;s financial impact since the tariff relief terms depend on future policy changes and the company meeting agreed milestones. The announcement came October 6, 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Agents Are Offering to Run Your Life. Should You Let Them?</div>
+        <div class="art-sum">I now have solid independent, non-WSJ reporting with concrete numbers to write the brief. AI startups and major tech firms are racing to launch &quot;agentic&quot; personal assistants that handle real-world tasks like booking travel, managing email, and completing purchases rather than just answering questions. At OpenAI&#x27;s DevDay on September 29, 2026, the company unveiled &quot;dots,&quot; an always-on agent accessible via chat, Slack, or Microsoft Teams that is bundled free with its Pro and Business Premium plans (also offered standalone alongside a new $500-per-month ChatGPT tier); it requires explicit user permission for sensitive actions like password changes or software installs and is not yet available in the EU, UK, or Switzerland due to data-privacy rules. Dots arrived roughly three weeks after Meta&#x27;s rival agent &quot;Muse,&quot; which operates inside WhatsApp to send emails, book travel, and fill out forms, and alongside the invite-only &quot;Instinct&quot; assistant, which runs via text message with no dedicated app. OpenAI reported 1.2 billion weekly ChatGPT users and 2.5 million business customers at the time of the announcement.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">NYC Lawmakers Grill AI Executives and Former Employees as City Weighs Guardrails</div>
+        <div class="art-sum">New York City Council held a marathon hearing on October 5, 2026, questioning executives from OpenAI, Meta, Anthropic, and Google, alongside former AI-lab employees, as part of its review of roughly 10 proposed bills to regulate AI development and deployment in the city. Former Anthropic researcher Jacob Coxon criticized the industry&#x27;s approach as &quot;extremely reckless,&quot; while ex-Google DeepMind researcher Alex Turner warned that misaligned AI could pose risks comparable to or greater than competitive pressure from China. Of the five companies subpoenaed to testify, only Elon Musk&#x27;s SpaceXAI declined to appear, prompting Council Member Menin to say the city plans to pursue the matter in court over an alleged subpoena violation.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Investors Have an ‘Exorbitant Privilege’</div>
+        <div class="art-sum">This doesn&#x27;t appear to be breaking news tied to a specific dated event — it reads as a WSJ markets analysis/opinion piece on the academic &quot;exorbitant privilege&quot; concept (the well-documented finding that U.S. investors earn higher returns on their foreign assets than foreigners earn on U.S. assets, due to risk-taking and the dollar&#x27;s reserve-currency role), and no other outlet appears to have covered this specific WSJ piece. I found only general background pieces on the concept, not independent reporting of the same story.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The S&amp;P 500 Hits a New Record High, Powered by Tech—and Not Much Else</div>
+        <div class="art-sum">The S&amp;P 500 closed at a record 7,818.93 on October 5, 2026, up 0.58% for the session, marking its 28th record close of the year and pushing its 2026 gain to more than 14%. The rally was concentrated in megacap technology names: chipmaker Marvell Technology jumped 5.8%, AMD gained nearly 3%, and Broadcom rose 3.7%, while Nvidia added roughly 1-2.2% as its market value approached $6 trillion. Falling U.S. Treasury yields also helped lift sentiment, with the Nasdaq likewise touching a fresh record on the same day.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Rise as AI Momentum Builds</div>
+        <div class="art-sum">The S&amp;P 500 closed at a record 7,818.93 on Tuesday, October 6, 2026, up 0.58% and its 28th record close of the year, while the Nasdaq Composite rose 0.45% to 27,599.79 and the Dow gained 253.38 points (0.49%) to 51,521.28. Gains were led by AI-linked names alongside falling Treasury yields, with Constellation Energy up 12.25%, Ciena up 13.85%, and Marvell Technology up 5.81%. The rally came as analysts projected roughly 29.5% year-over-year corporate earnings growth for the coming quarter, with AI-related capital investment cited as a key driver.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">S&amp;P 500 Reaches New Record High</div>
+        <div class="art-sum">The S&amp;P 500 closed at a record 7,818.93 on Monday, October 5, 2026, up 0.58% and surpassing its prior all-time high set in August, then extended gains the next day, trading near 7,830 on October 6; the rally was driven by resilient corporate profits, AI-spending optimism, and a pullback in oil prices, with chipmakers Marvell and AMD each gaining nearly 3%, Broadcom up 3.7%, and Nvidia&#x27;s market value approaching $6 trillion.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Indexes Slide as Tech, Industrials Drop</div>
+        <div class="art-sum">Europe&#x27;s STOXX 600 index fell about 1% on Wednesday, October 7, 2026, closing near 630 points — its lowest level since June — as technology and industrial names led the retreat, with chip-equipment maker BE Semiconductor Industries down 8.5%, Sweden&#x27;s AddTech off 7.6%, and Fresenius Medical Care down nearly 7%. The selloff coincided with Brent crude pushing above $101 a barrel on renewed Middle East tensions and intensifying fiscal worries in France, where the French-German 10-year bond yield spread widened to roughly 131-140 basis points on doubts about Paris&#x27;s ability to fix its budget. The euro slid about 0.7% to around $1.118 against the dollar, and MSCI&#x27;s global stock index fell 0.9% as the risk-off mood spread beyond Europe.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Your Index Fund Went Up. Was It Luck or Smarts?</div>
+        <div class="art-sum">This headline appears to be a WSJ personal-finance/advice-style column rather than a reported news story tied to a specific event, and no other outlet (Reuters, AP, Bloomberg, CNBC, etc.) has published a matching piece with the same angle or data. SOURCES: none</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Surprise, Your Child Has a ‘Trump Account.’ Here’s What to Know.</div>
+        <div class="art-sum">Trump Accounts, a federal savings program created by the &quot;One Big Beautiful Bill&quot; signed into law on July 4, 2025, launched for enrollment on July 4, 2026, giving every U.S. citizen child born between January 1, 2025, and December 31, 2028, a $1,000 seed deposit from the Treasury, invested in low-cost index funds and growing tax-deferred until age 18. As of early October 2026, the IRS reports about 4 million children have been signed up, with roughly 1 million families having claimed the $1,000 contribution, either online at trumpaccounts.gov or via IRS Form 4547 filed with a 2025 tax return. Treasury officials have also floated auto-enrolling eligible children by default, a change that could add as many as 60 million accounts. Parents or guardians can contribute up to $5,000 per year on top of the government seed money.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Nasdaq Hits New Record as Bond Yields March Higher</div>
+        <div class="art-sum">The Nasdaq Composite closed at a record 27,599.79 on October 5, 2026, extending a rally driven by tech shares even as long-term Treasury yields climbed to their highest levels since 2002, with the 10-year yield near 5.31-5.34% and the 30-year yield hitting roughly 5.70%. The S&amp;P 500 also notched a milestone, closing above 7,800 for the first time, while the Nasdaq 100 touched a fresh peak on October 6. Investors largely shrugged off the higher borrowing costs implied by rising yields, with tech sector gains offsetting concerns about the jump in long-term rates.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Nasdaq Poised to Hit New High as Treasury Yields Climb</div>
+        <div class="art-sum">The Nasdaq Composite closed at a record 27,477 points on Monday, October 6, 2026, up a little over 1% after touching an intraday high of 27,544, with gains led by Nvidia and AMD as tech stocks rallied. The rally came even as the benchmark 10-year Treasury yield climbed to 5.31%, its highest level in roughly 24 years (since 2002), and the 30-year yield pushed to around 5.70%. Investors have been weighing persistent inflation, heavy government borrowing, and the Fed&#x27;s rate outlook against strong AI-driven earnings optimism, which has kept equities climbing despite rising long-term borrowing costs. Semiconductor stocks broadly lagged even as megacap tech and communication-services names led the index higher.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Hackers Use Chinese AI Tool to Hit South Korean Banks, Exposing New Risk</div>
+        <div class="art-sum">South Korea&#x27;s National Police Agency is investigating cyberattacks on at least seven financial firms that used an open-source Chinese AI hacking tool called Artex, which taps external AI models (including Anthropic&#x27;s Claude Opus, OpenAI&#x27;s GPT and China&#x27;s DeepSeek) to find vulnerabilities and plan intrusions; the breaches, which came to light around September 30, 2026, exposed personal data for roughly 68,000 people. Shinhan Bank confirmed about 25,000 affected customers, KB Kookmin Bank saw credit card data for 119,000 clients compromised, and Hana Bank reported a limited breach via its sales-support system; stolen data included annual income figures and personal-loan limits. Investigators have traced the intrusions to more than two dozen IP addresses across roughly a dozen countries, including the US, Japan and Germany, and no suspects have yet been identified; officials called it the first known case of AI agents being used to hack the financial sector.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Bond Yields Are Surging Around the World—but Not in China</div>
+        <div class="art-sum">Benchmark government bond yields have surged to multi-decade highs across most major economies in 2026: the U.S. 10-year Treasury briefly touched 5.04% on September 15, its highest since 2007, Japan&#x27;s 10-year yield hit its highest since 1996, UK 30-year gilt yields reached their highest since 1998, and France&#x27;s and Germany&#x27;s 10-year yields hit their highest since 2008 and 2009 respectively. China&#x27;s 10-year yield, by contrast, sits near record lows around 1.69%, as the country remains mired in a multi-year deflationary stretch tied to its 2021 property-market crash. The global rise is largely attributed to investor concern over expanding government debt and spending, compounded by bets that major central banks will keep interest rates higher for longer.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 18 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">AI Solved One Math Problem and Everyone Freaked Out. It Just Cracked Hundreds More.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Exclusive | AI-Computing Startup Lambda Is Raising $4 Billion in Final Round Before Planned IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">A Data-Center Crunch is Coming</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Mistral to Release New AI Model to Better Compete With U.S. Rivals</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Becton Dickinson to Invest $19 Billion in U.S. in Exchange for Tariff Relief</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">AI Agents Are Offering to Run Your Life. Should You Let Them?</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">NYC Lawmakers Grill AI Executives and Former Employees as City Weighs Guardrails</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">U.S. Investors Have an ‘Exorbitant Privilege’</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">The S&amp;P 500 Hits a New Record High, Powered by Tech—and Not Much Else</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">U.S. Stocks Rise as AI Momentum Builds</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">S&amp;P 500 Reaches New Record High</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">European Indexes Slide as Tech, Industrials Drop</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Your Index Fund Went Up. Was It Luck or Smarts?</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Surprise, Your Child Has a ‘Trump Account.’ Here’s What to Know.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Nasdaq Hits New Record as Bond Yields March Higher</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Nasdaq Poised to Hit New High as Treasury Yields Climb</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Hackers Use Chinese AI Tool to Hit South Korean Banks, Exposing New Risk</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Bond Yields Are Surging Around the World—but Not in China</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">87 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">72 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">67 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">63 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">56 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">22 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-06.html">← Older · October 6, 2026 · Exclusive | Forbion Raises $2.6 Billion in Boost to European Biotech Industry</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
