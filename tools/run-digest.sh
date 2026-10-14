@@ -56,22 +56,36 @@ log "=== run start (target $FILE) ==="
 # an hour after its slot, i.e. at wake) died right here with
 # "Could not resolve host: github.com", and the day produced no digest at all.
 # So wait for the network instead of giving up the instant it isn't there.
+# Bounded by WALL CLOCK, not by a count of attempts. `sleep` is suspended while the
+# Mac sleeps, so an attempt-counted loop burns its whole budget doing nothing: on
+# 2026-10-09 a run that started at 12:19 logged its "10 minute" timeout at 12:18 the
+# NEXT DAY, and every slot from 10-09 to 10-13 died that way without once retrying
+# while the machine was actually awake. A deadline makes a sleep-interrupted wait
+# fall straight through to one final probe on wake instead.
+NETWORK_WAIT_SECONDS="${NETWORK_WAIT_SECONDS:-180}"
+
 wait_for_network() {
-  local i
-  for i in $(seq 1 30); do
+  local deadline=$(( $(date +%s) + NETWORK_WAIT_SECONDS ))
+  local started=$(date +%s)
+  while :; do
     if /usr/bin/nc -z -G 5 github.com 443 >/dev/null 2>&1; then
-      [ "$i" -gt 1 ] && log "network came up after $((i * 20))s"
+      local waited=$(( $(date +%s) - started ))
+      [ "$waited" -gt 5 ] && log "network came up after ${waited}s"
       return 0
     fi
-    log "no network yet (attempt $i/30) — waiting 20s"
+    [ "$(date +%s)" -ge "$deadline" ] && break
     sleep 20
   done
-  return 1
+  # One last try: if we got here by waking from sleep, the link may be up now.
+  /usr/bin/nc -z -G 5 github.com 443 >/dev/null 2>&1
 }
 
 if ! wait_for_network; then
-  log "FATAL: no network after 10 minutes — giving up; a later slot will retry"
-  exit 1
+  # Not fatal, and not worth shouting about. The agent now also runs on a short
+  # StartInterval, so the next pass in ~30 min tries again; the day only stays
+  # missing if the Mac is offline for all of them.
+  log "no network — skipping this pass, the next one will retry"
+  exit 0
 fi
 
 # Get in sync first; a previous run may have left the tree behind origin.

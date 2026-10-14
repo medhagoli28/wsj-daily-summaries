@@ -34,6 +34,15 @@
         </dict>
     </array>
 
+    <!-- Three fixed slots a day were not enough: 2026-10-09 through 10-13 all
+         produced nothing because the Mac was asleep or offline at every one of
+         them. Retry every 30 minutes as well. This is nearly free — once the
+         day's digest exists the script exits in about a second — and it means
+         the first moment the machine is awake WITH network gets used, instead
+         of waiting hours for the next fixed slot. -->
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
     <!-- Also try on login/reboot. Safe because the script is idempotent, and it
          rescues the case where the Mac was off through every slot above. -->
     <key>RunAtLoad</key>
