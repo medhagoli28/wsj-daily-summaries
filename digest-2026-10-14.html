@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 14, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-08.html">‹ Oct 8</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 93</div>
+    <div class="issue-date">October 14, 2026</div>
+    <div class="issue-sub">34 stories across tech, markets &amp; finance — a 21-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 34</span><span class="tab" data-key="tech">Tech · 12</span><span class="tab" data-key="markets">Markets · 12</span><span class="tab" data-key="finance">Finance · 10</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">U.S. Defense Startups Flock to Taiwan to Build China-Free Drones</div>
+        <div class="art-sum">U.S. defense startups including Anduril and Shield AI have signed at least 13 deals with Taiwanese manufacturers since September 2025 to build drone supply chains free of Chinese components, with Anduril&#x27;s Taiwan drone contracts surpassing $1 billion and Shield AI now sourcing 16% of its V-BAT parts from the island. Taiwan is positioning itself as a rare &quot;China-free&quot; drone manufacturing hub, offering components at roughly 25% above Chinese prices while leveraging its semiconductor and electronics base; the government has designated drones as one of five &quot;trusted industries&quot; and plans to invest about NT$44.2 billion (roughly $1.4 billion) in the sector between 2025 and 2030. Taiwanese firm Thunder Tiger became the first Asian company cleared to supply drones for U.S. military use and won an initial order for 1,520 units under the Pentagon&#x27;s Drone Dominance Program, while also announcing a joint venture to build drone motors in Ohio. The push is also backed by the U.S. 2026 NDAA, which for the first time includes a provision supporting U.S.-Taiwan co-production of uncrewed systems.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">John Ternus Takes Next Big Swing as Apple CEO With HomeView Tablet</div>
+        <div class="art-sum">Apple unveiled HomeView on October 13, 2026, a $299 tablet-style smart home hub with a 7-inch touchscreen that can sit on a table or mount on a wall, going on sale November 13. The device combines entertainment features (music, photos, FaceTime) with smart home controls for lights, thermostats, cameras, and locks, and it uses facial recognition to identify up to six household members and personalize their content. It&#x27;s the first major product launch under CEO John Ternus, who succeeded Tim Cook at the start of September 2026, and is seen as a test of whether Apple can compete with Amazon and Google in the smart home market while showcasing its Siri AI push.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Chips’ New Secret Sauce Is Packaging</div>
+        <div class="art-sum">Advanced packaging — not raw transistor fabrication — has become the binding constraint on AI chip production, as TSMC&#x27;s CoWoS (Chip-on-Wafer-on-Substrate) technology, which fuses logic dies with high-bandwidth memory on a silicon interposer, struggles to keep pace with demand; CoWoS capacity is growing at roughly an 80% compound annual growth rate yet remains fully booked through at least 2026 and reportedly into 2027. TSMC controls an estimated 90% of advanced packaging capacity for AI chips, and Nvidia alone has locked up more than 50% of that allocation, squeezing out rivals like AMD and Intel. CNBC reported on April 8, 2026 that Nvidia has been snapping up packaging capacity as TSMC expands production in the U.S. to relieve the constraint.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">My First Impressions of Apple’s New Smart Home Display</div>
+        <div class="art-sum">Apple&#x27;s HomeView is a $299, seven-inch square smart display and speaker for the kitchen counter, combining smart-home control, hands-free FaceTime, and an Apple Intelligence-powered Siri; its design echoes the iMac G4, with a half-domed base and a tilting touchscreen. The device uses facial recognition to identify up to six household members and surface personalized content such as messages, calendars, and widgets while keeping each person&#x27;s data separate. Reviewers who went hands-on this week (ahead of the device&#x27;s broader rollout) said it outclasses rivals like the Amazon Echo Show 10 and Google Nest Hub in build quality, and called it one of Apple&#x27;s strongest new product categories in years.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Character.ai Maker Files for Chapter 11 Bankruptcy</div>
+        <div class="art-sum">Character Technologies, the company behind Character.ai, filed for Chapter 11 bankruptcy protection in Delaware on October 12, 2026, seeking a court-supervised sale of most or all of its assets, with the filing reporting combined assets and liabilities between $50 million and $100 million; Disney has agreed to act as the stalking-horse bidder, offering $20 million for a non-exclusive perpetual license to some of Character&#x27;s intellectual property plus transition services, though other bidders can compete in the bankruptcy auction. CEO Colin Adams attributed the move to &quot;significant legal, regulatory and operational headwinds,&quot; referencing lawsuits over the chatbot&#x27;s alleged impact on teenage users and its impersonation of copyrighted characters from films and other media. Character.ai plans to keep operating during the sale process, which it expects to conclude in late November or early December 2026, though the platform could be wound down if no viable sale proposal emerges.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Uber Robotaxi Leader to Depart Next Month</div>
+        <div class="art-sum">Sarfraz Maredia, Uber&#x27;s global head of autonomous mobility and delivery, will leave the company on Nov. 16 after more than 12 years at Uber, planning to take a senior role in an unrelated industry that hasn&#x27;t been publicly named. His responsibilities will be split between Samarth Kejriwal, a senior director overseeing driverless vehicle operations, and Aaron Emrich, head of autonomous delivery. The exit continues a string of departures from Uber&#x27;s autonomous unit in 2026, including business-development lead Guy Peterson (who left for Rivian&#x27;s bike spinoff Also) and legal chief Lando Juarez (who departed for Bedrock Robotics in June), even as Uber leans on partnerships with robotaxi providers like Waymo rather than building its own self-driving fleet.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Has a God Problem Stretching From the Vatican to the Baptist Pulpit</div>
+        <div class="art-sum">Religious institutions across denominations are grappling with how to handle AI&#x27;s rapid encroachment into faith life: an April 2026 Lifeway Research survey of U.S. Protestant pastors found 10% are already regular AI users and another 32% are experimenting with it, while 43% of churchgoers object to pastors using AI in sermon preparation and more than 60% say they&#x27;re worried about AI&#x27;s broader influence on Christianity; in response, Southern Baptist leaders at Lifeway issued a statement in June 2026 to guide ministers on appropriate AI use. On the Catholic side, the Vatican published the doctrinal note &quot;Antiqua et nova&quot; on January 28, 2025, co-signed by Cardinals Víctor Fernández and José Tolentino de Mendonça, warning that AI should be understood only as a product of human intelligence, not a substitute for it, and Pope Leo XIV has urged priests to resist drafting homilies with chatbots. Catholic apologetics group Catholic Answers had earlier been forced to &quot;defrock&quot; its AI chatbot &quot;Father Justin&quot; in 2024 after it falsely claimed to be an ordained priest capable of hearing confession.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Says New AI Model Is State-of-the-Art, Will Make Muse Agent Smarter</div>
+        <div class="art-sum">Meta released two new frontier AI models, Muse Wonder and Muse Wonder Full, on October 12, 2026, calling them state-of-the-art for powering personal and professional AI agents, including Meta&#x27;s Muse assistant app. The models were trained at Meta&#x27;s gigawatt-scale Prometheus data center and are positioned to compete with OpenAI and Anthropic, with benchmark performance Meta says is comparable to leading rivals. Access is tiered behind paid plans: Muse app subscriptions cost $20 or $100 per month, Muse Code developer subscriptions run $50 or $200 per month, and API pricing for muse-wonder-1.0 is $4 per million input tokens and $20 per million output tokens with a 1M-token context window. Meta AI chief Alexandr Wang told CNBC the developer pricing would be set &quot;meaningfully below&quot; top models from OpenAI and Anthropic, reflecting Meta&#x27;s push to build new AI-derived revenue beyond advertising.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Video Cameras Are Everywhere—and Now They Are Being Hacked for War</div>
+        <div class="art-sum">Russian intelligence operatives have been systematically hijacking internet-connected security cameras, doorbells, and baby monitors across Europe and Ukraine—exploiting default passwords and outdated firmware among roughly 1.2 billion internet-connected cameras worldwide—to monitor military transport routes and arms shipments bound for Kyiv, according to the Wall Street Journal. Ukraine&#x27;s Security Service (SBU) says it has identified and secured, reoriented, or blocked about 40,000 cameras since Russia&#x27;s 2022 invasion that could otherwise have let Russian forces spot targets and correct missile strikes, including webcams in Kyiv residential areas accessed in 2024. The tactic runs both ways: a pro-Ukrainian group called Team OneFist reportedly hijacked a camera feed in Crimea in late 2022 to track a Russian helicopter and uncover a previously unknown military base. Image-recognition software is increasingly used to automate searches through hijacked feeds for military vehicles and cargo.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The U.S. Army’s Desert Tech Test Shows Long Road to AI Warfare</div>
+        <div class="art-sum">The U.S. Army&#x27;s Project Convergence Capstone 6 exercise ran July 20–29, 2026 at the National Training Center in California&#x27;s Mojave Desert, involving roughly 9,700 soldiers (including allies from Australia, Britain, Canada and New Zealand) testing more than 90 technologies across over 1,000 square miles in temperatures around 110°F. Drones from companies including Anduril and Theiss UAV Solutions suffered overheating, takeoffs delayed up to ten minutes, and battery conservation that cut flight times roughly in half, while many systems still lacked full autonomy and required manual control with soldiers carrying spare batteries and parts. The exercise also exposed communication dropouts, vulnerability to electronic jamming, and a steep learning curve for soldiers trusting and troubleshooting AI tools under stress, leading officials to describe the Army&#x27;s AI-fusion command system as &quot;ready but not done.&quot; Overall, the test underscored that despite high-precision AI targeting results, widespread combat-ready AI integration remains years away.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Compute Gold Rush</div>
+        <div class="art-sum">The five largest U.S. hyperscalers — Amazon, Microsoft, Alphabet, Meta and Oracle — have collectively lined up roughly $700 billion in capital spending for 2026, nearly double the approximately $410 billion they spent in 2025, with most of the increase going toward AI data centers, GPU clusters and the power infrastructure to run them. Gartner separately forecasts global data-center spending will jump 55.8% in 2026 to surpass $788 billion, driven largely by the same AI buildout. Individually, Amazon is projected to spend around $200 billion, Alphabet about $185 billion, Meta roughly $125 billion and Microsoft near $120 billion, underscoring how concentrated the &quot;compute&quot; buildout has become among a handful of companies racing to secure chips, data-center capacity and electricity. Nvidia remains the chief beneficiary of this spending wave as the dominant supplier of the GPUs underpinning these AI infrastructure investments.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How to Keep Your Webcam Safe From Prying Eyes</div>
+        <div class="art-sum">This WSJ headline is a general how-to/advice piece on webcam privacy rather than a reportable news event, so there is no underlying story with concrete figures or dates for other outlets to have covered — searches turn up only unrelated generic &quot;webcam security tips&quot; articles from sites like Cloudwards, Norton, and MakeUseOf, none of which are coverage of this WSJ piece.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Fund Managers Are Bullish—Watch Out</div>
+        <div class="art-sum">Bank of America&#x27;s Global Fund Manager Survey for October 2026, conducted October 2–8 among 161 participants managing $453 billion in assets, found investors holding near-extreme bullish positioning even as macro optimism softened, with a net 8% expecting weaker global growth over the next 12 months versus positive growth expectations as recently as November 2025. Cash levels sat at 3.8%, a net 24% of managers were underweight bonds, and allocation to emerging markets stood at a net 46% overweight. Technology and semiconductor positioning remained near its most crowded level in six years, with long global semiconductors the single most crowded trade followed by short U.S. Treasuries — a setup analysts flagged as a potential contrarian warning sign if growth disappoints or inflation surprises to the downside.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Third-Quarter Earnings Season Faces Challenge of Sky-High Expectations</div>
+        <div class="art-sum">S&amp;P 500 companies entered third-quarter 2025 earnings season carrying unusually high expectations, with analysts projecting roughly 8%–10% year-over-year earnings growth for the index even as estimates had been revised upward through the quarter rather than the typical pre-season cuts, according to FactSet data; some estimates put blended growth near 24% when driven heavily by mega-cap tech names. FactSet noted information technology and a handful of large companies account for a disproportionate share of projected growth, meaning the &quot;rest&quot; of the index excluding tech is expected to grow earnings by only about 2%, raising the bar for individual companies to avoid disappointing investors. Positive guidance from companies has also run above five- and ten-year averages (about 49% of S&amp;P 500 firms issuing upbeat guidance), reinforcing the elevated bar that strategists say increases the risk of outsized stock reactions to even modest misses as reporting ramps up in mid-October 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Tick Down as Bank Earnings Don’t Excite</div>
+        <div class="art-sum">U.S. stocks edged lower on Tuesday, October 13, 2026, as the Dow Jones Industrial Average fell 180.45 points (0.35%) to 51,670.10, the S&amp;P 500 slipped 0.02% to 7,805.45, and the Nasdaq Composite dropped 0.15% to 27,204.38, with chip stocks also weighing on sentiment. JPMorgan Chase posted a rare earnings miss, with EPS of $5.57 falling short of the $5.90 consensus despite net income rising 6% year-over-year to $15.3 billion, while revenue of $50.91 billion also missed estimates. Wells Fargo beat EPS estimates ($1.87 vs. $1.84 consensus) but missed on revenue ($21.87 billion vs. $22.31 billion expected), and Citigroup topped both EPS ($2.85 vs. $2.65 consensus) and revenue ($23.85 billion) forecasts; Goldman Sachs beat on both metrics, driven by strong equities trading. Despite several of the banks beating estimates, investors reacted tepidly, leaving major indexes essentially flat to slightly lower on the day.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Financial Services Roundup: Market Talk</div>
+        <div class="art-sum">This headline is WSJ&#x27;s recurring &quot;Market Talk&quot; wire feature — a rolling compilation of brief, unrelated commentary items on financial-services companies (this edition touching Ashmore Group, AXA, Public Bank, and others), published via Dow Jones Newswires at set times each day rather than a single reportable news story. Because it&#x27;s an aggregation of short analyst notes rather than one event, there&#x27;s no equivalent story on Reuters, AP, Bloomberg, or CNBC to verify specific numbers or dates against.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Givaudan Shares Climb After Sales Beat Expectations</div>
+        <div class="art-sum">Givaudan shares jumped nearly 7% on Tuesday, making the Swiss flavor and fragrance maker the top performer on Europe&#x27;s STOXX 600, after it reported third-quarter organic sales growth of 8.6%, well above the 4.7% consensus estimate. The beat was driven by the Fragrance &amp; Beauty division, which grew 13.5% versus an expected 6.6%, while Taste &amp; Wellbeing rose 3.5% against a 2.8% forecast. For the first nine months of 2026, Givaudan posted sales of CHF 5.89 billion, up 5.2% organically (2.6% in Swiss francs), exceeding the roughly 3.9% growth analysts had penciled in for the period. The rally pushed the stock to its highest level in about 15 months.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asia Stocks Battered as Semiconductor Stocks Dive</div>
+        <div class="art-sum">Asian equities sold off sharply on October 13-14, 2026, as a global semiconductor rout deepened on fears that Chinese memory-chip maker ChangXin Memory Technologies (CXMT) is nearing production of a competitive 4F² DRAM design, with next-generation server-memory chips targeted for year-end. South Korea&#x27;s KOSPI fell as much as 5.5-5.8% (after dropping over 7% intraday), with Samsung Electronics losing 7.4% and SK Hynix tumbling roughly 8-10%; Japan&#x27;s Nikkei 225 dropped 1.9%, dragged down by SoftBank Group (-8.5%) and chip-equipment maker Tokyo Electron (-7.2%). The decline tracked a broader U.S. semiconductor sell-off and warnings from Intel and Broadcom about potential capital-access constraints for AI-related spending.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Individual Investors Are Trading at Meme-Stock Levels</div>
+        <div class="art-sum">Individual investors are trading single-stock options at a daily notional pace of roughly $700 billion, a level not seen since the 2021 meme-stock frenzy, with call-option premiums now exceeding that period&#x27;s highs, according to Citadel Securities and Vanda Research data. Retail traders accounted for about 35% of U.S. equity trading volume through 2026, and VandaTrack puts total retail turnover (buys plus sells) in the 99.7th percentile of its 2012-2026 history. Citadel Securities reported that average daily retail cash-equity volumes in May and June 2026 ran 65% above 2025 levels and more than double the 2024 average, while retail options premium hit a record ~$6.8 billion per day in June, up 17% from May&#x27;s prior record. Much of the recent buying has concentrated in AI-related chip and infrastructure stocks, with semiconductor purchases tracking toward a potential single-month record in October 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Chip Stocks Mixed After Korean Tech Selloff</div>
+        <div class="art-sum">South Korea&#x27;s Kospi index plunged 5.5% on October 13, 2026, falling below 6,000 and triggering its first sell-side trading curb in nearly two months, as Samsung Electronics dropped about 7.4% and SK Hynix tumbled over 10% after Chinese memory maker CXMT announced progress on a new 4F² DRAM cell design and plans to launch a server memory module by year-end, threatening the roughly 90% of the global DRAM market controlled by Samsung, SK Hynix, and Micron. European chip stocks followed lower but with mixed severity: ASML fell about 3.3% while STMicroelectronics and Infineon each dropped around 5%, dragging the STOXX technology index down 1.7%, even as broader European indexes like the FTSE 100, CAC 40, and DAX posted gains.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Sleepy Insurance Product That Came to Power Private Credit’s Ascent</div>
+        <div class="art-sum">Fixed and indexed annuities issued by insurers now owned by private-equity giants have become a primary funding engine for the private credit boom, with life insurers&#x27; private credit holdings reaching roughly $849 billion, or 14% of their general-account assets, in 2024, up from just 10% a decade earlier, and private illiquid bond holdings climbing further to about $807 billion by year-end 2025, a $122 billion jump in a single year. Firms like Apollo (via Athene, $331 billion in assets) and KKR (via Global Atlantic, $150 billion) use annuity premiums as long-dated, stable capital to fund direct lending, asset-backed securities and other private-credit strategies that carry roughly 80 basis points higher yields than public bonds, letting them offer more competitive crediting rates to annuity buyers while expanding their credit platforms. Research from the Federal Reserve Bank of Chicago found this dynamic accounts for about 61% of the annuity market-share gains made by private-equity-owned insurers over the past decade, a pattern regulators have flagged as a growing source of interconnected risk between the insurance and private-credit sectors.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">S&amp;P 500, Nasdaq Slip as Oil Rises on Russia Strikes in Ukraine</div>
+        <div class="art-sum">Oil prices climbed on October 12, 2026, with Brent crude rising to around $106 a barrel and WTI to about $93, after Russian strikes hit Ukrainian energy infrastructure just a day after President Trump had announced an energy-targets ceasefire between Moscow and Kyiv. The S&amp;P 500 slipped about 0.1% and the Nasdaq Composite fell roughly 0.4%, dragged down by technology stocks, while the Dow Jones Industrial Average bucked the trend, gaining around 0.3-0.4% as energy and communication-services shares, along with a lift from Salesforce, kept it in positive territory. Investors were also turning their attention to the start of third-quarter earnings season.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Health Care Roundup: Market Talk</div>
+        <div class="art-sum">UnitedHealth Group shares rose about 4% on Tuesday, October 13, 2026 after the insurer beat third-quarter profit estimates, posting adjusted earnings of $4.69 per share versus the $4.14 Wall Street expected, on revenue of $112.69 billion, and raised its full-year 2026 adjusted earnings outlook to at least $20.50 per share from a prior $19.50-$20.00 range. Earnings from operations climbed to $6.6 billion from $4.3 billion a year earlier. Humana also traded roughly 2% higher, affirming 2026 adjusted EPS guidance of at least $9.00, while Johnson &amp; Johnson shares fell over 5% despite reporting in-line Q3 results and raising its full-year sales and earnings guidance.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">EU Aims to Put Brakes on Chinese Hybrid-Vehicle Market Share With Import Cap</div>
+        <div class="art-sum">The European Union will cap imports of Chinese-made hybrid and plug-in hybrid vehicles at 350,000 units a year starting as early as December 1, 2026, down from the roughly 800,000 such vehicles expected to arrive in 2026 (up from about 300,000 in 2025); the limit rises 6% annually and the measure runs for four years. Brussels is invoking a WTO safeguard mechanism, which doesn&#x27;t require proof of unfair subsidies, after Chinese brands captured 25% of the EU&#x27;s plug-in hybrid market and 14% of the conventional hybrid market in the first half of 2026, up from just 2% in both segments in 2024. The EU already imposes countervailing duties of up to 35.3% on Chinese battery-electric vehicles (on top of a 10% tariff) but had not applied similar tariffs to hybrids until now. Vehicles from Chinese brands assembled inside the EU are exempt from the cap, effectively pushing automakers like BYD toward local production rather than simply blocking imports.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Personal AI Agents Are Great—Until They Share Your Bank Statement in the Work Chat</div>
+        <div class="art-sum">XMTP Labs founder Shane Mac had connected Grok&#x27;s bot to his personal checking and savings accounts in August 2026 as a read-only &quot;personal CFO&quot; that was supposed to send a monthly spending report to a private group chat; on October 1, 2026, it instead posted the report — including his bank balances, credit-card payoffs, and home-gym and septic-tank expenses — into his company&#x27;s executive Slack channel. Mac said the mix-up happened because his separate Grok Bot agents shared underlying cloud infrastructure and credentials, and the bot resolved a similarly-named &quot;exec team&quot; chat to the wrong channel. The incident, which Mac shared publicly, drew roughly 670,000 views and sparked wider warnings about AI agents sharing permissions and data across accounts; some outlets have noted the episode remains unconfirmed by xAI/Grok.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Texting for Dollars: Kimberly Guilfoyle Offers Access to Trump</div>
+        <div class="art-sum">Kimberly Guilfoyle, then U.S. ambassador-nominee to Greece, allegedly pressured longtime Trump donor Eric Deters in July 2025 to wire $100,000 directly to her American Express account to cover a credit-card bill, texting &quot;Honey please I need you to get this done for me today&quot; and noting &quot;it won&#x27;t show up anywhere if you wire money to American Express.&quot; Deters says Guilfoyle dangled promises of access to senior Trump administration officials and offered to be his &quot;ride or die in Trump world&quot; in exchange for the payment, which he refused to make; he has since compiled a dossier of the exchange and shared it publicly. Guilfoyle&#x27;s attorney disputes the authenticity of the messages and says she was instead owed money related to speaking events, a claim Deters rejects. The allegations, which surfaced around October 12, 2026, have renewed scrutiny of access-selling among Trump advisers.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Planning for College Aid? The Federal Student-Loan Rules Just Changed</div>
+        <div class="art-sum">Starting July 1, 2026, the One Big Beautiful Bill Act overhauls federal student lending: Parent PLUS loans are capped at $20,000 per student per year with a $65,000 lifetime limit, down from the current &quot;borrow up to cost of attendance&quot; model, while the Grad PLUS program is eliminated for new borrowers entirely. Graduate borrowers taking out direct loans instead face new caps of $20,500 annually/$100,000 lifetime for most master&#x27;s programs and $50,000 annually/$200,000 lifetime for professional degrees (e.g., law, medicine), and a new $257,500 lifetime cap applies across all federal student loans combined. The law also narrows repayment options to just two plans going forward — a revised Standard Repayment Plan and a new Repayment Assistance Plan (RAP) — and bars new Parent PLUS disbursements after July 1, 2026 from enrolling in income-driven repayment, limiting them to the standard 10-year plan. Borrowers already in a program before that date can generally keep borrowing under the old limits for up to three more academic years or until they finish, whichever comes first.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Bank of America to Pay $1.2 Billion to Settle Violations of Money Laundering, Sanctions Laws</div>
+        <div class="art-sum">Bank of America has agreed to pay more than $1.2 billion in federal penalties after the Treasury Department found the bank failed for years to report over $5 billion in suspicious transactions, including activity tied to Chinese money-laundering networks and the southwest border, in violation of the Bank Secrecy Act. The Office of the Comptroller of the Currency imposed a record $750 million civil money penalty, the largest component of the total, which officials called the third-largest penalty in Treasury history. Separately, Treasury&#x27;s Office of Foreign Assets Control reached an $11.6 million settlement with the bank over apparent sanctions violations involving Iran, Russia, narcotics, and global terrorism programs. The announcement came on October 13-14, 2026, with Bank of America admitting it willfully violated anti-money-laundering rules.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Kalshi Examines Bets on Trump’s Pick for New White House Press Secretary</div>
+        <div class="art-sum">Kalshi is investigating a series of suspiciously well-timed bets that correctly predicted Trump&#x27;s selection of conservative commentator Katie Zacharia, 41, as his new White House press secretary despite her being seen as having just a 1 percent chance of getting the job. Bets as small as $19 and $74-$80 were placed hours and minutes before the announcement broke around 2 p.m. ET Friday, yielding payouts as high as $9,600 on stakes of under $200. The episode echoes a prior controversy in July involving former Trump teleprompter operator Gabriel Perez, who reportedly made over $100,000 betting on what the president would say publicly. Separately, bettors now give Zacharia only a 94% chance of lasting a month in the role following a rocky debut.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Energy Stocks Rise as Global Conflicts Push Up Oil Prices</div>
+        <div class="art-sum">Energy stocks climbed on October 12, 2026 as U.S. markets ended mixed, with gains in the sector driven by rising crude prices tied to escalating conflicts in Ukraine and the Middle East. Brent crude futures rose to roughly $105.48 a barrel on October 12, while North Sea Dated crude had already jumped $26.17/bbl month-over-month to $116.89/bbl in September. The price pressure followed intensified Mideast tensions, including Houthi strikes on Saudi Arabia and attacks on tankers and the East-West pipeline, alongside Ukrainian strikes on Russian energy infrastructure. U.S. retail fuel prices also rose in tandem, with gasoline averaging $4.35 per gallon and diesel $6.29 per gallon in September amid the broader crude rally.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Affluent and Older Americans Got Much Richer in Postpandemic Years</div>
+        <div class="art-sum">The Federal Reserve&#x27;s triennial Survey of Consumer Finances, released in October 2026, found overall median family net worth rose just 2% from 2022 to 2025 to about $216,000 after inflation, but gains were sharply uneven: households headed by someone 75 or older saw median net worth jump 37% to $505,000 (fueled mainly by retirement-account gains), making them the wealthiest age group, while families headed by someone under 35 saw net worth fall 23%. The top 10% of earners saw median wealth climb 31% to roughly $3.6 million, and the top 0.1% more than doubled their total wealth since 2020, driven largely by stock-market gains for those already holding equities. Median family income did rise 7% to $82,200, with lower-income households seeing solid wage gains in 2021-2022, but those gains didn&#x27;t translate into lasting wealth growth since they had little stock or real-estate exposure.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How 7.4% Mortgages Are Giving Buyers Leverage in a Stuck Housing Market</div>
+        <div class="art-sum">The average 30-year fixed mortgage rate climbed to 7.40% as of October 8, 2026, according to Freddie Mac — up from 7.28% the prior week and 6.30% a year earlier, marking the seventh consecutive weekly increase and the highest level since November 2023. With rates pricing many would-be buyers out of the market, those who remain have gained unusual negotiating power: active listings have swelled to roughly 1.5 million nationally, up about 46% from 2023, and seller concessions — covering closing costs, repairs, or rate buydowns — appeared in roughly 45% of recent transactions. The shift has effectively turned a high-rate environment into a buyers&#x27; market in many areas, letting qualified purchasers negotiate on price and terms even as affordability remains stretched.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">CFTC Proposes to Expand Definition of Swaps to Include Prediction Markets Trading</div>
+        <div class="art-sum">The CFTC on Friday, October 9, 2026, issued two measures asserting federal jurisdiction over prediction markets: a proposed rule that would formally expand the legal definition of &quot;swap&quot; to cover event contracts tied to sports, politics, cultural events, and weather, and a concurrent interim final rule exempting traditional casino-style gambling, including sportsbook wagers and casino games, from that same swap definition. The agency argues these event contracts are financial instruments &quot;commonly known to the trade as swaps,&quot; a move meant to resolve regulatory ambiguity and cement CFTC authority over platforms like Kalshi and Polymarket. The proposed rule is open for public comment, and the action comes amid an ongoing jurisdictional fight with state regulators, who contend that sports-related event contracts are gambling products subject to state, not federal, oversight.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">CVS Health Unit to Pay $315 Million to Resolve Illegal Opioid Prescription Claims</div>
+        <div class="art-sum">CVS Pharmacy, a unit of CVS Health, agreed to pay $315 million to settle Justice Department allegations that it illegally filled opioid prescriptions and submitted false claims to Medicare for them, the DOJ announced October 13, 2026. Prosecutors alleged that from October 2013 to December 2025, CVS knowingly dispensed controlled-substance prescriptions lacking a legitimate medical purpose, filled prescriptions for dangerous or excessive opioid quantities or too early, and filled scripts from known &quot;pill mills.&quot; The case originated from a 2019 whistleblower lawsuit filed by former CVS employee Hillary Estright under the False Claims Act. As part of the settlement, CVS also agreed to set up a hotline for reporting suspected illegal dispensing and to proactively monitor pharmacy dispensing behavior going forward.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 34 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">U.S. Defense Startups Flock to Taiwan to Build China-Free Drones</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">John Ternus Takes Next Big Swing as Apple CEO With HomeView Tablet</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">AI Chips’ New Secret Sauce Is Packaging</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">My First Impressions of Apple’s New Smart Home Display</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Character.ai Maker Files for Chapter 11 Bankruptcy</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Uber Robotaxi Leader to Depart Next Month</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">AI Has a God Problem Stretching From the Vatican to the Baptist Pulpit</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">Meta Says New AI Model Is State-of-the-Art, Will Make Muse Agent Smarter</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">9</span><span class="toc-t">Video Cameras Are Everywhere—and Now They Are Being Hacked for War</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">10</span><span class="toc-t">The U.S. Army’s Desert Tech Test Shows Long Road to AI Warfare</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">11</span><span class="toc-t">The Compute Gold Rush</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">12</span><span class="toc-t">How to Keep Your Webcam Safe From Prying Eyes</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Fund Managers Are Bullish—Watch Out</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Third-Quarter Earnings Season Faces Challenge of Sky-High Expectations</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">U.S. Stocks Tick Down as Bank Earnings Don’t Excite</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">Financial Services Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">17</span><span class="toc-t">Givaudan Shares Climb After Sales Beat Expectations</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">18</span><span class="toc-t">Asia Stocks Battered as Semiconductor Stocks Dive</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">19</span><span class="toc-t">Individual Investors Are Trading at Meme-Stock Levels</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">20</span><span class="toc-t">European Chip Stocks Mixed After Korean Tech Selloff</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">21</span><span class="toc-t">The Sleepy Insurance Product That Came to Power Private Credit’s Ascent</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">22</span><span class="toc-t">S&amp;P 500, Nasdaq Slip as Oil Rises on Russia Strikes in Ukraine</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">23</span><span class="toc-t">Health Care Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">24</span><span class="toc-t">EU Aims to Put Brakes on Chinese Hybrid-Vehicle Market Share With Import Cap</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">25</span><span class="toc-t">Personal AI Agents Are Great—Until They Share Your Bank Statement in the Work Chat</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">26</span><span class="toc-t">Texting for Dollars: Kimberly Guilfoyle Offers Access to Trump</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">27</span><span class="toc-t">Planning for College Aid? The Federal Student-Loan Rules Just Changed</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">28</span><span class="toc-t">Bank of America to Pay $1.2 Billion to Settle Violations of Money Laundering, Sanctions Laws</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">29</span><span class="toc-t">Exclusive | Kalshi Examines Bets on Trump’s Pick for New White House Press Secretary</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">30</span><span class="toc-t">Energy Stocks Rise as Global Conflicts Push Up Oil Prices</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">31</span><span class="toc-t">Affluent and Older Americans Got Much Richer in Postpandemic Years</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">32</span><span class="toc-t">How 7.4% Mortgages Are Giving Buyers Leverage in a Stuck Housing Market</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">33</span><span class="toc-t">CFTC Proposes to Expand Definition of Swaps to Include Prediction Markets Trading</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">34</span><span class="toc-t">CVS Health Unit to Pay $315 Million to Resolve Illegal Opioid Prescription Claims</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">89 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">74 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">68 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">64 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">23 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-08.html">← Older · October 8, 2026 · Norway Aims to Open Debate on Use of AI Glasses in Public With Ban Proposal</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
