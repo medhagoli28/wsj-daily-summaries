@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 12, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-11.html">‹ Oct 11</a> &nbsp;·&nbsp; <a href="digest-2026-10-13.html">Oct 13 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 96</div>
+    <div class="issue-date">October 12, 2026</div>
+    <div class="issue-sub">7 stories across tech, markets &amp; finance — a 5-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 7</span><span class="tab" data-key="markets">Markets · 3</span><span class="tab" data-key="finance">Finance · 4</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Dating-App Company Bumble in Advanced Talks to Go Private at $1 Billion Valuation</div>
+        <div class="art-sum">Bumble reached an agreement to be taken private by Ithaca Holdings in a deal valuing the dating-app company at about $1.3 billion, with the private equity firm offering $6.05 per share — a roughly 122% premium over Bumble&#x27;s June 24, 2026 closing price; news of the advanced talks had first surfaced around October 12, 2026 at a lower, roughly $1 billion valuation before the deal was finalized a day later. Bumble shares jumped about 50% to close at $3.80 on the news, their biggest single-day gain since the company&#x27;s 2021 IPO. The deal comes after a steep decline in Bumble&#x27;s business: total paying users fell more than 11% in 2025 to about 3.7 million (down 16.4% to 3.2 million in the second quarter alone) while annual revenue dropped nearly 10% to about $966 million. Founder and CEO Whitney Wolfe Herd, who returned to the role in early 2025, had been pushing AI-powered features to try to reverse the slide before the take-private agreement.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Retirement Savers Sue Dodgers Owner Mark Walter Saying His Insurers Misled Them</div>
+        <div class="art-sum">Los Angeles-area retiree Rick Phillips filed a lawsuit against Clear Spring Life and Annuity and Gainbridge on Monday (October 13, 2026), alleging the insurers—both tied to Dodgers chairman and CEO Mark Walter—misled annuity holders about how much of their money was funneled into affiliated, illiquid private-credit investments linked to Walter&#x27;s Guggenheim Partners and TWG Global empire. The suit claims investors were told only about 3% of assets (roughly $1.4 billion) were invested with affiliates, when later restatements and rating-agency reviews put the real figure at 39-42%, or between $17 billion and over $20 billion. It is at least the third such complaint, and plaintiffs also allege the insurers failed to disclose an ongoing federal investigation by the U.S. Attorney&#x27;s Office in Manhattan and the SEC, stemming from a whistleblower complaint about misrepresented intercompany loans. Defendants named include Walter himself, Delaware Life Insurance Co., Clear Spring Life and Annuity, Gainbridge, TWG Global Holdings, and Guggenheim Partners.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech, Media &amp; Telecom Roundup: Market Talk</div>
+        <div class="art-sum">ASML Holding reported third-quarter 2026 earnings of $12.47 per share on revenue of $13.18 billion, and shares rose about 2.4% after the Dutch chip-equipment maker said AI-driven demand is so strong it won&#x27;t be able to fully meet customer orders in 2027 or 2028, prompting it to raise its full-year sales outlook. The upbeat results from ASML, the world&#x27;s largest supplier of chipmaking equipment, lifted European tech shares and broader markets on October 14, 2026. Elsewhere in the sector, memory-chip makers diverged sharply: Western Digital, SK Hynix, Seagate and SanDisk posted sharp losses while Micron fell nearly 4%, and AMD shares dropped about 3.5% amid broader profit-taking in high-beta tech names ahead of upcoming earnings. Separately, AT&amp;T has agreed to sell AT&amp;T Mexico to Grupo Televisa and Fintech Holding for $2 billion in cash as part of its strategy to refocus on the U.S. market.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Oil Climbs as Fighting Flares in Middle East, Ukraine</div>
+        <div class="art-sum">Oil prices rose for a second straight session as Houthi forces intensified strikes on Saudi Arabia, including an attack on Riyadh&#x27;s international airport, while two tankers were attacked in the Strait of Hormuz over the weekend, threatening a recovery in Middle East crude exports seen in September; Brent crude climbed to roughly $105.50 a barrel and WTI traded near $92-94 a barrel. Markets were also rattled by renewed Russian strikes on Ukrainian energy infrastructure, which cast doubt on a Friday &quot;energy ceasefire&quot; announcement and raised the risk that Kyiv would retaliate against Russian refineries. In response to the heightened geopolitical risk, Goldman Sachs raised its December Brent forecast to $90 a barrel from $85 previously.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | FTX’s Old Bitcoin-Mining Assets Are Now Part of the AI Boom</div>
+        <div class="art-sum">SWI Group has raised €800 million (about $894 million-$900 million) to convert Genesis Digital Assets, a bitcoin miner originally backed by FTX before its 2022 collapse, into an AI data-center operator now valued at €6.1 billion; the plan repurposes the company&#x27;s power-heavy facilities in Texas, North Carolina, South Carolina, and Sweden for AI and high-performance-computing customers such as hyperscalers, while divesting its Kazakhstan mining operations. The move reflects a broader industry shift, as bitcoin miners have collectively signed more than $70 billion in AI and HPC hosting contracts, seeking steadier revenue tied to their power infrastructure and data-center sites rather than volatile crypto-mining income.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">What Might Russ Vought’s ‘Tremendous’ Surprise Actually Be?</div>
+        <div class="art-sum">President Trump told a cabinet meeting this week that Russ Vought — the White House budget director and a key architect of Project 2025 — has &quot;tremendous surprises&quot; coming in the next few weeks before the midterm elections, without specifying what they involve. Trump made similar remarks on separate occasions, at one point saying &quot;We have some big surprises coming up in a few weeks, right Russ?&quot; and adding that Vought &quot;got some great things happening,&quot; fueling speculation ranging from a new tariff-dividend program to further restructuring of federal grant rules. As OMB director, Vought has already moved this year to tighten control over nearly $1 trillion in federal grants, but neither the White House nor Vought has publicly detailed what the teased announcement will be. News outlets note the remarks come as Trump repeatedly dangles pre-midterm &quot;surprises&quot; tied to Vought without elaborating.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">‘A Glorious Fate’ Review: Making a Union Martyr</div>
+        <div class="art-sum">Historian Kevin M. Levin&#x27;s biography &quot;A Glorious Fate: The Life and Legacy of Colonel Robert Gould Shaw&quot; was published by the University of North Carolina Press on September 29, 2026, tracing the Civil War officer&#x27;s transformation from a privileged young man largely indifferent to abolitionism into the martyred commander of the 54th Massachusetts Infantry, one of the Union&#x27;s first Black regiments. Shaw was killed on July 18, 1863, leading the regiment&#x27;s assault on Confederate-held Fort Wagner in South Carolina, a battle that cemented his status as a Union hero and symbol of emancipation. Pulitzer Prize winner Annette Gordon-Reed and Pulitzer finalist Megan Kate Nelson have praised the book as a nuanced, &quot;definitive&quot; account of Shaw&#x27;s complicated life beyond the myth, while the Washington Independent Review of Books called it &quot;engrossing and highly readable.&quot;</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 7 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">1</span><span class="toc-t">Exclusive | Dating-App Company Bumble in Advanced Talks to Go Private at $1 Billion Valuation</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">2</span><span class="toc-t">Exclusive | Retirement Savers Sue Dodgers Owner Mark Walter Saying His Insurers Misled Them</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Tech, Media &amp; Telecom Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">4</span><span class="toc-t">Oil Climbs as Fighting Flares in Middle East, Ukraine</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">5</span><span class="toc-t">Exclusive | FTX’s Old Bitcoin-Mining Assets Are Now Part of the AI Boom</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">6</span><span class="toc-t">What Might Russ Vought’s ‘Tremendous’ Surprise Actually Be?</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">7</span><span class="toc-t">‘A Glorious Fate’ Review: Making a Union Martyr</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">77 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">71 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">58 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">44 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">40 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">24 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-11.html">← Older · October 11, 2026 · India Locks Down Heart of Capital to Thwart Voter Rights Protest</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

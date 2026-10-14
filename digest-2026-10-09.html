@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 9, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-08.html">‹ Oct 8</a> &nbsp;·&nbsp; <a href="digest-2026-10-10.html">Oct 10 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 93</div>
+    <div class="issue-date">October 9, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 7-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 2</span><span class="tab" data-key="markets">Markets · 8</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Other Anthropic Founder Trying to Fix the Company’s ‘Woke’ Reputation</div>
+        <div class="art-sum">Jack Clark, Anthropic&#x27;s co-founder and former head of policy who now leads the newly created Anthropic Institute, has become the company&#x27;s point person for countering the &quot;woke AI&quot; label that White House AI czar David Sacks and other Trump-administration figures have attached to Anthropic over its safety advocacy and a March 2026 lawsuit against the Pentagon over military-use restrictions. Clark has downplayed that Defense Department dispute as a &quot;narrow contracting dispute&quot; and briefed the administration on Anthropic&#x27;s Mythos model in April 2026, part of a broader thaw that included meetings between CEO Dario Amodei and Treasury Secretary Scott Bessent and White House Chief of Staff Susie Wiles. The company has also moved to build Washington ties by naming former Trump deputy chief of staff Chris Liddell to its board in February 2026 and hiring former White House AI policy advisor Sihao Huang as head of frontier compute strategy in September 2026, while publicly promoting its &quot;political even-handedness&quot; training framework for Claude.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Extreme Weather Is Everywhere Now—How to Prepare Your Home</div>
+        <div class="art-sum">US homeowners insurance premiums are set to rise for a fifth straight year in 2026, with the average annual premium projected to increase about 4% to roughly $3,057, according to Insurance Journal, while rates have already climbed around 24-27% nationally between 2021 and 2024 as climate-driven storms, floods and wildfires intensify. Insurers have pulled back from high-risk states such as California, Florida, Arizona and North Carolina, with Florida&#x27;s nonrenewal rate jumping 280% between 2018 and 2023 and over 30,000 policies dropped in California&#x27;s high-fire-risk areas, per NPR. Experts and insurers are urging homeowners to fortify their properties—installing fortified roofs, clearing defensible space, and adding ember-resistant vents—since such upgrades can qualify for premium discounts, while basic maintenance like clearing gutters and inspecting roofs for damage remains a cheap first line of defense. A recent Bankrate-cited survey found nearly 60% of homeowners suffered storm damage in the past three years, yet only 18% feel very prepared for extreme weather, and nearly 80% lack the savings or ability to cover an unexpected weather-related repair.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tokenized Stocks Bring ‘Radical Change’ to Markets, Cuomo Says</div>
+        <div class="art-sum">Former New York Governor Andrew Cuomo said on October 10, 2026, that tokenizing U.S. stocks would bring &quot;radical change&quot; to financial markets by enabling 24/7 global trading. Cuomo co-chairs OKXICE, a 50-50 joint venture between Intercontinental Exchange (parent of the NYSE) and crypto exchange OKX, which on October 4 notified the SEC of its intent to launch a Tokenized Securities Venue under the agency&#x27;s new Innovation Exemption framework, granted September 17. The initial platform would offer around-the-clock trading of tokenized shares in more than 60 U.S.-listed companies, settled against stablecoins such as USDC, USDG, and USDT. The venture builds on ICE&#x27;s March investment in OKX at a $25 billion valuation.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Rise as Iran Escalation Fears Subside</div>
+        <div class="art-sum">This has concrete, well-sourced numbers from CNBC, NPR, and PBS. I&#x27;ll write the brief based on this episode. President Trump announced a two-week ceasefire between the U.S. and Iran on April 7-8, 2026, easing fears that the month-old conflict would further disrupt global energy supplies and prompting a sharp Wall Street rally. The Dow Jones Industrial Average jumped roughly 1,300 points (its best single-day percentage gain since April 2025), the S&amp;P 500 closed up about 2.5%, and the Nasdaq Composite rose roughly 2.8%. Oil prices tumbled in tandem, with U.S. crude sliding about 16.4% to $94.41 a barrel and Brent crude falling 13.3% to $94.75, both logging their steepest one-day declines in years as traders priced in reduced risk to Strait of Hormuz shipping.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">SpaceX Makes Big Play to Become a Wireless Carrier</div>
+        <div class="art-sum">SpaceX announced on October 8, 2026 that it agreed to buy a nationwide portfolio of low-band spectrum from investment firm Grain Management, covering as much as 14 megahertz of paired spectrum in the 800 MHz band, marking its most concrete step yet toward becoming a full-fledged U.S. wireless carrier. The deal builds on SpaceX&#x27;s earlier 2025 agreement to acquire roughly $17 billion worth of spectrum from EchoStar for its Starlink direct-to-phone service, and the low-band 800 MHz spectrum is intended to help signals penetrate walls and other obstacles that mid-band spectrum struggles with. The FCC has separately approved SpaceX&#x27;s &quot;Starlink Mobile&quot; Gen2 satellite constellation application, clearing the way for roughly 15,000 next-generation satellites optimized for 2GHz spectrum and offering over 100 times the bandwidth of the current system, with deployment targeted to begin in 2027 pending Starship&#x27;s availability. The FCC also granted SpaceX a waiver allowing it to offer wireless service via satellite without needing a spectrum-leasing agreement with a terrestrial carrier.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">As Yields Surged, Small-Cap Stocks Were Hit Hard</div>
+        <div class="art-sum">The Russell 2000 small-cap index fell roughly 7.3% from its mid-August peak as the 10-year Treasury yield climbed to around 5.17% in late September 2026, its highest level since July 2007, with the iShares Russell 2000 ETF (IWM) logging a $3.3 billion weekly outflow — its second-largest of the year and third-largest in nine years. Small-caps are more sensitive to rising rates because many carry floating-rate debt and have less balance-sheet capacity than large-cap companies to absorb higher financing costs. As a result, the S&amp;P 500 has outperformed the Russell 2000 for five straight weeks, putting the small-cap index up about 14% year-to-date versus roughly 20% for the S&amp;P 500.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Scrapped IPO of Nvidia-Backed Company Points to Limits of AI Boom</div>
+        <div class="art-sum">Nvidia-backed data center operator Firmus Grid pulled its planned $5 billion-plus listing on the Australian Securities Exchange in early October 2026, which would have been Australia&#x27;s largest IPO in nearly 30 years, after the deal failed to attract sufficient investor support at its targeted roughly $30 billion valuation. Firmus, which sells Nvidia-powered computing capacity to large AI customers including OpenAI and Meta, had reportedly drawn indications of interest above the offer size just days earlier before investor caution set in. Bloomberg and other outlets framed the withdrawal as a warning sign for AI infrastructure funding, as investors grow more skeptical that massive capital spending on AI data centers will generate adequate returns.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Airtel Money Shares Open Higher on First Trading Day But $7 Billion Valuation Misses Mark</div>
+        <div class="art-sum">Airtel Money, the mobile-money arm of Airtel Africa, began conditional trading on the London Stock Exchange on October 9, 2026 and shares opened broadly flat before rising as much as 2% to around £1.96 under ticker AMC, with unconditional dealings set to start October 14. The IPO valued the business at $7 billion and raised roughly $703 million through a sale of existing shares by current shareholders, falling short of earlier expectations that the offering could value the unit at up to $10 billion and raise $1.5-2 billion. The deal, advised by Citigroup, ranks as the largest London IPO in about five years. Airtel Money serves more than 53 million monthly active customers across 13 African markets, processing payments and money transfers via mobile phones, with its annualized total transaction value up 36% to over $210 billion in the nine months to December 2025.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Consumer Sentiment Drops, per Michigan Survey</div>
+        <div class="art-sum">The University of Michigan&#x27;s preliminary Consumer Sentiment Index fell to 46.3 in October 2026, down 3.7% from September&#x27;s 48.1 and below economists&#x27; median forecast of 47.6 in a Bloomberg survey, marking the lowest level in the series&#x27; history. The Current Economic Conditions sub-index dropped 12.2% to 44.7, while the Consumer Expectations Index edged up 2.2% to 47.3. One-year inflation expectations climbed to 4.7%, with households citing persistent frustration over higher costs as the main drag on sentiment.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Borrowing Costs’ Double Whammy Boosts Recession Odds</div>
+        <div class="art-sum">U.S. Treasury yields have climbed sharply since the Iran conflict began in February 2026, with the 10-year yield up roughly 135 basis points to 5.23% and the 30-year up about 110 basis points from its March low to 5.614%, Reuters reported October 9, 2026. At the same time, corporate credit spreads are widening on top of those already-elevated government rates, with high-yield spreads reaching levels not seen since April and the lowest-rated CCC tier climbing to roughly 1,250 basis points, per CNBC&#x27;s October 9, 2026 reporting; high-yield bond yields rose to 8.1%, up from 7.22% a month earlier. Normally government bonds act as a shock absorber in a slowdown, with falling Treasury yields cushioning borrowers, but this combination of persistently high government rates and widening credit spreads threatens to amplify rather than soften any downturn, raising the odds of a recession. Analysts also point to added pressure from a potential wave of AI-infrastructure debt issuance — Goldman Sachs has predicted hyperscalers could issue a record $420 billion in bonds next year — as a factor pushing yields higher.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">The Other Anthropic Founder Trying to Fix the Company’s ‘Woke’ Reputation</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Extreme Weather Is Everywhere Now—How to Prepare Your Home</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Tokenized Stocks Bring ‘Radical Change’ to Markets, Cuomo Says</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">U.S. Stocks Rise as Iran Escalation Fears Subside</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">SpaceX Makes Big Play to Become a Wireless Carrier</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">As Yields Surged, Small-Cap Stocks Were Hit Hard</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Scrapped IPO of Nvidia-Backed Company Points to Limits of AI Boom</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Airtel Money Shares Open Higher on First Trading Day But $7 Billion Valuation Misses Mark</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Consumer Sentiment Drops, per Michigan Survey</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Borrowing Costs’ Double Whammy Boosts Recession Odds</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">92 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">71 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">67 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">58 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">44 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">40 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-08.html">← Older · October 8, 2026 · Norway Aims to Open Debate on Use of AI Glasses in Public With Ban Proposal</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

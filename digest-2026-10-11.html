@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 11, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-10.html">‹ Oct 10</a> &nbsp;·&nbsp; <a href="digest-2026-10-12.html">Oct 12 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 95</div>
+    <div class="issue-date">October 11, 2026</div>
+    <div class="issue-sub">11 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 11</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 6</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">India Locks Down Heart of Capital to Thwart Voter Rights Protest</div>
+        <div class="art-sum">More than 23,000 Central Armed Police Force personnel were deployed alongside Delhi police, with 37 checkpoints and detention centers set up across the capital, ahead of opposition-led protests on October 10, 2026 against the government&#x27;s Special Intensive Revision (SIR) of electoral rolls. The SIR process has left roughly 130 million Indians off the draft voter rolls nationwide, prompting the opposition INDIA bloc to march toward the Election Commission&#x27;s office demanding the exercise be scrapped and excluded voters reinstated. Protesters and several opposition figures, including Rahul Gandhi, also called for the resignation of Chief Election Commissioner Gyanesh Kumar, accusing the revision of disproportionately purging voters; some lawmakers were briefly detained before being released. Authorities defended the lockdown as a precaution to maintain order during the demonstrations in the capital.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Amazon in Talks to Buy AI Startup Decart for Around $7 Billion</div>
+        <div class="art-sum">Amazon is in talks to acquire Israeli AI startup Decart for roughly $7 billion, with a deal potentially finalized within days barring a breakdown in negotiations or a competing bidder, according to a Wall Street Journal report cited by multiple outlets on October 12, 2026. Decart, founded in 2023 by brothers Dean and Orian Leitersdorf along with Moshe Shalev, has built software enabling developers to switch between different AI chips and is developing &quot;world models&quot; called Lucy and Oasis that generate and simulate 3D environments; its backers include Sequoia Capital, Benchmark, and Radical Ventures. The talks follow Anthropic&#x27;s decision last month to walk away from a roughly $6 billion deal to acquire Decart. If completed, the acquisition would bolster Amazon&#x27;s AI infrastructure ambitions as it competes with Nvidia and pushes its own Trainium chips.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Courts Grapple With Problem of People Betting on the Outcome of Jury Cases</div>
+        <div class="art-sum">Prediction markets like Polymarket and Kalshi have begun hosting betting contracts on the outcomes of high-profile criminal trials, drawing concern from judges, defense attorneys, and legal scholars over jury integrity and courtroom fairness. Polymarket&#x27;s market on the murder case of Massachusetts mother Lindsay Clancy drew more than $600,000 in trading volume, including bets placed even after a mistrial, while a market on Tyler Robinson, the Utah man charged with killing activist Charlie Kirk, has attracted over $300,000 in wagers. In the Lockerbie bombing trial, the judge took the unusual step of instructing jurors not to &quot;visit, consult, or participate&quot; in any betting or prediction market tied to the case, naming Kalshi and Polymarket specifically. Legal experts warn of two distinct risks: someone with inside knowledge of jury deliberations profiting off confidential information, and public betting odds subtly swaying jurors&#x27; or judges&#x27; perception of a case&#x27;s likely outcome, though no instance of actual jury tampering has been documented so far.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Crew of Virtually Unknown Donors Powering the Rise of the New Left</div>
+        <div class="art-sum">A new super PAC called American Priorities, launched in 2026 to counter AIPAC&#x27;s influence in Democratic primaries and support candidates critical of Israel, has drawn roughly $5.7 million from its twelve largest donors during the 2025–2026 election cycle, according to a Wall Street Journal analysis cited by other outlets; the two biggest givers are tech executive Mohammad Waqas (about $1.1 million) and California tech worker Omer Hasan (about $1 million), most of whom had no prior record of political giving before 2025. The PAC has already spent more than $500,000 backing Abdul El-Sayed&#x27;s Michigan Senate bid and over $1 million supporting New York congressional primary winners Claire Valdez and Darializa Avila Chevalier, both members of the Democratic Socialists of America. Separately, investor Afaq Ahmed and Texas businessman Hussein &quot;Sam&quot; Mahrouq have also funded progressive figures including Reps. Ilhan Omar and Rashida Tlaib, while George and Alex Soros&#x27;s Democracy PAC contributed roughly $7 million to progressive causes in the same cycle. The emerging donor network skews younger than traditional progressive megadonors and is notably concentrated among people of South Asian or Middle Eastern heritage working in tech and medicine.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Kenyan Club Rejects Bid to Allow Women Into Men’s Bar From ‘Out of Africa’</div>
+        <div class="art-sum">Nairobi&#x27;s Muthaiga Country Club — the colonial-era social club featured in the 1985 film &quot;Out of Africa,&quot; where Robert Redford&#x27;s character was barred from entering with Meryl Streep&#x27;s character because she was a woman — has for decades kept its Members&#x27; Bar off-limits to women even as women have otherwise been admitted as full members since the early 2000s. Debate over the men-only bar policy resurfaced in late 2025 when club leaders put forward a proposal to let female members into the bar, a move that split the roughly century-old club&#x27;s membership of Nairobi&#x27;s business and political elite. According to reporting on the dispute, the push to change the rule has not succeeded, leaving the bar&#x27;s male-only status intact despite renewed pressure from women members and public scrutiny of the club&#x27;s colonial-era customs. Muthaiga has faced other recent legal and public fights over exclusionary practices, including a 2025 court case brought by lawyer Donald Kipkorir over being denied access to the club.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">When Companies Stop Driving a Hard Bargain, This Fed Official Starts Worrying</div>
+        <div class="art-sum">Beth Hammack, president of the Federal Reserve Bank of Cleveland, said this week that when businesses stop negotiating hard on prices, it signals they still hold enough pricing power to keep inflation elevated — a warning sign for policy. Speaking Monday, October 12, 2026, Hammack cited visits with local business leaders, including industrial-hardware maker Jergens in Cleveland, where she was told that price has slipped to third in importance for customers, behind quality and speed, suggesting sellers retain leverage to keep raising prices. She said inflation has broadened beyond energy costs and tariffs into how companies generally set prices, and argued the Fed should move toward more restrictive policy relatively quickly, favoring smaller, more frequent rate increases over waiting for a bigger one later. Hammack added she hopes to cool demand and inflation without severely damaging the job market, but stressed that current policy isn&#x27;t yet tight enough to return inflation to the Fed&#x27;s 2% target.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Why Economists Think Higher Bond Yields Are Here to Stay</div>
+        <div class="art-sum">The U.S. 10-year Treasury yield climbed to 5% on September 14, 2026 — a threshold not durably breached since 2007 — before touching a roughly 19-to-24-year high near 5.26%-5.37% by late September, driven by sticky inflation, heavy federal bond issuance, an AI-investment boom, and a ballooning national debt. The Committee for a Responsible Federal Budget estimates that a 10-year yield stuck near 5% (about 80 basis points above the CBO&#x27;s prior baseline) would push annual federal interest costs to roughly $2.7 trillion over the coming decade, more than projected spending on Social Security or Medicare. PIMCO&#x27;s chief investment officer Dan Ivascyn told the Financial Times in early October 2026 that the 10-year yield could still climb toward 6% — a level last seen around 2000 — citing fuel costs, inflation, and the growing public debt load, while a Bank of America fund-manager survey released October 13, 2026 found 37% of investors would shift from stocks into bonds if yields reached that 6% mark. Economists broadly describe the move as structural rather than cyclical, meaning they expect borrowing costs to stay elevated for years rather than reverting to the low-rate norms of the 2010s.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Two Interceptions That Doomed Arch Manning in a 10-Point Collapse</div>
+        <div class="art-sum">Texas led Oklahoma 17-7 at halftime of the Red River Rivalry game at the Cotton Bowl on October 11, 2025, but two fourth-quarter interceptions by quarterback Arch Manning flipped the game, with Oklahoma winning 27-24. The first interception, thrown toward receiver Ryan Wingo/Coleman, was picked off by Peyton Bowen and returned 42 yards for a touchdown, giving Oklahoma its first lead of the game; the second, intercepted by Courtland Guillory near Oklahoma&#x27;s 39-yard line with 19 seconds left, set up the game-winning field goal as time expired. Manning finished with three touchdown passes but the two picks accounted for the 10-point swing that sealed Texas&#x27;s collapse.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Sunday Scaries Are Real—and They’re Getting Worse</div>
+        <div class="art-sum">More than half of U.S. workers—57%, according to FlexJobs&#x27; Workplace Frustrations Report released in October 2026—report experiencing &quot;Sunday Scaries,&quot; the anticipatory dread about the week ahead, with 24% saying they feel it every single week. The phenomenon is intensifying: work-related messages and chats consumed about 12% of Sundays in 2025, nearly double the 6.6% recorded in 2023, according to Adobe Acrobat research cited by multiple outlets. Gen Z is hit hardest, with as many as 94% reporting the feeling in some surveys and 83% saying it bleeds into their personal relationships, while workload, unfinished tasks, and manager dynamics were cited as top triggers. On-site workers report the dread far more often (once or twice a month) than remote workers, who say they experience it only a few times a year.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">‘Fusionism’ Review: An Alliance of Principles</div>
+        <div class="art-sum">Stephanie Slade&#x27;s book &quot;Fusionism: Liberty, Virtue, and the Future of the American Right,&quot; published by University of Notre Dame Press in September 2026, argues that the postwar conservative philosophy pioneered by National Review editor Frank Meyer in the 1960s—which held that liberty and virtue are mutually reinforcing and that lasting virtue requires freedom rather than government coercion—remains the right framework for American conservatism today. Slade, a senior editor at Reason magazine, contends that this fusionist vision has been displaced by a conservatism now split among theocons, national conservatives, and neoreactionaries who are united less by fear of government tyranny than by shared opposition to the left, particularly under Donald Trump&#x27;s influence. The book, which grew out of a schism Slade observed during Trump&#x27;s first term between limited-government conservatism and a more state-power-driven approach, calls for restoring persuasion over coercion as the engine of social change.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Home Sellers Are Starting to Blink on Prices. That’s Bad for Builders.</div>
+        <div class="art-sum">A record 41% of U.S. homebuilders cut prices in a recent survey, and as of October 2026 roughly 38% report price cuts while about 66% are offering incentives such as mortgage-rate buydowns and closing-cost credits, with average price reductions near 6%, according to NAHB/NAR data. The median new-home sale price has fallen to about $393,800, down from roughly $460,000 in October 2022, narrowing the gap with resale prices. Individual home sellers in markets like Florida and Texas are now also lowering asking prices to compete, adding pressure on builders such as Lennar, whose average sales price dropped 10% year-over-year to about $386,000 in its fiscal fourth quarter of 2025. NAHB&#x27;s chief economist expects resale prices to decline further in most markets through 2026 as buyers gain more negotiating leverage.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 11 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">1</span><span class="toc-t">India Locks Down Heart of Capital to Thwart Voter Rights Protest</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">2</span><span class="toc-t">Exclusive | Amazon in Talks to Buy AI Startup Decart for Around $7 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Courts Grapple With Problem of People Betting on the Outcome of Jury Cases</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">The Crew of Virtually Unknown Donors Powering the Rise of the New Left</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Kenyan Club Rejects Bid to Allow Women Into Men’s Bar From ‘Out of Africa’</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">6</span><span class="toc-t">When Companies Stop Driving a Hard Bargain, This Fed Official Starts Worrying</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">7</span><span class="toc-t">Why Economists Think Higher Bond Yields Are Here to Stay</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">The Two Interceptions That Doomed Arch Manning in a 10-Point Collapse</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">The Sunday Scaries Are Real—and They’re Getting Worse</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">‘Fusionism’ Review: An Alliance of Principles</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Home Sellers Are Starting to Blink on Prices. That’s Bad for Builders.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">92 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">71 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">67 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">44 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-10.html">← Older · October 10, 2026 · The Desperate Hunt for AI Computing Power Is Upending Silicon Valley</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
