@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 16, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-15.html">‹ Oct 15</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 100</div>
+    <div class="issue-date">October 16, 2026</div>
+    <div class="issue-sub">12 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 12</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta and Apple, Longtime Foes, Team Up to Put Open-Weight AI on Macs</div>
+        <div class="art-sum">Meta and Apple announced a collaboration on October 15, 2026, to run Meta&#x27;s new open-weight AI model, Muse Spark Open, on Apple&#x27;s Mac hardware, marking a notable thaw between two companies that have frequently clashed over privacy and app-store policy. Muse Spark Open is an 816-billion-parameter mixture-of-experts model built for coding and agentic, long-horizon reasoning tasks, released under a license permitting limited commercial use. Apple updated its MLX machine-learning framework to optimize the model for the Mac Studio with M5 Ultra chip, and customers will be able to link two to four Mac Studios together to run the model locally for coding, video analysis, and other agentic workloads. Running the model on-device rather than in the cloud is pitched by both companies as improving both data security and cost compared with cloud-based AI services.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Engineer Accused of Bugging OpenAI’s Top-Secret Conference Room</div>
+        <div class="art-sum">Abdulrahman Alfozan, a 35-year-old Saudi national who had worked as an OpenAI engineer since July 2025, was arrested on October 9, 2026, and charged with using a device to intercept oral communications after a recording device was found plugged into a USB port on a TV in an OpenAI executive conference room, concealed in toilet paper; the device was discovered September 30 and determined to have been installed around September 28. Surveillance footage reportedly showed Alfozan near the room on multiple dates despite not being authorized to enter it, and prosecutors say he used an AI chatbot in August and September to ask about OpenAI&#x27;s building addresses, meeting-room locations, capacities, and calendars, while a chatbot linked to his spouse allegedly queried how to build, install, and remotely access a recording device. An unattended bag containing his wallet, ID, and a second recording device was also found at OpenAI&#x27;s offices. OpenAI terminated his employment the day of his arrest; he is also reported to be a partner at the Saudi venture firm Raed Ventures.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Companies Play Cat-and-Mouse With Secret-Stealing Spies</div>
+        <div class="art-sum">FBI agents arrested Abdulrahman Alfozan, a 35-year-old Saudi national and OpenAI engineer employed since July 2025, after security staff found a hidden recording device wired into a USB port behind a TV in an executive conference room at OpenAI&#x27;s San Francisco office in late September 2026, with a second listening device later found in his bag; he faces a federal charge of attempting to intercept oral communications and up to five years in prison plus a $250,000 fine. FBI Director Kash Patel said Alfozan allegedly sought to capture sensitive discussions about the company&#x27;s &quot;superintelligence&quot; technology, and OpenAI said it has no evidence he exfiltrated model weights, source code, or customer data. The case lands amid a broader wave of espionage activity targeting AI firms, including a January 2026 federal jury conviction of ex-Google engineer Linwei Ding on economic-espionage and trade-secret-theft charges tied to sharing AI chip and networking data with Chinese companies, and U.S. allegations that Chinese AI firms are running &quot;industrial-scale&quot; theft operations, including distillation attacks against models like those from OpenAI and Anthropic.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Tiny Robot Designed to Solve a Massive Underground Crisis</div>
+        <div class="art-sum">A collapsed sewer pipe outside Washington, D.C. spilled more than 240 million gallons of raw sewage into the Potomac River in January 2026, likely the largest sewage spill in U.S. history, out of an estimated 75,000 such spills the EPA says occur nationwide each year. In response, the EU-funded PIPEON project, backed by roughly $9 million, is developing miniature robots designed to crawl through confined, hazardous sewer pipes to inspect for cracks, blockages, and structural wear without requiring excavation. The robots aim to let utilities detect and fix leaks and damage in aging underground water and sewage infrastructure before failures like the Potomac spill occur. Similar mini-robot efforts are also being tested to find and repair water pipe leaks without digging up roads.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">TSMC Weighs Texas Expansion, Holds Talks on Musk’s Terafab</div>
+        <div class="art-sum">TSMC CEO C.C. Wei said on the company&#x27;s Q3 2026 earnings call on October 15, 2026, that TSMC has sent teams to Texas to evaluate a possible manufacturing expansion beyond its Arizona operations, citing strong demand from U.S. customers; this comes after TSMC pledged an additional $100 billion in Arizona investment in July, bringing its total Arizona commitment to $265 billion. Wei also confirmed talks with Elon Musk&#x27;s &quot;Terafab,&quot; a Tesla/SpaceX/xAI joint venture planned for the North Campus of Giga Texas in Grimes County that aims to combine chip design, fabrication, memory production and packaging under one roof, but said any fab producing TSMC chips would need to be operated by TSMC itself. That operational-control point conflicts with Musk, who said on X on October 7, 2026, that Tesla and SpaceX — not TSMC — would build and run the facility, leaving the outcome of the talks uncertain.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple Joins Nvidia in the $5 Trillion Valuation Club</div>
+        <div class="art-sum">Apple closed above $5 trillion in market value for the first time on Wednesday, with shares rising 0.5% to a record $342.96, making it only the second U.S. company after Nvidia to reach the milestone. Apple had briefly touched $5 trillion intraday before (first in late July) but this marked its first closing finish above the threshold, and the stock is up about 26% year-to-date and roughly 40% over the past 12 months. Apple crossed the $4 trillion mark in October 2025, meaning it added roughly $1 trillion in value in under a year. Nvidia, which closed above $5 trillion in October 2025, remains the larger company with a market cap of about $5.33 trillion.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AstraZeneca Strikes Up to $1.5 Billion AI Drug Discovery Deal With Insitro</div>
+        <div class="art-sum">AstraZeneca and AI biotech insitro announced a research partnership on October 15, 2026, worth up to $1.5 billion, with AstraZeneca paying $40 million upfront and up to roughly $1.46 billion tied to development and commercial milestones plus tiered royalties on sales. The deal uses insitro&#x27;s &quot;Virtual Human&quot; AI platform to identify drug targets and advance AstraZeneca-nominated programs for metabolic dysfunction-associated steatohepatitis (MASH) and cardiomyopathies, diseases where root biological drivers have been hard to pin down. AstraZeneca will hold exclusive worldwide rights to the resulting programs. The deal comes as AstraZeneca accelerates dealmaking toward its stated goal of $80 billion in total revenue and 20 new medicines by 2030.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">How to Invest for the Middle Class Blues</div>
+        <div class="art-sum">The underlying economic story is that September 2026 CPI rose 3.7% year-over-year, an acceleration from the prior month driven largely by rising gasoline and diesel prices, and inflation is now outpacing wage gains for the first time in roughly three years; chief economist Heather Long of Navy Federal Credit Union called it &quot;a true financial squeeze,&quot; noting that living standards for middle-, working-class, and working-poor households are currently declining. The squeeze also has a longer arc: real average weekly earnings for the private middle-class wage cohort now sit around $1,083, still below the roughly $1,140 peak that cohort reached in the early 1970s. Regionally, states including New York, California, and Maryland have seen the weakest middle-class wage growth relative to inflation. The accompanying boost to Social Security benefits (tied to the same September inflation data) is set to take effect for 2027 payments.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Dow Industrials, Treasurys Rise as Investors Rotate Out of Tech</div>
+        <div class="art-sum">I have sufficient concrete numbers now to write the brief. The Dow Jones Industrial Average rose roughly 0.4%-1.1% on Thursday, October 15, 2026, as investors rotated out of technology shares and into consumer, healthcare, and financial stocks after a sharp sell-off in AI and semiconductor names. The move followed a global chip-stock selloff triggered by Wednesday&#x27;s hotter-than-expected CPI report, with South Korea&#x27;s Kospi dropping 8% and Samsung Electronics and SK Hynix falling 9% and 11% respectively overnight. Treasury prices rallied as investors sought safety, pushing the 10-year yield down roughly 10-13 basis points to around 5.05%-5.09%, even as the Nasdaq Composite slipped about 0.4%-1.3% on continued weakness in richly valued AI and chip names. The divergence highlighted growing investor unease over AI spending sustainability and debt-financing costs rather than interest rates alone.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Failure of Australia’s Largest IPO in Decades Sends Tremors Through AI Trade</div>
+        <div class="art-sum">Nvidia-backed AI data-center developer Firmus Technologies withdrew what would have been Australia&#x27;s largest IPO in roughly three decades (the biggest since Telstra&#x27;s 1997 listing), citing &quot;recent market volatility and prevailing market conditions&quot; after the deal was last valued near A$30 billion (down from reports of up to A$43.7 billion), with plans to raise as much as A$7 billion on the ASX; the collapse came on October 8-9, 2026, just months after Firmus&#x27;s valuation had jumped from about $10.5 billion to $30 billion in under three months, and shares in related Australian firms fell as much as 23% as the deal&#x27;s failure rattled confidence in AI-infrastructure listings globally, with commentators pointing to it as a warning sign ahead of a planned Anthropic IPO test of investor appetite.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">For Stocks, the Future Ain’t What It Used to Be</div>
+        <div class="art-sum">Now I have enough concrete, non-WSJ-sourced facts to write the brief. A Wall Street Journal investing-newsletter column by Jason Zweig, published October 13, 2026 and titled &quot;For Stocks, the Future Ain&#x27;t What It Used to Be,&quot; draws on Roger Ibbotson&#x27;s new CFA Institute monograph &quot;Exponential Wealth: Centuries of Stock and Bond Returns&quot; to caution investors against assuming past performance will repeat; the book, marking the 50th anniversary of the original SBBI return series, finds that one dollar invested in U.S. large-cap stocks a century ago grew to $14,751, a 10.1% annualized return, or roughly 800 times its value after accounting for 2.9% average annual inflation. The monograph introduces a new &quot;Ibbotson Equity and Bond Indices&quot; data series as successor to the discontinued SBBI data and extends the analysis to pre-1926 U.S. history and centuries of global market data. The column&#x27;s thrust, per commentary referencing it, is that such historical averages are difficult for individual investors to actually capture and should not be extrapolated directly into forward return expectations.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Inflation Runs Hot, Stocks Go Cold</div>
+        <div class="art-sum">The U.S. Labor Department reported on October 14, 2026, that the September Consumer Price Index rose 3.7% year-over-year, up from 3.4% in August and above the 3.6% economists expected, with core CPI (excluding food and energy) at 2.6%. Stocks tumbled in response as traders priced in a greater chance the Federal Reserve would need to keep raising rates: the S&amp;P 500 fell 1.11% to 7,718.94 and the Nasdaq Composite dropped 1.88% to 26,692.87, each logging their worst day since July, while the Russell 2000 slid 2.2%. The selloff hit AI and chip stocks hardest — CoreWeave fell more than 15%, Oracle dropped about 9%, Dell fell 11.3%, and the Philadelphia Semiconductor Index plunged 4.3% — while defensive sectors like Health Care (+2.09%) and Consumer Staples (+1.46%) posted gains.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 12 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Meta and Apple, Longtime Foes, Team Up to Put Open-Weight AI on Macs</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">The Engineer Accused of Bugging OpenAI’s Top-Secret Conference Room</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">AI Companies Play Cat-and-Mouse With Secret-Stealing Spies</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">The Tiny Robot Designed to Solve a Massive Underground Crisis</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">TSMC Weighs Texas Expansion, Holds Talks on Musk’s Terafab</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Apple Joins Nvidia in the $5 Trillion Valuation Club</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">AstraZeneca Strikes Up to $1.5 Billion AI Drug Discovery Deal With Insitro</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">How to Invest for the Middle Class Blues</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Dow Industrials, Treasurys Rise as Investors Rotate Out of Tech</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Failure of Australia’s Largest IPO in Decades Sends Tremors Through AI Trade</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">For Stocks, the Future Ain’t What It Used to Be</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Inflation Runs Hot, Stocks Go Cold</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">94 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">79 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">68 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">60 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-15.html">← Older · October 15, 2026 · Anthropic’s Quarterly Revenue Jumped 45% to Nearly $17 Billion</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
