@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 17, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-16.html">‹ Oct 16</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Saturday Issue · No. 101</div>
+    <div class="issue-date">October 17, 2026</div>
+    <div class="issue-sub">16 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 16</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">A Five-Day Tour for Katie Zacharia</div>
+        <div class="art-sum">Katie Zacharia departed as White House press secretary on October 16, 2026, just five days after taking the job, making her the shortest-serving press secretary in modern history, surpassing Anthony Scaramucci&#x27;s 11-day run as communications director in Trump&#x27;s first term. Her tenure was marred by a widely panned first press briefing and revelations that she had represented herself as a lawyer despite never passing the bar exam, prompting Trump to publicly tell her to &quot;reconsider&quot; the role. According to NBC News and CNN, she was reportedly in the middle of a Wall Street Journal interview when senior adviser Jason Miller interrupted to say Vice President JD Vance wanted to speak with her; she never returned to the interview or the job. Zacharia, a Pepperdine University graduate who had been a communications adviser to Trump Media and Technology Group since June 2026, becomes the 37th person to hold the press secretary post.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Runs Into Its Next Big Obstacle: Insurance</div>
+        <div class="art-sum">Insurers are increasingly unwilling to fully underwrite the risks of the AI boom, creating a growing coverage gap just as AI companies and data-center operators seek protection against massive potential losses. New ISO exclusion endorsements (CG 40 47 and CG 40 48) took effect January 1, 2026, letting insurers carve generative-AI-related bodily injury, property damage, and advertising-injury claims out of standard commercial general liability policies. AIG&#x27;s CEO said in August 2026 that the AI data-center construction boom is &quot;maxing out&quot; property-and-casualty insurers&#x27; capacity, since reinsurers can only cover a fraction of the enormous construction-cost limits at these multibillion-dollar campuses. In response, specialty insurers have begun rolling out new products — such as Armilla&#x27;s AI liability policy, underwritten by Lloyd&#x27;s of London syndicates since April 2025, covering losses from AI hallucinations and model-performance failures — while analysts project the AI data-center insurance market could grow toward $200 billion by 2030.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Better.com Adds Former X CEO Linda Yaccarino to Board After Proxy Fight</div>
+        <div class="art-sum">Better Home &amp; Finance Holding Co. appointed former X CEO Linda Yaccarino as an independent director effective Thursday, October 15, 2026, the first board addition under its &quot;Better 2.0&quot; plan. The move came just two days after Nasdaq formally notified the mortgage lender that its board and audit committee failed to meet exchange independence requirements, and follows a proxy fight in which founder Vishal Garg regained control after being ousted as CEO in early August, subsequently removing five directors including chairman Harit Talwar and interim CEO Daniel Lewis. Yaccarino, who previously ran advertising sales at NBCUniversal before her stint at X (formerly Twitter), is expected to focus on scaling the company&#x27;s AI-driven &quot;Tinman&quot; lending platform and enforcing cost discipline.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Michael Dell, a Dot-Com Era Survivor, Has Tips to Beat an AI Bust</div>
+        <div class="art-sum">Michael Dell, who led Dell Technologies through the dot-com crash of the early 2000s, says he&#x27;s applying the same discipline to today&#x27;s AI infrastructure boom by avoiding long-term, speculative bets and relying on a just-in-time manufacturing model that lets Dell scale server and data-center production up or down with actual demand rather than getting stuck with excess capacity. Dell argues a full-blown AI bubble is unlikely in the near term because demand for AI &quot;tokens&quot; still outstrips supply, telling interviewers &quot;it would be hard for there to be a bubble right now, just because there&#x27;s not enough supply,&quot; while acknowledging markets &quot;always overcorrect&quot; eventually, just not in the next couple of years. He has also said chip and compute supply could remain tight through 2030, even as he cautions peers against funding AI buildouts with heavy debt tied to long-duration contracts.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Big Tech Is Soft-Launching Data Centers Early, Bracing for Scrutiny</div>
+        <div class="art-sum">Big Tech firms including Amazon, Google, Meta, and Microsoft are increasingly &quot;soft-launching&quot; AI data center projects earlier in the planning process and pledging greater transparency, after facing intensifying local backlash that has blocked, withdrawn, or stalled more than $170 billion in announced AI data center investment across 46 projects in 20 US states between January 2024 and May 2026. The shift follows revelations that hyperscalers routinely sought nondisclosure agreements with local officials during site selection; AWS CEO Matt Garman said on October 3, 2026 that Amazon has stopped using NDAs with government agencies and will publish more resource data and protect residential ratepayers from rate hikes. More than 300 US local governments have enacted bans or moratoria on new hyperscale facilities, with over 100 additional moratoriums under consideration, as communities cite concerns over water use, power demand, and utility costs. Opposition has accelerated sharply, from 6 project cancellations in 2024 to 25 in 2025 and more than 20 more by mid-May 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Indonesia Stocks Log Worst Day Since 1998 on MSCI Downgrade Warning</div>
+        <div class="art-sum">Indonesia&#x27;s Jakarta Composite Index plunged as much as 11.4% on Friday, October 16, 2026, its steepest one-day drop since January 1998, triggering a 30-minute trading halt after the index fell 8% shortly after the open. The selloff followed MSCI&#x27;s warning that it could reclassify Indonesia from &quot;emerging market&quot; to a lower &quot;standalone market&quot; status—worse than the previously floated &quot;frontier market&quot; downgrade—which would strip Indonesian stocks from indexes tracked by global passive and active funds. UBS estimated the reclassification could trigger roughly $4 billion in passive outflows and about $15 billion more from active investors. Indonesian equities have now lost nearly 40% in 2026, making them the world&#x27;s worst-performing major stock market this year.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Stocks Slump as Nasdaq Faces Weekly Loss</div>
+        <div class="art-sum">The Nasdaq Composite fell 2.14% on Friday, October 16, 2026, closing at 26,140.03 and posting its worst week since June with a weekly loss of more than 4%, as a sell-off in tech and AI-related names deepened alongside rising oil prices and interest-rate concerns. Semiconductor stocks were hit especially hard, with the VanEck Semiconductor ETF (SMH) sliding roughly 10% for the week—its biggest weekly decline since April 2025—dragging down Micron, AMD, Broadcom, and Intel. Investor anxiety centered on whether AI data-center operators like CoreWeave can turn profitable in time to repay mounting debt, particularly as borrowing costs are expected to rise.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Rising Rates Threaten Wall Street’s Golden Goose in Trading</div>
+        <div class="art-sum">The 10-year Treasury yield climbed to 5.35% this week, its highest level since 2002, as Wall Street&#x27;s biggest banks reported third-quarter earnings; the five largest firms (JPMorgan, Goldman Sachs, Citigroup, Bank of America and Morgan Stanley) lost a combined $270 billion in market value between their summer peaks and October 9, 2026 on fears that surging yields will squeeze profits. Trading revenue still hit nearly $19 billion in stock-trading alone for the quarter, with equities trading up double digits at every major bank (Goldman&#x27;s rose almost 75%), even as bond trading flattened and Bank of America warned investment-banking fees could fall at least 10%. That follows a record first half of 2026, when the industry&#x27;s profits soared 51% year-over-year to $45.9 billion, driven by AI-related deal activity and elevated trading volumes, putting the sector on pace for roughly $90 billion for the full year.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Defense Stocks Rally, Boosted by Project Bromo Report</div>
+        <div class="art-sum">European defense and aerospace stocks jumped after reports that the EU is preparing to fast-track antitrust approval of &quot;Project Bromo,&quot; the planned satellite joint venture combining Airbus, Thales, and Leonardo; Thales shares rose about 2.85%, Leonardo gained roughly 4.1%, and Rheinmetall climbed around 5% on the broader sector optimism. Under the proposed structure, Airbus would hold a 35% stake in the new satellite company, with Thales and Leonardo each holding 32.5%, creating a roughly 25,000-employee firm with about €6.5 billion in annual turnover aimed at reducing Europe&#x27;s reliance on SpaceX for satellite services. The venture, first outlined via a memorandum of understanding in October 2025, is seen as an early test of the EU&#x27;s updated merger doctrine favoring European industrial consolidation to compete with US and Chinese rivals.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asia Stocks Recover Some Ground After Tech Rout</div>
+        <div class="art-sum">Most Asian markets rebounded on Friday, October 16, 2026, after a tech-driven selloff the previous day fueled by AI-boom concerns, with South Korea&#x27;s Kospi rising 2.7% and Japan&#x27;s Nikkei 225 gaining 1.8% following Thursday losses of 7.6% and 4.9% respectively; chipmakers SK Hynix and Kioxia led the rebound after being hit hardest the day before. The recovery was driven partly by Nvidia CEO Jensen Huang defending cloud provider CoreWeave against financial concerns, and Federal Reserve Chair Kevin Warsh saying the AI shock could bring major economic benefits. Hong Kong, Shanghai, Singapore, Taipei, and Manila also posted gains, though Jakarta was a notable exception, plunging more than 11% — its worst drop since 1998 — after MSCI said it would no longer be &quot;appropriate&quot; to keep Indonesia classified as an emerging market.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall as Credit Fears Haunt Tech Sector</div>
+        <div class="art-sum">U.S. stocks closed lower Friday, October 16, 2026, in their worst week since late June, as a broad tech sell-off deepened: the S&amp;P 500 fell 1.1% and the Nasdaq Composite dropped 573 points (2.1%) to 26,140. The decline was driven by mounting fears that heavily indebted AI and data-center companies, such as cloud provider CoreWeave (roughly $50 billion in debt, with bond yields climbing to about 15% this week), may struggle to service borrowing costs amid massive AI infrastructure spending. Chip and AI-adjacent names led the losses — Micron fell 5.6%, AMD dropped 6%, Broadcom lost 4.5%, and Intel fell 5.8% — with 20 of the most valuable global AI and semiconductor stocks shedding more than $1 trillion in value combined over the week.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Frenzied Stock-Options Trading Shows Individual Investors Are Still Hungry for Risk</div>
+        <div class="art-sum">Daily notional volume in single-stock options has surged back to roughly $700 billion, matching levels last seen during the 2021 meme-stock mania, with more than half of that activity concentrated in contracts expiring within two weeks. Average daily options volume across the retail market hit an all-time high of over 73 million contracts by May 2026, and Robinhood reported options contracts traded up 50% year-over-year to a record 774 million in the second quarter of 2026. Unlike 2021, when GameStop and AMC &quot;to the moon&quot; bets drove the frenzy, the current wave is fueled by AI enthusiasm, strong corporate earnings, and a wave of high-profile IPOs; for the week ended October 7, 2026, the share of investors expecting stocks to rise over the next six months climbed to 40.3%, the highest since mid-July and comparable to 2021-era bullishness.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The 26-Year-Old Russian Defector Who Fed Ukraine His Army’s Battle Plans</div>
+        <div class="art-sum">Lt. Lev Stupnikov, a 26-year-old Russian signals officer, secretly passed troop positions and operational plans to Ukrainian intelligence starting around 2023-2024, information used in strikes that reportedly killed more than 300 Russian soldiers, including one attack that killed 68 troops and a colonel. A graduate of a St. Petersburg military academy who began questioning the war&#x27;s conduct in 2022, he was aided by his mother, a protest participant, in making contact with Ukrainian intelligence, and he escaped across the front line in July 2024 using a pre-arranged passcode. He subsequently joined the Russian Volunteer Corps, a Ukrainian-based unit made up of ethnic Russians fighting against Moscow.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Natural Gas Futures Mixed After Below-Estimate Storage Build</div>
+        <div class="art-sum">The U.S. Energy Information Administration reported a 67 Bcf injection into natural gas storage for the week ended October 9, 2026, falling short of the 76 Bcf build analysts had forecast in a Reuters poll and well below the 90 Bcf five-year average increase for that week. The below-estimate build signaled tighter supply heading into winter heating season, and front-month November natural gas futures rose about 2% to roughly $3.26/MMBtu following the report, even as daily output fell to a five-month low and demand forecasts firmed for the following two weeks. Despite the bullish storage signal, trading was choppy, with futures giving back some gains intraday as the broader market digested mixed near-term weather and demand signals.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Natural Gas Futures Fall Ahead of Weekly Storage Data</div>
+        <div class="art-sum">U.S. natural gas futures declined as traders positioned ahead of the EIA&#x27;s weekly storage report, with the November contract slipping to around $3.215 per MMBtu in overnight trading, down about 0.65%, after settling at $3.24 on October 15, 2026. The pullback came even as the most recent EIA data showed a smaller-than-average storage build: inventories rose 67 Bcf to 3,567 Bcf for the week ended October 9, a build 23 Bcf below the five-year average, while mild weather forecasts continued to weigh on prices despite the tighter supply signal. The prior week&#x27;s report (for the week ended October 2) showed an 85 Bcf injection, which also came in below historical norms but above market expectations.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Mark Walter Probe Dings a Guggenheim Funding Machine That Powers Wall Street</div>
+        <div class="art-sum">Federal prosecutors in Manhattan and the SEC are investigating Guggenheim Partners CEO Mark Walter&#x27;s insurance companies — Delaware Life Insurance Co. and Clear Spring Life and Annuity Co. — over whether they concealed that billions of dollars in private-credit loans backed other parts of Walter&#x27;s business empire, with grand jury subpoenas issued to the insurers in February 2026. Investigators have reportedly narrowed in on four intermediary firms — Miami-based ABS Capital, Amistad Financial, commercial real-estate broker Bradford Allen, and Hudson Trading — that funneled loan proceeds between Walter-linked entities. A related lawsuit alleges the insurers concealed roughly $21 billion in affiliated loans and failed to disclose the federal probe to elderly annuity holders; more than $1.2 billion of the financing for Walter&#x27;s purchase of the Los Angeles Dodgers reportedly came from these insurers. Walter&#x27;s TWG Global has said there was &quot;no fraud,&quot; and as of late August 2026 neither Walter nor his companies had been charged by the DOJ or named in an SEC enforcement action.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 16 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">A Five-Day Tour for Katie Zacharia</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">AI Runs Into Its Next Big Obstacle: Insurance</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Better.com Adds Former X CEO Linda Yaccarino to Board After Proxy Fight</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Michael Dell, a Dot-Com Era Survivor, Has Tips to Beat an AI Bust</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Big Tech Is Soft-Launching Data Centers Early, Bracing for Scrutiny</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Indonesia Stocks Log Worst Day Since 1998 on MSCI Downgrade Warning</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Tech Stocks Slump as Nasdaq Faces Weekly Loss</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Rising Rates Threaten Wall Street’s Golden Goose in Trading</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">European Defense Stocks Rally, Boosted by Project Bromo Report</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Asia Stocks Recover Some Ground After Tech Rout</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">U.S. Stocks Fall as Credit Fears Haunt Tech Sector</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Frenzied Stock-Options Trading Shows Individual Investors Are Still Hungry for Risk</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">The 26-Year-Old Russian Defector Who Fed Ukraine His Army’s Battle Plans</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">U.S. Natural Gas Futures Mixed After Below-Estimate Storage Build</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">U.S. Natural Gas Futures Fall Ahead of Weekly Storage Data</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Exclusive | Mark Walter Probe Dings a Guggenheim Funding Machine That Powers Wall Street</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">95 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">80 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">69 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">46 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-16.html">← Older · October 16, 2026 · Meta and Apple, Longtime Foes, Team Up to Put Open-Weight AI on Macs</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
