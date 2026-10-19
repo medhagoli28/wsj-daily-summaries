@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 19, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-17.html">‹ Oct 17</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 102</div>
+    <div class="issue-date">October 19, 2026</div>
+    <div class="issue-sub">16 stories across tech, markets &amp; finance — a 11-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 16</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Microsoft Pulls out of Nscale U.K. Data-Center Deal Over Power-Supply Issues</div>
+        <div class="art-sum">Microsoft has pulled out of a deal to lease capacity from a 50-megawatt Nscale data center in Loughton, on the outskirts of London, which was set to house roughly 23,000 Nvidia GB300 chips for Azure services; the site had been expected to go live by the end of 2026, but National Grid officials reportedly told Nscale they didn&#x27;t expect power to be available until the 2030s. Microsoft said the withdrawal is limited to this single site and that it remains committed to its broader partnership with Nscale, while Nscale said it is exploring alternative power sources and other UK expansion sites. The episode underscores how UK grid-connection delays are becoming a real constraint on AI data-center buildouts, and comes as Nscale, a UK-based AI cloud/GPU provider, prepares for an IPO.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic to Commit 5% of Its Shares to New ‘Public Benefit’ Fund</div>
+        <div class="art-sum">Anthropic announced on October 18-19, 2026 that it will commit 5% of its shares to a newly created &quot;public benefit&quot; fund, structured as an LLC to allow flexibility in how proceeds are used, subject to shareholder approval; the board can add an additional 2% for every 50% increase in the company&#x27;s valuation above an undisclosed baseline. The fund is intended to support large donations—either to traditional nonprofits or as direct distributions to specific populations—and to explore &quot;bolder approaches&quot; to addressing AI-driven job displacement, but it is barred from funding lobbying or political donations in the U.S. or abroad. Combined with a separate announcement made the prior Sunday, Anthropic said roughly 20% of its shares are now earmarked for public-good purposes, with that share potentially growing further if valuation milestones are hit.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Quantinuum Sees Path to Fault-Tolerant Quantum Computing by 2029 With New Milestone</div>
+        <div class="art-sum">Quantinuum announced it has achieved the first fully fault-tolerant universal gate set with repeatable quantum error correction, producing encoded &quot;magic states&quot; with about 99.993% fidelity—roughly a tenfold improvement over prior published results on any hardware platform. The Colorado-based company, a spinout backed by Honeywell, says the result removes what it considers the last major scientific hurdle toward its planned &quot;Apollo&quot; universal fault-tolerant quantum computer, which it still targets for delivery by 2029. The milestone, announced in June 2025, marks a shift from today&#x27;s noisy intermediate-scale (NISQ) prototypes toward what Quantinuum calls &quot;utility-scale&quot; quantum computing by decade&#x27;s end.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Agents Trading Stocks While You Sleep? Charles Schwab’s CEO Is Skeptical</div>
+        <div class="art-sum">Charles Schwab CEO Rick Wurster said he&#x27;s skeptical that AI agents can reliably outperform the market on clients&#x27; behalf, arguing &quot;there is no magic formula to beat the market&quot; and noting that if one existed, hedge funds would already be using it. Wurster said any AI agent trading on a customer&#x27;s behalf needs clear &quot;rules of the road&quot; set by the user, with human oversight, rather than fully autonomous decision-making. Schwab is already fielding and blocking dozens of unauthorized AI-agent login attempts on client accounts each week, and the firm is instead rolling out its own conversational AI assistant, &quot;Charley,&quot; which will help with research and placing limit orders rather than acting as an autonomous trading bot.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Toilet Paper and Honey Pots: Spy Games in Silicon Valley | Technology for Oct. 18</div>
+        <div class="art-sum">The FBI arrested an OpenAI engineer, a Saudi national, after discovering a covert audio recording device hidden inside a toilet-paper roll and plugged into a TV&#x27;s USB port in a San Francisco conference room, with prosecutors alleging he used an AI productivity agent to research meeting-room layouts and ways to build continuous audio recorders. The case echoes the Rippling-Deel feud, in which Rippling caught an alleged Deel-recruited mole by luring him into a fake Slack &quot;honeypot&quot; channel, and the suspect later allegedly flushed his phone down a toilet when ordered to surrender it for a forensic review. In response, AI labs including OpenAI, Anthropic, and Google have tightened counterintelligence measures: Anthropic now requires multi-employee authorization to access core datasets, Google has used an internal monitoring system called &quot;Facade&quot; since 2018 to flag suspicious data access, and firms are training staff to spot honeypot approaches and avoid discussing secrets in public or on whiteboards.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">ETFs Often Cost More Than They Should</div>
+        <div class="art-sum">Index-tracking ETFs that go even slightly beyond the broadest benchmarks often carry fees well above the rock-bottom levels investors expect, with inertia among the biggest drivers of excess cost: Vanguard&#x27;s S&amp;P 500 ETF (VOO), the largest ETF in the category with roughly $1.68 trillion in assets, charges a 0.03% expense ratio, while State Street&#x27;s SPDR Portfolio S&amp;P 500 ETF (SPYM) tracks the identical 500 stocks for 0.02% — a one-basis-point gap that, per a 24/7 Wall St analysis dated September 21, 2026, siphons about $10 more per $100,000 invested annually and roughly $1,200 in lost ending value over 20 years, despite near-identical returns (VOO returned 16.61% over the trailing year through September 18, 2026, versus 16.65% for SPYM). Fidelity&#x27;s FXAIX charges even less, at 0.015%, underscoring how even &quot;cheap&quot; index products can be undercut by competitors tracking the same benchmark. CNBC has separately reported that while fee competition has driven headline expense ratios down industry-wide, analysts caution that price shouldn&#x27;t always be the sole factor driving ETF selection decisions.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">From Verizon to UnitedHealth, Corporate America Is Balking at ‘Tokenized’ Stocks</div>
+        <div class="art-sum">Nine companies — including Broadcom, Verizon, UnitedHealth Group, CoreWeave, AppLovin, Rocket Lab, Cerebras Systems, Applied Digital, and Applied Optoelectronics — have formally objected to having their shares tokenized by OKXICE, a joint venture between crypto exchange OKX and Intercontinental Exchange (owner of the NYSE), under the SEC&#x27;s new Innovation Exemption framework. The objections appeared in an OKXICE public notice dated October 15, 2026, after the venture had identified 63 stocks it intended to support for tokenized trading. Companies cited concerns about potential effects on stock price, liquidity, and investor confusion from trading on a venue with which they have no affiliation. Under the SEC framework, a timely issuer objection blocks that company&#x27;s shares from being tokenized on that specific venue, marking an early setback for OKXICE&#x27;s push into tokenized US equities.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nordex Shares Jump on Earnings Growth, Guidance Raise</div>
+        <div class="art-sum">Nordex shares jumped as much as 10-13% in Frankfurt trading after the German wind turbine maker reported preliminary third-quarter EBITDA of roughly €278 million, up from €136 million a year earlier and about 15% above analyst consensus, while revenue rose to around €2.19 billion from €1.71 billion and free cash flow climbed to €379 million from €149 million. On the back of those results, Nordex raised its full-year 2026 EBITDA margin guidance to a range of 11.5%-12.5%, up from the previous 8.0%-11.0% forecast, while keeping its revenue guidance unchanged at €8.2 billion to €9.0 billion. The company attributed the upgrade to stronger margins in its Service segment and solid project execution, noting that risks it had previously flagged in its Projects segment did not materialize as expected.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Netflix Stock Might be a Sleeper Hit</div>
+        <div class="art-sum">This fits — the WSJ &quot;sleeper hit&quot; framing lines up with Netflix shares having been battered down roughly 46% from their 52-week high of $124.86 to a 52-week low of $65.08 set in July 2026, before stabilizing and climbing about 4% over the past week to $72.56 as of October 16, 2026, with the stock up 2.89% to $72.61 on October 15 following news of its largest layoffs in years. Ahead of Q3 earnings scheduled for October 20, 2026, Wall Street sentiment has turned cautiously constructive: Deutsche Bank upgraded Netflix to Buy with a $95 target even as HSBC cut its target to $76 after a September downgrade, and the broader analyst consensus points to roughly 26-30% upside from current levels. Options traders are bracing for a nearly 9.6% swing in the stock around the earnings print, with the setup reflecting a market split between bulls betting on an ad-revenue-and-cost-cutting-driven rebound and bears still wary of slowing engagement and rising sports-rights costs.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Opinion | The Market’s Rude Reminder on AI</div>
+        <div class="art-sum">Nvidia shares have dropped more than 12% from their October 6, 2026 peak market cap of $5.76 trillion, erasing roughly $600 billion in value, as a broader AI-stock selloff accelerated through mid-October 2026. The rout, which sent the Nasdaq 100 to its worst weekly decline since April and dragged chipmakers like AMD and memory firms SK Hynix and Samsung lower, was triggered by a Financial Times report that OpenAI&#x27;s revenue projections (around $50 billion) raised doubts about its ability to pay for the massive computing contracts it has signed. Investors also grew anxious over hotter-than-expected inflation data, oil topping $110 a barrel, and the trillions of dollars in debt being raised to fund AI data-center buildouts, prompting a rotation out of chip stocks and into government bonds for safety. Despite the pullback, Nvidia CEO Jensen Huang maintained that AI&#x27;s transformative benefits would soon ease investor concerns.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Dollar Could Underperform on AI Jitters</div>
+        <div class="art-sum">The Bloomberg Dollar Spot Index fell 0.3% on Thursday, October 15, 2026, its biggest one-day drop in over a month, as jitters over AI-related stocks and credit stress drove investors into Treasuries, pushing the 10-year yield toward its largest weekly fall in more than a year. The dollar was on track for a weekly decline against most G10 currencies, with the euro and Swiss franc among the beneficiaries, as strategists noted the greenback is losing its usual safe-haven status when turmoil originates in the tech/AI sector rather than elsewhere. Analysts at ING and OCBC said concerns center on whether AI data-center operators and their lenders can stay profitable enough to service debt tied to the AI buildout, though most don&#x27;t see this as the start of a major dollar decline. The selloff followed a stretch in which AI-driven economic optimism had helped prop up the dollar near an 18-month peak.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How to Get All the Tax Benefits From Your Health-Savings Account</div>
+        <div class="art-sum">The IRS has raised 2026 health savings account contribution limits to $4,400 for self-only high-deductible health plan coverage and $8,750 for family coverage, with an additional $1,000 catch-up contribution allowed for account holders aged 55 and older. To qualify, savers need an HDHP with a minimum deductible of $1,700 for self-only or $3,400 for family coverage in 2026, and out-of-pocket maximums capped at $8,500 (individual) or $17,000 (family). HSAs carry a &quot;triple tax advantage&quot;: contributions are deductible (even without itemizing), growth inside the account is tax-free, and withdrawals for qualified medical expenses are untaxed, with unused funds and the account itself carrying over indefinitely even after a job change.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Popular Tax-Saving Trade is Juicing Wall Street’s Borrowing Binge</div>
+        <div class="art-sum">Investors owed a near-record $1.48 trillion in margin debt at the end of September 2026, with growth increasingly driven by tax-oriented strategies rather than traditional stock speculation. At Charles Schwab, $60.7 billion of its $187.9 billion in margin loans—about 32%—is now tied to &quot;tax-aware long-short&quot; strategies, in which investors borrow against appreciated portfolios to buy more stock while shorting a separate basket, using losses on the short side to offset taxable gains; assets in these strategies have grown from roughly $1 billion to nearly $190 billion over five years. Separately, options-based &quot;box spread&quot; loans on S&amp;P 500 index options—which function like loans between buyers and sellers of the option combination—have reached a record $146 billion outstanding, with average daily notional volume up 26% year-over-year as investors, advisers and family offices use them as a cheaper, tax-efficient alternative to Treasuries and conventional margin loans; the U.S. Treasury Department is now reviewing box-spread funds over tax-minimization concerns.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Riskiest Corner of the AI Trade Is Crashing Into Higher Rates</div>
+        <div class="art-sum">CoreWeave, the loss-making AI cloud-computing firm that carries roughly $50 billion in debt, has become the epicenter of a credit-market selloff as its bonds hit record yields and its five-year credit-default-swap spread implied about a 64% chance of default over five years, up from roughly 30% a year earlier. Spreads on AI-related high-yield debt widened past 350 basis points, with data-center-specific debt spreads topping 400 basis points, as investors grew wary of the private-credit financing underpinning the AI buildout. Every 100-basis-point rise in rates could add about $30 million to CoreWeave&#x27;s annual interest expense given its floating-rate debt load. The stress has spilled over into equities and bonds tied to Oracle and Meta, reflecting broader contagion fears across the AI data-center trade since late September 2026.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">This Investing Strategy Is So Good You Can’t Handle It</div>
+        <div class="art-sum">I have enough concrete, non-WSJ-sourced facts to write the brief. A new study by financial economist Andrew Ang, &quot;Uncle Sam&#x27;s Cut: A Century of the Federal Tax Drag on US Equity Returns,&quot; found that federal income taxes cut long-horizon U.S. equity wealth by more than a third, with the average pretax annual return of 10.47% falling to 7.00% after federal taxes — a drag of 3.47 percentage points — based on a simulated taxable investor holding the capitalization-weighted market portfolio from 1926 through 2025. The study, posted to SSRN in mid-2026, found dividend taxation was the dominant historical channel for the drag, that the tax hit averaged 347 basis points annually across rolling 30-year windows (peaking at 538 bps in 1936-1965 and easing to 165 bps in 1996-2025), and that step-up in basis at death can lower the drag for older investors (to about 103 bps by age 70). The research underscores that a buy-and-hold indexing strategy, while cheap on fees, still loses a large real-world chunk of its theoretical return to federal taxes once dividends and eventual capital-gains realization are factored in.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">University Endowments Land Biggest Returns Since 2021 on SpaceX, AI Gains</div>
+        <div class="art-sum">Harvard&#x27;s endowment returned 27.1% in fiscal year 2026, its best performance since a 33.6% gain in fiscal 2021, pushing total assets to nearly $68 billion and outpacing the S&amp;P 500&#x27;s 22.3% return over the same period, driven largely by a $2.2 billion stake in SpaceX that became its largest single holding (revealed in a Q2 regulatory filing), ahead of Taiwan Semiconductor at roughly $350 million. The gains extended across higher education: the University of North Carolina system&#x27;s endowment returned 37.8% on an early SpaceX bet made more than 15 years ago, Washington University in St. Louis returned 37.3%, and Stanford&#x27;s main investment pool returned 31.7%, with AI-linked investments also contributing broadly across these portfolios.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 16 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Microsoft Pulls out of Nscale U.K. Data-Center Deal Over Power-Supply Issues</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Anthropic to Commit 5% of Its Shares to New ‘Public Benefit’ Fund</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Exclusive | Quantinuum Sees Path to Fault-Tolerant Quantum Computing by 2029 With New Milestone</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">AI Agents Trading Stocks While You Sleep? Charles Schwab’s CEO Is Skeptical</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Toilet Paper and Honey Pots: Spy Games in Silicon Valley | Technology for Oct. 18</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">ETFs Often Cost More Than They Should</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">From Verizon to UnitedHealth, Corporate America Is Balking at ‘Tokenized’ Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Nordex Shares Jump on Earnings Growth, Guidance Raise</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Netflix Stock Might be a Sleeper Hit</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Opinion | The Market’s Rude Reminder on AI</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Dollar Could Underperform on AI Jitters</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">How to Get All the Tax Benefits From Your Health-Savings Account</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">A Popular Tax-Saving Trade is Juicing Wall Street’s Borrowing Binge</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">The Riskiest Corner of the AI Trade Is Crashing Into Higher Rates</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">This Investing Strategy Is So Good You Can’t Handle It</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">University Endowments Land Biggest Returns Since 2021 on SpaceX, AI Gains</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">96 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">81 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">61 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">42 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-17.html">← Older · October 17, 2026 · A Five-Day Tour for Katie Zacharia</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
