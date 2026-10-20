@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 20, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-19.html">‹ Oct 19</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 103</div>
+    <div class="issue-date">October 20, 2026</div>
+    <div class="issue-sub">12 stories across tech, markets &amp; finance — a 7-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 12</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 3</span><span class="tab" data-key="finance">Finance · 4</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">DHS Orders DeepSeek Technology Removed From Federal Civilian IT Systems</div>
+        <div class="art-sum">The Department of Homeland Security has issued Exclusion and Removal Order #2026-01, directing all U.S. civilian federal executive branch agencies to immediately strip DeepSeek products—and any third-party software built on DeepSeek&#x27;s models—from their IT systems, while also barring any future procurement; the order, signed July 24, 2026 and filed October 19, 2026, invokes the Federal Acquisition Supply Chain Security Act of 2018 and cites three threat vectors: transfer of sensitive data to PRC servers, potential generation of actionable intelligence on U.S. persons and agencies, and possible malware or other vulnerabilities embedded in the models. The ban applies only to civilian federal agency systems and procurement, not to state governments, private companies, or foreign governments.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">What to Know About the Obscure Trust Looming Over Anthropic’s IPO</div>
+        <div class="art-sum">Anthropic&#x27;s Long-Term Benefit Trust is a Delaware trust, set up when the company incorporated as a public benefit corporation in 2021, that holds no equity in the company yet can appoint or remove four of its seven board seats, giving it majority control of the board. Its three current trustees — former Federal Reserve chair Ben Bernanke (who joined in July 2026), Clinton Health Access Initiative CEO Neil &quot;Buddy&quot; Shah, and Center for a New American Security CEO Richard Fontaine — are tasked with prioritizing &quot;the long-term benefit of humanity&quot; over shareholder returns and must get advance notice of major actions like new model launches. Ahead of a potential IPO valuing the company as high as $2 trillion, Anthropic&#x27;s structure would still give founders and insiders roughly 50.1% voting control via special shares, while the Trust retains power to block major corporate actions such as large debt issuances or a sale of more than half the company, meaning public investors would have no seat on the board and limited influence over governance.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Germany’s Merck to Buy U.K. Biotech Silence Therapeutics for $1.3 Billion</div>
+        <div class="art-sum">Merck KGaA agreed to acquire UK-based Silence Therapeutics in an all-cash deal valuing the company at roughly $1.3 billion in equity value (about $1.1 billion enterprise value), with shareholders set to receive $20 per American depositary share, an 82% premium over the 30-day volume-weighted average price as of October 16, 2026. The deal, unanimously approved by both boards, gives Merck access to divesiran, Silence&#x27;s Phase III-ready siRNA therapy for phlebotomy-dependent polycythemia vera, and is expected to close in the first quarter of 2027. It marks Merck&#x27;s third major acquisition in under two years, following its $3.9 billion SpringWorks Therapeutics purchase in 2025 and its pending $11.3 billion bid for Bio-Techne.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Technology</div>
+        <div class="art-sum">The provided &quot;headline&quot; is just the generic label &quot;Technology&quot; under a &quot;Tech&quot; section — this isn&#x27;t an actual news headline, so there&#x27;s no specific story to research or verify against other outlets.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Former OpenAI Worker Accused of Bugging Discussed Jobs With Saudi Royal</div>
+        <div class="art-sum">Saudi national Abdulrahman Alfozan, 35, was arrested by the FBI on October 9, 2026, after OpenAI discovered a hidden audio recording device in a USB port on a television in an executive conference room, which investigators say he installed on September 28; he was fired by OpenAI and is charged in the U.S. District Court for the Northern District of California with one count of using a device to intercept oral communications. Prosecutors allege he used AI tools to help design the encrypted device and to identify which rooms were used by OpenAI executives, government officials, and business partners, and that he exchanged WhatsApp messages with an unidentified Saudi royal who urged him to return to Saudi Arabia to join a state AI initiative. Court filings also allege his wife and infant son left the U.S. for Saudi Arabia in October on business-class tickets purchased by a Saudi military official, and that Alfozan himself had booked a one-way ticket to Saudi Arabia before his arrest.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Mostly Higher as AI Credit Worries Abate</div>
+        <div class="art-sum">U.S. stocks rose broadly on Monday, October 19, 2026, as fears over AI-related credit risk eased after Nvidia CEO Jensen Huang told Bloomberg he saw no need for Nvidia to backstop CoreWeave, adding that &quot;their cost of capital is actually decreasing.&quot; The rebound follows a rough stretch the prior week — the Nasdaq had sunk more than 2% on October 16 amid a tech selloff tied to worries about debt-fueled AI infrastructure spending, with neocloud firm CoreWeave and chipmakers like SK Hynix and Samsung among the hardest hit. Even as equities recovered Monday, CoreWeave shares closed only slightly lower and bond yields on Oracle debt stayed elevated, signaling that credit-market anxiety over AI financing had not fully disappeared even as stock investors moved on.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">New Cracks in AI Trade Push Wall Street to Worst Week Since June</div>
+        <div class="art-sum">The Nasdaq Composite dropped 2.14% on Friday, October 16, 2026, capping a weekly slide of roughly 4.5% — its worst week since late June — while the S&amp;P 500 fell about 2% for the week, as a sell-off in AI-linked stocks wiped out more than $1 trillion in tech market value; the rout was fueled by reports of advances by China&#x27;s ChangXin Memory Technologies (which sent Micron shares down 14.6% for the week), renewed worries about debt-heavy &quot;neocloud&quot; financing models, and a surge in oil prices to around $110 a barrel. Information technology shares shed more than 6% for the week, their worst performance since April 2025, before stocks partially rebounded the following Monday, October 19, as investors bought back into AI names.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">WSJ Dollar Index Rises 0.11% to 97.20</div>
+        <div class="art-sum">This headline is a routine WSJ &quot;Data Talk&quot; wire blurb — a single-line market-data tick syndicated via Dow Jones Newswires rather than an actual news story. Searches turned up only Dow Jones Newswires/WSJ-affiliated reposts of similar daily index readings (e.g., index at 95.90, 96.09, 96.18 on other dates), with no independent reporting of this specific 97.20 reading from Reuters, AP, Bloomberg, or CNBC — outlets generally don&#x27;t write standalone stories about a single day&#x27;s 0.11% WSJ Dollar Index tick.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Jamie Dimon’s National-Security Pledge Finances $230 Billion in First Year</div>
+        <div class="art-sum">JPMorgan Chase deployed $230 billion in the first year of its &quot;Security and Resiliency Initiative,&quot; a 10-year, $1.5 trillion commitment launched in October 2025 to finance industries tied to U.S. economic and national security, including defense, energy, and manufacturing. CEO Jamie Dimon has described the pledge as &quot;100% commercial,&quot; representing roughly a 50% increase over financing the bank would have provided anyway, while noting the total could end up &quot;far bigger&quot; than the initial target. The $230 billion figure, about 15% of the full pledge, encompasses loans, capital markets transactions, financial advisory work, and direct investments rather than a lump sum of newly deployed cash.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Trump Endorses Israel’s Netanyahu for Re-Election</div>
+        <div class="art-sum">President Trump endorsed Israeli Prime Minister Benjamin Netanyahu for re-election on October 19, 2026, just nine days before Israel&#x27;s October 27 election, writing on Truth Social a &quot;complete and total endorsement&quot; of Netanyahu, whom he called a &quot;Great Warrior Prime Minister&quot; and partner against Iran. The endorsement broke months of public silence from Trump on the race, during which his and Netanyahu&#x27;s Middle East strategies had at times diverged. Trump warned Israeli voters that choosing a different leader could leave the U.S. to confront regional threats, including Iran, without a strong partner in Jerusalem.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Former MIT Scientist Wins Defamation Case Over Sexual-Harassment Accusations</div>
+        <div class="art-sum">A Suffolk County jury in Massachusetts unanimously awarded former MIT biologist David Sabatini $6 million on October 17, 2026, finding that former colleague Kristin Knouse defamed him and tortiously interfered with his career by falsely claiming he sexually coerced her. Knouse, a graduate student mentee Sabatini had met in 2012, alleged in 2021 that a consensual relationship the two began in 2018 (and ended in 2019) was actually coercive grooming. The allegations led MIT to place Sabatini on indefinite leave and the Howard Hughes Medical Institute to fire him from his 24-year post at the Whitehead Institute in 2021, and later contributed to NYU withdrawing a potential faculty offer in 2022 after student and faculty protests. The three-week trial also rejected Knouse&#x27;s counterclaims, though she has said she plans to appeal.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | In New Letter, Ilhan Omar Fights Back Against Home Search</div>
+        <div class="art-sum">Rep. Ilhan Omar&#x27;s attorneys sent a letter Friday, October 16, 2026, to Justice Department prosecutors accusing federal agents of violating a magistrate judge&#x27;s protective order during an October 12 search of her Washington, D.C.-area home, calling the probe &quot;vindictive, retributory, and politically motivated.&quot; Homeland Security Investigations agents, acting on an immigration-fraud and false-statements inquiry, seized items including her cellphone, passport, and documents; her lawyers say agents also blocked her from reaching counsel for over an hour and failed to notify the House Office of General Counsel as the warrant required. The letter demands the DOJ immediately return the seized property and preserve all audio/video recordings of the search. Omar, a naturalized U.S. citizen who fled Somalia in 1995 and became a citizen in 2000, has denied wrongdoing and calls the investigation politically driven.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 12 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">DHS Orders DeepSeek Technology Removed From Federal Civilian IT Systems</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">What to Know About the Obscure Trust Looming Over Anthropic’s IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Germany’s Merck to Buy U.K. Biotech Silence Therapeutics for $1.3 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Technology</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Former OpenAI Worker Accused of Bugging Discussed Jobs With Saudi Royal</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Stocks Mostly Higher as AI Credit Worries Abate</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">New Cracks in AI Trade Push Wall Street to Worst Week Since June</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">WSJ Dollar Index Rises 0.11% to 97.20</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">Jamie Dimon’s National-Security Pledge Finances $230 Billion in First Year</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">Trump Endorses Israel’s Netanyahu for Re-Election</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Former MIT Scientist Wins Defamation Case Over Sexual-Harassment Accusations</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Exclusive | In New Letter, Ilhan Omar Fights Back Against Home Search</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">97 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">82 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">72 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">70 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">62 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">47 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-19.html">← Older · October 19, 2026 · Microsoft Pulls out of Nscale U.K. Data-Center Deal Over Power-Supply Issues</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
