@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 21, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-20.html">‹ Oct 20</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 104</div>
+    <div class="issue-date">October 21, 2026</div>
+    <div class="issue-sub">20 stories across tech, markets &amp; finance — a 13-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 20</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 8</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Anthropic S-1 Shows Red-Hot Growth, Risks and Massive Computing Costs</div>
+        <div class="art-sum">Anthropic&#x27;s draft S-1, reviewed by the Wall Street Journal, shows revenue surging to $16.3 billion in the first half of 2026, up from $1.1 billion a year earlier, after growing from $400 million in 2024 to $4.6 billion in 2025. Despite the growth, the company posted an $80.7 billion net loss for H1 2026 (versus $13 billion a year prior), driven largely by computing infrastructure costs — it spent nearly $9 billion on compute in H1 2026 alone, already surpassing its full-year 2025 infrastructure spend of $7.3 billion. The filing also discloses long-term compute commitments that have grown to more than $600 billion over the next decade, with roughly 80% of that tied to non-cancelable contracts, alongside risk-factor warnings about customer concentration and potential &quot;catastrophic&quot; misuse incidents.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Why Nvidia Needs CoreWeave</div>
+        <div class="art-sum">CoreWeave shares dropped about 15% on October 14, 2026, closing near $65.78, while its bonds traded at yields around 15%, as investors grew anxious about the AI-infrastructure firm&#x27;s heavy debt load tied to GPU buildouts; Nvidia CEO Jensen Huang pushed back on those concerns at an event in Stockholm around October 15, saying CoreWeave&#x27;s &quot;strength is improving every day&quot; and that a financial backstop from Nvidia isn&#x27;t needed since CoreWeave&#x27;s cost of capital is actually falling. The companies&#x27; ties run deep — Nvidia holds a $6.3 billion capacity-purchase agreement with CoreWeave running through 2032 (committing Nvidia to buy unsold compute capacity) and added a $2 billion direct equity investment in CoreWeave shares in January 2026, giving Nvidia an ownership stake of nearly 10%. The episode highlights why Nvidia has a vested interest in CoreWeave&#x27;s stability: CoreWeave is a major buyer and reseller of Nvidia GPUs, and its distress would ripple into Nvidia&#x27;s own sales and balance-sheet exposure.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Policy Chief Joel Kaplan to Leave Company</div>
+        <div class="art-sum">Joel Kaplan, Meta&#x27;s chief global affairs officer and top policy executive, will leave the company in 2027 after more than 15 years at Meta, with plans to stay on through the November 2026 U.S. midterm elections. Kaplan joined Meta in 2011 to lead U.S. public policy and rose to become the company&#x27;s top policy voice in January 2025, succeeding Nick Clegg shortly before President Trump&#x27;s return to the White House. Meta has not named a permanent successor; president Dina Powell McCormick and chief legal officer C.J. Mahoney are expected to absorb more policy responsibilities in the interim.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Bill Gross’s AI Tool Could Supercharge the Number of Startups</div>
+        <div class="art-sum">Bill Gross, the Idealab founder who invented pay-per-click advertising and has started more than 150 companies, launched Idealab.ai on October 19, 2026, a free platform that used AI to analyze over 17 million sources and generate roughly 1.2 million business ideas. Users can filter the ideas by field, geography, market size, required capital, and team size, with each one including a business brief, potential customers, competitors, and reasons it could fail; Gross built an accompanying &quot;Periodic Table of Business Functions&quot; covering 118 jobs needed to run a company. The project aims to spur the creation of 1 million new businesses and 100 million jobs worldwide, and Cloudflare CEO Matthew Prince has already pledged $100,000 in credits to each startup that uses the platform.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AstraZeneca Partners With Oracle to Refine Clinical Research With AI</div>
+        <div class="art-sum">AstraZeneca and Oracle announced a nonbinding collaboration on October 20, 2026, to use artificial intelligence and real-world data to accelerate clinical trial recruitment, support earlier disease diagnosis, and monitor drug safety. The partnership will initially focus on cancer, cardiovascular, respiratory, immunology, and rare diseases, pairing AstraZeneca&#x27;s drug-development expertise with Oracle&#x27;s cloud and analytics infrastructure. Their first concrete project will support hypertension research in Abu Dhabi in collaboration with healthcare firm M42. The companies plan to build shared governance and reusable technical components, with the goal of expanding successful approaches to other disease areas and regions if outcome measures are met.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Elice Slides in Korea Debut Amid Caution Toward AI Stocks</div>
+        <div class="art-sum">Elice Group, a South Korean AI data-center and cloud infrastructure firm, fell as much as 32.6% on its KOSDAQ trading debut on October 20, 2026, closing down roughly 27-28% from its IPO price of 90,500 won, marking the largest first-day opening decline for a Korean IPO of $100 million or more. The offering raised 201.1 billion won ($150-151 million) after pricing at the top of its indicative range, despite institutional demand of 388.84 times the shares on offer and retail subscriptions of 408.26 times, which drew more than 10 trillion won in deposits. Elice, which has expanded from an AI education platform into GPU-based data centers and AI solutions, reported first-half revenue up 200% to 34.4 billion won and swung to a 10.3 billion won operating profit. The sharp sell-off renewed investor scrutiny over the sustainability of heavy AI infrastructure spending and valuations across the sector.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Ant-Backed Fintech Mynt Rises in Debut After Philippines’s Largest IPO</div>
+        <div class="art-sum">Mynt, the Globe Telecom-, Ant Group- and Ayala-backed parent of GCash, made its trading debut on the Philippine Stock Exchange on Tuesday, October 20, 2026, after pricing its IPO at 6.60 pesos per share to raise roughly 60.9 billion pesos (about $967 million), the largest IPO in Philippine history, surpassing Monde Nissin&#x27;s 52.2-billion-peso listing in 2021. Shares opened at 6.63 pesos and climbed as high as 6.71 pesos, a gain of about 1.7% from the offer price, even as broader Asian markets sold off. GCash, Mynt&#x27;s flagship app, reported 41.5 million monthly active users as of June 30, 2026, equal to roughly 56% of the Philippines&#x27; adult population.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Make a U-Turn on Hopes of U.S.-Iran Diplomacy</div>
+        <div class="art-sum">I have enough verified detail across multiple non-WSJ outlets (CNBC, Yahoo Finance/Bloomberg) to write the brief. U.S. stocks reversed early losses and rallied on Monday, September 20, 2026, as optimism grew over possible U.S.-Iran diplomacy ahead of the UN General Assembly, with President Trump telling Fox News he would likely be open to meeting Iranian President Masoud Pezeshkian. The Nasdaq Composite jumped 2.26% to a record close of 27,122.09, the S&amp;P 500 climbed 1.49% to 7,764.70, and the Dow Jones Industrial Average added 366.19 points (0.71%) to 52,048.83. The rebound came alongside cooling oil prices and falling Treasury yields, with the 10-year yield dropping more than 4 basis points to 4.951%. The following day, oil extended its decline after Trump described a &quot;very good,&quot; roughly three-hour meeting with Iran&#x27;s delegation, with Brent crude settling down 1.09% at $99.25 a barrel.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">How to Play the Retreat in Defense Stocks</div>
+        <div class="art-sum">The S&amp;P 1500 Aerospace and Defense Index has fallen roughly 19% from its early-August 2026 peak through mid-October, with the iShares U.S. Aerospace &amp; Defense ETF down about 17.86% from its August 14 close; Lockheed Martin has dropped roughly 25% from its 2026 high near $692 to around $508, while Northrop Grumman closed at $510.65, about 34% below its 52-week high of $774. The retreat is tied to investor concern that Democrats could win control of Congress in the November midterms and tighten scrutiny of Pentagon spending and contractors&#x27; ties to the Trump administration, compounded by higher fuel costs and broader rate-driven market swings. Despite the slide, some fund managers and analysts, per Bloomberg, view the pullback as a buying opportunity, betting the sector&#x27;s rally resumes once midterm uncertainty clears, favoring names like Lockheed, Northrop, Huntington Ingalls, and RTX.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stock Pickers Burned by the AI Boom Think Their Moment Has Finally Arrived</div>
+        <div class="art-sum">Active stock pickers have been pummeled by this year&#x27;s AI-driven rally, with only 28% of mutual funds outperforming the S&amp;P 500 in 2026, down sharply from more than 60% at the end of February, putting active managers on pace for their fourth-worst relative showing in 20 years, according to Bloomberg; investors pulled roughly $1 trillion out of active equity mutual funds last year as money concentrated in a handful of AI megacaps. The dynamic began shifting in October 2026 as a rolling AI-linked selloff hit the market: global fundamental long-short funds lost 2.9% in the week through October 15, and Asia-focused stock pickers fell 6.8% in the first half of the month, per reporting cited by rallies.ai and CNBC, as investors grew nervous about the payoff from heavy AI spending. With richly valued AI names wobbling and dispersion widening across non-AI stocks, many active managers now argue conditions are finally turning in their favor, though analysts note a bad month for tech alone doesn&#x27;t guarantee stock pickers&#x27; cheaper alternatives will actually deliver returns.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Mixed as Strong Earnings Offset AI Credit Fears</div>
+        <div class="art-sum">On Tuesday, October 20, 2026, the Dow Jones Industrial Average jumped 529.85 points (1.02%) to close at 52,495.88, the S&amp;P 500 added 0.28% to 7,712.57, while the Nasdaq Composite slipped 0.02% to 26,424.82, leaving the major indexes mixed. Strong corporate earnings drove the gains in blue-chip names — 3M shares jumped more than 5% after beating estimates and raising its full-year guidance — but tech stocks lagged amid lingering worries about AI-related financing and credit risk, particularly tied to debt-laden infrastructure players like CoreWeave, whose five-year credit default swap spreads had recently topped 1,121 basis points. Those AI credit concerns followed a rough prior week in which the Nasdaq fell over 4%, pressured by fears that heavily indebted AI data-center companies may struggle to generate profits fast enough to service rising borrowing costs.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Luxury and Cash Fuel U.S. Housing Market</div>
+        <div class="art-sum">All-cash purchases made up roughly 27-31% of U.S. home sales in 2026, down from about 30-32% a year earlier, but the trend reverses sharply at the high end: more than 40% of homes priced at $1 million-plus were bought without a mortgage in the first four months of the year, and a majority of $2 million-plus homes were all-cash deals. The median luxury home price rose 4.7% year-over-year to $1.37 million, more than triple the 1.5% gain for non-luxury homes, while Coldwell Banker&#x27;s 2026 Mid-Year Report found 63% of luxury specialists reporting more all-cash clients, up from 51% a year prior. Miami exemplifies the divide, logging 24 home sales of $30 million or more through September 2026 — already topping the previous full-year record of 21 set in 2025 — with cash representing 84.7% of purchases in the $5 million-$10 million range. Nationally, existing-home sales held under 4 million units in September 2026 even as inventory rose to 1.60 million homes, underscoring how luxury and cash buyers are propping up activity while the broader market lags.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The AI Stock Market Wobble Is a Reminder: This Time Isn’t Different</div>
+        <div class="art-sum">Global technology stocks have sold off sharply in mid-October 2026, with 20 of the most valuable global AI and semiconductor stocks shedding more than $1 trillion in value in a single week, as the Philadelphia Semiconductor Index fell for eight consecutive sessions through October 19. Broadcom and Oracle were among the hardest hit, dropping roughly 21.6% and 20.0% respectively, while South Korea&#x27;s SK Hynix plunged over 10% and Samsung fell 8.73% amid worries about AI financing costs, data-center demand sustainability, and potential memory-chip oversupply. Global technology equity funds saw $4.8 billion in outflows as of October 19, and at least 47 major data-center projects have faced delays or cancellations in 2026. Analysts note Nvidia&#x27;s valuation (forward P/E around 26x, market cap near $5.7 trillion in early October) remains far below dot-com-era peaks like Cisco&#x27;s roughly 60x forward P/E in 2000, suggesting the comparison to that earlier bubble is contested even as the AI trade wobbles.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stock Futures Rise as Investors Make Cautious Return to Risk</div>
+        <div class="art-sum">U.S. stock futures rose on Monday, October 20, 2026, as investors tentatively returned to beaten-down AI and tech names following the prior week&#x27;s selloff, with Dow futures up roughly 0.2% even as the S&amp;P 500 and Nasdaq 100 futures initially wavered between gains and losses amid mixed earnings and crude oil near $111 a barrel. SpaceX shares reportedly surged as traders digested a fresh batch of corporate earnings reports. Investors remained wary, citing concerns over financing costs and debt levels at AI infrastructure companies and worries that valuations have grown stretched after the recent run-up. In Asia overnight, South Korea&#x27;s Kospi gained about 1.8% on tech strength while Japan&#x27;s Nikkei slipped around 0.7%, underscoring the cautious, uneven tone of the broader risk-on move.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Turn Higher, Setting Aside AI Jitters</div>
+        <div class="art-sum">U.S. stocks turned higher on Tuesday, October 20, 2026, with the Dow Jones Industrial Average jumping 529.85 points (1.02%) to close at 52,495.88, while the S&amp;P 500 added 21.84 points (0.28%) to 7,712.57 and the Nasdaq Composite was roughly flat, down 6.07 points (0.02%) to 26,424.82. The rally was led by healthcare stocks hitting record highs, with Eli Lilly, UnitedHealth, Merck, Johnson &amp; Johnson and Amgen among the biggest contributors, while technology shares eased about 0.3% and acted as the main drag. The gains came even as investors remained wary about AI spending after a selloff in tech stocks the prior week, with money rotating into healthcare and small-cap stocks — the Russell 2000 climbed 1.65%. Oil prices also retreated, helping broader sentiment.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Housing Starts Dropped Again in September</div>
+        <div class="art-sum">U.S. housing starts fell 5.2% in September to a seasonally adjusted annual rate of 1.221 million, down from an upwardly revised 1.288 million in August and 7.4% below the September 2025 pace of 1.319 million. Single-family starts, the largest segment of the market, dropped 4.6% to an 859,000 annual rate, the lowest in a year. Building permits, a gauge of future construction, fell to their lowest level in roughly three and a half years as builders pulled back amid rising financing costs and a 30-year fixed mortgage rate that climbed from about 6.8% to 7.6% over the course of September. Economists cited in the reports expect homebuilding to stay weak into 2027 as higher rates continue to squeeze both builders and buyers.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Weak Points in AI Bonds Are Becoming Clearer</div>
+        <div class="art-sum">Bonds tied to AI data centers are showing fresh cracks: debt backing Meta&#x27;s &quot;Hyperion&quot; facility, which traded above face value in July, has slid to roughly 91 cents on the dollar, while about $4 billion of CoreWeave&#x27;s corporate debt now trades below 80 cents with yields near 11-15%. Data-center developers and &quot;neoclouds&quot; issued roughly $37 billion in junk bonds this year—more than four times 2025&#x27;s total—and Morgan Stanley projects total AI-related debt issuance will reach about $570 billion in 2026. Credit-default-swap spreads on Oracle, Meta, Amazon and Alphabet have widened sharply, with Oracle&#x27;s five-year CDS climbing to its highest level in 18 years after S&amp;P cut the company to BBB-, one notch above junk, citing the pace of its AI spending. Investor appetite is also cooling at the margin: Meta&#x27;s recent $25 billion bond sale drew about $96 billion in orders, well below the $125 billion demand for a $30 billion Meta bond sold a year earlier.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Home-Builder Sentiment Sinks to 14-Year Low</div>
+        <div class="art-sum">Builder confidence in the market for newly built single-family homes fell three points to 29 in October, the lowest reading since 2012, according to the NAHB/Wells Fargo Housing Market Index. The decline was driven by mortgage rates holding above 7%, elevated material and labor costs, and weak buyer traffic, with builder confidence in the South and West particularly weak — the West alone slumped 10 points to its lowest since late 2011. In response, 43% of builders cut prices in October, the highest share in six years, while 65% used sales incentives, marking the 19th straight month that incentive use has been at or above 60%. One-third of builders also reported immigration-enforcement activity disrupting their local labor supply during the month.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A Hedge-Fund Billionaire’s Two Bitter Wars—Against His Wife and His Business Partner</div>
+        <div class="art-sum">Two Sigma co-founder John Overdeck, 56, is embroiled in a New Jersey divorce trial against his estranged wife Laura Overdeck while simultaneously battling co-founder David Siegel for control of the $85 billion quant firm, with their 2002 marriage having no prenup. John has offered Laura $723 million in the settlement, but her lawyers are seeking roughly $2.2 billion, equal to 35% of his Two Sigma stake, making it reportedly New Jersey&#x27;s largest-ever divorce case. Overdeck has testified that a forced liquidation of that much of his stake could shift firm control toward Siegel, with whom he has clashed for years over executive roles, compensation, and succession.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">China’s Ultimate Political Survivor Just Fell. What That Says About Xi’s Rule.</div>
+        <div class="art-sum">Huang Qifan, 74, the former mayor of Chongqing who led the city from 2010 to 2016, was placed under investigation by China&#x27;s Central Commission for Discipline Inspection on October 14, 2026, for alleged serious violations of discipline and law, eight years after retiring from public life. He was long nicknamed a political &quot;tumbler&quot; for surviving the dramatic downfalls of two successive Chongqing party chiefs, Bo Xilai and Sun Zhengcai, while also earning a reputation as a skilled economic technocrat known as the &quot;financial mayor.&quot; His son, Huang Ranfei, an executive at Shandong Weiqiao Pioneering Group, was reportedly detained around the same time, and the probe follows earlier September 2026 investigations into former Yufu Holdings executives Xie Wenhui and Wu Jian, suggesting a link to state-owned enterprise reforms during Huang&#x27;s tenure. Analysts note his fall is notable precisely because it came so long after the political turbulence around him appeared to have ended, reinforcing a broader pattern of Xi Jinping&#x27;s anti-corruption campaign reaching even officials once thought untouchable.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 20 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Anthropic S-1 Shows Red-Hot Growth, Risks and Massive Computing Costs</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Why Nvidia Needs CoreWeave</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Meta Policy Chief Joel Kaplan to Leave Company</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Bill Gross’s AI Tool Could Supercharge the Number of Startups</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">AstraZeneca Partners With Oracle to Refine Clinical Research With AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Elice Slides in Korea Debut Amid Caution Toward AI Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Ant-Backed Fintech Mynt Rises in Debut After Philippines’s Largest IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Stocks Make a U-Turn on Hopes of U.S.-Iran Diplomacy</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">How to Play the Retreat in Defense Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Stock Pickers Burned by the AI Boom Think Their Moment Has Finally Arrived</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">U.S. Stocks Mixed as Strong Earnings Offset AI Credit Fears</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Luxury and Cash Fuel U.S. Housing Market</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">The AI Stock Market Wobble Is a Reminder: This Time Isn’t Different</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Stock Futures Rise as Investors Make Cautious Return to Risk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">U.S. Stocks Turn Higher, Setting Aside AI Jitters</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">U.S. Housing Starts Dropped Again in September</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">The Weak Points in AI Bonds Are Becoming Clearer</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">U.S. Home-Builder Sentiment Sinks to 14-Year Low</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">A Hedge-Fund Billionaire’s Two Bitter Wars—Against His Wife and His Business Partner</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">20</span><span class="toc-t">China’s Ultimate Political Survivor Just Fell. What That Says About Xi’s Rule.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">98 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">83 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">73 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">63 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-20.html">← Older · October 20, 2026 · DHS Orders DeepSeek Technology Removed From Federal Civilian IT Systems</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
