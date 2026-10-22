@@ -307,9 +307,21 @@ def research(digest, use_dedup=True):
     store = dedup.load_store()
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
+    seen_this_run = {}
     researched = []
     for i, item in enumerate(digest, 1):
         title = item["title"]
+
+        # Always suppress repeats WITHIN this run, even with --no-dedup. The
+        # section feeds overlap, so one story can arrive under Tech and Markets
+        # both: 2026-10-18 produced 15 entries covering only 10 stories, one of
+        # them listed three times. --no-dedup is about not deferring to OTHER
+        # days, never about letting a single digest repeat itself.
+        if dedup.is_duplicate(title, seen_this_run):
+            print(f"[{i}/{len(digest)}] skip (already in this digest): {title[:50]}",
+                  file=sys.stderr)
+            continue
+
         if use_dedup and dedup.is_duplicate(title, store):
             print(f"[{i}/{len(digest)}] skip (already covered): {title[:60]}", file=sys.stderr)
             continue
@@ -326,6 +338,7 @@ def research(digest, use_dedup=True):
             return None
 
         researched.append(result)
+        seen_this_run[title] = {"date": today}
         store[title] = {"date": today}
 
     dedup.save_store(dedup.prune_store(store))
