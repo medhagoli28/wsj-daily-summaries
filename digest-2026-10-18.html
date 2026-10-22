@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 18, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-17.html">‹ Oct 17</a> &nbsp;·&nbsp; <a href="digest-2026-10-19.html">Oct 19 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 102</div>
+    <div class="issue-date">October 18, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic to Commit 5% of Its Shares to New ‘Public Benefit’ Fund</div>
+        <div class="art-sum">Anthropic announced on October 18, 2026 that it will commit 5% of its outstanding shares to a newly created Public Benefit Fund, structured as a wholly-owned LLC, with board discretion to add another 2% for every 50% increase in the company&#x27;s valuation above a set baseline, subject to stockholder approval. At Anthropic&#x27;s last reported $965 billion valuation, the initial 5% stake would be worth roughly $48 billion, a figure that would rise to about $75 billion if the company reaches the roughly $1.5 trillion valuation some investors are reportedly discussing. The fund&#x27;s charter bars spending on lobbying or political contributions and is intended to support charitable initiatives and efforts addressing AI&#x27;s economic effects, including impacts on the labor market; the move comes weeks ahead of Anthropic&#x27;s expected IPO. Separately, Anthropic also named physicist Christopher Stubbs to its Long-Term Benefit Trust around the same announcement.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Agents Trading Stocks While You Sleep? Charles Schwab’s CEO Is Skeptical</div>
+        <div class="art-sum">Charles Schwab CEO Rick Wurster said in mid-October 2026 that he is skeptical of fully autonomous AI agents trading stocks without human oversight, arguing &quot;there is no magic formula to beat the market&quot; and calling the idea of AI devising proprietary trading strategies a &quot;fool&#x27;s errand.&quot; Wurster said an AI agent should trade on a client&#x27;s behalf only if given explicit &quot;rules of the road,&quot; rather than being allowed to improvise buy and sell decisions on its own. Schwab has also been actively blocking tens of attempts each week by unauthorized AI agents trying to log into client accounts using stored credentials or browser automation. Instead, Schwab is steering clients toward its own forthcoming conversational AI assistant, &quot;Charley,&quot; which is designed to research investments and place limit orders rather than operate with full autonomy.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Toilet Paper and Honey Pots: Spy Games in Silicon Valley | Technology for Oct. 18</div>
+        <div class="art-sum">FBI agents arrested Abdulrahman Alfozan, a 35-year-old Saudi national and OpenAI engineer, after discovering a USB recording device wrapped in toilet paper plugged into a monitor in a restricted executive conference room at OpenAI&#x27;s San Francisco headquarters, with CCTV footage reportedly showing him later trying to retrieve it; separately, Rippling sued rival Deel in March 2025 over an alleged corporate spy who, when confronted with a court order for his phone, locked himself in a Dublin office bathroom and flushed the toilet rather than hand over the device. OpenAI has since begun training employees to recognize &quot;honeypot&quot; tactics—including warnings about strangers at cafes or playgrounds probing for information—and similar counterespionage briefings have reportedly extended to Anthropic and Google, amid estimates that 1,000 or more intelligence agents operate in Silicon Valley. OpenAI also fired three safety researchers this month over allegations they shared confidential information with outside evaluator METR.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The AI Stock Market Wobble Is a Reminder: This Time Isn’t Different</div>
+        <div class="art-sum">The Nasdaq 100 posted its steepest weekly drop since last April, falling 5.5% in the week ending October 16, 2026, while the Philadelphia Semiconductor Index lost more than $1.6 trillion in market capitalization as investors soured on AI-linked stocks; the broader Nasdaq Composite fell 573 points (2.1%) on October 15 to close at 26,140, its worst single-week performance since June. The rout hit data-center and chip names hardest — CoreWeave plunged 15.5% that Wednesday and fell another 6% the next day, while Oracle closed nearly 9% lower — as investors cited rising borrowing costs, stretched valuations, slowing revenue growth at frontier AI labs like OpenAI and Anthropic, and warnings from Broadcom and Intel executives that financing could become a headwind for the AI buildout. By October 19-20, tech shares began bouncing back as investors returned to chip and AI-related stocks, framing the episode as a volatility wobble rather than a lasting reversal.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Five Ways Americans’ Finances Have Changed Under Trump</div>
+        <div class="art-sum">I now have enough concrete, independently-sourced figures to write the brief. A USDA moderate-cost food plan for a family of four cost about $306.50 a week when Trump&#x27;s second term began and had risen roughly $14 more by August, with ground beef climbing from about $5.55 to $6.79 a pound while egg prices fell from $4.95 to $2.27 a dozen over the same period. Median monthly mortgage payments for homebuyers rose from $2,112 at the start of the term to $2,196 in August, nearing record highs, even as retirement accounts with stock-market exposure grew in value. Tariffs imposed in 2025-2026 added an estimated $1,000 to average household expenses in 2025, a burden projected to ease to about $820 in 2026 according to the Tax Foundation, while the personal savings rate fell to 4.7%, below its historical average. Public sentiment reflects the mixed picture: an Economist/YouGov poll found nearly half of Americans rate the economy as poor, the highest share since 2022, with only about one in five calling it good or excellent.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Isabelle d’Ornano on Femininity, Success and the Importance of Doing Small Things</div>
+        <div class="art-sum">No other outlet appears to have covered this specific Wall Street Journal feature — it reads as a WSJ-exclusive personal interview/profile of Isabelle d&#x27;Ornano, the Sisley cosmetics co-founder, rather than a news story picked up by wire services or other business outlets like Reuters, AP, or Bloomberg; general biographical pieces on d&#x27;Ornano and Sisley exist elsewhere, but none report on this particular WSJ interview or headline.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Ford Wants to Make Fun Cars Again in Europe—if Drivers Can Wait Until 2028</div>
+        <div class="art-sum">Ford unveiled a &quot;Ready, Set, Ford&quot; European product offensive under which five all-new, rally-inspired passenger vehicles — including a Europe-tailored Bronco, a subcompact electric hatch, and multi-energy crossovers — will launch between 2028 and the end of 2029. The Bronco variant is slated to begin production in 2028 at Ford&#x27;s Valencia, Spain plant, while two electric models will be co-developed with Renault on its Ampere platform and built at Renault&#x27;s ElectriCity plant in northern France, with Ford leading design and driving dynamics. CEO Jim Farley framed the push as Ford &quot;getting out of the boring-car business and into the iconic-vehicle business,&quot; positioning Europe as &quot;the frontline in the global transformation&quot; of the auto industry. The plan aims to counter Ford&#x27;s shrinking European market share amid rising competition from Chinese automakers.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Ina Garten Shares Her Secret to Perfect Scrambled Eggs</div>
+        <div class="art-sum">Ina Garten revealed that her secret to perfect scrambled eggs is using less liquid, not more, after years of believing extra milk made the eggs fluffier; she now adds a splash of half-and-half rather than milk for a richer taste, cooks the eggs low and slow in butter while stirring minimally, and pulls them off the heat just before they look fully set, letting residual heat from the pan finish the job so they stay soft and creamy. She has also recommended folding in goat cheese for an especially rich, velvety texture.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Trump Endorses Israel’s Netanyahu for Re-Election</div>
+        <div class="art-sum">President Trump issued a &quot;Complete and Total Endorsement&quot; of Israeli Prime Minister Benjamin Netanyahu on Sunday, October 18-19, 2026, roughly nine days ahead of Israel&#x27;s October 27 general election. In a statement, Trump called Netanyahu &quot;a Great Warrior Prime Minister, and an even greater Partner for Peace&quot; in confronting Iran, breaking months of public silence during which he had deflected questions about backing his longtime ally. Trump also warned Israeli voters that choosing any leader other than Netanyahu could leave the U.S. to confront Middle East threats alone, saying &quot;I am not inclined to do so.&quot; The endorsement comes amid a strained relationship between the two leaders in recent months and as polls suggest the Israeli election could produce no clear winner.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">College Football Just Witnessed an Unprecedented Day of Stunning Upsets</div>
+        <div class="art-sum">I have enough confirmed details now. On October 17, 2026, five of the Associated Press&#x27;s top seven ranked teams lost in a single day, the first time that has happened since the AP poll began in 1936. Unranked Auburn upset No. 1 Georgia 27-24 in Athens, and No. 2 Notre Dame fell at BYU in a game marred by an acknowledged officiating error that denied the Fighting Irish a final offensive play. The same weekend saw No. 1 Texas lose its top ranking the prior week before falling further (to No. 19) after a loss to Florida, which climbed to No. 20; Miami moved into the No. 1 spot in the AP poll that followed. Analysts estimated the odds of that many top-seven upsets occurring on one Saturday at roughly 1 in 1,000.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Anthropic to Commit 5% of Its Shares to New ‘Public Benefit’ Fund</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">AI Agents Trading Stocks While You Sleep? Charles Schwab’s CEO Is Skeptical</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Toilet Paper and Honey Pots: Spy Games in Silicon Valley | Technology for Oct. 18</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">The AI Stock Market Wobble Is a Reminder: This Time Isn’t Different</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Five Ways Americans’ Finances Have Changed Under Trump</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Isabelle d’Ornano on Femininity, Success and the Importance of Doing Small Things</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Ford Wants to Make Fun Cars Again in Europe—if Drivers Can Wait Until 2028</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Ina Garten Shares Her Secret to Perfect Scrambled Eggs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">Trump Endorses Israel’s Netanyahu for Re-Election</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">College Football Just Witnessed an Unprecedented Day of Stunning Upsets</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">100 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">85 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">75 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">64 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-17.html">← Older · October 17, 2026 · A Five-Day Tour for Katie Zacharia</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
