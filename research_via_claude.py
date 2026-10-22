@@ -292,10 +292,17 @@ def items_from_digest(path):
     return items
 
 
-def research(digest):
+def research(digest, use_dedup=True):
     """Run every fetched headline through the CLI, skipping recent near-duplicates.
 
     Same shape as wsj_fetch.research(), including writing back the de-dup store.
+
+    `use_dedup=False` is for backfilling a past gap. De-dup assumes days are
+    written in order: it suppresses a story because a RECENT day already covered
+    it. Backfilling inverts that — on 2026-10-18, 10 of 15 headlines were skipped
+    because 10-19/20/21 had since covered them, which left the 18th with 5 entries
+    and no Tech section at all. Those stories ran on the 18th first; the later days
+    only got them because the 18th was missing.
     """
     store = dedup.load_store()
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -303,7 +310,7 @@ def research(digest):
     researched = []
     for i, item in enumerate(digest, 1):
         title = item["title"]
-        if dedup.is_duplicate(title, store):
+        if use_dedup and dedup.is_duplicate(title, store):
             print(f"[{i}/{len(digest)}] skip (already covered): {title[:60]}", file=sys.stderr)
             continue
         print(f"[{i}/{len(digest)}] {title[:60]}", file=sys.stderr)
@@ -338,6 +345,9 @@ def main():
     ap.add_argument("--date", metavar="YYYY-MM-DD",
                     help="stamp the digest with this date instead of today "
                          "(for backfilling a missed day)")
+    ap.add_argument("--no-dedup", action="store_true",
+                    help="research every headline, even ones a recent day covered "
+                         "(for backfilling a gap that later days have since eaten)")
     ap.add_argument("--min-entries", type=int, default=1,
                     help="exit 1 if fewer than this many headlines got a real summary")
     ap.add_argument("--max-failure-rate", type=float, default=0.5,
@@ -374,7 +384,7 @@ def main():
     else:
         items = wsj_fetch.build(args.limit)
 
-    researched = research(items)
+    researched = research(items, use_dedup=not args.no_dedup)
     if researched is None:
         print("[FAIL] authentication is broken — wrote nothing", file=sys.stderr)
         return 2
