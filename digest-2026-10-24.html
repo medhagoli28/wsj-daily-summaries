@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 24, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-22.html">‹ Oct 22</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Saturday Issue · No. 107</div>
+    <div class="issue-date">October 24, 2026</div>
+    <div class="issue-sub">27 stories across tech, markets &amp; finance — a 17-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 27</span><span class="tab" data-key="tech">Tech · 10</span><span class="tab" data-key="markets">Markets · 11</span><span class="tab" data-key="finance">Finance · 6</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Four Innovators on Work and Creativity</div>
+        <div class="art-sum">No other outlet appears to have covered this piece — &quot;Four Innovators on Work and Creativity&quot; looks like a WSJ-exclusive feature (likely tied to WSJ&#x27;s 2026 Innovator Issue, published around October 19, 2026, with its awards ceremony scheduled for October 29, 2026, at MoMA in New York), and searches turned up only WSJ&#x27;s own coverage plus general Innovator Awards party/listings content, not the specific interview piece or its content from Reuters, AP, Bloomberg, or similar outlets.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AI Hacks Are Coming Thick and Fast and Overwhelming the Internet</div>
+        <div class="art-sum">Researchers at Wiz uncovered two critical PHP vulnerabilities, collectively named &quot;php2shell&quot; (CVE-2026-109618 and CVE-2026-109619), that could enable remote code execution on servers running PHP, which powers an estimated 70% of websites worldwide; the PHP Foundation issued an emergency patch after the flaws were disclosed in August 2026. Frontier AI models, including OpenAI&#x27;s GPT-5.6 &quot;Sol,&quot; played a key role in surfacing the exploit chain, which had previously been too complex for human researchers to practically demonstrate despite the underlying bugs existing for decades. Separately, starting September 25, 2026, a hacker unleashed a swarm of AI agents that autonomously attempted to breach more than 1,200 websites over several weeks without further human input, illustrating how AI-driven &quot;agent swarms&quot; are accelerating both the discovery and exploitation side of cyberattacks. Experts say the combined effect is a surge in AI-assisted and increasingly autonomous attacks that is straining defenders&#x27; ability to patch and respond in time.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Signal Chats That Cost OpenAI Researchers Their Jobs</div>
+        <div class="art-sum">OpenAI fired three safety researchers — Tomek Korbak, Mikita Balesni, and Jasmine Wang — on October 1, 2026, after its security team found they had used disappearing Signal messages to communicate with outside AI-safety researcher Ryan Greenblatt. The investigation began after a September report revealed details about OpenAI&#x27;s newest model, code-named Astra, which the company treated as a leak of confidential model-design information; security staff then called the researchers into meetings and asked them to unlock their phones to review the chats. OpenAI described the dismissals as stemming from a &quot;significant breach of trust,&quot; while the three researchers say they were never told specifically what information they allegedly leaked and deny sharing confidential material, suggesting the firings are instead linked to their advocacy for more transparent AI safety practices.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">1Password Surpasses $500 Million in Revenue as AI Agents Drive Growth</div>
+        <div class="art-sum">1Password&#x27;s annual recurring revenue surpassed $500 million as of October 2026, driven by surging adoption of its developer and AI-agent security tools, with net new ARR up about 60% over the first nine months of fiscal 2026 and third-quarter growth around 90% year-over-year. More than 200,000 businesses now use 1Password, including 85% of companies on the Forbes AI 50, while third-quarter new customer additions rose 150% year-over-year and customers paying over $100,000 annually grew more than 40%. Monthly active users of its developer and AI security tools jumped 200% year-over-year, and non-human (machine) identity users grew 500%. The company also launched &quot;1Password for Agents,&quot; letting AI agents use login credentials on a person&#x27;s behalf without ever storing the underlying passwords.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">SK Hynix Pauses IPO of Memory-Chip Unit as AI Valuation Fears Mount</div>
+        <div class="art-sum">SK Hynix scrapped plans for a U.S. Nasdaq listing of its NAND flash and SSD subsidiary Solidigm, which had been under consideration since August 2026 at a potential valuation of up to $150 billion and was expected to raise $10-15 billion; the company cited volatile markets and a sharp correction in semiconductor shares, saying the move does not reflect any change in Solidigm&#x27;s growth prospects. The retreat also followed opposition from SK Hynix&#x27;s own minority shareholders, who argued the listing amounted to a dilutive dual listing, as well as scrutiny from South Korean regulators examining whether the deal would trigger the country&#x27;s split-listing rules tightened in July 2026. Solidigm, based in Rancho Cordova, California, was created from SK Hynix&#x27;s 2021 acquisition of Intel&#x27;s NAND business and is now held under a U.S. holding company called AI Company, set up in January 2026. SK Hynix shares rose following the announcement on October 23, 2026, as the pullback came amid broader investor unease over an AI valuation bubble that has also hit data-center developers Firmus Grid and AirTrunk.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">SpaceX: A Futuristic Berkshire Hathaway, or Just a Mess?</div>
+        <div class="art-sum">SpaceX, which completed the largest IPO in history on June 12, 2026, pricing shares at $135 and closing its debut up 19% near $161, has since seen its market value swell past $2 trillion (reported around $2.14 trillion in late October 2026) after absorbing Elon Musk&#x27;s AI venture xAI earlier in the year. Musk is now pushing to merge SpaceX with Tesla as well, a combination that reports estimate could create a roughly $3.5 trillion entity spanning rockets, satellites, EVs, robotics, and AI — explicit modeling, by Musk&#x27;s own comparison, on Warren Buffett&#x27;s multi-business Berkshire Hathaway. Both companies have formed special committees of independent directors to evaluate the proposed combination, with regulatory filings warning the committees could still reject it, fueling debate over whether the sprawling structure represents visionary capital allocation or an unwieldy conglomerate.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">What to Know About the AI-Triggered Cybersecurity Crisis</div>
+        <div class="art-sum">The second batch of results matches the recent, dated story: a critical PHP vulnerability set, dubbed PHP2Shell, was disclosed around October 21-22, 2026, and AI tools sharply accelerated both its discovery/analysis and subsequent exploitation, forcing emergency patching across government and corporate websites worldwide — researchers estimate the flaws could affect roughly 70% of internet-facing PHP sites. Cloudflare reported exploit attempts scaling from thousands within 10 hours of disclosure to hundreds of thousands within two hours, as attackers used AI to weaponize the two-decade-old bug far faster than in past vulnerability cycles. Wiz researchers noted AI didn&#x27;t find the bug itself but let a single researcher complete in about a week what previously required a world-class team months to do, compressing the timeline between disclosure and mass exploitation. Cloudflare CEO Matthew Prince warned the incident previews a new normal, saying &quot;we&#x27;re going to have a couple years where every single week it&#x27;s going to feel like the sky is falling.&quot;</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">SpaceX and Tesla Are Already Joined at the Hip. What a Formal Merger Would Mean.</div>
+        <div class="art-sum">Elon Musk said this week during Tesla&#x27;s earnings call that the boards of SpaceX and Tesla have each formed special committees to explore a potential merger, calling the idea a &quot;lot of merit&quot; but stressing that a deal is &quot;not a certainty.&quot; Together the two companies are valued at roughly $3.5 trillion, meaning a combination would eclipse SpaceX&#x27;s $1.25 trillion absorption of xAI in February and rank as the largest corporate merger in history. The strategic logic Musk cited centers on AI and compute: Tesla&#x27;s self-driving cars and Optimus robots could draw on the massive data-center and orbital computing capacity SpaceX is building out. Any deal would need approval from both companies&#x27; shareholders, and Musk himself is excluded from the special committees due to his conflicts of interest on both sides.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Chinese AI Startup DeepSeek Raises $15 Billion Ahead of Potential IPO</div>
+        <div class="art-sum">Chinese AI startup DeepSeek has raised $15 billion in a private funding round that nearly doubled its original target, lifting its valuation to roughly $74 billion ahead of a planned Shanghai IPO targeted for early 2027. New and existing backers in the round included Tencent, battery maker CATL, Lenovo-backed Legend Capital, automaker Geely, and private equity firm Stony Creek Capital, alongside prior investors Monolith Management and Shixiang. DeepSeek has hired state-owned Citic Securities to advise on the listing and brought on former venture capitalist Yan Wentao as CFO in September 2026. Founder Liang Wenfeng told investors last month that the company&#x27;s annualized revenue run rate had reached $1 billion, though it remains unprofitable as it keeps investing heavily in computing infrastructure.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Ordered to Pay $25 Billion to New Mexico in Data-Privacy Case</div>
+        <div class="art-sum">A New Mexico state judge ordered Meta to pay $25 billion to the state on October 21, 2026, after a Santa Fe jury found in September that the company violated the state&#x27;s Unfair Practices Act by misleading residents about privacy, tallying 43 million violations tied to the 2018 Cambridge Analytica scandal, in which the data of up to 87 million Facebook users was improperly harvested. The judge calculated that state law could have supported a penalty exceeding $219 billion but reduced it to $25 billion, making it the largest fine ever levied against Meta. Meta&#x27;s chief legal officer said the suit effectively seeks &quot;to impose a tax on speech&quot; and that the company is confident it will prevail on appeal.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stocks Pulled in Two Directions, Fall to End Volatile Week</div>
+        <div class="art-sum">U.S. stocks fell on Friday, October 23, 2026, to close out a turbulent week on Wall Street, with the Dow Jones Industrial Average dropping 652.82 points (1.23%) to 52,215.16, the S&amp;P 500 sliding 39.75 points (0.52%) to 7,623.68, and the Nasdaq Composite slipping 53.52 points (0.21%) to 25,955.34. Rising oil prices — Brent crude climbed above $116 a barrel — along with a sell-off in AI-related tech names and hotter-than-expected inflation data drove the volatility and a rotation out of growth stocks into value and defensive sectors. For the week, the S&amp;P 500 finished down about 0.5% and the Nasdaq fell roughly 0.7%, while the Dow managed a modest 0.4% weekly gain. Investors are now looking ahead to next week, when about a third of S&amp;P 500 companies report earnings, including AI hyperscalers Alphabet, Microsoft, and Amazon.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Stock Selloff Continues as Oil Surges | Markets P.M. for October 23</div>
+        <div class="art-sum">The S&amp;P 500 fell 39.75 points (0.52%) to 7,623.68 and the Dow dropped 652.82 points (1.23%) to 52,215.16 on Friday, October 23, 2026, as a tech-led selloff continued; the Nasdaq slipped 53.52 points to 25,955.34. Oil prices surged alongside the equity decline: Brent crude climbed 3.1% to settle at $116.72 a barrel, its highest close since April 29, while WTI jumped 3.8% to $103.27. The rally was driven by Houthi attacks on Saudi Arabia and renewed Iranian warnings, which stoked fears of further disruption to Middle East energy supplies and added pressure to an already volatile week for stocks.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Indonesia’s Sovereign Fund Sticks to Investment Strategy Amid Market Turmoil</div>
+        <div class="art-sum">Danantara, Indonesia&#x27;s $900 billion sovereign wealth fund, said on October 23-24, 2026 that it has been buying stocks and will stick to its investment strategy despite a market rout triggered by MSCI&#x27;s warning that it could downgrade Jakarta&#x27;s stock exchange to &quot;standalone&quot; status over concerns about ownership opacity and trading behavior. The fund, which holds roughly 65% of its portfolio in equities, 30% in fixed income, and 5% in hedge funds, has pledged $5 billion to Indonesian companies over the next six to nine months and said it could step in further during selloffs if valuations look attractive. The turmoil has pushed Indonesian stocks to their lowest levels since 2020, with foreign investors having sold a net $4.88 billion of Indonesian equities so far in 2026, on pace for the largest annual outflow in at least 16 years.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Citi Gets Regulator Nod for Wholly Owned Securities Venture in China</div>
+        <div class="art-sum">China&#x27;s securities regulator, the CSRC, has approved Citigroup&#x27;s bid to set up a wholly owned securities venture, Citigroup Securities (China) Company Limited, to be based in Shanghai with registered capital of 1.2 billion yuan (about $178.6 million). The license lets the new entity offer equities brokerage, securities underwriting, research, and principal trading to domestic and foreign clients, and the approval continues Beijing&#x27;s post-2020 removal of foreign ownership caps on securities firms, fund managers, and futures companies. Citi said it aims to roughly double its China securities staff to about 100 people by the end of 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Stocks Fall on AI Concerns</div>
+        <div class="art-sum">The Nasdaq Composite fell 2.6% on Thursday, October 22, 2026, its steepest one-day drop since June 5, while the S&amp;P 500 slid 1.2%, its biggest decline since July 29, as investors grew increasingly anxious about the sustainability of massive AI capital spending. Meta Platforms dropped nearly 7% after raising its 2026 capex guidance to $135–145 billion, Amazon fell 4.6%, Nvidia dropped 4.4%, and Tesla and Alphabet each slid 3.1%; Tesla also cut its full-year capex guidance by 20%. Apple was the lone &quot;Magnificent Seven&quot; member spared from the rout. Analysts noted the swings appeared driven more by shifting investor sentiment than by new fundamental developments in the AI trade.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Fall as Tech Selloff Deepens</div>
+        <div class="art-sum">U.S. stocks fell further on Friday, October 23, 2026, as the tech selloff that began Thursday deepened, with the Dow Jones Industrial Average dropping 652.82 points (1.23%) to 52,215.16 and the S&amp;P 500 losing 39.75 points (0.52%) to 7,623.68; the Nasdaq Composite, which had already posted its steepest one-day drop since early June on Thursday (down 2.60%, or 694 points, to 26,008.86), slipped a further 0.21% to 25,955.34. The rout was triggered by a batch of high-profile earnings reports that reignited fears over AI spending, with chipmakers Marvell and AMD plunging 8% and Intel falling 7%; Meta Platforms shares slid about 7% despite beating analyst expectations, after the company posted its first cash outflow in more than a decade due to AI-related capital expenditures. Other &quot;Magnificent Seven&quot; names were also hit earlier in the week, including Amazon (down 4.6%), Nvidia (down 4.4%), and Tesla and Alphabet (each down roughly 3.1%).</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">London Stock Exchange Group Agrees to Buy Octus From Permira For $3.5 Billion</div>
+        <div class="art-sum">London Stock Exchange Group agreed on October 22, 2026 to acquire Octus, a New York-based credit intelligence provider formerly known as Reorg, from private equity firm Permira for $3.5 billion in an all-cash deal financed with external debt. Octus, founded in 2013 by Kent Collier, covers leveraged finance, distressed debt, restructuring and private credit markets, and is expected to generate more than $300 million in revenue in 2026 while being earnings-neutral for LSEG in the first year. Permira, which had invested in Octus since 2022, is exiting as part of the transaction, and Collier is expected to remain CEO; the deal is slated to close in the first half of 2027. The acquisition deepens LSEG&#x27;s push into faster-growing data and private-markets analytics segments.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Hot Healthcare Stocks Could Outperform for Years</div>
+        <div class="art-sum">The S&amp;P 500 healthcare sector rose about 9% over the past three months and is up roughly 9% in October 2026 alone, making it the index&#x27;s strongest sector that month as investors rotated out of expensive tech and semiconductor stocks — the Nasdaq fell 4.5% and the VanEck Semiconductor ETF dropped 10.5% during the same stretch. Drugmakers including Eli Lilly, Merck, and AbbVie have been among the biggest contributors, with Eli Lilly&#x27;s obesity and diabetes drugs continuing to drive demand, while Moderna has surged about 589% over the trailing year. Analysts tie the rally partly to easing policy overhangs (bets that 2025 federal health-spending cuts could be partially reversed) along with improving earnings, as second-quarter sector profits beat expectations by 18.1% even though they remained below year-ago levels.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Stock Indexes Fall Sharply as Oil Rises</div>
+        <div class="art-sum">The pan-European STOXX 600 fell for a second straight session on October 23, 2026, extending a multi-week slide as luxury group Kering&#x27;s shares slumped on disappointing results and banks including Barclays and Hermès also weighed on sentiment; the index logged its steepest weekly loss since early September, down roughly 1.4%. Brent crude climbed above $114 a barrel, up as much as 4% in a single session, after deadly attacks in Saudi Arabia stoked fears that the Iran conflict could escalate into a broader regional war choking off energy supplies. Adding to the pressure, French bond yields jumped amid the country&#x27;s deepening fiscal crisis, with Moody&#x27;s reviewing France&#x27;s sovereign debt rating, while worries over heavy AI-infrastructure spending and Middle East and Russia-Ukraine tensions further dented investor confidence.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Financial Services Roundup: Market Talk</div>
+        <div class="art-sum">This is not a single news story but a recurring WSJ Dow Jones Newswires compilation feature (&quot;Financial Services Roundup: Market Talk&quot;) that bundles short, unrelated market-commentary snippets on financial-services companies several times a day, so there is no discrete event to verify against other outlets and no non-WSJ coverage of it as a story exists. SOURCES: none</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">NYSE Is Getting Trounced in the Battle for Wall Street’s Biggest IPOs</div>
+        <div class="art-sum">I have enough solid, non-WSJ confirmation (the first search&#x27;s aggregator citing WSJ numbers, plus corroborating SpaceX/Anthropic IPO details). The albertpham.info site is a low-quality aggregator though, so I&#x27;ll lean on the numbers it reported (which are verifiable facts/figures) alongside CNBC for the Anthropic detail. Nasdaq has pulled decisively ahead of the NYSE in the fight for 2026&#x27;s largest IPOs, landing 59 traditional IPOs worth nearly $120 billion so far this year versus the NYSE&#x27;s 32 IPOs totaling roughly $20 billion, according to data reported in mid-October 2026. Much of Nasdaq&#x27;s edge comes from a single deal: SpaceX&#x27;s blockbuster offering, which priced at $135 a share on June 12, 2026, raised $75 billion, and valued the company near $2.1 trillion, contributing about $86 billion to Nasdaq&#x27;s reported total. The rivalry could tilt further in Nasdaq&#x27;s favor if Anthropic—reportedly eyeing a listing that could value it near $2 trillion—proceeds with an IPO roadshow that shifted toward mid-October 2026, with pricing expected before the November U.S. midterm elections. Nasdaq has now led NYSE in IPO listings for most of the past decade, a streak this year&#x27;s mega-deals have only extended.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Financial—and Psychological—Cost of Being the Friend Who Picks Up the Tab</div>
+        <div class="art-sum">Nearly half of Gen Z consumers—46%—say they currently owe friends or family more than $1,000, with 30% owing $2,500 or more, according to Zelle&#x27;s &quot;Avoidance Economy Report,&quot; based on two national surveys of roughly 1,000 Americans conducted in 2026. Among those who fronted money for a shared expense like a trip or event, 76% say they were never fully repaid, and 55% say settling up has created tension or hurt a friendship. The report also found 47% of Gen Z respondents have gone into debt covering group costs, and about 20% have muted or ignored group chats specifically to dodge repayment requests. Gen Z was also found to be the biggest per-person spender on shared experiences like festivals or bachelorette trips, with 37% reporting spending more than $2,500 on a single event.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">‘Self-Portrait, Age 23’: Rembrandt’s Personal, Painterly Revelations</div>
+        <div class="art-sum">This WSJ piece appears to be an exclusive museum/art feature on Rembrandt&#x27;s &quot;Self-Portrait, Age 23&quot; (1629, Isabella Stewart Gardner Museum, Boston) — likely tied to a 2026 book on the painting from Paul Holberton Publishing and/or the upcoming &quot;Book of Esther in the Age of Rembrandt&quot; exhibition (Aug 6, 2026–Jan 18, 2027) — but no other wire or outlet (Reuters, AP, Bloomberg, CNBC) appears to have run a comparable news story with concrete figures on it; coverage is limited to the museum&#x27;s own collection page and art-history sites, not independent news reporting of a dated event.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Stocks Fall as Oil Prices Hit Five-Month High</div>
+        <div class="art-sum">On Friday, October 23, 2026, the Dow Jones Industrial Average fell 652.82 points (1.2%) to close at 52,215.16, the S&amp;P 500 dropped 39.75 points (0.52%) to 7,623.68, and the Nasdaq Composite slipped 53.52 points (0.2%) to 25,955.34. The declines came as oil prices surged to a five-month high on fears of renewed U.S.-Iran conflict, with Brent crude climbing 3.1% to settle at $116.72 a barrel and WTI crude rising 3.8% to $103.23 a barrel. The selloff was broad, with nearly three out of every four S&amp;P 500 stocks ending the day lower, as reports surfaced that the U.S. and Israel had developed plans for renewed strikes on Iran following the midterm elections.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">U.S. Tech Stocks Drop on AI Spending Concerns</div>
+        <div class="art-sum">The Nasdaq Composite fell 2.6% (about 694 points) on October 23, 2026, closing near 26,008.86 in its worst one-day decline since June, as investors grew alarmed over ballooning AI infrastructure spending. Meta shares dropped roughly 7% after the company disclosed its future lease and contractual commitments had jumped to about $825 billion from roughly $700 billion in July, and its third-quarter free cash flow swung to a $2.1 billion deficit from a $10.6 billion surplus a year earlier. Amazon fell 4.6%, Nvidia dropped 4.4%, Tesla and Alphabet each slid 3.1%, and Microsoft declined 2.2%, with Nvidia&#x27;s CEO also warning that AI &quot;neocloud&quot; providers lack sufficient capital to sustain current growth. The selloff extended a broader tech rout that had begun earlier in the month amid fears that massive AI data-center spending commitments are outpacing returns.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Sallie Mae Cuts Full-Year View After Logging Higher Charge-Offs</div>
+        <div class="art-sum">Sallie Mae (SLM Corp) reported a third-quarter 2026 net loss of $32.3 million, with adjusted EPS of -$0.19 versus a forecast of +$0.17, in results released after market close on Thursday, October 22, 2026. The company cut its full-year 2026 EPS guidance to $1.95-$2.05, down sharply from the prior analyst consensus near $3.11, and raised its full-year net charge-off guidance to $400 million-$420 million from a prior $345 million-$385 million. Management blamed the higher charge-offs partly on third-party debt-settlement firms persuading otherwise-healthy borrowers to deliberately default so they can negotiate settlements, pushing delinquencies to 4.2% of loans in repayment; it also canceled a planned fourth-quarter whole-loan sale due to volatile interest-rate conditions. Shares fell sharply on the news.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Meta’s Muse Is Going Gangbusters. But Where Is the Payoff?</div>
+        <div class="art-sum">I have enough concrete facts to write the brief now. Meta&#x27;s personal AI assistant Muse, launched in August 2026, has signed up more than 10 million users in the U.S. and Canada, with daily active users hitting 2.5 million on October 16 — a 15% week-over-week jump — and about 25% of registered users engaging daily. Meta charges $20 a month for its &quot;Power&quot; tier and $100 a month for &quot;Maximum,&quot; on top of a free tier, while also exploring taking a cut of purchases that Muse helps users complete, a fee Zuckerberg has described as &quot;a very small cut&quot; of money saved, earned, or spent through the agent. Despite the rapid adoption — strong enough that Meta reportedly had to ask Stripe to raise transaction limits to handle shopping volume — Meta&#x27;s overall Q3 2026 earnings (revenue up 26% to $64.6 billion, net income more than tripling to $9.86 billion) showed capital expenditure and AI infrastructure spending squeezing free cash flow, and analysts have cautioned that monetizing Muse at scale could be &quot;notoriously slow.&quot;</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 27 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Four Innovators on Work and Creativity</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">AI Hacks Are Coming Thick and Fast and Overwhelming the Internet</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Signal Chats That Cost OpenAI Researchers Their Jobs</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">1Password Surpasses $500 Million in Revenue as AI Agents Drive Growth</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">SK Hynix Pauses IPO of Memory-Chip Unit as AI Valuation Fears Mount</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">SpaceX: A Futuristic Berkshire Hathaway, or Just a Mess?</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">What to Know About the AI-Triggered Cybersecurity Crisis</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">SpaceX and Tesla Are Already Joined at the Hip. What a Formal Merger Would Mean.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">9</span><span class="toc-t">Chinese AI Startup DeepSeek Raises $15 Billion Ahead of Potential IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">10</span><span class="toc-t">Meta Ordered to Pay $25 Billion to New Mexico in Data-Privacy Case</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Stocks Pulled in Two Directions, Fall to End Volatile Week</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Stock Selloff Continues as Oil Surges | Markets P.M. for October 23</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Indonesia’s Sovereign Fund Sticks to Investment Strategy Amid Market Turmoil</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Citi Gets Regulator Nod for Wholly Owned Securities Venture in China</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">Tech Stocks Fall on AI Concerns</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">U.S. Stocks Fall as Tech Selloff Deepens</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">17</span><span class="toc-t">London Stock Exchange Group Agrees to Buy Octus From Permira For $3.5 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">18</span><span class="toc-t">Hot Healthcare Stocks Could Outperform for Years</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">19</span><span class="toc-t">European Stock Indexes Fall Sharply as Oil Rises</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">20</span><span class="toc-t">Financial Services Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">21</span><span class="toc-t">NYSE Is Getting Trounced in the Battle for Wall Street’s Biggest IPOs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">22</span><span class="toc-t">The Financial—and Psychological—Cost of Being the Friend Who Picks Up the Tab</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">23</span><span class="toc-t">‘Self-Portrait, Age 23’: Rembrandt’s Personal, Painterly Revelations</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">24</span><span class="toc-t">U.S. Stocks Fall as Oil Prices Hit Five-Month High</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">25</span><span class="toc-t">U.S. Tech Stocks Drop on AI Spending Concerns</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">26</span><span class="toc-t">Sallie Mae Cuts Full-Year View After Logging Higher Charge-Offs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">27</span><span class="toc-t">Meta’s Muse Is Going Gangbusters. But Where Is the Payoff?</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">101 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">86 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">76 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">65 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">49 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-22.html">← Older · October 22, 2026 · Meta Is Getting Creative to Fund Its Massive AI Investments</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
