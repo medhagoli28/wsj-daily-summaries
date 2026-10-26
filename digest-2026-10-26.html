@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 26, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-25.html">‹ Oct 25</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 109</div>
+    <div class="issue-date">October 26, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 7-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta’s Unending AI Spending</div>
+        <div class="art-sum">Meta raised its 2026 capital-expenditure guidance for the third time this year, now forecasting $130 billion to $145 billion, up sharply from the roughly $72 billion it spent in 2025, with over $100 billion earmarked specifically for AI infrastructure such as data centers and custom chips. During the Q3 2026 earnings call on October 21, 2026, CEO Mark Zuckerberg defended the spending and said he is willing to commit between $100 billion and $200 billion overall to AI infrastructure even without certainty the bet will pay off, pointing to projects like the Hyperion cluster in Louisiana, planned to scale to five gigawatts. The spree has pressured Meta&#x27;s profit and free cash flow even as Q3 revenue rose 26% to $64.6 billion, and Wall Street analysts now project total Big Tech capex topping $1 trillion in 2027 as rivals match the buildout.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple’s iPhone Duo Is on Sale. Good Luck Buying One.</div>
+        <div class="art-sum">Apple&#x27;s first foldable iPhone, the iPhone Duo, went on sale October 23, 2026 in the U.S. and more than 70 other countries, starting at $1,999 for 256GB and ranging up to $3,199 for 2TB. Demand far outpaced supply: within roughly 30 minutes of preorders opening on October 16, online delivery estimates had already slipped to late January 2027, and some tracking showed waits stretching as far as January 25, 2027. Apple is stocking only small quantities for walk-in buyers in the U.S., Australia, Canada, Mexico, and parts of Britain and Europe, while in China, France, Hong Kong, India, and Japan units are reserved exclusively for customers with existing online orders.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Leak Suspicions That Got Three OpenAI Staffers Fired</div>
+        <div class="art-sum">OpenAI fired three safety researchers — Tomek Korbak, Mikita Balesni, and Jasmine Wang — after an internal investigation suspected them of leaking confidential information to an outside AI-safety group, reportedly tied to a September report on the company&#x27;s &quot;Astra&quot; model, which uses a design that makes its reasoning less visible to humans. As part of the probe, OpenAI security officers examined the researchers&#x27; personal phones and found that disappearing messages had been enabled on some Signal chats, including ones with AI researcher Ryan Greenblatt. The three were called into same-day meetings and dismissed, and they have publicly denied leaking confidential information, saying OpenAI never specified in writing what they allegedly mishandled. OpenAI maintains the firings were based on policy violations around handling sensitive information and were &quot;not for raising safety concerns or speaking out.&quot;</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Two AI Chipmakers Make Up 34% of America’s Earnings Boom</div>
+        <div class="art-sum">Nvidia and Micron Technology together are projected to account for roughly a third of the S&amp;P 500&#x27;s third-quarter 2026 earnings growth, with FactSet data showing the two chipmakers contributing about 36% of the index&#x27;s expected profit increase, according to estimates cited around October 13-21, 2026. The S&amp;P 500&#x27;s overall blended year-over-year earnings growth rate for Q3 2026 stands at about 29%, but excluding Nvidia and Micron, that growth rate would fall to roughly 20%—meaning the pair added close to 9 percentage points on their own. Nvidia has benefited from surging AI chip demand while Micron has seen a boost from memory-chip pricing tied to AI infrastructure buildout. The concentration underscores how reliant the broader market&#x27;s earnings expansion has become on a small handful of AI-linked semiconductor companies rather than broad-based corporate growth.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Basic Materials Roundup: Market Talk</div>
+        <div class="art-sum">&quot;Basic Materials Roundup: Market Talk&quot; is a recurring Dow Jones Newswires/WSJ feature — a rolling compilation of brief market commentary snippets on silver, copper, gold, coal, and chemical companies published several times daily (around 4:20, 12:20, and 16:50 ET), rather than a discrete news story. Because it&#x27;s a WSJ/Dow Jones-exclusive wire format aggregating one-line market notes, it isn&#x27;t a single event that other outlets (Reuters, AP, Bloomberg, CNBC) independently report on — they don&#x27;t republish or cover this feature format.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">How Trade Desk Rescued Executives’ Stock Options From a Dive in the Share Price</div>
+        <div class="art-sum">Trade Desk shareholders approved a plan to reprice up to roughly 14.7 million underwater stock options at a special meeting in October 2026, after the ad-tech company&#x27;s shares had fallen about 77% over the prior year, pushing most outstanding option exercise prices above the current stock price. The repricing reset about 1.6 million options for CEO Jeff Green and another 1.6 million for other senior executives to that day&#x27;s closing price, with more than 12 million additional options for other employees also converted from deeply underwater to in the money. The measure passed by nearly a two-to-one margin only because Green&#x27;s supervoting shares, which give him just over 50% of voting power, accounted for roughly 98% of the &quot;yes&quot; votes; excluding his stake, about 95% of outside shareholders voted against it. The company justified the move by saying declines in its stock price &quot;could substantially harm&quot; its ability to retain employees holding the options.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">What I Saw Outside Elon Musk’s Massive Colossus 2 Data Center</div>
+        <div class="art-sum">Elon Musk&#x27;s xAI has built out its Colossus 2 supercomputer cluster in Memphis, Tennessee, which came online in January 2026 and uses nearly a million Nvidia GPUs to train the Grok chatbot, with Musk saying he now spends four days a week on-site to get it running; the facility is powered in part by dozens of unpermitted natural-gas turbines (as many as 59, with up to 33 located just across the state line in Southaven, Mississippi) that the NAACP says could emit roughly 2,508 tons of nitrogen oxides and 236 tons of fine particulate matter annually, prompting an April 2026 Clean Air Act lawsuit against xAI and its MZX Tech subsidiary over pollution in nearby South Memphis neighborhoods. xAI has continued expanding the site, including an $80 million purchase of a roughly 1-million-square-foot building for a third facility, pushing the cluster&#x27;s planned power draw toward 2 gigawatts — equivalent to about 40% of Memphis&#x27;s average daily electricity consumption.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Politicians Are Turning Against AI, but Your Pension Is Riding on It</div>
+        <div class="art-sum">13 large U.S. public pension systems have booked roughly $138 billion in paper gains on AI-linked stocks since ChatGPT&#x27;s late-2022 launch, with those 15 stocks growing from about 12% to 27% of the funds&#x27; domestic equity holdings by June 2026, according to a Wall Street Journal analysis cited by other outlets; meanwhile at least 10 members of Congress who have opposed data-center expansion or sponsored bills to restrict it hold personal AI-stock exposure estimated between $12.36 million and $35 million, and officials in states like New York and Pennsylvania have pushed back on new data centers even as their states&#x27; pension funds keep profiting from AI holdings. Separately, CalPERS has already trimmed its Nvidia stake by about 40%, cutting AI-related exposure to roughly 22% of its tracked book, as some fund managers grow wary of concentration risk even while state and local pensions overall held about $6.5 trillion in assets in 2025.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Cat-and-Mouse Game Between Premium Credit-Card Firms and Points Junkies</div>
+        <div class="art-sum">Now I have enough concrete details from non-WSJ sources to write the brief. On February 10, 2026, Chase&#x27;s website for an exclusive FIFA World Cup ticket presale crashed for many Sapphire cardholders, and the bank responded by offering 5,000 Ultimate Rewards courtesy points to affected customers who called to complain, regardless of proof of purchase attempts. TikTok creator Jared Friedman (@pointedbyjared) publicized the loophole, telling followers they could get the points &quot;just for calling&quot; without evidence; in March 2026, Chase closed his Sapphire Reserve and Amazon Prime Visa accounts, citing &quot;points abuse,&quot; though he was able to transfer his accumulated points beforehand. The episode is emblematic of a broader tightening by premium-card issuers in 2026, including Chase&#x27;s stricter enforcement of its 5/24 application rule, American Express extending &quot;once-per-lifetime&quot; bonus restrictions to its Gold and Green cards, and Amex closing accounts tied to resale activity and international spend patterns. Card issuers are increasingly using AI-driven monitoring to detect reward-gaming behavior even as annual fees on premium cards climb toward four figures, fueling an escalating back-and-forth between banks and rewards-focused cardholders.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Meta’s Hunt for AI Capital Strikes a Raw Nerve on Wall Street</div>
+        <div class="art-sum">Meta priced a record $30 billion corporate bond sale on October 30, 2025, split into six tranches maturing from five to 40 years, to help fund its AI data-center buildout, with Citigroup and Morgan Stanley leading the deal; it ranks among the largest high-grade corporate bond offerings ever and the biggest since 2023. The borrowing followed a separate $27.3 billion off-balance-sheet financing deal in late October for Meta&#x27;s Hyperion data center in Louisiana, and came as Meta raised its 2026 capital-expenditure guidance to roughly $195-205 billion, up from $180-190 billion previously. A subsequent $12.5 billion bond tied to an El Paso, Texas data center priced at yields above 7%, about 0.4 percentage points higher than Meta paid on the Hyperion deal nine months earlier, signaling that investors are demanding a bigger premium as AI infrastructure debt piles up across the industry. The spending surge is partly tied to Meta&#x27;s roughly $300 billion cloud-compute contract with OpenAI, with estimates that it may need to borrow around $100 billion over four years to meet that commitment.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Meta’s Unending AI Spending</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Apple’s iPhone Duo Is on Sale. Good Luck Buying One.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Leak Suspicions That Got Three OpenAI Staffers Fired</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Two AI Chipmakers Make Up 34% of America’s Earnings Boom</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Basic Materials Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">How Trade Desk Rescued Executives’ Stock Options From a Dive in the Share Price</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">What I Saw Outside Elon Musk’s Massive Colossus 2 Data Center</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Politicians Are Turning Against AI, but Your Pension Is Riding on It</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">The Cat-and-Mouse Game Between Premium Credit-Card Firms and Points Junkies</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">Meta’s Hunt for AI Capital Strikes a Raw Nerve on Wall Street</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">103 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">87 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-25.html">← Older · October 25, 2026 · Nasdaq Futures Steady as AI Selloff Pauses</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
