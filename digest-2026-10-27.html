@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — October 27, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-26.html">‹ Oct 26</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 110</div>
+    <div class="issue-date">October 27, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 6</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Banks, Blackstone Form $63 Billion Financing Vehicle for Broadcom AI Tech</div>
+        <div class="art-sum">Bank of America, Citigroup, Morgan Stanley and Blackstone have formed a $63 billion special-purpose vehicle to finance Broadcom AI chips and networking gear that will be leased to Anthropic, marking one of the largest debt deals yet tied to the AI infrastructure buildout. The deal is structured with roughly $43.5 billion (about 69%) as first-lien senior debt arranged by Bank of America, Citigroup and Morgan Stanley, while Blackstone is committing the second-lien portion; Broadcom is providing residual value support on the first-lien tranche. The financing ties back to a previously announced strategic compute agreement between Broadcom and Anthropic, with chip deliveries expected to begin in 2027.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Biggest Takeaways From Anthropic’s IPO Prospectus</div>
+        <div class="art-sum">Anthropic&#x27;s S-1 filed with the SEC shows first-half 2026 revenue of $16.3 billion, up roughly 13-fold from $1.16 billion in the same period of 2025, with Q2 revenue growing 1,368% year-over-year and net revenue retention near 900%. The filing also discloses an $80.7 billion net loss for H1 2026, but $72.4 billion of that stems from a non-cash accounting charge tied to convertible notes, leaving the company adjusted-profitable with roughly $1.6 billion in operating income; compute costs per dollar of revenue fell from $2.01 a year earlier to $0.55. Anthropic plans to list on the Nasdaq under the ticker &quot;ANT&quot; the week of November 16, 2026, targeting a valuation of $1.8-$2 trillion, more than double its $965 billion valuation from a May funding round, while its seven co-founders retain voting control and nearly 25% of revenue comes from just five customers.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic Unveils Paperwork for Blockbuster IPO</div>
+        <div class="art-sum">Anthropic publicly filed its Form S-1 with the SEC on October 26, 2026, setting up a Nasdaq listing under the ticker &quot;ANT&quot; with Goldman Sachs and Morgan Stanley leading the underwriting syndicate. The filing disclosed revenue of $16.3 billion for the first half of 2026, up from $1.2 billion a year earlier, alongside a net loss of $80.7 billion, most of which stemmed from a $72.4 billion non-cash charge tied to changes in the fair value of convertible notes. Anthropic is targeting a listing the week of November 16, with bankers discussing a valuation range of roughly $1.5 trillion to $2 trillion and a raise that could exceed $100 billion, positioning it to rival or surpass SpaceX&#x27;s IPO as one of the largest public debuts in history. The filing also included extensive risk disclosures warning that its AI technology could pose &quot;catastrophic or existential&quot; risks.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta Plans up to $95 Billion in Financing to Power Its AI Growth</div>
+        <div class="art-sum">Meta announced on October 26, 2026, a plan to raise up to $95 billion through equity offerings to fund its AI infrastructure buildout, including data centers and cloud computing capacity. The plan combines an initial $35 billion tranche—via concurrent underwritten public offerings of depositary shares and Class A common stock tied to forward sale agreements—with a separate $60 billion share-sale program using nonvoting Class C shares. Meta said chipmakers Nvidia, AMD, and Broadcom expressed interest in purchasing up to $5 billion of the shares. The move supports Meta&#x27;s projected 2026 capital expenditures of $135 billion to $145 billion, driven by investment in AI compute, its Muse AI agent, and data center expansion.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Brazilian Markets Crash After Lula’s Surprise Election Win Stuns Investors</div>
+        <div class="art-sum">Lula da Silva won an unprecedented fourth term in Brazil&#x27;s October 26, 2026 runoff, defeating Senator Flávio Bolsonaro with 51.8% of valid votes to 48.2% in a comeback after losing the first round — the first time since Brazil&#x27;s return to direct elections in 1989 that a runoff winner had trailed in round one. The surprise outcome, which blindsided investors who had bet on a Bolsonaro win and fiscal tightening, triggered a historic market rout: Brazil&#x27;s Bovespa index fell nearly 17% (triggering a trading-halt circuit breaker), the real dropped more than 10% against the dollar, and the iShares MSCI Brazil ETF (EWZ) sank about 25% in premarket trading. Individual stocks were hit even harder, with Banco Bradesco down 31.5%, Itaú Unibanco down 26.6%, XP Inc. down 48.7%, and StoneCo down 37.0%, while roughly $6 billion in planned corporate equity sales were derailed; Bolsonaro refused to concede and said he would seek to annul the result, adding to the uncertainty.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Shares Rally After Anthropic Files for Historic IPO</div>
+        <div class="art-sum">Anthropic publicly filed its S-1 prospectus with the SEC on Monday, October 26, 2026, planning to list Class A shares on the Nasdaq Global Select Market under the ticker &quot;ANT,&quot; with trading expected to begin as soon as mid-November at a valuation of roughly $2 trillion. The filing disclosed $16.3 billion in revenue for the first half of 2026, up from about $1.2 billion a year earlier, alongside an $80.7 billion net loss for the same period. News of the filing boosted the broader tech sector, with the S&amp;P 500 rising 0.7%, the Nasdaq Composite adding 0.8%, and chip stocks including Nvidia, Broadcom, Micron, and Intel posting midday gains as investors took the move as a sign of renewed confidence in AI&#x27;s commercial prospects.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">JetBlue Brings Some Relief to Investors With Third-Quarter Performance</div>
+        <div class="art-sum">JetBlue posted a third-quarter 2026 net loss of $257 million, or 68 cents per share, but revenue rose 21.1% year-over-year to $2.8 billion, with revenue per available seat mile (RASM) up 18.4% — well above the airline&#x27;s initial guidance. Average fares climbed 19.2% to $245.11 even as load factor slipped 1.5 points to 83.6%, while fuel costs jumped 57% to $3.91 per gallon and pushed unit costs (CASM) up 19.4%, though JetBlue said it recaptured about 87% of the higher fuel expense through pricing. Looking ahead, the airline guided to 1-2 points of year-over-year operating margin expansion in the fourth quarter and reiterated targets of sustained profitability in 2027 and at least $1 in EPS with positive free cash flow by 2028, a forecast that reassured investors despite the quarterly loss.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Brazil-Exposed Companies Slide After Surprise Lula Victory</div>
+        <div class="art-sum">Luiz Inácio Lula da Silva won an unprecedented fourth term as Brazil&#x27;s president on October 26, 2026, overturning a first-round deficit to beat Senator Flávio Bolsonaro with 51.8% of valid votes to Bolsonaro&#x27;s 48.2%, an outcome prediction markets had not foreseen. The shock result triggered a severe sell-off in Brazilian assets: the Ibovespa posted its biggest single-day drop since March 2020, falling nearly 14%, while the iShares MSCI Brazil ETF plunged 25% in premarket trading and the real sank 10.5% against the dollar to its weakest level since December 2025. Hard-hit names included Itaú Unibanco (down 20%), Petrobras (down 16%), and Ambev (down 10.3%), as investors unwound bets they&#x27;d placed after Bolsonaro&#x27;s first-round lead had fueled hopes of fiscally disciplined, pro-business policy; Bloomberg also reported roughly $6 billion in planned equity sales were frozen in the aftermath.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Stocks Decline as Appetite for Risky Assets Ebbs</div>
+        <div class="art-sum">Asian stocks fell broadly on Friday, October 24-25, 2026, tracking a selloff on Wall Street as investors grew cautious about stretched valuations in AI-related tech names; Japan&#x27;s Nikkei 225 slipped roughly 0.6% in early trade, while Hong Kong&#x27;s Hang Seng and South Korea&#x27;s Kospi also declined. Oil prices dropped more than 1% alongside the equity retreat, and the MSCI Asia Pacific Index hovered near its lowest level since July. China&#x27;s CSI 300 has been under particular pressure, having slid into a bear market after losing about $2.4 trillion in value since its May peak amid weak industrial profits and intense price competition. The pullback reflects a broader risk-off shift as traders weigh heavy AI infrastructure spending against high borrowing costs and mixed earnings signals from U.S. megacap tech companies.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Auto &amp; Transport Roundup: Market Talk</div>
+        <div class="art-sum">Volvo Cars&#x27; stock plunged as much as 24% on October 23, 2026, after the company reported a steep third-quarter loss and CEO Håkan Samuelsson said China sales weakness hit &quot;faster than we thought,&quot; prompting a strategy review and job cuts. Global sales for the quarter fell 10.7% year-over-year to 141,609 vehicles, and Volvo announced it would launch a new &quot;lower-priced&quot; battery-electric model on its SPA3 platform, with first customer deliveries targeted for after summer 2027. Separately in the auto-and-transport space, China International Marine Containers (CIMC) disclosed on October 23, 2026 that it had been named in a new U.S. antitrust case, adding to legal exposure after it was previously charged by the Justice Department over alleged price-fixing in shipping containers between 2019 and 2024; CIMC&#x27;s Q3 earnings release is scheduled for October 29, 2026.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Banks, Blackstone Form $63 Billion Financing Vehicle for Broadcom AI Tech</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">The Biggest Takeaways From Anthropic’s IPO Prospectus</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Anthropic Unveils Paperwork for Blockbuster IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Meta Plans up to $95 Billion in Financing to Power Its AI Growth</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Brazilian Markets Crash After Lula’s Surprise Election Win Stuns Investors</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Tech Shares Rally After Anthropic Files for Historic IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">JetBlue Brings Some Relief to Investors With Third-Quarter Performance</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Brazil-Exposed Companies Slide After Surprise Lula Victory</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Asian Stocks Decline as Appetite for Risky Assets Ebbs</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Auto &amp; Transport Roundup: Market Talk</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">104 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">88 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">66 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-26.html">← Older · October 26, 2026 · Meta’s Unending AI Spending</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
