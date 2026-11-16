@@ -146,6 +146,13 @@ AUTH_MARKERS = (
     "authentication_error",
     "please run /login",
     "credit balance is too low",
+    # The 2026-10-27 outage. None of the markers above matched this wording, so
+    # the fast-abort never fired and every pass ground through all 34 headlines
+    # before giving up — for 19 days, every 30 minutes.
+    "failed to authenticate",
+    "oauth session expired",
+    "could not be refreshed",
+    "not logged in",
 )
 
 
