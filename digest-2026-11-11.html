@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 11, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-10.html">‹ Nov 10</a> &nbsp;·&nbsp; <a href="digest-2026-11-12.html">Nov 12 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 112</div>
+    <div class="issue-date">November 11, 2026</div>
+    <div class="issue-sub">14 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 14</span><span class="tab" data-key="tech">Tech · 6</span><span class="tab" data-key="markets">Markets · 8</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | United Airlines Is Banning AI Bots From Booking Flights</div>
+        <div class="art-sum">United Airlines updated its contract of carriage on November 11, 2026, to bar unauthorized third-party AI agents from booking flights, managing reservations, or accessing MileagePlus loyalty accounts on customers&#x27; behalf, citing risks to customer data, surprise purchases, and unauthorized changes. The airline said travelers can still use AI chatbots like ChatGPT, Gemini, and Claude to research routes, compare fares, and build itineraries, and can book through approved channels such as Google Flights and Kayak that sync with its system. An analyst cited by Yahoo Finance suggested United wants to avoid ceding control to AI intermediaries the way it once did to search engines like Google. Delta and American told Fast Company that some AI tools already have booking privileges on their platforms and that they are continuing to evaluate the technology rather than imposing a similar outright ban.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">TSMC Approves Up to $1 Billion Investment Plan in Anthropic, OpenAI</div>
+        <div class="art-sum">TSMC&#x27;s board approved authorization for up to $1 billion in combined investments tied to Anthropic and OpenAI on November 10, 2026, split evenly: up to $500 million to buy Anthropic shares at its IPO price, and up to $500 million to purchase OpenAI preferred shares. The board separately approved up to $500 million to set up a new investment company focused on strategic bets across the semiconductor ecosystem. The approvals set maximum authorized amounts rather than confirming the full sums have been deployed, and came alongside TSMC reporting October sales up about 60% year-over-year. TSMC disclosed the board actions in a Form 6-K filing with the U.S. SEC.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia Scandal Tests the Resilience of the Global AI Boom</div>
+        <div class="art-sum">Nvidia CEO Jensen Huang resigned after revelations that he had an affair with a woman later identified as a suspected Chinese intelligence operative, triggering a leadership shakeup that installed CFO Colette Kress as interim CEO and wiping out roughly 30% of Nvidia&#x27;s market value since October 6, 2026. The scandal has reignited scrutiny of Nvidia&#x27;s China dealings, including allegations that a Singapore-based firm, Megaspeed, helped Chinese customers evade U.S. export controls even as Nvidia&#x27;s share of China&#x27;s AI chip market had already fallen from about 95% to near zero before a late-2025 compromise let it resume shipping a downgraded chip there. Economists and analysts, including RSM&#x27;s Joe Brusuelas, warn the affair compounds existing worries over high AI capital spending and rising interest rates, with some predicting the episode could help trigger a broader AI investment bubble unwinding, though others argue chip demand remains too strong for the scandal alone to pop it. Huang is also expected to face congressional scrutiny over the national-security implications, and the controversy comes as it heightens U.S.-China tensions over semiconductor dominance ahead of related diplomatic engagements.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Three States Where the AI Boom Could Slow After the Midterms</div>
+        <div class="art-sum">In the 2026 midterms, Democratic women flipped governor&#x27;s seats in Georgia, Ohio, and Texas, with utility rates and data-center opposition cited as key factors in all three races. Texas governor-elect Gina Hinojosa and Georgia governor-elect Bottoms have both pledged statewide moratoriums on new data-center permits, though already-under-construction projects would likely be exempt. The backlash reflects real cost pressure: Ohio residential electricity bills have risen more than 20% over the past two years, and a typical Georgia Power customer now pays around $175 a month, up after six rate increases in two years. Voters also backed restrictions on data centers in 40 of 41 local ballot measures on November 3, 2026, and researchers found at least 46 AI data-center projects worth over $170 billion stalled or blocked since January 2024 amid community opposition.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Alibaba’s Chip Unit Files for Hong Kong Listing</div>
+        <div class="art-sum">Alibaba&#x27;s chip design unit T-Head filed a listing application with the Hong Kong Stock Exchange, with Alibaba disclosing on November 11, 2026 that the confidential filing was actually submitted on September 11, 2026; T-Head remains wholly owned by Alibaba and is expected to stay a subsidiary after the IPO. T-Head designs full-stack data-center chips, including processors positioned as a domestic rival to Nvidia&#x27;s offerings in China, and the spin-off is meant to let investors value the chip business separately while giving it direct access to equity and debt capital markets. The size and structure of the offering have not yet been finalized, and the deal still requires approval from the Hong Kong exchange&#x27;s listing committee as well as a filing with China&#x27;s securities regulator, the CSRC.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">AkzoNobel, Axalta’s $25 Billion Merger Could Harm Competition, U.K. Regulator Warns</div>
+        <div class="art-sum">The UK Competition and Markets Authority said AkzoNobel&#x27;s proposed $25 billion acquisition of Axalta Coating Systems could substantially lessen competition in the UK vehicle refinish coatings market, where the combined company would hold roughly a 40%-50% share; the CMA found remaining rivals would not provide sufficient competitive constraint, risking higher prices or reduced service quality for bodyshops and repair centers. The regulator gave the companies until November 18, 2026 to offer remedies or face referral to an in-depth Phase 2 investigation. AkzoNobel and Axalta have said they intend to address the concerns using the divestment package of their European vehicle-refinish coatings business already agreed with the European Commission, which cleared the deal on that basis.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Why High Beef Prices Are Here to Stay</div>
+        <div class="art-sum">Ground beef hit a record retail average of $6.92 per pound in August 2026, while beef steak averaged $12.80 per pound, up 16% from a year earlier, according to CNBC. The root cause is supply: USDA&#x27;s January 2026 inventory count put the total U.S. cattle and calf herd at 86.2 million head and the beef cow herd at 27.6 million, the smallest national herd in 75 years and the lowest cow count since 1961, after years of drought and high feed costs drove ranchers to liquidate rather than rebuild. USDA projects retail beef prices will climb roughly 10% in 2026, and because cattle need two to three years to breed, raise, and bring to market, analysts say the herd can&#x27;t be rebuilt quickly, so elevated prices are expected to persist for several more years. Bloomberg and Fortune both note demand hasn&#x27;t meaningfully softened despite the run-up, which is keeping prices locked in at or near record levels.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Global Economy Looks Vulnerable to an AI Bust</div>
+        <div class="art-sum">IMF Managing Director Kristalina Georgieva warned on November 16, 2026 that the global economy is &quot;standing on one leg, the AI leg,&quot; citing roughly $1 trillion in AI-related circular financing, about two-thirds of it debt-funded, as a financial-stability risk if confidence in the sector falters. The IMF&#x27;s October 2026 outlook raised its global growth forecast to 3.1% largely on the back of AI infrastructure investment, but warned that a sharp AI investment pullback could cut global GDP by 1.1% by 2028 (including a 1.8% hit to US output), with even a moderate equity correction shaving about 0.4 percentage points off growth. Separately, a November Bank of America survey found 45% of fund managers now name an &quot;AI bubble&quot; as the market&#x27;s top tail risk, up from just 11% in September, while former SEC Chair Gary Gensler has warned a bubble burst could trigger a recession comparable in scale to the dot-com bust.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">NYSE Affiliate to Launch 24/7 Tokenized Stock Trading This Month</div>
+        <div class="art-sum">Intercontinental Exchange (ICE), the parent of the New York Stock Exchange, and crypto exchange OKX will launch 24/7 tokenized stock trading on November 23, 2026 through their 50-50 joint venture, OKXICE, offering more than 70 tokenized assets including Coinbase and Robinhood stock plus several dozen Direxion-managed ETFs. Each token represents a security entitlement backed one-for-one by a U.S. share held by a registered broker-dealer, preserving holder rights like dividends and voting; access at launch is limited to eligible U.S. OKX customers who complete identity checks and onboarding. Notably, 67 companies—including Apple, Tesla, and Meta—have objected to having their stock tokenized on the platform and opted out. The move follows the SEC&#x27;s September 2026 decision to begin granting exemptions allowing platforms to trade digital tokens of U.S. equities.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Investors Run Back to AI Stocks, Less Than a Week After a Historic Selloff</div>
+        <div class="art-sum">AI-related stocks staged a sharp rebound in the week after a selloff that erased roughly $2.5 trillion in market value beginning around November 5, 2026, with the S&amp;P 500 climbing 1.3% on November 11 to pull within about 2.6% of its prior all-time high. Nvidia rose roughly 2.8-2.9% that day to close near $173.73, Micron rallied 11.9%, and CoreWeave jumped 24.7% after reporting a smaller-than-expected quarterly loss and roughly $9 billion in customer prepayments and deposits expected over the next three months, according to CEO Michael Intrator. The Nasdaq Composite gained 1.6% and the Dow added 254 points (0.5%) the same day, as strong CoreWeave earnings helped restore investor confidence in the broader AI trade just days after fears of an AI spending slowdown had triggered the rout.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">CoreWeave Finds a Workaround to Capital Constraints—for Now</div>
+        <div class="art-sum">CoreWeave reported a Q3 2026 net loss of about $709 million even as revenue surged roughly 168% year-over-year, prompting the company to overhaul how it funds its AI data-center buildout. CEO Michael Intrator said on the November 10, 2026 earnings call that CoreWeave will stop relying on unsecured debt markets &quot;at current yields,&quot; shifting instead to asset-level, delayed-draw term loans collateralized by specific customer contracts and to large customer prepayments — about 70% of contracts signed in 2026 included upfront payments, with some reaching 100% of contract value, and the company expects roughly $9 billion in prepayments and deposits over the next three months. The stock jumped about 16% after the beat-and-raise report eased near-term financing fears, even as analysts flagged the company&#x27;s high debt-to-equity ratio (around 10.3) and SPV-based off-balance-sheet structures, where billions in GPU-backed loans sit outside the parent company&#x27;s own balance sheet.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | OpenAI Continues to Suffer Heavy Losses as Revenue Rises to $10 Billion</div>
+        <div class="art-sum">OpenAI&#x27;s quarterly revenue rose roughly 50% to about $10 billion in the third quarter of 2026, up from roughly $6.7 billion in the prior quarter, according to figures the company shared with investors. Despite that growth, operating losses widened to about $10.9 billion, up from $10.1 billion the previous quarter, meaning the company lost roughly $1.09 for every dollar of revenue booked. CFO Sarah Friar told investors the adjusted operating margin improved to negative 109% from negative 150% a quarter earlier, and that OpenAI&#x27;s annualized revenue run rate had reached about $50 billion. The disclosures come as the company advances plans toward a future IPO.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Trump’s Plan to Import Russian Diesel Stalls on the High Seas</div>
+        <div class="art-sum">A tanker carrying roughly 40,000 metric tons of Russian diesel reversed course about 400 nautical miles off New York, underscoring how President Trump&#x27;s plan to bring Russian fuel into the U.S. has stalled since he struck a deal with Vladimir Putin on October 9, 2026; the Treasury Department&#x27;s General License 135 authorizes the sale and import of Russian diesel through April 7, 2027, but no cargo has actually reached U.S. shores since the deal was announced. The holdup stems from legal risk — the waiver appears to conflict with the 2022 Ending Importation of Russian Oil Act — leading banks, port operators, and terminal companies to avoid the shipments, with one U.S. lawmaker warning a dozen port and terminal operators that accepting the cargoes could violate federal law and expose them to severe penalties. Trump had touted the deal as securing more than 4.8 million tons of Russian diesel for global markets to help lower fuel prices ahead of the midterms, but buyer resistance has left tankers idling or diverting instead of unloading.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nvidia CEO Jensen Huang Affair Strains Taiwan’s Devotion to Its Hometown Hero</div>
+        <div class="art-sum">In Taiwan, Nvidia CEO Jensen Huang&#x27;s once-untouchable &quot;hometown hero&quot; status has been shaken after reports that his extramarital affair involved Alice Huang, a Chinese businesswoman U.S. officials have described as a spy, a relationship first exposed when a video of the pair at a Taipei restaurant from 2025 went viral; Taiwan&#x27;s Interior Ministry has since revoked Alice Huang&#x27;s entry permit after finding she entered the island eight times in 2024-2025 using a Hong Kong identity despite originating from mainland China. Jensen Huang, born in Taiwan and previously mobbed by fans and reporters on visits home (including a two-week trip in May-June and a stopover in August), publicly apologized to his wife and to Nvidia in an open letter after acknowledging the affair, while President Trump said Huang &quot;had absolutely no idea that the person in question was a spy.&quot; Taiwanese residents and shop owners interviewed say the scandal has visibly dented his image, with some customers asking that his photos be taken down from local businesses.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 14 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | United Airlines Is Banning AI Bots From Booking Flights</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">TSMC Approves Up to $1 Billion Investment Plan in Anthropic, OpenAI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Nvidia Scandal Tests the Resilience of the Global AI Boom</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Three States Where the AI Boom Could Slow After the Midterms</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Alibaba’s Chip Unit Files for Hong Kong Listing</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">AkzoNobel, Axalta’s $25 Billion Merger Could Harm Competition, U.K. Regulator Warns</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Why High Beef Prices Are Here to Stay</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">The Global Economy Looks Vulnerable to an AI Bust</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">NYSE Affiliate to Launch 24/7 Tokenized Stock Trading This Month</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Investors Run Back to AI Stocks, Less Than a Week After a Historic Selloff</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">CoreWeave Finds a Workaround to Capital Constraints—for Now</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Exclusive | OpenAI Continues to Suffer Heavy Losses as Revenue Rises to $10 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Trump’s Plan to Import Russian Diesel Stalls on the High Seas</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Nvidia CEO Jensen Huang Affair Strains Taiwan’s Devotion to Its Hometown Hero</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">111 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">95 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">71 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">52 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">45 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-10.html">← Older · November 10, 2026 · How Jensen Huang’s Affair Spiraled Into a National Security Nightmare</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

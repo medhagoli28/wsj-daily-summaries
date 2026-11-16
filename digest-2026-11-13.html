@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 13, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-12.html">‹ Nov 12</a> &nbsp;·&nbsp; <a href="digest-2026-11-14.html">Nov 14 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 114</div>
+    <div class="issue-date">November 13, 2026</div>
+    <div class="issue-sub">15 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 15</span><span class="tab" data-key="tech">Tech · 8</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Meta Testing New Prediction-Market App With Employees</div>
+        <div class="art-sum">Meta Platforms employees have begun internally testing a prediction-market app called &quot;Takes,&quot; which was previously known internally as &quot;Arena&quot; when Mark Zuckerberg directed a small team to build it this past summer; the app uses a virtual currency called &quot;cred&quot; (short for credibility) rather than real money, letting employees stake points on the outcomes of questions or events and gain or lose cred based on accuracy. As of mid-November 2026, the app is not available to the public and Meta has not said whether or when it might launch more broadly, with the internal trial fitting the company&#x27;s routine practice of &quot;dogfooding&quot; new products before any public release. The move signals Meta&#x27;s interest in the prediction-markets space as platforms like Kalshi and Polymarket have grown in popularity, especially among younger users Meta is trying to attract.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Widespread Microsoft Outage Roils Businesses, Governments</div>
+        <div class="art-sum">A severe Microsoft 365 outage beginning late Thursday, November 12, 2026, knocked out Outlook, Teams and Copilot for more than 12 hours and dragged into a second day, affecting organizations in over 70 countries. Governments including those of Japan, Singapore, Australia and the UK reported disruptions, with the NHS, London&#x27;s Metropolitan Police, and the U.S. House of Representatives among those hit, and Microsoft said the cause was a technical/server issue with no sign of malicious activity. The Anderson Economic Group estimated the outage could cost up to $7 billion in lost productivity, and Microsoft confirmed by Saturday, November 14, that services had been fully restored. The disruption forced some U.S. workers home early, pushed local governments to tell residents to call instead of email, and in Australia stopped some businesses from printing invoices and some schools from holding online classes.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Before His Ouster, Jensen Huang Belittled the Executive Replacing Him</div>
+        <div class="art-sum">I have enough concrete, non-WSJ confirmation of this story now. Jensen Huang, during an August 2026 meeting with senior Nvidia finance executives, called then-CFO Colette Kress &quot;a deer in the headlights&quot; while interrupting her presentation and dismissed her as a mere &quot;reporting CFO&quot; who couldn&#x27;t help shape strategy, amid rising internal concern over Nvidia&#x27;s chip-wafer and memory purchase commitments and its financing deals with AI startups; Huang resigned as president, CEO, and board member effective November 12, 2026, after the board investigated extramarital affairs, including one with a woman U.S. intelligence officials suspected of ties to Chinese espionage, and Kress — the executive he had belittled months earlier — was then named Nvidia&#x27;s interim CEO while continuing as CFO, with the board now searching for a permanent successor among internal and external candidates.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia Co-Founder Jensen Huang’s Downfall Is a Sign of Silicon Valley’s Power Drain</div>
+        <div class="art-sum">Jensen Huang resigned as Nvidia&#x27;s CEO on Thursday, November 12, 2026, after mounting scrutiny over reports that he had an extramarital affair with a woman believed to be linked to Chinese intelligence, followed by additional allegations involving a relationship with an Nvidia executive who reported directly to him. The fallout hit Nvidia&#x27;s stock hard: shares fell 12.75% over the trading week — the company&#x27;s sixth straight weekly decline, its longest such streak since 2012 — and on Friday, November 13, Nvidia&#x27;s market capitalization closed below $4 trillion for the first time since July 2025. Wall Street analysts told CNBC that Huang&#x27;s departure could cost Nvidia as much as 20% of its market value given his outsized role in supplier relationships, customer ties, and the company&#x27;s AI-industry influence. Commentators framed his ouster as symbolic of a broader redistribution of power within Silicon Valley, since Huang&#x27;s reach extended well beyond chipmaking into shaping the wider AI boom.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Why I’m Not Losing Sleep Over the AI Apocalypse</div>
+        <div class="art-sum">This appears to be a WSJ opinion piece by Alexandra Samuel, a tech columnist who writes regularly for the WSJ and Harvard Business Review, and this looks like a personal-perspective op-ed rather than a news story — it&#x27;s not the kind of piece other outlets typically re-report, since it&#x27;s one columnist&#x27;s argument rather than a factual event. I did not find independent coverage of this specific column on Reuters, AP, Bloomberg, CNBC, or similar outlets; the only related material is aggregator sites quoting the WSJ text directly, which I can&#x27;t use as a substitute source. Given that, I can&#x27;t produce a sourced brief without relying on WSJ content. This is a WSJ opinion column (not a reported news story), and no other outlet appears to have covered it independently — aggregator sites only quote the WSJ text directly, which isn&#x27;t a usable substitute source.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">ChatGPT Launches Wallet Feature Allowing Users to Pay With Agents</div>
+        <div class="art-sum">OpenAI launched ChatGPT Wallet on November 13, 2026, letting its AI agent &quot;dots&quot; make purchases on a user&#x27;s behalf without the agent or merchant ever accessing the underlying card number, with the user approving each transaction via Face ID or fingerprint; the feature is initially available only to ChatGPT Pro subscribers aged 18+ in the US with eligible US-issued cards, built in partnership with American Express, Mastercard, and Visa. Users add a payment card once and keep their existing card rewards and dispute protections, while OpenAI said it is not taking a cut of transactions to start. Longer term, OpenAI plans to let users set spending limits and pre-approve purchase categories so agents can act more autonomously without per-purchase approval.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Uber Says Personal Data Was Exposed in Third-Party Data Breach</div>
+        <div class="art-sum">Uber disclosed that an unauthorized actor used compromised credentials belonging to third-party AI firm Fireworks AI to access data Uber had shared with that vendor, affecting 149,346 U.S. drivers; the intrusion occurred around October 7, 2026, and Fireworks AI notified Uber on October 9, with Uber&#x27;s investigation confirming the access by October 13. The exposed information included drivers&#x27; names, driver&#x27;s license numbers, and driver&#x27;s license images. Uber said it immediately severed its data connection to the vendor and, as of its notification letters sent around November 11, had found no evidence that the stolen data had been misused.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Our New Cybersecurity Reality: If It’s ‘Smart,’ It’s Hackable</div>
+        <div class="art-sum">Attackers seized remote control of Danfoss refrigeration controllers in hundreds of French supermarkets overnight on October 11-12, 2026, forcing units into continuous defrost mode that pushed internal temperatures as high as 50°C (122°F) and spoiled fresh and frozen stock at chains including Intermarché, Netto, Carrefour, and Monoprix. CERT-FR, France&#x27;s national cyber emergency response team, confirmed widespread compromises of two Danfoss controller series (AK-SM and AK-SC), many running outdated or end-of-life firmware no longer receiving security patches. Two supermarkets in Alsace alone reported losing roughly €270,000 in spoiled stock, with nationwide losses potentially reaching into the millions of euros. The attack, followed weeks later by similar fridge-hacking incidents in Belgium, Sweden, and Ireland, has prompted EU cybersecurity officials to warn that internet-connected industrial and consumer devices — from fridges to routers to home appliances — remain a largely unsecured and expanding attack surface.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Stocks Fall as Next Week Brings Big Tests for the AI Trade | Markets P.M. for Nov. 13</div>
+        <div class="art-sum">Technology shares pulled back on Friday, November 13, 2026, with the Nasdaq Composite down about 0.91% and the S&amp;P 500 off roughly 0.40%, while the Dow Jones Industrial Average ticked up around 0.1%, as investors braced for a high-stakes week for the AI trade. Nvidia was set to report quarterly earnings on November 17, and Anthropic was preparing for a possible stock market debut around November 19 at a reported valuation near $1.33 trillion, two events seen as key tests of whether the AI-driven rally can hold up. The pullback followed a broader tech-led selloff earlier in the month, including a roughly 1,800-point Dow drop on November 4 that pushed the Nasdaq into correction territory, and losses continued into the following Monday, November 16, as traders positioned ahead of both events.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Mixed on Nvidia Fallout Fears</div>
+        <div class="art-sum">This confirms that CNBC, CNN, and Forbes corroborate the story (not a hoax) — Jensen Huang resigned as Nvidia CEO on November 12, 2026 amid reports of an extramarital affair, including allegations involving a woman U.S. intelligence reportedly believes is a Chinese spy, and CFO Colette Kress was named interim CEO; Nvidia shares plunged more than 13% at the open and the company&#x27;s market cap closed below $4 trillion on November 13 for the first time since July 2025, after peaking near $5.8 trillion in early October. The fallout dragged broader markets through the week of November 16, with the Dow falling 600 points and the Nasdaq losing roughly 2% on November 15 as AI-linked stocks sold off, while the S&amp;P 500 and Nasdaq futures slid further ahead of Nvidia&#x27;s quarterly earnings report, due after the bell that Tuesday, with analysts projecting roughly 90% earnings growth on $109 billion in revenue. Adding to the uncertainty, the Financial Times reported Huang was weighing a return as CEO, though a source told CNBC the Nvidia board was not considering reinstating him, even as an online petition for his return drew more than 170,000 signatures and backers including Elon Musk.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Stock Indexes Turn Positive as Oil Drops</div>
+        <div class="art-sum">European markets reversed earlier losses to close higher on November 10, 2026, as the pan-European Stoxx 600 index rose about 0.9% to roughly 662.54, nearing its early-August record and recovering from a weaker open. The rally was driven by a sharp pullback in oil prices, with Brent crude falling more than 2% to around $90 a barrel after comments from President Trump eased fears of US military escalation against Iran and reduced concerns about Middle East supply disruptions. Banking stocks led sectoral gains, up roughly 1.7%, while airlines such as Lufthansa (+1.8%) and Air France-KLM (+1.2%) rallied on hopes that cheaper crude would ease fuel costs, even as energy shares themselves lagged on the lower oil prices.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic Chief Tells Jamie Dimon He Hopes IPO Will ‘Underpromise and Overdeliver’</div>
+        <div class="art-sum">Anthropic CEO Dario Amodei told JPMorgan CEO Jamie Dimon in a pre-IPO briefing that he hopes Anthropic&#x27;s public offering will &quot;underpromise and overdeliver,&quot; likening the approach to how the company releases AI models only after extensive testing; he also called sourcing enough computing power the company&#x27;s &quot;deepest business dilemma.&quot; Anthropic is set to price its IPO on November 18, 2026, with trading on Nasdaq under the ticker &quot;ANT&quot; beginning November 19, offering 825 million shares priced between $70 and $78 each, implying a valuation of roughly $1.3 trillion to $1.45 trillion. That range is well below the roughly $2 trillion some earlier reports had floated, reflecting recent turbulence in AI-sector valuations. Amodei added that Anthropic is &quot;not super fussed&quot; about the exact timing or market conditions surrounding the listing.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asia’s Stock Rebound Fades as Nvidia Uncertainty Lingers</div>
+        <div class="art-sum">Asian stock markets extended last week&#x27;s losses on November 16, 2026, as investors continued to digest the fallout from Jensen Huang&#x27;s resignation as Nvidia&#x27;s CEO; South Korea&#x27;s Kospi fell 3.6% and Japan&#x27;s Nikkei 225 dropped 2.4%, among the sharpest declines globally. The selloff followed a US session in which the S&amp;P 500 fell 1.9% and the Nasdaq composite dropped 2.4%, with Nvidia shares sinking 4.6% amid uncertainty over AI-chip demand and renewed worries about potential restrictions on AI data centers after Democratic midterm election gains. Nvidia is set to report quarterly earnings on Tuesday, its first under interim CEO Colette Kress following Huang&#x27;s abrupt exit. Chip suppliers across the region, including SK Hynix and Samsung Electronics, also saw sharp declines as the rebound from earlier in the week lost steam.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Decline as Nvidia Shares Slide Again</div>
+        <div class="art-sum">Nvidia shares fell further on November 16, 2026, extending a slide that began after CEO Jensen Huang resigned on November 12 amid revelations of an affair with a suspected Chinese spy, with Nvidia&#x27;s stock down roughly 35% from its peak and the company&#x27;s market value dropping below $4 trillion for the first time since July 2025; CFO Colette Kress was named interim CEO. The sell-off dragged broader U.S. markets lower, with the Dow falling about 600 points and the Nasdaq composite losing roughly 2% in the prior session (November 15), while the S&amp;P 500 fell about 0.9% and the Nasdaq 100 slid 2.0% on November 16 as it marked a third straight day of losses. Nvidia also faced pressure from a U.S. Commerce Department move to close a loophole that had let China access its chips via overseas rentals, adding regulatory concerns to the leadership crisis and reviving broader worries about an AI-stock bubble.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | AI Bots Are Using Credit Cards. Banks Are Racing to Keep Up.</div>
+        <div class="art-sum">JPMorgan Chase has begun blocking AI shopping agents from completing purchases with customers&#x27; Chase credit card numbers, even when the customer has handed the agent the card details, while Bank of America, Capital One and Citigroup cards are already being used by such agents when customers permit it; JPMorgan CEO Jamie Dimon warned on the bank&#x27;s October 2026 third-quarter earnings call against letting &quot;rogue agents&quot; — &quot;there could be thousands of them&quot; — into its systems. The dispute centers partly on card classification, since the virtual cards many AI agents use get coded as commercial cards, prompting workarounds like Stripe&#x27;s Link wallet, which issues one-time virtual cards that merchants say cost more to accept and complicate returns. Meanwhile card networks are racing to build rails for this activity: Mastercard introduced &quot;Verifiable Intent&quot; on March 5, 2026, and Visa launched &quot;Intelligent Commerce Connect&quot; on April 8, 2026, with Visa and OpenAI announcing on June 10, 2026 a deal letting ChatGPT agents pay with linked Visa cards within user-set limits. Consumer research cited by PYMNTS found 52% of consumers want to choose how they pay when an AI agent lines up even a $300 purchase.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 15 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Meta Testing New Prediction-Market App With Employees</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Widespread Microsoft Outage Roils Businesses, Governments</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Before His Ouster, Jensen Huang Belittled the Executive Replacing Him</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Nvidia Co-Founder Jensen Huang’s Downfall Is a Sign of Silicon Valley’s Power Drain</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Why I’m Not Losing Sleep Over the AI Apocalypse</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">ChatGPT Launches Wallet Feature Allowing Users to Pay With Agents</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Uber Says Personal Data Was Exposed in Third-Party Data Breach</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">Our New Cybersecurity Reality: If It’s ‘Smart,’ It’s Hackable</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Tech Stocks Fall as Next Week Brings Big Tests for the AI Trade | Markets P.M. for Nov. 13</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">U.S. Stocks Mixed on Nvidia Fallout Fears</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">European Stock Indexes Turn Positive as Oil Drops</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Anthropic Chief Tells Jamie Dimon He Hopes IPO Will ‘Underpromise and Overdeliver’</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Asia’s Stock Rebound Fades as Nvidia Uncertainty Lingers</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">U.S. Stocks Decline as Nvidia Shares Slide Again</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Exclusive | AI Bots Are Using Credit Cards. Banks Are Racing to Keep Up.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">111 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">95 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">77 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">71 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-12.html">← Older · November 12, 2026 · Who Is Colette Kress? Meet Nvidia’s New Interim CEO</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

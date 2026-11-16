@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 15, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-14.html">‹ Nov 14</a> &nbsp;·&nbsp; <a href="digest-2026-11-16.html">Nov 16 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 116</div>
+    <div class="issue-date">November 15, 2026</div>
+    <div class="issue-sub">11 stories across tech, markets &amp; finance — a 8-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 11</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 6</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Jensen Huang’s Downfall</div>
+        <div class="art-sum">Nvidia CEO Jensen Huang resigned on Thursday, November 12, 2026, after 33 years leading the company, following reports that he had extramarital affairs — including one with a woman U.S. intelligence reportedly believes was a spy for China — and the board moved to oust him just a day after The Wall Street Journal first reported it was preparing to do so. CFO Colette Kress was named interim CEO while Nvidia&#x27;s board searches for a permanent successor, considering both internal and external candidates. Nvidia shares had already lost more than $300 billion in market value in after-hours trading on November 11 once the WSJ report broke, with losses reportedly growing toward roughly $1 trillion in the following days as the scandal widened and raised fresh governance concerns for the roughly $4 trillion company Huang co-founded in 1993.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Jensen Huang Built the Backdoor Route That Keeps Beijing in the AI Race</div>
+        <div class="art-sum">Nvidia CEO Jensen Huang cultivated a network of Southeast Asian partners, centered on Singapore-based cloud provider Megaspeed and its Malaysian subsidiary Speedmatrix, that moved roughly $7.5 billion worth of restricted Nvidia AI chips to Chinese firms, with Speedmatrix alone receiving over 200 shipments of the technology between June 2024 and June 2025. The scandal escalated after reports surfaced that Huang had a personal relationship with Megaspeed executive Alice Huang, a Chinese citizen described in reporting as a &quot;publicly reported Chinese intelligence asset,&quot; prompting Nvidia&#x27;s board to open an independent national-security investigation and, as of November 2026, consider removing him as CEO. Separately, Malaysian customs seized about $12.1 million worth of advanced AI chips in October 2025, and Singapore&#x27;s government has continued discussions with U.S. officials, including Deputy Secretary of State Christopher Landau, over the Megaspeed probe. Chinese recipients of the rerouted computing capacity reportedly included major firms such as Alibaba and Tencent.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Bessent Urges Nvidia to Pick Outsider as Next CEO</div>
+        <div class="art-sum">Treasury Secretary Scott Bessent said in a Fox News interview on November 15-16, 2026, that Nvidia&#x27;s next CEO &quot;should be found outside the company,&quot; calling for a &quot;dramatic shakeup&quot; following Jensen Huang&#x27;s resignation amid a scandal over alleged sales of advanced AI chips to Chinese entities through shell companies, including some based in Singapore. Bessent gave Nvidia&#x27;s board and outside legal counsel 10 days to provide answers. Nvidia has named CFO Colette Kress as interim CEO and Harvey C. Jones as chairman, while the board has reportedly approached Arm Holdings CEO Rene Haas—a former longtime Nvidia executive—as a potential permanent successor. President Trump, by contrast, said he &quot;would not mind&quot; if Huang returned to the role.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How AI Helps Me Find the Right TV Shows at the Right Times</div>
+        <div class="art-sum">Netflix began testing a new &quot;AI Discover&quot; tab on November 3, 2026, giving a limited group of U.S. subscribers who use Netflix in English on supported TVs a mood- and time-based way to pick what to watch. Instead of a search box, the feature offers curated themes such as &quot;Something Light,&quot; &quot;Scare Me,&quot; &quot;Family Movie Night,&quot; and &quot;Quick Watches,&quot; each previewed with a short clip, and every recommended title carries a &quot;Tune Your Recommendations&quot; button next to &quot;Play&quot; and &quot;My List&quot; so users can keep or reject it. Netflix described the rollout as a &quot;test kitchen,&quot; saying it will use subscriber feedback to decide which discovery features to keep, improve, or expand. The company has not given a timeline for a wider rollout beyond the initial test group.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The SpaceX IPO Had Musk’s Star Power. Anthropic’s Has FOMO.</div>
+        <div class="art-sum">Anthropic&#x27;s IPO roadshow has drawn investor orders for roughly six to seven times the shares on offer, surpassing the demand SpaceX&#x27;s June 2026 offering saw at the same point in its roadshow (SpaceX priced at a roughly $1.8 trillion valuation after raising $85.7 billion). Anthropic is marketing shares at an estimated $70-$78 each, targeting a valuation of around $1.3 trillion to $1.5 trillion for the IPO — down from talk of over $2 trillion just weeks earlier — after its most recent private round (Series H, May 2026) valued the company at $965 billion. Seven major tech companies have already committed roughly $26 billion toward the offering, and analysts have noted Bitcoin fell about 18% in the weeks ahead of Anthropic&#x27;s IPO, echoing a similar ~19% drop before SpaceX&#x27;s listing, a pattern some attribute to investors freeing up cash to chase the new shares.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">New AI Millionaires Want Wealth Advisers Who Can Help Give Their Money Away</div>
+        <div class="art-sum">I have enough concrete facts now to write the brief. New wealth created by the AI boom—SpaceX&#x27;s 2026 IPO alone minted an estimated 4,400 new millionaires overnight, with Anthropic and OpenAI expected to follow with their own offerings—is driving demand for wealth advisers who specialize in philanthropy rather than just investment management. Advisers say many of these newly rich tech workers, often in their 20s and 30s, want to give away 25% or more of their holdings and need help with donor-advised funds and tax strategies for appreciated stock. Anthropic&#x27;s co-founders have reportedly pledged roughly 80% of their equity to charity, and early Anthropic investor Nick Fitz and his partner Griff Bohm have begun advising young AI-industry employees on running large-scale philanthropic vehicles. For context, past megadonor MacKenzie Scott has given more than $26 billion in unrestricted gifts to nonprofits since 2019, a model some of these new donors are looking to emulate.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">How Jensen Huang Built a Business to Feed Chinese Appetite for American Chips</div>
+        <div class="art-sum">Jensen Huang resigned as Nvidia&#x27;s CEO, president, and board member on November 11, 2026, after an internal probe into his relationship with Alice Huang, a Chinese businesswoman and then-CEO of Singapore-based Megaspeed International, whose network of shell companies allegedly routed roughly 240,000 Nvidia GPUs — including H100 and H200 chips — to Chinese buyers in violation of U.S. export restrictions, worth an estimated $7.5 billion. Megaspeed said Alice Huang left her executive role on August 30, 2025, and has denied wrongdoing, while Singapore and U.S. authorities continue to investigate the firm, and Singapore reportedly held her passport for months with little cooperation from U.S. investigators. The scandal, which also wiped out more than $1 trillion in Nvidia&#x27;s market value, has prompted the U.S. Congress to push for tighter AI chip export controls to China.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Bond Yields Rise on Growing Expectations for Fed Rate Hike</div>
+        <div class="art-sum">Japanese government bond yields climbed to multi-week highs on November 16, 2026, with the benchmark 10-year JGB yield rising roughly 3 basis points to about 2.88%, tracking a broader selloff in U.S. Treasuries; Australia&#x27;s 10-year yield also rose, up about 6 basis points to around 5.05%. The move followed hotter-than-expected U.S. inflation data and hawkish commentary from Federal Reserve officials, which pushed market pricing to nearly fully price in a Fed rate hike at the December meeting, with some analysts (including RBC Capital Markets) flagging a real chance of back-to-back hikes in December and January. The Treasury rout also revived bets on further Bank of Japan tightening, with overnight-index swaps implying around an 87% probability of a BOJ rate increase by December, up sharply from about 50% a week earlier.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Gucci Is Cutting Prices. Louis Vuitton Is Reluctant to Follow the Trend.</div>
+        <div class="art-sum">Gucci has cut prices on select handbags by roughly 29-30%, including a France-sold bag that dropped from €3,500 to €2,450 and the Ophidia mini bucket bag in China that fell from 12,300 yuan to 8,700 yuan, moves that followed 13 consecutive quarters of declining sales at the Kering-owned brand. Kering&#x27;s third-quarter 2026 comparable sales at Gucci still fell about 6% year-on-year despite the cuts, as the brand tries to win back aspirational middle-income shoppers who had been priced out by years of earlier increases. Louis Vuitton, LVMH&#x27;s flagship label, has so far held firm on pricing, betting that stronger product design and renewed brand appeal can revive demand without resorting to discounts, though LVMH has reportedly begun internally discussing price cuts after ruling them out a year earlier. The split underscores a broader three-year slump across the luxury sector, with Gucci&#x27;s move seen as reflecting the more pragmatic, cost-conscious management style of Kering CEO Luca de Meo.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Morning Risk Report: Jensen Huang Doesn’t Believe in Succession Planning. It’s Become a Big Risk for Nvidia.</div>
+        <div class="art-sum">Jensen Huang, 63, has publicly rejected formal succession planning at Nvidia, telling podcaster Lex Fridman earlier in 2026 that he hopes to &quot;die at his desk,&quot; even as the company&#x27;s market value has approached $4 trillion with no named president, COO, or clear No. 2 executive; Huang reportedly has roughly 60 direct reports in a deliberately flat management structure. Nvidia&#x27;s most recent annual report does not use the word &quot;succession&quot; at all, compared with 25 mentions in Microsoft&#x27;s and 16 in Alphabet&#x27;s, according to CNBC and Fortune, which flagged this as an unusual governance gap for a company of its size. Analysts cited by CNBC and CNN say much of Nvidia&#x27;s edge rests on Huang&#x27;s personal relationships with suppliers and customers, making the lack of a bench or transition plan a distinct &quot;single point of failure&quot; risk for investors as rivals like AMD and Google press their AI chip challenges.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Sean Duffy Made the Call to Shut Down Flights. Now He’s Making His Case.</div>
+        <div class="art-sum">Transportation Secretary Sean Duffy ordered a nationwide ground stop on Friday, November 13, 2026, halting departures for roughly four hours before airspace reopened that evening, in what became the longest U.S. flight-departure halt since 9/11; nearly 18,000 flights were canceled from Friday through Monday, November 16. Duffy attributed the breakdown to a contractor-installed router in Arkansas that bombarded air traffic control&#x27;s telecommunications network with repeated connection attempts, overwhelming systems that feed radar data to controllers, though some of the roughly 13,000 air traffic controllers working unpaid during the government shutdown publicly disputed his account. Duffy has since pressed Congress for $50 billion in emergency funding to modernize the aging air traffic control system, up from an earlier $30 billion ask, while some Democrats note much of the money Congress already allocated for FAA upgrades remains unspent.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 11 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Jensen Huang’s Downfall</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">How Jensen Huang Built the Backdoor Route That Keeps Beijing in the AI Race</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Bessent Urges Nvidia to Pick Outsider as Next CEO</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">How AI Helps Me Find the Right TV Shows at the Right Times</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">The SpaceX IPO Had Musk’s Star Power. Anthropic’s Has FOMO.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">New AI Millionaires Want Wealth Advisers Who Can Help Give Their Money Away</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">How Jensen Huang Built a Business to Feed Chinese Appetite for American Chips</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Asian Bond Yields Rise on Growing Expectations for Fed Rate Hike</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Gucci Is Cutting Prices. Louis Vuitton Is Reluctant to Follow the Trend.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">The Morning Risk Report: Jensen Huang Doesn’t Believe in Succession Planning. It’s Become a Big Risk for Nvidia.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">Sean Duffy Made the Call to Shut Down Flights. Now He’s Making His Case.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">111 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">95 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">72 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">71 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">45 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-14.html">← Older · November 14, 2026 · How I Used AI to Make My Grandson a Children’s Book for Less Than $200</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

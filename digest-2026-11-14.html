@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 14, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-13.html">‹ Nov 13</a> &nbsp;·&nbsp; <a href="digest-2026-11-15.html">Nov 15 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Saturday Issue · No. 115</div>
+    <div class="issue-date">November 14, 2026</div>
+    <div class="issue-sub">9 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 9</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 2</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How I Used AI to Make My Grandson a Children’s Book for Less Than $200</div>
+        <div class="art-sum">This appears to be a personal essay/first-person piece in the WSJ Tech section rather than a hard-news story, and I could not find any other outlet (Reuters, AP, Bloomberg, CNBC, or similar) that reported on it — the only hit was a thin aggregator page (hyper.ai) whose actual content is JavaScript-rendered and empty on fetch, so I can&#x27;t verify any of its claimed details (cost, page count, tools used) independently, and I won&#x27;t pass along unverified or possibly AI-hallucinated specifics as fact. Since no legitimate secondary outlet has covered this WSJ piece with verifiable reporting, I can&#x27;t produce a sourced brief for it.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Facing Backlash on Land, Data Centers Look to the Sea</div>
+        <div class="art-sum">South Korean shipbuilders HD Hyundai, Hanwha Ocean, and Samsung Heavy Industries are developing floating data-center expertise as onshore AI infrastructure faces mounting opposition, including activists storming a Microsoft site in Amsterdam and Thailand pausing more than 100 data-center projects, with a March 2026 Gallup poll finding 70% of Americans oppose building AI data centers in their communities; Singapore&#x27;s Keppel began construction this year on a four-story floating data center slated to open in 2028, while startup Panthalassa raised $140 million for wave-powered offshore platforms, planning Pacific pilots in 2026 and commercial operations by 2027, and China&#x27;s HiCloud reached full commercial operation in May 2026 on a 24-megawatt offshore wind-powered underwater facility near Shanghai.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">In Jensen Huang’s Ouster, Tech Billionaires See a Mistake—and a Lesson</div>
+        <div class="art-sum">Jensen Huang resigned as Nvidia&#x27;s CEO around November 12, 2026, after the board moved to oust him following reports of undisclosed extramarital affairs, including one with a woman accused of being linked to Chinese intelligence; CFO Colette Kress was named interim CEO. The decision split Silicon Valley — Elon Musk, Palmer Luckey and dozens of other tech leaders signed a &quot;Stand With Jensen&quot; open letter urging his reinstatement, and an online petition backing his return had drawn nearly 180,000 signatures by November 16. Epic Games founder Tim Sweeney instead framed it as a governance lesson, writing that Huang &quot;made a rookie mistake. He had a board,&quot; since unlike Mark Zuckerberg or Michael Dell, Huang lacked majority voting control over the company he founded. Wedbush analyst Dan Ives estimated Nvidia was worth roughly 25% less without Huang at the helm.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">What Jensen Huang’s Downfall Means for Big Tech</div>
+        <div class="art-sum">Nvidia CEO Jensen Huang resigned effective immediately on November 12, 2026, amid reports of extramarital affairs, including with a woman U.S. intelligence reportedly believes is a Chinese spy, prompting CFO Colette Kress to step in as interim CEO and Harvey C. Jones, former Synopsys CEO, to become the company&#x27;s first board chair. The scandal triggered a market rout: Nvidia shares fell as much as 16% intraday before closing down 4.3% on the resignation news, and by November 16 the stock had tumbled roughly 34% since early October to around $161, erasing nearly $2 trillion in market value and pushing the company below a $4 trillion valuation for the first time since July 2025. Economists and analysts, including RSM&#x27;s Joe Brusuelas, warned the turmoil could trigger a broader &quot;bursting&quot; of the AI investment bubble given Nvidia&#x27;s central role in the sector. Amid the fallout, an online petition urging Huang&#x27;s reinstatement has drawn more than 170,000 signatures, with tech figures like Elon Musk rallying behind him, and reports (via the Financial Times) suggest Huang has discussed a potential return to the CEO role.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Microsoft Service Restored After Widespread Outage, Company Says</div>
+        <div class="art-sum">A widespread Microsoft 365 outage began around 17:00–18:00 UTC on November 12, 2026, disrupting Outlook, Exchange Online, Teams, SharePoint, OneDrive and Copilot for users across more than 70 countries, including governments, courts, hospitals, airlines and banks. Microsoft confirmed on November 14 that services had been fully restored for all affected customers and regions, after an outage that lasted well over 24 hours — one of the longest in the company&#x27;s history and its second major disruption this year. The company said the incident was &quot;not related to cyber or AI/agents,&quot; attributing it instead to a technical issue introduced during an earlier network capacity upgrade that surfaced following a recent network change. Roughly 430 million people worldwide use Microsoft 365, and foreign banks in Taiwan were among the hardest hit since their data is routed to overseas headquarters through Microsoft&#x27;s email systems.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Chaos and Unexpected Joys of a 19-Hour Global Email Outage</div>
+        <div class="art-sum">A Microsoft 365 outage that began around 11:17 a.m. ET (16:17 UTC) on November 12, 2026, knocked Outlook, Teams, SharePoint and Copilot offline for users across roughly 74 countries, with Downdetector logging nearly 140,000 Outlook reports globally, more than 130,000 of them in the US. Microsoft said a months-old infrastructure defect combined with a surge in Teams traffic overwhelmed server capacity, and the company extended its email-retry timeout to 48 hours to keep queued messages from bouncing while it worked through the backlog. The disruption stretched across two workdays, with Microsoft reporting queues &quot;approaching normal levels&quot; by the afternoon of November 13 and services fully restored by the morning of November 14; the company said there was no evidence of a cyberattack. Microsoft later apologized publicly for the incident, which disrupted email for governments, airlines, schools and businesses worldwide.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Powerful Trump Allies Aided a Chinese Vape Operation</div>
+        <div class="art-sum">The White House ordered federal officials in late summer 2026 to release tens of millions of dollars&#x27; worth of detained illegal Chinese-made Geek Bar vapes into the U.S. market following conversations with Trump political adviser Chris LaCivita and his son, Chris LaCivita Jr., a registered lobbyist for the brand&#x27;s importer Hillfield. The FDA has never authorized a Geek Bar product for U.S. sale, and selling unauthorized vapes is illegal, though the Trump administration earlier in 2026 created a non-enforcement carve-out for certain unauthorized e-cigarettes. Chris LaCivita Jr.&#x27;s firm, Checkmate Government Relations, has been paid $860,000 by Hillfield since late 2025, and the elder LaCivita says he flagged Hillfield&#x27;s plan to invest $1 billion in a U.S. manufacturing plant to senior White House aides, while denying he pushed for release of the detained shipments or that he could &quot;direct anyone in government to do anything.&quot;</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">What Travelers Caught in the Air-Travel Delays Need to Know</div>
+        <div class="art-sum">A nationwide FAA ground stop triggered by a telecommunications outage halted U.S. air traffic for roughly four and a half hours on Friday, November 13, 2026, from about 3:30 p.m. to 8:15 p.m. ET, leading to roughly 12,462 flight cancellations and thousands more delays, with major airlines alone canceling about 9,082 flights. Under Department of Transportation rules, travelers whose flights were canceled or significantly changed are entitled to a full cash refund &quot;regardless of the reason,&quot; including an FAA-ordered stoppage, but only if they decline any rebooking offer and any travel voucher or credit the airline proposes instead. Airlines must process these refunds automatically and promptly, typically within about a week for credit-card purchases, without requiring the passenger to request them. Unlike in Europe, U.S. carriers are not required to pay additional cash compensation or cover meals and lodging for stranded passengers even when the disruption is attributable to the airline.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How a Friday Ground Stop Left America’s College Football Teams Scrambling</div>
+        <div class="art-sum">The FAA issued a nationwide ground stop at 3:54 p.m. ET on Friday, November 13, 2025, after detecting a telecommunications and radar instability affecting air traffic control with more than 3,500 aircraft already in the air, and lifted it around 8:15 p.m. after roughly four hours, by which point over 7,000 flights had been canceled. The disruption stranded or delayed several college football teams traveling for Week 11 games, including Oregon State, Boise State, North Texas, and Wyoming, forcing some squads to rebook flights for Saturday morning. At least six games shifted kickoff times as a result, with the SEC&#x27;s Auburn-Mississippi State game pushed from noon to 4:15 p.m. and Ole Miss-Oklahoma moved all the way to Sunday at 1 p.m. Nearly every Power Four conference had at least one team affected, with the ACC the lone exception where all teams had already reached their destinations.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 9 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">How I Used AI to Make My Grandson a Children’s Book for Less Than $200</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Facing Backlash on Land, Data Centers Look to the Sea</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">In Jensen Huang’s Ouster, Tech Billionaires See a Mistake—and a Lesson</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">What Jensen Huang’s Downfall Means for Big Tech</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Microsoft Service Restored After Widespread Outage, Company Says</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">The Chaos and Unexpected Joys of a 19-Hour Global Email Outage</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Exclusive | Powerful Trump Allies Aided a Chinese Vape Operation</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">What Travelers Caught in the Air-Travel Delays Need to Know</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">How a Friday Ground Stop Left America’s College Football Teams Scrambling</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">111 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">95 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-13.html">← Older · November 13, 2026 · Exclusive | Meta Testing New Prediction-Market App With Employees</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

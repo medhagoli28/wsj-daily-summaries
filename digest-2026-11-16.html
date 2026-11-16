@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 16, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-15.html">‹ Nov 15</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 117</div>
+    <div class="issue-date">November 16, 2026</div>
+    <div class="issue-sub">21 stories across tech, markets &amp; finance — a 14-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 21</span><span class="tab" data-key="tech">Tech · 7</span><span class="tab" data-key="markets">Markets · 9</span><span class="tab" data-key="finance">Finance · 5</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Trump Administration to Name Nvidia Among AI ‘National Champions’</div>
+        <div class="art-sum">The Trump administration plans to designate more than two dozen American companies, including Nvidia, Microsoft, Amazon, OpenAI, and Anthropic, as AI &quot;national champions,&quot; according to a Wall Street Journal report cited by other outlets on November 15-16, 2026. The designation, to be unveiled by Commerce Secretary Howard Lutnick, would be tied to the American AI Exports Program established by an executive order President Trump signed in July 2025, offering fast-tracked export licenses, diplomatic support, and federal backing to help these firms expand overseas and compete against Chinese AI rivals. The move comes as Nvidia faces separate scrutiny over recent controversies, even as it remains central to the administration&#x27;s push to spread U.S.-made AI technology globally.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia’s Days as an Open Checkbook for the AI Economy Are Numbered</div>
+        <div class="art-sum">I have enough concrete detail now to write the brief. Nvidia&#x27;s role as a free-flowing financier of the AI buildout is facing new limits after CEO Jensen Huang resigned on November 12, 2026, with finance chief Colette Kress named interim CEO; Kress had already pushed back internally on some of Nvidia&#x27;s largest financing deals. Huang himself began tightening terms in his final months, telling smaller &quot;neocloud&quot; partners in an October Berlin meeting that they would need upfront payments from their own customers before Nvidia extended more chip financing. Nvidia&#x27;s financing activity had ballooned to a record 129 venture deals in 2026 (up from 49 in all of 2023), and company filings list roughly $36 billion of cloud backstops, part of a broader push unveiled in August 2026 to mobilize more than $500 billion in third-party capital for AI infrastructure. Lenders and credit investors are now pressing for future financing to be backed by recipients&#x27; actual customer contracts or financial guarantees, amid wider scrutiny of &quot;circular&quot; deal structures across the AI industry.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Campaign to Bring Back Jensen Huang as Nvidia CEO</div>
+        <div class="art-sum">Nvidia co-founder Jensen Huang resigned as CEO around November 12, 2026, following revelations of extramarital affairs, including one involving a woman suspected of being a Chinese spy, and within days a grassroots campaign to reinstate him gained steam. The &quot;Stand With Jensen&quot; petition at standwithjensen.com had drawn more than 178,000 signatures by November 16, including roughly 8,400 self-identified current Nvidia employees and nearly 90,000 self-identified shareholders, with high-profile backers such as Elon Musk, Replit CEO Amjad Masad, and Epic Games CEO Tim Sweeney signing an open letter demanding the board &quot;bring Jensen back&quot; pending an independent investigation. Allies of Huang reportedly set up a &quot;war room&quot; to lobby the board and rehabilitate his standing with U.S. lawmakers, and President Trump voiced support for his return, even as governance experts and analysts such as Wedbush&#x27;s Dan Ives called a reinstatement highly unlikely.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Intel Sued by Investors After 29% Stock Plunge</div>
+        <div class="art-sum">Shareholders filed a proposed class action against Intel in federal court in San Jose, California, accusing the chipmaker, CEO Lip-Bu Tan, and other executives of concealing a severe PC sales slump before its stock collapsed. The suit, brought by law firm Robbins Geller Rudman &amp; Dowd on behalf of investors who held Intel shares between July 23 and October 29, says Intel shares fell nearly 29% on October 30 after the company issued a weaker-than-expected fourth-quarter revenue forecast citing soft PC demand and manufacturing bottlenecks, with quarterly earnings dropping about 9%, or roughly $800 million, to $8.1 billion. The complaint also alleges Intel had motive to mislead investors because it raised $23 billion by selling stock at $95 per share in mid-August, during what the suit calls a &quot;disastrous&quot; third quarter.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Big Tech Needs to Spread Its Bets on Data Centers</div>
+        <div class="art-sum">This has solid numbers already. I have enough to write the brief with concrete figures from Tom&#x27;s Hardware and CNBC. Amazon, Microsoft, Alphabet, and Meta are on track to spend roughly $725 billion combined on capital expenditures in 2026, up about 77% from $410 billion in 2025, with the bulk earmarked for AI data centers and GPU clusters (Amazon ~$220B, Alphabet $195-205B, Microsoft ~$175-190B, Meta $135-145B). To avoid putting all that money into owned facilities, the hyperscalers are increasingly leasing capacity from &quot;neocloud&quot; providers and financing buildouts through debt and off-balance-sheet structures rather than pure cash capex, a shift Morgan Stanley and other analysts flagged in November 2026 amid rising concern over AI-debt concentration. The credit-quality gap underscores the stakes: neocloud companies&#x27; credit default spreads run above 1,000 basis points versus roughly 55 basis points for the hyperscalers themselves, and the Federal Reserve has said it is monitoring the data-center build-out for risks to the broader financial system.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | EQT Ventures Invests $10 Million in Enterprise AI Company Edra</div>
+        <div class="art-sum">EQT Ventures invested $10 million in enterprise AI startup Edra, following a four-week pilot in which Edra&#x27;s technology automated workflows on EQT&#x27;s internal IT service desk by converting business processes into executable AI instructions; EQT plans to expand the tool across more of its business segments after the pilot. Edra was founded in 2024 by former Palantir executives Eugene Alperz and Yiannis Karamanlakis and has already deployed its platform with other companies for IT service management, technical support, and compliance automation. The new funding brings Edra&#x27;s total raised to $40 million, building on a prior $30 million Series A led by Sequoia Capital, 8VC, and A*.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">I Came Home to Find My Door Kicked In. It Turned Into My Own Personal Whodunit.</div>
+        <div class="art-sum">No other outlet appears to have covered this piece — it reads as a personal essay/column from WSJ (likely their &quot;A-Hed&quot; or Off Duty section) recounting one writer&#x27;s own experience, not a syndicated news story, so there&#x27;s no independent reporting on it elsewhere to verify or summarize. SOURCES: none</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Stock Indexes Mixed at Start of Crucial Week</div>
+        <div class="art-sum">Europe&#x27;s major bourses finished split on Monday, November 16, 2026, with Germany&#x27;s DAX falling about 0.60%, France&#x27;s CAC 40 edging up roughly 0.18%, and the UK&#x27;s FTSE 100 giving up early gains to close down around 0.21%, with technology shares among the weakest performers on continued AI-investment jitters. The muted, divided session opened a week markets are watching closely, as Nvidia reports third-quarter earnings on Tuesday (analysts expect revenue growth of about 91% to roughly $109 billion) and Anthropic prices its IPO Wednesday before shares begin trading Thursday under the ticker ANT, offering 825 million shares at $70–$78 each. A separate $26 billion private placement tied to the IPO includes Google, Nvidia, AMD, Broadcom, Micron, Microsoft and TSMC agreeing to buy non-voting shares at the IPO price.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Quebecor Makes $21.96 Billion Bid for Telus in Canadian Telecom Deal</div>
+        <div class="art-sum">Quebecor submitted a non-binding cash-and-stock proposal to Telus on November 16, 2026, offering C$6.35 in cash plus 0.17 of a Quebecor Class B share per Telus share — a package worth about C$19.45 per share and valuing Telus at roughly C$31 billion (US$21.7 billion), a roughly 60% premium to Telus&#x27;s prior Friday closing price. Quebecor says the combination would merge complementary networks and spectrum, generating an estimated C$160 million in annual operating synergies and C$235 million in annual capital efficiencies. The deal would need sign-off from Canada&#x27;s Competition Bureau, the CRTC, and Innovation, Science and Economic Development Canada; Telus&#x27;s special committee has flagged significant regulatory and execution risk, saying Quebecor hasn&#x27;t shown how the tie-up would clear Canada&#x27;s current telecom ownership framework. If completed, it would rank among the largest domestic mergers in Canadian history.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Major U.S. Stock Indexes Slide as Nvidia Fallout Continues to Ripple Through Markets</div>
+        <div class="art-sum">Major U.S. stock indexes extended their recent slide on November 16, 2026, with the S&amp;P 500 down roughly 2% and the Nasdaq Composite down about 1.9%, while the Dow Jones Industrial Average dropped 716 points (1.4%), as fallout from Nvidia&#x27;s leadership crisis continued to weigh on markets. Nvidia shares sank 4.6% and were again the heaviest drag on Wall Street, days after CEO Jensen Huang resigned on November 12 following revelations of a romantic affair with a woman U.S. intelligence officials believe is a Chinese spy, prompting the board to name CFO Colette Kress interim CEO. Other chip and AI-linked names fell sharply too — Broadcom dropped 4.3%, AMD fell 5.6%, and CoreWeave sank 7.2% — as investors grew cautious about elevated AI valuations ahead of Nvidia&#x27;s earnings report, with Kress now set to present results on November 17. International markets also slid in sympathy, with South Korea&#x27;s Kospi down 3.6% and Japan&#x27;s Nikkei 225 off 2.4%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Equities Drop as U.S. Chip Selloff Spills Over</div>
+        <div class="art-sum">Japan&#x27;s Nikkei 225 fell 2.4% on Monday, November 16, 2026, closing below 60,000 as chipmaking-equipment suppliers Advantest (down about 11%) and Tokyo Electron (down roughly 6-7%) led the slide, while South Korea&#x27;s Kospi dropped 3.6% and Taiwan&#x27;s Taiex lost 6%, with TSMC, SK Hynix and Samsung Electronics all sliding as well. The rout tracked a selloff in U.S. chip stocks, including a 4.6% drop in Nvidia shares, amid continued fallout from CEO Jensen Huang&#x27;s resignation the prior week and jitters ahead of Nvidia&#x27;s earnings report due Tuesday. Japan&#x27;s market took an added hit from a government report showing the economy contracted in the latest quarter.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Investors Set to Win Big in Anthropic’s IPO</div>
+        <div class="art-sum">Anthropic&#x27;s IPO, set to begin trading November 19, 2026 under ticker ANT, is pricing shares up to $78 each in an offering that could raise as much as $64.4 billion and value the company at up to $1.4 trillion; a separate $26 billion private placement with cornerstone investors including Google, Nvidia and AMD runs alongside it. Early backers Menlo Ventures, Sequoia Capital, Spark Capital, Lightspeed, ICONIQ and Coatue stand to post large paper gains, but Amazon is positioned for the biggest payoff of all — its Anthropic stake was carried at roughly $190.4 billion as of July, with about $6.2 billion in convertible notes set to convert into roughly 1.84 billion nonvoting shares at listing. Google&#x27;s stake, built since 2023, is capped at about 14-15% with no board seat or voting rights, while Anthropic&#x27;s seven co-founders retain majority voting control (50.1%) through a separate Founder LLC structure.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Treasury Yields Decline but Fed Rate-Hike Prospects in Focus</div>
+        <div class="art-sum">The 10-year Treasury yield fell about 2 basis points to 5.131% on Monday, November 16, 2026, down from a high of 5.174% reached the prior Friday, while the 2-year yield dropped over 3 basis points to 4.84% and the 30-year yield eased to 5.467%; the declines came as investors awaited remarks from Federal Reserve Chairman Kevin Warsh on technology&#x27;s impact on productivity and jobs. Despite the dip in yields, traders are now pricing in a 100% probability of a Fed rate hike at the December 9 meeting, with about 89% odds favoring a quarter-point increase and roughly 14% odds of a half-point move. The shift follows a sharp run-up in yields the prior week, including their biggest surge in about 19 months, driven by stronger-than-expected inflation and producer-price data that reinforced expectations the Fed will need to tighten rather than cut.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Novo Nordisk Shares Rise on Positive Weight-Loss Data, Hemophilia Drug Approval</div>
+        <div class="art-sum">Novo Nordisk shares climbed roughly 2.4-2.7% after the Danish drugmaker unveiled fresh subgroup data from its REDEFINE trials showing early responders to experimental obesity drug CagriSema lost about 25.4% of their body weight, while two REDEFINE 9 doses produced estimated weight reductions of 20.7% and 21% after 68 weeks versus 2% for placebo. The same day, the European Commission granted marketing authorization (November 13, 2026) for Frehemgo (denecimig), Novo&#x27;s new haemophilia A prophylaxis drug, based on the FRONTIER2 trial, which showed significantly lower annualized bleeding rates than prior clotting-factor treatments; the drug can be dosed weekly, every two weeks, or monthly via a pre-filled pen, with European launches planned for 2027. Novo also released real-world data showing patients on its oral Wegovy pill lost about 6% of body weight within three months.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Johnson &amp; Johnson to Buy Ollin Biosciences for $2.2 Billion</div>
+        <div class="art-sum">Johnson &amp; Johnson agreed to acquire Texas-based biotech Ollin Biosciences for $2.2 billion upfront, with up to roughly $1.13 billion more in potential regulatory and commercial milestone payments, in a deal announced November 16, 2026 and expected to close before year-end. The acquisition brings J&amp;J Ollin&#x27;s lead asset OLN324, a bispecific antibody in Phase 3 development for wet age-related macular degeneration and diabetic macular edema that is designed to compete with Roche&#x27;s Vabysmo, with early trial data suggesting faster and larger vision improvements than the incumbent drug. As part of the deal, Blackstone Life Sciences will pay J&amp;J $750 million over several years, contingent on closing, to fully fund OLN324&#x27;s Phase 3 trials. Ollin was founded in 2023 and is backed by ARCH Venture Partners and Mubadala Capital.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Japan Fires Off Verbal Warning on Yen as Weakness Stokes Intervention Alert</div>
+        <div class="art-sum">The Japanese yen traded near the psychologically sensitive 160-per-dollar level in mid-November 2026, with the dollar climbing as high as 159.94 yen, prompting Tokyo to escalate verbal intervention warnings. Atsushi Mimura, Japan&#x27;s top currency diplomat, said on November 12 that &quot;currency moves over the past few days have been too fast&quot; and warned markets not to forget the summer&#x27;s record intervention, when Japan and the U.S. jointly spent roughly 15.4 trillion yen (about $79.4 billion) on July 30-31 and August 3 — the first joint U.S.-Japan intervention in 28 years. Finance Minister Satsuki Katayama said Tokyo would stay in close contact with U.S. counterparts and stands ready to act against &quot;excessive and rapid&quot; moves, while the yen&#x27;s slide has been driven largely by broad dollar strength tied to hawkish Fed rate expectations, compounded by a weaker-than-expected Japanese GDP reading (down 0.1%). As of November 16, no new intervention had been confirmed — only verbal warnings.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Activist Calls on Landlord Invitation Homes to Sell Houses ‘One at a Time’</div>
+        <div class="art-sum">Activist hedge fund Land &amp; Buildings Investment Management, led by Jonathan Litt and holding less than 1% of Invitation Homes&#x27; shares, went public on November 16, 2026 with an open letter urging the single-family rental landlord to keep disposing of houses &quot;one at a time&quot; rather than in bulk, after private talks with management stalled. The fund argues Invitation Homes shares trade well below its estimated net asset value of roughly $45 per share, and it wants the Dallas-based company to return at least $2 billion annually to shareholders via buybacks or dividends funded by individual home sales, while also scaling back acquisitions and development. Land &amp; Buildings additionally proposed that Invitation Homes offer tenants a 6% rebate toward a down payment to help them buy the homes they rent, citing pending legislation it says will limit the company&#x27;s room to expand further.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Gold Futures Kept Down by Strong U.S. Dollar</div>
+        <div class="art-sum">Gold futures for December delivery fell to around $3,869.70 an ounce on Monday, November 16, 2026, down about 0.4% and touching their lowest level in over a year, as a strengthening U.S. dollar and rising 10-year Treasury yields weighed on the metal. The pressure built through the first half of November: gold had slid roughly 1% on November 6 after a strong U.S. payrolls report boosted the dollar and yields, reversing gains made just days earlier when Democratic midterm election wins briefly pushed gold above $4,000 an ounce as the dollar softened. Markets now see the Federal Reserve as increasingly likely to raise rates in December following accelerating U.S. inflation, a combination that has further strengthened the dollar and made dollar-priced gold more expensive for foreign buyers, deepening the metal&#x27;s decline from its 2026 highs.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Asian Currencies Consolidate, But May Be Weighed by Risk-Off Sentiment</div>
+        <div class="art-sum">Asian currencies were mostly steady to weaker on Monday, November 16, 2026, as a risk-off mood tied to a sharp Wall Street selloff in tech stocks spread across the region; the yen jumped as much as 0.6% to around 157.54 per dollar, outperforming other G-10 currencies as traders sought safety, while the Taiwan dollar broke through the 33-per-dollar level amid an AI-stock rout that hit chip-sensitive currencies like the South Korean won. The pressure followed a roughly 12% plunge in U.S. semiconductor stocks, which raised the risk of fresh foreign-equity outflows from Taiwan and South Korea, and the dollar index (DXY) climbed toward about 101.6 on the safe-haven bid. Commodity-linked currencies were also hit, with NZD/USD trading around 0.5525-0.5530, its weakest level since April 2025, after disappointing Chinese economic data added to the broader risk aversion.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Warren Buffett to Donate $5.4 Billion of Berkshire Hathaway Stock to Family Foundations</div>
+        <div class="art-sum">Warren Buffett, 96-year-old chairman emeritus of Berkshire Hathaway, converted 6,150 Class A shares into 9,225,000 Class B shares valued at about $5.47 billion and donated them on November 16, 2026 to four family foundations — roughly $2.19 billion to the Susan Thompson Buffett Foundation and about $1.09 billion each to the three foundations run by his children. The gift, more than four times last year&#x27;s donation, is part of his pledge to give away his entire remaining Berkshire stake (he still holds about 13% of the company) by December 31, 2034, and brings his cumulative lifetime contributions to the family foundations above $29 billion. Buffett accompanied the announcement with a Thanksgiving letter reaffirming confidence in successor Greg Abel.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Banks Race to Keep Up as AI Bots Use Credit Cards</div>
+        <div class="art-sum">JPMorgan Chase has begun blocking AI shopping agents from making purchases with its customers&#x27; credit cards, even as rival banks including Bank of America, Capital One, and Citigroup allow agent-initiated purchases when customers opt in, according to PYMNTS. Mastercard launched its &quot;Agent Pay&quot; system in April 2026, letting AI agents receive virtual credit cards governed by bank-issued &quot;agentic tokens&quot; that cap spending within preset parameters, while Visa countered with &quot;Intelligent Commerce Connect,&quot; announced in September 2026, which lets merchants accept AI-agent payments across both Visa and non-Visa cards through a single integration. Visa and Mastercard are also cooperating with Stripe and Google on open standards such as the Agentic Commerce Protocol (ACP) and Agent Payments Protocol (AP2) to govern how AI bots authorize and process purchases. Banks remain wary because early data show AI shopping agents return more purchased goods and fall for more scams than human shoppers, including paying merchants that never ship the goods.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 21 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Trump Administration to Name Nvidia Among AI ‘National Champions’</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Nvidia’s Days as an Open Checkbook for the AI Economy Are Numbered</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Campaign to Bring Back Jensen Huang as Nvidia CEO</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Intel Sued by Investors After 29% Stock Plunge</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Big Tech Needs to Spread Its Bets on Data Centers</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Exclusive | EQT Ventures Invests $10 Million in Enterprise AI Company Edra</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">I Came Home to Find My Door Kicked In. It Turned Into My Own Personal Whodunit.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">European Stock Indexes Mixed at Start of Crucial Week</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Quebecor Makes $21.96 Billion Bid for Telus in Canadian Telecom Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Major U.S. Stock Indexes Slide as Nvidia Fallout Continues to Ripple Through Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Asian Equities Drop as U.S. Chip Selloff Spills Over</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">The Investors Set to Win Big in Anthropic’s IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">U.S. Treasury Yields Decline but Fed Rate-Hike Prospects in Focus</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Novo Nordisk Shares Rise on Positive Weight-Loss Data, Hemophilia Drug Approval</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">Johnson &amp; Johnson to Buy Ollin Biosciences for $2.2 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">Japan Fires Off Verbal Warning on Yen as Weakness Stokes Intervention Alert</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Activist Calls on Landlord Invitation Homes to Sell Houses ‘One at a Time’</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">Gold Futures Kept Down by Strong U.S. Dollar</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">Asian Currencies Consolidate, But May Be Weighed by Risk-Off Sentiment</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">20</span><span class="toc-t">Warren Buffett to Donate $5.4 Billion of Berkshire Hathaway Stock to Family Foundations</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">21</span><span class="toc-t">Banks Race to Keep Up as AI Bots Use Credit Cards</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">111 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">95 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">72 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">71 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">52 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-15.html">← Older · November 15, 2026 · Jensen Huang’s Downfall</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

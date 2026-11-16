@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 10, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-10-27.html">‹ Oct 27</a> &nbsp;·&nbsp; <a href="digest-2026-11-11.html">Nov 11 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 111</div>
+    <div class="issue-date">November 10, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 3</span><span class="tab" data-key="finance">Finance · 3</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Jensen Huang’s Affair Spiraled Into a National Security Nightmare</div>
+        <div class="art-sum">Nvidia CEO Jensen Huang on November 8, 2026, told staff in an internal email that he&#x27;d had an affair with a woman identified as Alice Huang, a representative of Megaspeed with ties to Huawei, prompting Nvidia&#x27;s board to open an independent investigation led by a committee of outside directors; U.S. intelligence officials had reportedly identified her as a Chinese intelligence asset as early as October 2025 and informed President Trump, who took no action at the time. Nvidia&#x27;s board said it had &quot;no reason to believe&quot; national security or company secrets were compromised, but the scandal escalated into Huang&#x27;s resignation effective November 12, 2026, with an agreement to testify before House committees before Thanksgiving (November 26). On November 16, 2026, Trump told reporters he saw no national security risk from the affair and was comfortable with Huang potentially returning as CEO, while a House committee negotiation over his testimony continued.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How Hackers Steal Millions in AI Computing Power</div>
+        <div class="art-sum">I now have solid, non-WSJ confirmation of this story with concrete figures and dates. Hackers have been breaking into cloud-hosting and AI developer platforms to steal API keys and credentials, then running up massive unauthorized usage charges on victims&#x27; accounts — a technique security researchers call &quot;LLMjacking.&quot; In one case, attackers exploited a previously unknown vulnerability in Railway&#x27;s build infrastructure starting October 20, 2026, eventually decrypting customer environment variables across up to 100,000 workspaces and racking up an estimated $740,000 in fraudulent AI usage charges that Railway had to absorb. The Railway incident was part of a wider wave — dubbed &quot;Black October&quot; by researchers — in which at least a dozen AI developer, hosting, and inference platforms (including Zeabur, OpenCode, Northflank, Fireworks AI, and NVIDIA Brev) were breached between early October and early November 2026, with stolen keys often validated and exploited within minutes; in some cases two stolen Amazon Bedrock keys alone generated roughly 800,000 and 1.7 million model calls. Researchers also describe an emerging underground resale market, with &quot;LLM Mixers&quot; pooling stolen keys and selling access to over 30 LLM providers.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Law Firm Wachtell Lipton to Lead Nvidia Internal Investigation</div>
+        <div class="art-sum">Nvidia&#x27;s independent board members retained law firm Wachtell, Lipton, Rosen &amp; Katz, along with former acting U.S. Attorney for the Southern District of New York Joon H. Kim, on November 10, 2026, to lead an independent investigation into CEO Jensen Huang and whether company secrets or national security were compromised. The probe followed Huang&#x27;s admission of an affair with a woman reportedly linked to Chinese intelligence, as detailed in prior reporting by the New York Times and Financial Times, amid broader scrutiny of Nvidia&#x27;s chip sales to Chinese companies. The situation escalated quickly: on November 12, 2026, Nvidia&#x27;s board announced Huang had resigned as President, CEO, and board member effective immediately, with CFO Colette Kress named interim CEO and Harvey C. Jones appointed as the board&#x27;s first-ever independent Chair.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic’s IPO Is the Signal Amid the AI Noise</div>
+        <div class="art-sum">Anthropic filed an amended S-1 on November 10, 2026, and is set to price its IPO on Nasdaq under the ticker ANT on November 18, with shares expected to begin trading November 19, offering 825 million shares in a range of $70 to $78 apiece. At that range the deal would raise more than $64 billion and value the company at roughly $1.4 trillion on a fully diluted basis. The filing showed revenue surging to $33.2 billion in the first nine months of 2026, a jump of more than 1,200% year-over-year, driven by demand for Claude and its coding tools, with third-quarter revenue alone reaching $16.8 billion. Despite the growth, Anthropic disclosed roughly $80 billion in first-half losses and future compute obligations in the hundreds of billions of dollars, raising investor questions about whether revenue can outpace its massive computing costs.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">How Boise Became One of America’s Hottest Rental Markets</div>
+        <div class="art-sum">Boise, Idaho has emerged as one of the fastest-rising rental markets in the country, with average apartment rent reaching $1,585 in November 2026, up roughly 8.1% year-over-year, while Apartment List pegs the annual increase even higher at around 16% over the first nine months of 2026, far outpacing the 4.1% Idaho state average and the roughly flat-to-negative national rate. Two-bedroom units in the city now average $1,690, up 17% from a year earlier, and one-bedrooms average $1,450, up about 11.5%. Among the nation&#x27;s 100 largest cities, only San Francisco and Oakland posted faster rent growth than Boise over the past year, a reversal from the slower 4.8% pace Boise saw in the same period of 2025.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic to Seek $1.3 Trillion Valuation in IPO</div>
+        <div class="art-sum">Anthropic is targeting a roughly $1.3 trillion valuation for its initial public offering, planning to offer 825 million shares priced between $70 and $78 each, with pricing expected around November 18 and trading on the Nasdaq Global Select Market under the ticker &quot;ANT&quot; set to begin November 19, 2026. The company has secured $26 billion in commitments from seven major tech firms—AMD, Broadcom, Google, Micron, Microsoft, Nvidia, and TSMC—who agreed to buy stock at the IPO price, and Anthropic estimates the IPO plus private placement could generate roughly $84.6 billion in net proceeds at the midpoint share price. The targeted valuation is notably below the $2 trillion figure investors had previously floated, reflecting some pullback in the ask.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Toyota’s Scion Brand Returns With Japan’s Forbidden-Fruit Minitrucks</div>
+        <div class="art-sum">Toyota is reviving its Scion brand in late 2027 with the KEI-01, a U.S.-legal kei-style minitruck built on the classic Japanese formula of a 660cc three-cylinder engine, four-wheel drive, and a compact body roughly 11 feet long; it will be assembled at Toyota&#x27;s Indiana plant, where the company plans to invest $34 million and add 50 jobs, with the truck imported partly as a knockdown kit from Japan to meet Low-Speed Vehicle rules (25-mph top speed) and FMVSS regulation 500. The pickup is expected to cost just under $20,000, carry up to 600 pounds, and will initially be sold through a limited set of dealers or fleet channels to farmers, construction crews, and fleet operators rather than the general public. Scion was discontinued as a Toyota brand in 2016, and this kei-truck launch marks its first return to the U.S. market in roughly a decade.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Maybelline Redefines ‘Maybe’ in a Refresh of Its Classic Catchphrase</div>
+        <div class="art-sum">Maybelline New York has retired its 35-year-old slogan &quot;Maybe she&#x27;s born with it. Maybe it&#x27;s Maybelline&quot; (introduced in 1991) for a new version, &quot;Maybe. We&#x27;re born with it. Maybe. It&#x27;s Maybelline,&quot; swapping &quot;she&#x27;s&quot; for &quot;we&#x27;re&quot; and adding periods to recast &quot;maybe&quot; as a declaration rather than a question. The brand unveiled the refreshed tagline around November 11-16, 2026, alongside a new campaign called &quot;The Beauty of Infinite Possibility&quot; fronted by global ambassador Miley Cyrus. Maybelline says the change extends the line&#x27;s meaning from one woman to all women, framing &quot;beauty&quot; as something open to interpretation and possibility rather than a fixed trait. Reaction has been mixed, with some outlets like Forbes calling the new phrasing &quot;polarizing&quot; compared with the &quot;iconic&quot; original.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">A 55-Year-Old Film That Offended Everyone Is Back—and This Time It’s a Hit</div>
+        <div class="art-sum">Ken Russell&#x27;s 1971 film &quot;The Devils,&quot; long banned, cut, and censored for its graphic depictions of sex, violence, and religious blasphemy, returned to U.S. theaters on October 16, 2026, via Warner Bros.&#x27; new Clockwork imprint in a fully restored, uncut 4K director&#x27;s cut — the first NC-17 release in Warner Bros.&#x27; 103-year history. The one-week limited run, opening in 350 North American locations, grossed over $1.7 million for a per-screen average of $4,925, outperforming all but two other films in the top 10 that week. Audience demand was strong enough that distributors extended the engagement indefinitely, with the film reportedly topping $3.3 million domestically; a U.K. theatrical release followed on October 30, timed for Halloween.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">‘Avedon’ Review: Netflix’s Documentary on a Defining Portraitist</div>
+        <div class="art-sum">&quot;Avedon,&quot; directed by Ron Howard, premiered on Netflix in November 2026 as a documentary profile of photographer Richard Avedon, drawing on previously unseen archival material and interviews with friends, family, and peers to trace his career turning head-on portraiture into a recognized art form. The film has been met with widespread critical acclaim, holding a Metascore of 82 (&quot;universal acclaim&quot;) based on nine critic reviews aggregated by Metacritic as of mid-November 2026. Reviewers from outlets including Variety and RogerEbert.com praised its use of hundreds of Avedon&#x27;s photographs and its portrait of the man behind the camera, though some, including Variety, noted Howard&#x27;s &quot;safe&quot; directorial approach keeps the photographer&#x27;s more complex edges at a distance.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">How Jensen Huang’s Affair Spiraled Into a National Security Nightmare</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">How Hackers Steal Millions in AI Computing Power</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Law Firm Wachtell Lipton to Lead Nvidia Internal Investigation</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Anthropic’s IPO Is the Signal Amid the AI Noise</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">How Boise Became One of America’s Hottest Rental Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Anthropic to Seek $1.3 Trillion Valuation in IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Toyota’s Scion Brand Returns With Japan’s Forbidden-Fruit Minitrucks</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">Maybelline Redefines ‘Maybe’ in a Refresh of Its Classic Catchphrase</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">A 55-Year-Old Film That Offended Everyone Is Back—and This Time It’s a Hit</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">‘Avedon’ Review: Netflix’s Documentary on a Defining Portraitist</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">111 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">95 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">71 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-10-27.html">← Older · October 27, 2026 · Banks, Blackstone Form $63 Billion Financing Vehicle for Broadcom AI Tech</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
