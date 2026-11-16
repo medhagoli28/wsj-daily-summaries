@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 5, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-04.html">‹ Nov 4</a> &nbsp;·&nbsp; <a href="digest-2026-11-06.html">Nov 6 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Thursday Issue · No. 115</div>
+    <div class="issue-date">November 5, 2026</div>
+    <div class="issue-sub">8 stories across tech, markets &amp; finance — a 5-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 8</span><span class="tab" data-key="tech">Tech · 2</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">How the Data Center Backlash Could Play Into the Hands of Big Tech</div>
+        <div class="art-sum">Voters in at least 38 jurisdictions passed bans or restrictions on new data centers on Election Day in early November 2026, part of a broader backlash driven by concerns over noise, water use, and higher electricity bills — a Washington Post/other polling found roughly 7 in 10 Americans oppose new data centers in their communities, and roughly $64 billion in data center projects have been blocked or delayed over the past two years. Analysts and reporting (Axios, TechCrunch) note this regulatory friction raises the barrier to entry for new projects while established players like Amazon, Microsoft, Google, and Meta — which already have sites permitted, built, or under construction — are better positioned to weather the pushback and even acquire stalled projects cheaply, effectively entrenching their competitive advantage. In response, companies including Google, Amazon, Meta, and Microsoft have begun offering communities more money, transparency, and concessions to ease opposition, according to Fortune and Axios.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">HP Taps Former GSK Executive Emma Walmsley as Next CEO</div>
+        <div class="art-sum">HP Inc.&#x27;s board named Emma Walmsley as its next chief executive, effective January 4, 2027, succeeding Bruce Broussard, who has been interim CEO since February 2026; the announcement came November 4, 2026, ending a roughly monthlong search. Walmsley led pharmaceutical giant GSK as CEO from April 2017 to December 2025 and has sat on Microsoft&#x27;s board for seven years, but she arrives at HP with no prior hardware or tech-industry experience. Her mandate includes reviving a sluggish PC business and positioning HP to capture growing demand for AI-enabled devices.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Americans Cut Back on Boats and RVs—but Can’t Stop Buying Harley-Davidsons</div>
+        <div class="art-sum">New boat sales are forecast to drop 15% in 2026, with retail sales down 8.6% to 215,736 units on a rolling 12-month basis through November 2025, while RV wholesale shipments are projected by the RVIA to fall roughly 8.2% to between 300,000 and 328,100 units for the year amid even steeper year-over-year declines reported earlier in 2026. Harley-Davidson, by contrast, posted a 9% jump in North American retail motorcycle sales in its third quarter of 2026 (reported October 29, 2026), marking a fourth consecutive quarter of year-over-year growth, and the company raised its full-year 2026 guidance to global retail sales and wholesale shipments of 135,500 to 139,000 units. Analysts attribute the boat and RV slump to higher financing costs, inflation, and more cautious consumer confidence around big-ticket discretionary purchases, even as Harley&#x27;s turnaround—driven by strength in its Trike and Softail lines—bucks that broader pullback.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">A Soldier Cut Off His Own Foot to Survive. Then Came a Daring Drone Rescue.</div>
+        <div class="art-sum">Ukrainian soldier Kostiantyn Vlasenko, 49, amputated his own frostbitten and gangrenous foot to survive after being wounded by Russian drone-dropped munitions that killed his comrade, then spent roughly 491 days stranded near the front line before a six-rotor heavy-lift drone extracted him on October 4, 2026, carrying him about 70 meters into the air and 15 kilometers to safety. Ukrainian commanders called it the first known aerial drone rescue of a wounded soldier in the war; Vlasenko later met Prince Harry and recounted being &quot;on my own for more than 200 days.&quot; The operation required coordinated military support to shield the rescue drone from interception by Russian aircraft.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Major Investors Are Skeptical Anthropic IPO Can Achieve $1.5 Trillion Valuation</div>
+        <div class="art-sum">Major investors told CNBC and Reuters in early November 2026 that Anthropic&#x27;s hoped-for $1.5 trillion IPO valuation was looking like a &quot;stretch&quot; after a broader AI stock sell-off, with some predicting a more realistic range of $1 trillion to $1.25 trillion. By mid-November, Anthropic formally targeted a lower valuation of up to roughly $1.02 trillion in its IPO filing, about half the $2 trillion figure once floated earlier in the process. Reuters reported investors cited slowing revenue growth and the company&#x27;s massive infrastructure spending commitments as reasons to push for a reduced price, while the IPO itself is expected to raise over $64 billion at the top of its range. The pullback reflects cooling Wall Street appetite for AI valuations more broadly amid the recent market correction in AI-related stocks.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Wall Street Gets $2.5 Trillion AI Reality Check With Historic Rout of Tech Stocks</div>
+        <div class="art-sum">A Wall Street sell-off on Thursday, November 5, 2026 wiped out roughly $2.5 trillion in market value as investors reassessed the AI buildout following Democratic gains in Tuesday&#x27;s midterm elections, including in Texas, a hub for planned data centers; the tech-heavy Nasdaq posted its worst day since April 2025. Nvidia shares fell more than 9%, the &quot;Magnificent Seven&quot; mega-cap tech stocks lost roughly $1 trillion combined in the single session, and the VIX volatility index surged about 70%, its biggest one-day jump in nearly two years, reaching a seven-month high. The rout spread overnight into Asian and European markets, and by Friday, November 6, US stocks staged a fragile, reflex-driven rebound, though analysts said the episode left investors questioning whether the political and regulatory backdrop that fueled the AI rally had shifted.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Opinion | Trump Is the Author of the Ruin</div>
+        <div class="art-sum">Peggy Noonan&#x27;s WSJ opinion column &quot;Trump Is the Author of the Ruin,&quot; published November 5-6, 2026, argued Trump bears responsibility for the GOP&#x27;s midterm losses, landing amid exit polling showing roughly 60-65% of voters blamed Trump&#x27;s policies for making the economy worse and for high prices; an AP-NORC survey similarly found Trump&#x27;s economic approval hitting a new low, with a separate Reuters/Ipsos poll putting the share of Americans faulting his policies for rising prices at 78%. NBC News&#x27; exit poll data showed many voters treated the November 3, 2026 midterms as a direct rebuke of Trump, with 44% saying their personal finances were worse than two years earlier when he returned to office. Noonan&#x27;s column itself is paywalled on WSJ, but its framing — that Trump squandered a strong economic hand and is now the author of his party&#x27;s decline — is corroborated by the broader polling picture reported elsewhere.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The 2027 Tax Brackets Are Here. See Where You Land.</div>
+        <div class="art-sum">The IRS announced new 2027 federal income tax brackets on November 10, 2026, keeping the seven rates unchanged at 10%, 12%, 22%, 24%, 32%, 35%, and 37% while raising the income thresholds roughly 3.2% for inflation, pushing the top 37% bracket to kick in above $768,700 for single filers. The standard deduction rises to $16,600 for single filers, $33,200 for married couples filing jointly, and $24,925 for heads of household. The adjustments touch nearly 70 provisions, including an increase in the unified gift and estate tax exemption to $15.48 million and a rise in the annual gift tax exclusion to $20,000 per recipient. These changes apply to tax year 2027, meaning they&#x27;ll affect returns filed in early 2028.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 8 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">How the Data Center Backlash Could Play Into the Hands of Big Tech</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">HP Taps Former GSK Executive Emma Walmsley as Next CEO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Americans Cut Back on Boats and RVs—but Can’t Stop Buying Harley-Davidsons</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">A Soldier Cut Off His Own Foot to Survive. Then Came a Daring Drone Rescue.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Exclusive | Major Investors Are Skeptical Anthropic IPO Can Achieve $1.5 Trillion Valuation</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Wall Street Gets $2.5 Trillion AI Reality Check With Historic Rout of Tech Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Opinion | Trump Is the Author of the Ruin</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">The 2027 Tax Brackets Are Here. See Where You Land.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">117 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">80 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">76 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-04.html">← Older · November 4, 2026 · The Election Day Revolt That Threatens America’s AI Boom</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

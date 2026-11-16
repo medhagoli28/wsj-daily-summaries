@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 7, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-06.html">‹ Nov 6</a> &nbsp;·&nbsp; <a href="digest-2026-11-10.html">Nov 10 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Saturday Issue · No. 117</div>
+    <div class="issue-date">November 7, 2026</div>
+    <div class="issue-sub">6 stories across tech, markets &amp; finance — a 5-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 6</span><span class="tab" data-key="tech">Tech · 1</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">TikTok Gets EU Warning Over ‘For You Feed’ Content</div>
+        <div class="art-sum">The European Commission said on Friday, November 13, 2026, that TikTok&#x27;s personalized &quot;For You&quot; feed shows preliminary evidence of breaching the EU&#x27;s Digital Services Act by creating a &quot;rabbit hole effect&quot; that repeatedly exposes users to content about sadness, isolation, or body image, risking harm to mental well-being, especially for minors. TikTok disputes the findings, telling Reuters the Commission&#x27;s statements are &quot;fundamentally inaccurate and distort our platform&#x27;s architecture,&quot; while facing potential fines of up to 6% of its global annual turnover if it doesn&#x27;t comply. In response, TikTok says it will let EU users turn off feed personalization and will stop showing personalized ads to users aged 13-17.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Is AI Taking White-Collar Jobs? What the Latest Numbers Tell Us</div>
+        <div class="art-sum">Professional and business services — the sector covering lawyers, accountants, and consultants — added 70,000 jobs in October 2026, the category&#x27;s largest monthly gain since July 2022, even as ADP reported 27,000 job losses in that same sector two days earlier, underscoring how conflicting the data remains. Challenger, Gray &amp; Christmas tallied 121,401 U.S. job cuts explicitly attributed to AI from January through October 2026. The pain is concentrated unevenly: document-preparation services cut employment 17% over the year, telephone call centers and PR agencies each lost 4.7%, and advertising agencies shed 3.9%, while payroll data shows employment for 22-to-25-year-olds in the most AI-exposed occupations down roughly 13% relative to older peers even as the overall unemployment rate has barely moved. Most broad-based research cited this year, including from the Yale Budget Lab and the Federal Reserve, still finds no economy-wide AI effect on unemployment, suggesting the disruption so far is concentrated in entry-level and specific white-collar niches rather than a broad collapse.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Election Drubbing Complicates Vance’s Calculation on Whether to Run in 2028</div>
+        <div class="art-sum">Republicans lost control of both the Senate and House in this week&#x27;s midterm elections, and the party also lost gubernatorial races in Virginia (Abigail Spanberger over Winsome Earle-Sears) and New Jersey (Mikie Sherrill over Jack Ciattarelli) by wider margins than Trump&#x27;s 2020 deficits in those states, prompting donors and operatives to question Vice President JD Vance&#x27;s 2028 prospects. Vance&#x27;s odds of winning the 2028 GOP nomination dropped about seven points on Kalshi the morning after the midterms, with his odds of winning the presidency also falling a few points on Polymarket, as some confidants reportedly urged him to consider sitting out and at least one major New York fundraiser began fielding calls from donors unwilling to back him. Rivals including Marco Rubio, Ted Cruz, Ron DeSantis, and Glenn Youngkin are reportedly making early moves as Vance, tied closely to the unpopular administration, faces questions about whether the losses have permanently dented his standing. Vance himself, as of November 13-16, 2026, has told allies he still intends to run, arguing the GOP needs to focus on affordability ahead of the 2026 midterms.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The New Stars and Presidential Hopefuls Shaking Up Democrats’ 2028 Field</div>
+        <div class="art-sum">Following the November 2026 midterm elections, Georgia Senator Jon Ossoff emerged as the surprise frontrunner in Democrats&#x27; 2028 presidential conversation, leading Kalshi&#x27;s prediction market at 18% and topping a progressive convention straw poll with 38.4% of votes, even though he has told CNN he has no interest in running. Rep. Alexandria Ocasio-Cortez, 36, has also surged to around 9.9%–16.6% depending on the market or poll, while California Gov. Gavin Newsom&#x27;s odds have fallen sharply from roughly 37% to about 11-12% as his once-dominant standing erodes. Other Democrats boosted by strong midterm results include Pennsylvania Gov. Josh Shapiro, Illinois Gov. JB Pritzker, Kentucky Gov. Andy Beshear, and former Transportation Secretary Pete Buttigieg, with Buttigieg, Newsom, and AOC placing as the top three in a recent early-state primary poll. Despite the midterm momentum for several contenders, analysts note Democrats still lack a clear frontrunner heading into what is expected to be a crowded 2028 primary.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The New Swing Voter: Young, Underemployed and Deeply Disillusioned</div>
+        <div class="art-sum">Americans ages 18 to 29 swung toward House Democrats by more than 20 percentage points in the November 2026 midterms compared with 2024, with young male voters moving roughly 40 points leftward and Latino men swinging about 51 points, according to AP VoteCast/Voter Poll data cited in post-election coverage. Roughly half of voters under 30 said they were financially worse off than two years earlier, the highest share of any age group, as many described working multiple jobs or accepting work below their qualifications amid a soft entry-level job market. Analysts and young political organizers, including 21-year-old Jayden D&#x27;Onofrio of the Florida Future Leaders PAC, describe this cohort as a true swing bloc with &quot;no alliance&quot; to either party, driven less by ideology than by frustration that milestones like home ownership and stable full-time work feel increasingly out of reach. The shift marked the sharpest realignment of any age group in the 2026 midterms.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The Growing Push to Protect Trophy Hunting in Africa</div>
+        <div class="art-sum">I have enough solid, non-WSJ reporting on this story (Safari Club International&#x27;s push to loosen trophy-import restrictions) to write the brief. Safari Club International, a hunting advocacy group, petitioned U.S. Interior Secretary Doug Burgum in May 2025 to roll back Endangered Species Act import restrictions on sport-hunted trophies of African elephants, lions, and argali sheep, arguing the current rules are &quot;unnecessary, overly burdensome and inconsistent with regulatory reform initiatives&quot; under the Trump administration. The group&#x27;s proposal would eliminate the requirement that U.S. Fish and Wildlife Service make an &quot;enhancement finding&quot; — that an elephant trophy import benefits the species&#x27; survival — before issuing a permit, a rule put in place under a 2024 revision to the ESA&#x27;s 4(d) rule. In August 2026, SCI president W. Laird Hamberlin submitted follow-up comments calling the elephant rule&#x27;s annual certification process for African range countries &quot;duplicative&quot; and urging its elimination. Separately, reporting this year found the administration permitted more than 300 elephant trophy imports in 2025, even as President Trump had previously called trophy hunting a &quot;horror show.&quot;</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 6 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">TikTok Gets EU Warning Over ‘For You Feed’ Content</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">2</span><span class="toc-t">Is AI Taking White-Collar Jobs? What the Latest Numbers Tell Us</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Election Drubbing Complicates Vance’s Calculation on Whether to Run in 2028</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">The New Stars and Presidential Hopefuls Shaking Up Democrats’ 2028 Field</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">The New Swing Voter: Young, Underemployed and Deeply Disillusioned</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">6</span><span class="toc-t">The Growing Push to Protect Trophy Hunting in Africa</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">75 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-06.html">← Older · November 6, 2026 · Quantum Computers Are Poised to Crack Encryption. AI Could Beat Them to It.</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

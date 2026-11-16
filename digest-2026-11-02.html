@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 2, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-01.html">‹ Nov 1</a> &nbsp;·&nbsp; <a href="digest-2026-11-03.html">Nov 3 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Monday Issue · No. 112</div>
+    <div class="issue-date">November 2, 2026</div>
+    <div class="issue-sub">16 stories across tech, markets &amp; finance — a 11-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 16</span><span class="tab" data-key="tech">Tech · 2</span><span class="tab" data-key="markets">Markets · 8</span><span class="tab" data-key="finance">Finance · 6</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Shopping Bots Are Coming for Amazon</div>
+        <div class="art-sum">Amazon is racing to control the rise of autonomous AI shopping agents: it sued Perplexity in November 2026 over the Comet browser agent&#x27;s ability to make purchases on its marketplace, citing computer-fraud claims and a degraded shopping experience, while also blocking Meta&#x27;s new &quot;Muse&quot; shopping agent from its site. At the same time, Amazon has leaned into building its own agentic tools — it renamed its Rufus chatbot to &quot;Alexa for Shopping&quot; on May 13, 2026 (used by more than 400 million customers in the twelve months through October 29, 2026, with users spending 50% more per order), and in May 2026 AWS launched an &quot;Agentic Shopping Assistant&quot; that lets other retailers deploy a similar AI agent in about 60 days. The tension reflects a broader industry fight: Walmart has taken the opposite approach, opening an &quot;Agent Gateway&quot; that lets outside AI agents (via Anthropic&#x27;s MCP) complete purchases with spending caps of $50-$100, while OpenAI&#x27;s ChatGPT Instant Checkout and Perplexity&#x27;s &quot;Buy for Me&quot; push to let bots transact directly, putting pressure on the roughly $74.4 billion U.S. retail-media ad business that Amazon and Walmart dominate.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Apple’s Growth Machine Is Slowing. High Prices Might Not Save It.</div>
+        <div class="art-sum">Apple&#x27;s fiscal fourth-quarter revenue rose to $478.8 billion for fiscal 2026, up roughly 15% for the year, with iPhone revenue climbing 17% to $57.58 billion in the September quarter, but analysts and reports now flag decelerating growth, with projected iPhone revenue growth of about 14% next quarter down from 22-23% in prior quarters. Apple has responded by raising prices, lifting iPhone prices in September 2026 and separately increasing MacBook and iPad prices as CEO Tim Cook said higher memory and storage costs made increases &quot;unavoidable.&quot; Despite this, Apple&#x27;s stock hit a record high in November 2026, pushing its market cap toward $5 trillion after briefly touching that mark in July 2026, even as analysts at firms like Loop Capital and UBS warn of margin pressure and shipment concerns tied to supply constraints and rising component costs.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">People Are Using AI for Divorce Advice and It’s Driving Their Lawyers Crazy</div>
+        <div class="art-sum">Family lawyers say a growing share of clients are showing up to consultations with legal strategies, draft pleadings, or arguments generated by AI chatbots like ChatGPT, often convinced the advice is sound before a professional ever reviews their case; one survey of 133 family-law attorneys found 80% had received client correspondence or filings they believed were AI-generated. Attorneys describe the chatbot-sourced guidance as frequently inaccurate — for example, one business owner was told by a chatbot he had an &quot;easy case&quot; for lowering spousal support without the bot ever reviewing his financial statements, and nearly two years and two law firms later he was still untangling the fallout. Separately, in February 2026 a federal judge (Jed Rakoff, SDNY) ruled that a litigant&#x27;s chats with a consumer AI chatbot were protected by neither attorney-client privilege nor work-product doctrine, prompting several family-law firms to warn clients that ChatGPT conversations can be discoverable in divorce litigation. Lawyers say the trend is adding cost and friction to cases, as clients often expect their attorney to simply rubber-stamp conclusions they&#x27;ve already reached with a chatbot.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic Investors Push for Cautious Valuation Closer to $1.5 Trillion</div>
+        <div class="art-sum">Large investors planning to buy shares in Anthropic&#x27;s upcoming IPO have pushed the company to target a valuation closer to $1.5 trillion rather than the roughly $2 trillion figure floated earlier, following a sharp sell-off in AI and tech stocks in recent weeks; some investors have said the final price could even land closer to $1 trillion. Anthropic&#x27;s last private valuation was $965 billion, set in a Series H round in May 2026, and reports in mid-August had suggested backers were eyeing $2 trillion or higher for the IPO before sentiment shifted. As of early November 2026, bankers and investors were still negotiating the target range, with $1.5-1.6 trillion emerging as the more cautious consensus figure some large investors are pushing for.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">America’s Multi-Trillion-Dollar AI Buildout Is on the Ballot—and Wall Street Is Watching</div>
+        <div class="art-sum">In the November 3, 2026 U.S. midterm elections, AI data-center spending became a flashpoint, with voters in roughly 10 states deciding on dozens of ballot measures—CNBC and other outlets reported at least 44 such measures nationwide, nearly all of which imposed restrictions or rejected pro-development proposals rather than favoring the industry. Exit polls cited by CBS News found about 76% of voters said they would oppose a data center being built in their community, and concerns over rising electricity bills (a Goldman Sachs analysis cited a projected roughly 6% national increase) were a major driver of that sentiment. Crypto, AI, and online-gambling interests spent more than $377 million trying to influence the midterms, but Wall Street still reacted with a broad, multi-trillion-dollar sell-off in AI stocks following the results, reflecting fears that political backlash could slow the roughly $2.5 trillion in planned AI data-center investment tied to state and local races.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Chip Maker Marvell Agrees to Buy Lumentum in $80 Billion Deal</div>
+        <div class="art-sum">Marvell Technology agreed on November 2, 2026 to acquire optical components maker Lumentum in an all-stock deal valued at about $80 billion in equity and $115 billion in enterprise value including debt, with Lumentum shareholders receiving 4.5 Marvell shares for each Lumentum share. The exchange ratio implies roughly $1,132 per Lumentum share, a premium of about 23.9% over the companies&#x27; unaffected closing prices as of October 28, 2026. Marvell shareholders will own about 67% of the combined company and Lumentum holders about 33%, with the companies citing demand for optical connectivity in AI data centers and projecting a combined $550 billion addressable market and more than $1 billion in annual run-rate cost synergies; the deal is expected to close in the first half of 2028.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Dow Rebounds After Friday’s Selloff as Oil Slides</div>
+        <div class="art-sum">The Dow Jones Industrial Average surged 1,104 points (2.15%) to close at 52,389.75 on Monday, November 9, 2026, rebounding from the prior Friday&#x27;s selloff, while the S&amp;P 500 gained 2.35% and the Nasdaq Composite jumped 2.74%. The rally was fueled by a sharp drop in oil prices, with Brent crude falling 5.85% to $92.57 a barrel and WTI crude sliding 4.38% to $86.85, after comments from President Trump suggested further U.S. military strikes against Iran were unlikely amid talks to end the conflict. Semiconductor stocks led the tech rebound, with the iShares Semiconductor ETF up more than 8%, AMD rising about 13%, and Broadcom climbing nearly 9%, though Nvidia fell roughly 4% following news its board would hire outside counsel to review CEO Jensen Huang&#x27;s ties to a woman identified by U.S. intelligence as a Chinese spy; industrials also outperformed, rising about 4.2%.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Mixed as Percolating AI Fears Offset Oil Relief</div>
+        <div class="art-sum">I have solid, corroborated figures now from AP/Yahoo/CNBC coverage. On Monday, November 2, 2026, the S&amp;P 500 fell 0.5% to 7,541.40 and the Nasdaq Composite dropped 1.1%, while the Dow Jones Industrial Average gained 0.4% (about 213 points) to 51,983.98, as an early rally driven by sliding oil prices gave way to renewed selling in AI and big-tech stocks. Brent crude tumbled 7.6% to $104.77 a barrel on hopes for diplomatic talks to ease the Middle East conflict, lifting airlines and other energy-sensitive sectors and briefly pushing the S&amp;P 500 up as much as 1.1% intraday. Those gains eroded as investors continued to fret that the hundreds of billions of dollars Big Tech is pouring into AI data centers may not generate enough profit to justify the spending, extending a sell-off from the prior week. Despite the tech-driven index declines, roughly seven in ten S&amp;P 500 stocks still ended the day higher.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">This Bond Measure Says Stocks Are Cheap. Don’t Believe It.</div>
+        <div class="art-sum">Treasury yields climbing toward 5% in 2026 have narrowed the gap between stock earnings yields and bond yields to levels last seen in the late 1990s, with the S&amp;P 500&#x27;s equity risk premium compressing to roughly zero or turning negative by some measures, according to Bloomberg-sourced data reported by Fortune on September 29, 2026. As of November 13, 2026, the S&amp;P 500 traded around 18.5 times forward earnings — below its five- and ten-year averages near 19-20x — even as the 10-year Treasury yield pushed to roughly 5.15%-5.24% that week, a combination some analysts read as a signal stocks are undervalued relative to bonds. Critics of that read argue the comparison is flawed because it pits a nominal Treasury yield against a real earnings yield (corporate profits grow with inflation, bond coupons don&#x27;t), so a fairer gauge would stack earnings yield against inflation-protected Treasury (TIPS) yields, a gap that has also narrowed sharply and no longer signals cheap stocks. Ray Dalio separately warned in October 2026 that the earnings-growth cushion stocks have used to absorb rising bond yields is shrinking, leaving less protection if free cash flow weakens.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Trump Family-Linked Mining Venture Aims to Go Public in $2 Billion Deal</div>
+        <div class="art-sum">Kaz Resources, a tungsten mining company with a project in Kazakhstan, is planning to sell shares to the public through a direct U.S. listing as early as next year in a deal valued at roughly $2 billion, giving Donald Trump Jr. and Eric Trump indirect ownership stakes. The U.S. International Development Finance Corporation (DFC) has issued letters of interest to back the project with financing of up to $1.6 billion, part of nearly $2 billion in total federal support the company is seeking. The arrangement has drawn scrutiny from lawmakers including Senator Elizabeth Warren, who has questioned federal agency heads over potential conflicts of interest tied to the Trump sons&#x27; financial stake in a firm positioned to benefit from that government assistance.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">11 of the Best Financial Advisor Companies: Well-Known Fiduciary Investment Firms to Consider</div>
+        <div class="art-sum">This is a WSJ Buy Side advice/listicle piece (a roundup of fiduciary advisor firms), not a reported news story, so there&#x27;s no independent outlet covering the same &quot;11 Best&quot; article — though some of the firms it names have separately publicized their own WSJ Buy Side ratings: Mercer Advisors received WSJ Buy Side&#x27;s 2026 &quot;Best Overall Financial Advisory Firm for High-Net-Worth Individuals&quot; award, Creative Planning was named Buy Side&#x27;s Best Independent RIA in America for comprehensive wealth management, Range Advisory and Savant Wealth Management each received 5-star Buy Side ratings based on criteria like fees, credentials, services, and account minimums, and Captrust and NerdWallet&#x27;s own &quot;Best Financial Advisors for 2026&quot; list cover overlapping ground with similar RIA rankings.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Best Savings Account Rates in November 2026</div>
+        <div class="art-sum">As of November 16, 2026, top-yielding savings accounts are offering between roughly 4.30% and 5.00% APY, according to Forbes Advisor and The College Investor, with Leader Bank and Axos Bank cited among those at 5.00% and Pibank offering 4.40% APY with no minimum balance requirement; CIT Bank, Openbank, and Western Alliance Bank are listed around 4.35%. Accounts with no minimum-balance requirements include EverBank Performance Savings at 4.20% APY for new customers and Marcus Online Savings at 3.50% APY, neither requiring direct deposit or a linked checking account. These rates remain well above the national average and reflect the elevated-but-easing rate environment that has persisted through 2026, though all figures are variable and subject to change.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Best Small-Business Loans in November 2026</div>
+        <div class="art-sum">This is a WSJ &quot;best of&quot; roundup/advice article rather than a reported news story, so there&#x27;s no single matching article elsewhere to attribute it to; however, comparable lender roundups from other outlets confirm the current lending landscape: NerdWallet and LendingTree note the prime rate sits at 7% as of November 2026, with SBA 7(a) variable rates capped at 10.00%–13.50% depending on loan size, while SBA 504 debentures run roughly 6.3%–7.0% fixed and bank/credit union term loans fall in the 7%–10% range; Fundbox and Bluevine are frequently cited for lines of credit up to $250,000 with funding in as little as two days, OnDeck for 1–2 day approvals, and Kiva for interest-free microloans up to $15,000.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Best CD Rates for November 2026</div>
+        <div class="art-sum">The top nationally available CD rate as of November 2026 is 5.00% APY on a 60-month CD from Popular Direct, requiring a $10,000 minimum deposit, while USAlliance Financial leads shorter terms with 5.00% APY on a 1-year CD and 5.05% APY on an 18-month CD; Sallie Mae Bank also offers 5.00% APY on a 5-year CD with a $2,500 minimum. Some credit unions post even higher promotional rates, such as Southland Credit Union&#x27;s 9.00% APY on a 9-month certificate, though that offer is limited to new members in the Los Angeles and Orange County area. Overall, CD rates have been trending upward heading into November 2026 as banks compete for deposits.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Average Business Loan Rates in November 2026</div>
+        <div class="art-sum">Average small business loan rates vary widely by lender and loan type as of November 2026: bank term loans run roughly 6% to 12% APR, SBA 7(a) loans carry variable rates capped between 10% and 13.5% (with fixed rates of 13%-15% on smaller loans under $250,000, based on the current 7% prime rate), and SBA 504 loans priced at the November 5, 2026 debenture sale came in at about 6.58%-6.59% for the CDC portion. Online and alternative lenders quote much higher ranges, from roughly 10% up to 36% APR or more, while business lines of credit typically fall between 8% and 22% APR depending on borrower creditworthiness and collateral. Commercial mortgage/real estate loan rates on November 16, 2026 ranged from about 5.75% to 13.12% overall, with conventional commercial mortgages between 6.41% and 9.40%.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Best Unsecured Business Loans in November 2026</div>
+        <div class="art-sum">This &quot;Best Unsecured Business Loans&quot; headline is a WSJ Buy Side roundup/comparison article, not a news event — it&#x27;s WSJ&#x27;s own editorial content (similar to NerdWallet, Bankrate, and Business.org pieces), and no other outlet is reporting it as a story since it&#x27;s not news-worthy; each outlet (LendingTree, NerdWallet, Business.org, Fit Small Business, Bankrate) publishes its own independent &quot;best of&quot; list rather than covering WSJ&#x27;s specific rankings. Common picks across these comparison sites include Lendio and Biz2Credit (unsecured term loans up to $2,000,000) for overall/large-amount needs, Fundbox for startups, Fora Financial for bad credit, and U.S. Bank&#x27;s Unsecured Quick Loan for same-day funding — but these are independent lists, not corroboration of WSJ&#x27;s specific article.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 16 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">The Shopping Bots Are Coming for Amazon</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Apple’s Growth Machine Is Slowing. High Prices Might Not Save It.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">People Are Using AI for Divorce Advice and It’s Driving Their Lawyers Crazy</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Anthropic Investors Push for Cautious Valuation Closer to $1.5 Trillion</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">America’s Multi-Trillion-Dollar AI Buildout Is on the Ballot—and Wall Street Is Watching</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Chip Maker Marvell Agrees to Buy Lumentum in $80 Billion Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Dow Rebounds After Friday’s Selloff as Oil Slides</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">U.S. Stocks Mixed as Percolating AI Fears Offset Oil Relief</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">This Bond Measure Says Stocks Are Cheap. Don’t Believe It.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Exclusive | Trump Family-Linked Mining Venture Aims to Go Public in $2 Billion Deal</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">11 of the Best Financial Advisor Companies: Well-Known Fiduciary Investment Firms to Consider</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Best Savings Account Rates in November 2026</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Best Small-Business Loans in November 2026</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Best CD Rates for November 2026</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Average Business Loan Rates in November 2026</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Best Unsecured Business Loans in November 2026</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">117 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">99 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">80 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">76 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">75 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">48 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-01.html">← Older · November 1, 2026 · AI Spenders Get Spooked</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

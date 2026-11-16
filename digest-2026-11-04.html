@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 4, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-03.html">‹ Nov 3</a> &nbsp;·&nbsp; <a href="digest-2026-11-05.html">Nov 5 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 114</div>
+    <div class="issue-date">November 4, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 5</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 1</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Election Day Revolt That Threatens America’s AI Boom</div>
+        <div class="art-sum">In the November 4, 2026 midterms, voters rejected AI data-center expansion in roughly 38 of 39 fully counted local ballot measures nationwide, with restriction-side support averaging about 77% of the vote, according to Stateline and CNBC. A CNBC poll found 56% of voters called data centers a &quot;crucial or major&quot; factor in their vote, and 76% said they would oppose a new data center in their own community. The backlash also hit Congress: Democrat Zack Mullock unseated longtime GOP Rep. Jeff Van Drew in New Jersey&#x27;s Cape May-area district, and Shannon Taylor defeated Rep. Rob Wittman in Virginia, both after campaigning against data-center buildout, while two Ohio and Wisconsin Republican House candidates lost after being branded &quot;Data Center Derek&quot; and &quot;DC Derrick&quot; by opponents.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Google to Invest $15 Billion in Malaysia Over Two Years</div>
+        <div class="art-sum">Google announced on November 4, 2026, that it will invest $15 billion in Malaysia over 2027-2028 to expand data center infrastructure amid surging AI demand, building on a prior $2 billion commitment made in 2024. The funding will support new energy-efficient data center campuses in Selangor and Negeri Sembilan, alongside 1GW of clean energy capacity, adding to Google&#x27;s existing Elmina Business Park facility in Selangor. Google estimates the construction phase will add an average of $1.1 billion annually to Malaysia&#x27;s GDP, with the completed facilities supporting more than 9,000 long-term local jobs at wages roughly 45% above the national median. Malaysia already accounts for more than half of all data center capacity under construction in Southeast Asia, and Prime Minister Anwar Ibrahim publicly welcomed the investment.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">OpenAI Had ‘Rough’ First Half of Year Before Coding Takeoff, Brockman Says</div>
+        <div class="art-sum">OpenAI President Greg Brockman said at the WSJ Tech Live event in early November 2026 that Q1 and Q2 of 2026 were &quot;pretty rough&quot; for the company, particularly in coding, where rivals like Anthropic dominated the conversation despite OpenAI having its Codex product; he said &quot;no one was talking about&quot; OpenAI in coding during that stretch. That changed in the third quarter, when OpenAI&#x27;s annualized revenue grew about 70% quarter-over-quarter and its enterprise segment roughly doubled, helped by the rollout of GPT-5.6 Sol and ChatGPT Work, with one analysis finding enterprise spending between OpenAI and Anthropic nearly even by September 2026. Brockman also said OpenAI could be ready for an IPO as early as 2027 given the company&#x27;s current growth trajectory.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Meta President Says Midterm Results Will Make Building Data Centers Harder</div>
+        <div class="art-sum">Meta&#x27;s president of global affairs, Dina Powell McCormick, said at the WSJ Tech Live conference on November 5, 2026 that Democratic wins in the U.S. midterm elections will make building new U.S. data centers &quot;a lot harder,&quot; citing public backlash against AI infrastructure projects; she acknowledged the industry has &quot;not done as good a job as we needed to explain the benefits of these investments.&quot; Data centers became a visible ballot issue this cycle, with Democratic candidates who pledged to halt or restrict development winning races, and in Ohio voters in 15 municipalities passed bans or other restrictions on data center construction. McCormick said successful projects tend to involve the company covering its own electricity costs, directing tax revenue surpluses to local services like teachers and first responders, and securing bipartisan local support.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">OpenAI to Bring Pierre Computer’s Code Storage to Codex Through Acquisition</div>
+        <div class="art-sum">OpenAI announced on November 4, 2026 that it will acquire Pierre Computer Company, a developer-tooling startup founded in 2023 by Bootstrap creator Jacob Thornton and former Twitter engineer Ian Ownbey, to bring Pierre&#x27;s Git-based Code Storage technology into its Codex coding platform. Pierre also makes the open-source Trees, Diffs, and Highlights tools used for file navigation, diff viewing, and real-time syntax highlighting; OpenAI says these will remain open-source and continue receiving contributions. The move is aimed at building out infrastructure for managing code generated by AI agents and positions Codex as a more direct competitor to Microsoft&#x27;s GitHub. Financial terms and a closing date were not disclosed, and the deal still needs regulatory approval.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">These People Can Make Your House Look Like No One Lives There</div>
+        <div class="art-sum">A growing niche of professional &quot;house managers&quot; is helping affluent American families keep their homes immaculate, running household operations the way an executive runs a company — handling everything from grocery stocking and closet organizing to appliance repair and meal prep. Kim House, who works for nine families in the Atlanta area, charges about $60 an hour and earns roughly $120,000 a year, while one placement firm says demand has surged from serving 100 families in 2025 to 900 in 2026. Household managers nationally can earn between $150,000 and $250,000 a year, with some high-end staff commanding six-figure salaries, as demand spreads beyond the ultra-wealthy into middle- and upper-middle-class households. One client, a urologist, described her house manager&#x27;s role bluntly: &quot;They are basically another wife.&quot;</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Opinion | Republicans Forgot How to Win Elections</div>
+        <div class="art-sum">Outgoing Texas Senator John Cornyn published an op-ed titled &quot;Republicans Forgot How to Win Elections,&quot; arguing the GOP violated what he called four basic rules of coalition politics: building a coalition that adds voters rather than subtracts them, fielding likable candidates, keeping campaign promises, and prioritizing character and integrity. Cornyn wrote the piece after his own Senate seat was lost to Texas Attorney General Ken Paxton in the Republican primary runoff, and amid broader Republican losses in the November 2026 midterm elections. He framed the midterm &quot;bloodbath&quot; as a direct consequence of the party straying from those four tenets rather than any single policy failure.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Blue Wave Sets Off a Potential Regime Change in Markets</div>
+        <div class="art-sum">Democrats swept the November 4, 2026 US midterm elections, winning control of both the House and Senate, triggering an immediate &quot;regime change&quot; trade across global markets as investors priced in reduced odds of further tariff escalation and fiscal expansion. The benchmark 10-year Treasury yield fell roughly 4-6 basis points to around 4.90-4.92%, the dollar weakened against all ten G10 currencies, and global stocks initially surged while technology and AI-related shares, along with Bitcoin, came under pressure on fears of tighter regulatory scrutiny. Analysts noted the bond market&#x27;s reaction was counterintuitive: rather than pricing in higher deficits from new Democratic spending, traders bet that a divided/hostile Congress means less new Treasury issuance, pushing yields lower. Looking ahead, strategists flagged that 2027 debt-ceiling negotiations could still reverse this dynamic by softening scheduled spending cuts and raising defense outlays, potentially increasing Treasury supply again.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Beijing Reins In IPO Rush After AI Concerns Hit Stock Market</div>
+        <div class="art-sum">Beijing&#x27;s securities regulator, the CSRC, has informally told investment banks to pause new IPO applications and asked major shareholders to hold off on large share sales, after a sharp October selloff tied to fading enthusiasm for China&#x27;s AI boom; the CSI 300 fell 8.5% in October, its worst month in over a decade, while the AI- and chip-heavy STAR 50 index dropped roughly 40% from its July peak through late October. The chipmaker YMTC (via parent CCSH Corporation), which had filed to raise about 33 billion yuan (~$4.9 billion) on Shanghai&#x27;s STAR Market, has postponed its listing, with some reports suggesting it may now slip into the first half of 2027. To stem the selloff, authorities have also deployed liquidity support such as swap lines for brokerages and relending facilities for buybacks, with state-backed &quot;national team&quot; ETFs reportedly drawing about $11.5 billion in inflows in a single day.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Exclusive | Hedge Fund Elliott Warns of FOGO: Fear of Getting Obliterated in the Market</div>
+        <div class="art-sum">Elliott Management, the $82 billion hedge fund run by co-CEOs Paul Singer and Jonathan Pollock, told investors in an October letter that &quot;nearly every alarm that portends a bear market is sounding,&quot; warning that the market&#x27;s fear of missing out (FOMO) could flip into a &quot;fear of getting obliterated,&quot; which it dubbed FOGO. The firm cited widening U.S. budget deficits, persistent inflation, strains in private-credit portfolios, and AI-related hype—including circular investment deals between tech firms and debt-financed capital spending—as risk factors, drawing a comparison to the debt-fueled speculation of the Roaring &#x27;20s before the Great Depression. Elliott said it remains &quot;focused on capital preservation&quot; while staying &quot;prepared to deploy capital when disruption comes.&quot;</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">The Election Day Revolt That Threatens America’s AI Boom</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Google to Invest $15 Billion in Malaysia Over Two Years</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">OpenAI Had ‘Rough’ First Half of Year Before Coding Takeoff, Brockman Says</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Meta President Says Midterm Results Will Make Building Data Centers Harder</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">OpenAI to Bring Pierre Computer’s Code Storage to Codex Through Acquisition</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">These People Can Make Your House Look Like No One Lives There</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Opinion | Republicans Forgot How to Win Elections</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">The Blue Wave Sets Off a Potential Regime Change in Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Beijing Reins In IPO Rush After AI Concerns Hit Stock Market</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">Exclusive | Hedge Fund Elliott Warns of FOGO: Fear of Getting Obliterated in the Market</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">117 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">99 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">76 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">75 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">53 days</span></div><div class="thread-row"><span class="thread-name">Crypto</span><span class="thread-days">48 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">25 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-03.html">← Older · November 3, 2026 · Silicon Valley Promises AI Will Cure Disease. Drugmaker CEOs Aren’t Buying It.</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
