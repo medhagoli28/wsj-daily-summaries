@@ -396,6 +396,17 @@ def main():
         items = [i for i in items if published_on(i, args.published_on)]
         print(f"[{args.published_on}] {len(items)} of {before} headlines "
               f"were published that day", file=sys.stderr)
+
+        # A section that failed outright (rate limit, network) means this day's
+        # headlines are incomplete. Publishing anyway produces a thin digest that
+        # reads as a quiet news day — exactly how 2026-11-06 ended up with one
+        # story. Bail so the caller can retry once the limit clears.
+        failed = getattr(wsj_fetch.build, "failed_sections", [])
+        if failed:
+            print(f"[FAIL] incomplete fetch — {', '.join(failed)} returned nothing; "
+                  f"not writing a partial digest", file=sys.stderr)
+            return 4
+
         if not items:
             print("[FAIL] no headlines from that day are still in the feeds",
                   file=sys.stderr)

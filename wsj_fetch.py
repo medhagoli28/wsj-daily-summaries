@@ -21,6 +21,8 @@ import html
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -61,10 +63,34 @@ SECTIONS = {
 TAG = re.compile(r"<[^>]+>")
 
 
-def fetch(url: str) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read()
+def fetch(url: str, attempts: int = 4) -> bytes:
+    """GET a feed, retrying on rate limits and server errors.
+
+    Google News starts returning 429 when several days are backfilled in a row.
+    Without a retry the caller's per-section `except` swallowed it and the day
+    simply lost that whole section — on 2026-11-06 two of three sections vanished
+    and the digest published with a single story, looking like a quiet news day
+    rather than a failed fetch. Back off and try again instead.
+    """
+    delay = 5
+    last = None
+    for attempt in range(1, attempts + 1):
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read()
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code not in (429, 500, 502, 503, 504):
+                raise
+        except urllib.error.URLError as e:
+            last = e
+        if attempt < attempts:
+            print(f"[retry {attempt}/{attempts - 1}] {last} — waiting {delay}s",
+                  file=sys.stderr)
+            time.sleep(delay)
+            delay *= 2          # 5s, 10s, 20s
+    raise last
 
 
 def clean(text: str) -> str:
@@ -117,6 +143,7 @@ def build(limit: int, after: str = None, before: str = None):
     what you want and filter precisely on each item's pubDate afterwards.
     """
     digest = []
+    failed_sections = []
     for section, cfg in SECTIONS.items():
         if after and before:
             url = gnews(f"{SECTION_QUERIES[section]} after:{after} before:{before}")
@@ -127,7 +154,15 @@ def build(limit: int, after: str = None, before: str = None):
             raw = fetch(url)
             digest.extend(parse_items(raw, is_gnews, section, limit))
         except Exception as e:  # noqa
+            # Record it rather than only warning: a silently dropped section makes
+            # a failed fetch look like a quiet news day.
             print(f"[warn] {section}: {e}", file=sys.stderr)
+            failed_sections.append(section)
+
+    if failed_sections:
+        print(f"[warn] {len(failed_sections)} section(s) failed entirely: "
+              f"{', '.join(failed_sections)}", file=sys.stderr)
+    build.failed_sections = failed_sections
     return digest
 
 
