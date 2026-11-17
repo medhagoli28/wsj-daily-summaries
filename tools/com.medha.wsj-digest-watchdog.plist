@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.medha.wsj-digest-watchdog</string>
+
+    <!-- Separate from com.medha.wsj-digest on purpose. If the watchdog shared a
+         process with the producer, a producer that dies silently takes its own
+         alarm with it — which is exactly how the 19-day October outage stayed
+         invisible. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/medhagoli/wsj-daily-summaries/tools/check-freshness.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/medhagoli/wsj-daily-summaries</string>
+
+    <!-- Twice a day, at hours she's likely to be at the Mac so the notification
+         is actually seen. Not more: this should be a signal, not background noise
+         that gets tuned out. -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Hour</key><integer>10</integer>
+            <key>Minute</key><integer>38</integer>
+        </dict>
+        <dict>
+            <key>Hour</key><integer>19</integer>
+            <key>Minute</key><integer>12</integer>
+        </dict>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/medhagoli/wsj-daily-summaries/watchdog.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/medhagoli/wsj-daily-summaries/watchdog.log</string>
+</dict>
+</plist>

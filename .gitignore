@@ -24,3 +24,7 @@ public/
 # Local scheduler logs (LaunchAgent)
 digest-run.log
 launchd.log
+
+# Watchdog logs
+freshness.log
+watchdog.log
