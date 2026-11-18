@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 8, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-07.html">‹ Nov 7</a> &nbsp;·&nbsp; <a href="digest-2026-11-09.html">Nov 9 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 118</div>
+    <div class="issue-date">November 8, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">My Week With Apple’s Beach-Friendly iPad Mini and Amazon’s Upscale Alexa Tablet</div>
+        <div class="art-sum">Apple unveiled its new iPad Mini on October 26, 2026, featuring an 8.5-inch OLED display, the A20 Pro chip, IP67 water and dust resistance, and a starting price of $699, which Apple calls the tablet&#x27;s &quot;biggest update ever.&quot; Around the same time, on October 8, 2026, Amazon retired its 15-year-old Fire tablet brand and introduced three Android-based &quot;Alexa Tablet&quot; models built around the Alexa+ assistant and full Google Play access: the 8.7-inch Tablet 8 ($229.99), the 11-inch Tablet 11 ($329.99), and the aluminum-bodied 12-inch Tablet 12 Pro, which starts at $499.99 ($549.99 for the anti-glare Nanomatte version). Amazon says the Tablet 12 Pro offers roughly triple the processing power and nine times the graphics performance of any previous Fire device, positioning it to compete directly with Apple&#x27;s iPad and Samsung&#x27;s Galaxy Tab lineup. All three Alexa Tablets began shipping October 14, 2026 in the U.S., Mexico, and Canada.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">From Silicon Valley to the Pentagon, Here’s the 2026 WSJ Tech: California Recap</div>
+        <div class="art-sum">This is a recap/wrap-up article of WSJ&#x27;s own &quot;Tech: California&quot; conference (held November 3–4, 2026, at Stanly Ranch in Napa), where WSJ journalists synthesize their own event&#x27;s sessions on Silicon Valley, the Pentagon, Apple, and Anthropic — it is WSJ-generated editorial content about WSJ&#x27;s own event, not a discrete news story that other outlets independently reported on, so there is no comparable non-paywalled source to brief from.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia’s Board to Investigate Reports That Jensen Huang Was Spying Target</div>
+        <div class="art-sum">Nvidia&#x27;s board of directors announced on Sunday, November 8, 2026, that it was launching an independent investigation into reports that CEO Jensen Huang had been the target of a Chinese intelligence effort, after Huang told staff in an internal email that he&#x27;d had an affair with a woman, identified as Alice Huang, a former Singapore-based chip executive allegedly recruited by China&#x27;s Ministry of State Security; the board said it had &quot;no reason to believe&quot; national security or Nvidia secrets were compromised. The New York Times subsequently reported Huang also had a separate affair with an Nvidia executive who reported to him. Days later, on Thursday, November 12, 2026, Nvidia confirmed Huang&#x27;s resignation as CEO, president, and board member after 33 years leading the company, with CFO Colette Kress named interim CEO effective immediately.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Democrats Promised to Fix the Economy. What Can They Really Do?</div>
+        <div class="art-sum">Congressional Democrats, fresh off a midterm sweep that handed them control of the House and Senate, are mapping out a 100-day affordability agenda that includes reinstating expired Affordable Care Act premium tax credits, reversing Medicaid cuts, capping prescription drug costs, rolling back Trump-era tariffs, and a Senate proposal to cap credit card interest rates at 10%. Government funding must be extended by December 11, 2026, and analysts at Goldman Sachs expect Democrats to use that and other must-pass bills as leverage to advance parts of the agenda. Despite the ambitious wish list, the party&#x27;s actual power is constrained by the Senate filibuster and limited influence over Federal Reserve policy, meaning many of the proposed fixes would shift costs rather than structurally lower them.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Do You Know England’s Founding Father? It’s OK, England Doesn’t Either.</div>
+        <div class="art-sum">This WSJ piece is a feature/history essay about King Æthelstan rather than a breaking news story, and it does not appear to have been independently reported by Reuters, AP, Bloomberg, or other mainstream outlets — the only other hits are aggregator sites that simply republish or summarize the WSJ article itself, which doesn&#x27;t count as independent coverage. The underlying historical facts are well established: in 927, Æthelstan conquered the Viking-held kingdom of York after the death of its ruler Sihtric Cáech, becoming the first king to rule a unified England; he had been crowned at Kingston-upon-Thames in 925 (1,100th anniversary fell in September 2025), and the 1,100th anniversary of the 927 unification itself falls in 2027. Because no independent outlet broke or re-reported this specific WSJ feature, I can&#x27;t produce a sourced brief drawn from non-WSJ reporting of the story itself.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Opinion | Needed: a Lame Duck Congress That Isn’t Lame</div>
+        <div class="art-sum">_(could not research: You&#x27;ve hit your session limit · resets 7:30pm (America/New_York))_</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Opinion | Israel Can Achieve a Unity Government</div>
+        <div class="art-sum">Israel&#x27;s October 27, 2026 legislative election left parliament deadlocked, with a four-party bloc led by former army chief Gadi Eisenkot winning 48 of 120 Knesset seats and 67 lawmakers ultimately backing him for prime minister versus 46 for Benjamin Netanyahu; President Isaac Herzog tasked Eisenkot with forming a government and set a December 6 deadline. Netanyahu has since repeatedly called for a national unity government, arguing it&#x27;s needed to &quot;eliminate the Iranian threat once and for all,&quot; but Eisenkot has rejected a unity deal with Netanyahu himself—calling his campaign against Arab parties &quot;racist&quot;—while leaving the door open to a coalition with Likud and Religious Zionism members if their commitment to unity is &quot;sincere.&quot; As of November 14-16, 2026, coalition negotiations remain ongoing with no deal reached.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Opinion | It Was the Economy, Not the War</div>
+        <div class="art-sum">Republicans suffered sweeping midterm losses in elections held the week of November 3, 2026, prompting Vice President JD Vance to attribute the defeat primarily to the war with Iran, while NBC News exit polling found 39% of voters named the economy the most important issue facing the country versus 32% who cited the state of democracy, with 75% saying the economy was in rough shape and 65% blaming Trump&#x27;s policies for worsening it. The same exit polls showed the Iran war was still a significant factor — 63% of voters said going to war with Iran was the wrong decision, and roughly 74% called the war a &quot;crucial&quot; or &quot;major&quot; factor in their vote — but Republicans themselves ranked the economy above immigration as their top concern, while Democratic voters ranked democracy above the economy. The data underpins a rebuttal published in WSJ Opinion by Mark Penn and Andrew Stein arguing the economy, not the war, was the decisive driver of the GOP&#x27;s losses.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Children’s Place Files for Bankruptcy With Plans to Sell Assets</div>
+        <div class="art-sum">The Children&#x27;s Place filed for Chapter 11 bankruptcy protection on November 8, 2026, in the U.S. Bankruptcy Court for the District of New Jersey, listing roughly $881 million in debt against $742 million in assets. The retailer, which also owns the Gymboree brand, operates 514 brick-and-mortar stores in the U.S. and is now running a competitive bidding process to sell its assets, with interested buyers given until December 9 to submit offers and a sale expected to close by year-end. The company plans to lay off more than 700 New Jersey-based workers by February 2027, but says all of its stores and websites remain open for now.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Iconic Saudi Tower Hit as Yemen’s Houthis Target Riyadh</div>
+        <div class="art-sum">A Houthi missile barrage struck Saudi Arabia on Sunday, November 8, 2026, with falling debris damaging windows at the Aramco Tower in Riyadh&#x27;s King Abdullah Financial District; Saudi Arabia&#x27;s Energy Ministry reported no injuries or fatalities. The Saudi-led coalition said it intercepted at least two ballistic missiles aimed at Riyadh as part of a broader assault that also targeted the Eastern Province&#x27;s oil facilities, the southern border region, and King Khalid International Airport. Houthi military spokesman Yahya Saree claimed responsibility, and the coalition said it had intercepted at least 15 ballistic missiles, cruise missiles, and drones launched toward Saudi territory since the start of November 2026.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">My Week With Apple’s Beach-Friendly iPad Mini and Amazon’s Upscale Alexa Tablet</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">From Silicon Valley to the Pentagon, Here’s the 2026 WSJ Tech: California Recap</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Nvidia’s Board to Investigate Reports That Jensen Huang Was Spying Target</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Democrats Promised to Fix the Economy. What Can They Really Do?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Do You Know England’s Founding Father? It’s OK, England Doesn’t Either.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Opinion | Needed: a Lame Duck Congress That Isn’t Lame</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Opinion | Israel Can Achieve a Unity Government</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Opinion | It Was the Economy, Not the War</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Children’s Place Files for Bankruptcy With Plans to Sell Assets</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Iconic Saudi Tower Hit as Yemen’s Houthis Target Riyadh</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">121 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">103 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">83 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">76 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-07.html">← Older · November 7, 2026 · TikTok Gets EU Warning Over ‘For You Feed’ Content</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
