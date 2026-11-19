@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 19, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-18.html">‹ Nov 18</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Thursday Issue · No. 129</div>
+    <div class="issue-date">November 19, 2026</div>
+    <div class="issue-sub">17 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 17</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 6</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Palo Alto Networks to Buy AI-Startup Applied Compute for $4.5 Billion</div>
+        <div class="art-sum">Palo Alto Networks agreed to acquire AI model platform Applied Compute in an all-stock deal valued at $4.5 billion, with the deal announced November 18, 2026 alongside its fiscal Q1 earnings; the acquisition is expected to close in Palo Alto&#x27;s fiscal third quarter of 2027. Applied Compute builds a platform for training and improving customized, open-weight AI models and agents, and its co-founder and CEO Yash Patil will become Palo Alto Networks&#x27; co-chief AI officer once the deal closes. The announcement came as Palo Alto reported quarterly revenue up 39% year-over-year to $3.44 billion, beating estimates of $3.31 billion, and raised its full-year revenue forecast to $14.52–$14.57 billion versus prior estimates of $14.17 billion.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Tencent Profit Flatlines Amid Surging AI Investments, Revenue Growth Slows</div>
+        <div class="art-sum">Tencent reported third-quarter 2026 revenue of 207.3 billion yuan, up 8% year-over-year, while non-IFRS operating profit and net profit each fell 6% as spending on AI infrastructure accelerated. Operating capital expenditure payments surged 257% year-over-year to expand compute capacity, and R&amp;D spending rose 42% to 32.4 billion yuan as the company builds out its AI model family. Cloud revenue growth accelerated to 35% year-over-year, and Tencent&#x27;s AI productivity app WorkBuddy surpassed 10 million daily active users, signaling the company is prioritizing AI buildout over near-term profit margins.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Seven Anthropic Founders Who Are About to Become Multibillionaires</div>
+        <div class="art-sum">Anthropic completed its IPO at $83 per share, valuing the AI company at roughly $1.5 trillion, and the deal has turned each of its seven co-founders — Dario Amodei, Daniela Amodei, Tom Brown, Jack Clark, Jared Kaplan, Sam McCandlish, and Christopher Olah — into multibillionaires, with disclosed post-sale stock positions worth close to $20 billion apiece. Each founder holds roughly a 1.4% stake in the company, a position that was already worth more than $13 billion based on Anthropic&#x27;s $350 billion valuation from a funding round in late 2025/early 2026. Some Wall Street estimates point to Anthropic eventually trading toward a $2 trillion valuation, which would push each founder&#x27;s stake to between roughly $27 billion and $29 billion.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">What’s Your AI-Literacy IQ?</div>
+        <div class="art-sum">This is a WSJ-exclusive interactive quiz feature (testing readers&#x27; AI jargon knowledge), not a reported news story — it has not been covered or republished by other outlets, so there is no independent reporting to summarize.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic Sells More Shares Than Planned at a Higher Price Than Expected | What’s News for Nov. 18</div>
+        <div class="art-sum">The first search confirms it — this is about the Anthropic IPO, where the company sold 980 million shares at $83 each, raising $81.3 billion and surpassing the original plan of roughly 825 million shares at $70-$78. On November 18, 2026, Anthropic priced its IPO above the initial target range, implying a valuation of about $1.5 trillion, and the deal included more than 23 million shares sold by existing stockholders. The offering surpassed SpaceX&#x27;s $75 billion IPO to become the largest on record, reflecting strong investor demand for AI-sector stock.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Mixed, Nvidia Down Again Ahead of Anthropic IPO</div>
+        <div class="art-sum">U.S. stocks closed mixed on Wednesday, November 18, 2026, with the Dow falling about 1.1% while the Nasdaq edged up roughly 0.4%, as investors weighed hawkish Fed minutes alongside Nvidia earnings and Anthropic&#x27;s pending IPO. Nvidia shares dropped nearly 3% even after reporting fiscal Q3 revenue up 103% year-over-year and issuing stronger-than-expected guidance, marking a fifth straight day of losses as investors rotated toward Anthropic&#x27;s IPO as an alternative AI bet. Anthropic reportedly priced its IPO at $83 a share, with Nvidia also set to invest up to $10 billion in the company via a private placement ahead of its Nasdaq debut on Thursday, November 19, 2026.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Mostly Lower After Nvidia Earnings Fail to Soothe Nerves</div>
+        <div class="art-sum">U.S. stocks closed mostly lower on Wednesday, November 18, 2026, even after Nvidia beat earnings estimates, as the Dow Jones Industrial Average fell 561 points (-1.11%) to 50,198.17 and the S&amp;P 500 slipped 0.23% to 7,323.63, while the Nasdaq Composite edged up 0.42% to 24,429.88. Nvidia reported fiscal third-quarter revenue of $115.8 billion, up 103% year over year, with data-center sales of $107.6 billion (+110%) and issued fourth-quarter guidance of roughly $130 billion, yet its shares still closed down 2.9% after paring an earlier pre-market gain of nearly 4%. The selloff reflected lingering investor unease over AI-spending durability, tighter chip-export rules, and Nvidia&#x27;s leadership transition, with interim CEO Colette Kress overseeing the company while the board searches for a permanent successor to former CEO Jensen Huang.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic Plans to Raise IPO Price After Strong Demand</div>
+        <div class="art-sum">Anthropic priced its IPO at $83 per share on November 18, 2026, up from its earlier marketed range of $70 to $78, after investor orders reportedly reached nearly $500 billion (roughly $400 billion institutional plus $100 billion retail) against the shares on offer. The final price values the AI company above the $1.4 trillion target it had initially sought and pushed the deal&#x27;s size toward $81.3 billion raised through a sale of 980 million shares, which outlets reported as the largest IPO on record, surpassing SpaceX&#x27;s $75 billion offering. About 20% of the IPO was set aside for retail investors, and the stock was set to begin trading on the Nasdaq under ticker ANT.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Slower Retail Sales Drag on Market</div>
+        <div class="art-sum">U.S. retail sales rose just 0.2% in October to $748.2 billion, a sharp slowdown from September&#x27;s 0.8% gain, as high prices made shoppers more cautious — though core sales excluding autos and gas actually beat forecasts, climbing 0.6% versus the 0.4% consensus. The report, released November 17, 2026, landed alongside hawkish comments from a Federal Reserve official, reinforcing bets that rates would stay higher for longer and adding to a broader selloff on Wall Street. The Dow Jones Industrial Average closed down 1.64%, or about 849 points, to its lowest level since July, while the S&amp;P 500 fell roughly 1% and the Nasdaq slipped as investors also turned cautious ahead of Nvidia&#x27;s earnings. A 1.6% drop in auto and parts sales weighed on the headline figure, partly offset by a 4.7% jump in miscellaneous retailer sales.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Chip Stocks Rise After Strong Nvidia Results</div>
+        <div class="art-sum">Nvidia reported fiscal third-quarter results after the close on Tuesday, November 17, 2026, posting revenue of $115.8 billion, up 103% year-over-year and above the roughly $109 billion analyst consensus, with data-center revenue rising 110% to $107.6 billion and fourth-quarter guidance of $130 billion versus expectations near $125 billion. The beat and strong guidance sent European semiconductor stocks higher in Wednesday trading, with ASML up about 2.6%, Infineon and other German chip names gaining 2–4%, and STMicroelectronics rising over 1.5%, as investors read the results as confirmation that AI-related chip demand remains robust. (Note: one search result referenced a claim about Nvidia CEO Jensen Huang no longer being reinstated, which I could not corroborate and have excluded from this brief as likely unreliable.)</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Stocks Fall as U.S. Moves to Tighten Chip Curbs</div>
+        <div class="art-sum">Asian stocks sold off sharply on November 17, 2026 after the U.S. moved to tighten export curbs on advanced AI chips, requiring data-center operators in Singapore, Malaysia, Thailand, Indonesia and Brazil to obtain licenses before receiving them, a step aimed at closing loopholes that let chips reach China via third-party markets; the MSCI Asia Pacific index fell about 1.2% with its tech sub-index down 3.6%, while South Korea&#x27;s Kospi dropped 2.5% and Taiwan&#x27;s Taiex fell 2.3%, extending a two-day slide of more than 7%. Samsung Electronics and TSMC shares each fell nearly 5% in Asian trading, and the selloff spread to U.S. chipmakers, with AMD down 4-5%, the Philadelphia Semiconductor Index dropping over 4%, and Broadcom, Micron and Intel also declining.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How Everyday Investors Are Playing the Nvidia Drama</div>
+        <div class="art-sum">Retail investors poured roughly $1.6 billion into Nvidia shares over three trading days in November 2026 — about $590 million on Monday, $730 million on Tuesday, and $300 million on Wednesday — their largest three-day buying spree in at least a year, as the stock dropped nearly 9.5% on November 9–10 amid turmoil including Jensen Huang&#x27;s resignation as CEO (CFO Colette Kress stepped in as interim chief) and broader AI-bubble jitters. On the day the resignation became public, about 5.1 million Nvidia call options traded, the second-highest single-day volume of the year, and during the first 30 minutes of that session alone retail traders generated roughly $111 million in net purchases, a record for that window. By November 16, however, the dip-buying enthusiasm had cooled, with more retail portfolios trimming than adding to Nvidia positions ahead of its Q3 earnings report on November 17, and shares had extended their November losses to around 22%.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Home Depot CEO Steps Down After Medical Leave of Absence</div>
+        <div class="art-sum">Home Depot CEO Ted Decker is stepping down effective November 23, 2026, roughly three months after he began a temporary medical leave in August 2026 that the company has not detailed; Decker had led Home Depot as CEO and president for about four years and will remain chairman of the board. The retailer named CFO Richard McPhail, who joined Home Depot in 2005 and became CFO in September 2019, as the new CEO. Ann-Marie Campbell, a 41-year company veteran, will become president and COO, while Jordan Broggi, a 13-year Home Depot employee, steps up to CFO. The leadership shuffle was announced November 17, 2026, alongside Home Depot&#x27;s third-quarter earnings report, in which the company beat Wall Street&#x27;s profit and sales expectations.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">These Charts Show How More People Are Pulling Cash Out of Their Homes</div>
+        <div class="art-sum">Homeowners withdrew about $47 billion in home equity during the first quarter of 2026, up 2% from a year earlier and the highest first-quarter total since 2021, according to ICE Mortgage Technology data reported by CNBC. More than half of that activity came through HELOCs and second-lien loans, with roughly 248,000 borrowers tapping about $25 billion that way — the strongest first-quarter second-lien volume in nearly 20 years — while another 234,000 homeowners pulled out about $22 billion via cash-out refinances, the highest first-quarter level since 2022. The surge is driven by a &quot;lock-in effect,&quot; as homeowners use second liens to access equity without giving up low first-mortgage rates; average second-lien HELOC rates fell to 6.6% in March, their lowest since late 2022. By the third quarter, mortgage holders held a record $17.5 trillion in home equity, with nearly 2.4 million borrowers holding at least $1 million in equity.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">HPE Adds Former JPMorgan Exec to Board, Amends Agreement With Elliott Investment</div>
+        <div class="art-sum">Hewlett Packard Enterprise appointed Jennifer A. Nason, the former Global Chair of Investment Banking at JPMorgan Chase who retired from that role in February 2025, to its board of directors effective November 18, 2026. The same day, HPE and Elliott Investment Management signed a Second Amendment to their July 2025 Cooperation Agreement, raising the board-size cap to a maximum of 15 directors through the 2027 Annual Meeting, after which it will be capped at 13 directors until the agreement&#x27;s expiration. Nason previously led JPMorgan&#x27;s Technology, Media and Telecommunications investment banking group from 2004 to 2012. The move extends HPE&#x27;s roughly 16-month-old cooperation pact with activist investor Elliott, which had pushed for board changes amid the company&#x27;s ongoing transformation efforts.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">I Talked to Job Seekers in All 50 States. Here’s What It Takes to Get Hired Right Now.</div>
+        <div class="art-sum">This appears to be a WSJ-exclusive feature (reporter Lindsay Ellis&#x27;s year-long, 50-state interview project), with no independent non-WSJ outlet reporting the same findings — other hits are either a secondary commentary blog or an unrelated separate survey. Based on a secondary source (a Substack post summarizing the WSJ piece, not WSJ text itself), WSJ reporter Lindsay Ellis spent roughly a year interviewing more than 100 job seekers across all 50 states for a piece published November 15, 2026, finding the average U.S. job search now runs about 27 weeks — the longest stretch outside the pandemic in over a decade — and that applicants among the first 10% to apply to a posting were nearly twice as likely to land an interview. The reporting cites survey data showing 54% of hiring decision-makers use AI to screen résumés (rising to 71% in finance, insurance, and real estate, and 68% at companies with 500+ employees), with 26% of those employers now hiring fewer entry-level workers as a result. One case cited involved a Princeton Ph.D. who applied to roughly 2,300 jobs without landing one, illustrating the piece&#x27;s broader finding that mass-applying is largely ineffective compared with networking and early application timing. Because this is an original WSJ investigative feature rather than a wire story, no other outlet appears to have independently reported the same underlying survey findings — the only available non-WSJ coverage is third-party commentary on the WSJ article rather than original reporting.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">European Defense Chief Snaps at Pentagon Official Over Ukraine Criticism</div>
+        <div class="art-sum">At a NATO meeting in Brussels on Tuesday, November 17, 2026, senior Pentagon policy official Elbridge Colby criticized Ukraine&#x27;s long-range strikes on Russian oil and energy infrastructure, arguing they had not helped push toward ending the war, prompting German Defense Minister Boris Pistorius to call the critique &quot;quite a stupid thing&quot; and British Defense Secretary Wes Streeting to defend the strikes as having &quot;helped degrade Putin&#x27;s war machine, buying time and saving lives.&quot; The clash occurred during a meeting of the Ukraine Defense Contact Group, exposing a trans-Atlantic rift over strategy. Ukrainian Defense Minister Yevhenii Khmara said Kyiv&#x27;s strikes were retaliation for nightly Russian bombardment of Ukrainian energy and heating infrastructure and announced plans to more than triple Ukraine&#x27;s long-range strike capability next year.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 17 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Palo Alto Networks to Buy AI-Startup Applied Compute for $4.5 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Tencent Profit Flatlines Amid Surging AI Investments, Revenue Growth Slows</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Seven Anthropic Founders Who Are About to Become Multibillionaires</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">What’s Your AI-Literacy IQ?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Anthropic Sells More Shares Than Planned at a Higher Price Than Expected | What’s News for Nov. 18</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Stocks Mixed, Nvidia Down Again Ahead of Anthropic IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">U.S. Stocks Mostly Lower After Nvidia Earnings Fail to Soothe Nerves</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Anthropic Plans to Raise IPO Price After Strong Demand</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Slower Retail Sales Drag on Market</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">European Chip Stocks Rise After Strong Nvidia Results</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Asian Stocks Fall as U.S. Moves to Tighten Chip Curbs</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">How Everyday Investors Are Playing the Nvidia Drama</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Home Depot CEO Steps Down After Medical Leave of Absence</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">These Charts Show How More People Are Pulling Cash Out of Their Homes</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">HPE Adds Former JPMorgan Exec to Board, Amends Agreement With Elliott Investment</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">I Talked to Job Seekers in All 50 States. Here’s What It Takes to Get Hired Right Now.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">European Defense Chief Snaps at Pentagon Official Over Ukraine Criticism</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">122 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">104 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">79 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">77 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">56 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-18.html">← Older · November 18, 2026 · Nvidia Reports Faster Growth, Says Jensen Huang Won’t Return as CEO</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
