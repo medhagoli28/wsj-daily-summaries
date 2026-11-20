@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 20, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-19.html">‹ Nov 19</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 130</div>
+    <div class="issue-date">November 20, 2026</div>
+    <div class="issue-sub">16 stories across tech, markets &amp; finance — a 10-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 16</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 8</span><span class="tab" data-key="finance">Finance · 4</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Thousands of Anthropic Employees and Investors Are Set to Reap Fortunes</div>
+        <div class="art-sum">Anthropic launched an employee tender offer in February 2026 sized at $5 billion to $6 billion, allowing current and former employees who had been with the company at least a year to sell shares to outside investors at a valuation of roughly $350 billion, up from $61.5 billion about ten months earlier. The company ultimately completed the secondary sale but fell short of the full $6 billion target as some employees chose to hold their shares ahead of a potential IPO. By comparison, Anthropic&#x27;s subsequent primary funding round valued the company at $380 billion (and a later $65 billion Series H reportedly pushed the post-money valuation to $965 billion), with investor assessments suggesting at least 400 early employees could be worth $100 million or more, including several potential billionaires. Anthropic publicly filed its IPO registration statement on October 26, 2026, with the IPO price reportedly set at more than three times the tender offer price.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">I Tried New York City’s New High-Tech Public Bathrooms—and Saw the Future</div>
+        <div class="art-sum">New York City is rolling out 17 free, touchless public restrooms from startup Throne Labs across all five boroughs under a $4 million, yearlong pilot launched by Mayor Zohran Mamdani; units sit near high-traffic spots like Yankee Stadium and Cooper Square, run 7 a.m. to 10 p.m., and are entered via text message, QR code, an app, or a tap card. Each self-contained, solar-powered unit needs no water, sewer, or electrical hookup, uses 21 sensors to monitor cleanliness and trigger automatic cleaning after roughly 10-15 visits, and includes a baby-changing station and ADA accessibility. For privacy and to limit misuse, the door automatically unlocks and opens after a 10-minute time limit, with warnings issued in English and Spanish before it does.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Uber Co-Founder Kalanick Teases Protest at Nvidia as Calls for Huang’s Return Continue</div>
+        <div class="art-sum">Travis Kalanick, co-founder of Uber, said at the TomorrowX summit in Austin on November 18, 2026 that he would show up at Nvidia&#x27;s headquarters with a &quot;wafer-encrusted&quot; megaphone to lead a walkout of employees demanding Jensen Huang&#x27;s reinstatement as CEO, a campaign that has reportedly gathered more than 7,500 signatories identified as Nvidia staff (about 18% of the workforce). Huang resigned as president, CEO and board member effective November 12, 2026, following board findings of personal conduct inconsistent with company standards. On Nvidia&#x27;s November 17 earnings call, the first since Huang&#x27;s exit, new board chair Harvey Jones said directors had unanimously accepted the resignation and do not intend to reinstate him, while reporting quarterly revenue of $115.8 billion and expressing confidence in interim CEO Colette Kress as the company searches for a permanent chief executive.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">What the Blue Wave in Texas Means for Elon Musk’s Tesla and SpaceX</div>
+        <div class="art-sum">Democrats swept Texas&#x27;s November 3, 2026 statewide elections for the first time since 1994, with Gina Hinojosa defeating Gov. Greg Abbott by roughly 7 points and state Rep. James Talarico winning the U.S. Senate race by about 12 points, while Democrats also flipped the Texas House. The results rattled markets tied to Elon Musk, whose companies are based in Texas: shares of Tesla and SpaceX slumped 3.3% and 3.8% respectively, erasing nearly $130 billion in combined value, despite Musk having spent close to $500 million trying to keep the state red. Analysts flagged that the incoming Democratic administration, which campaigned partly on data-center regulation, could slow permitting and impose new guardrails on the AI-infrastructure buildout SpaceX and Tesla are counting on, including a planned joint chipmaking venture.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Two Big Debuts Fail To Boost Stocks</div>
+        <div class="art-sum">Anthropic&#x27;s shares surged roughly 17-34% above their $83 IPO price on their November 19, 2026 trading debut, pushing the company&#x27;s fully diluted valuation to about $1.76 trillion in the largest IPO in history, but the enthusiasm failed to lift the broader market. The Dow Jones Industrial Average instead sank about 1,100 points (roughly 2.1-2.2%) to fall below 50,000, while the S&amp;P 500 and Nasdaq each dropped around 2-2.3%, with more than 90% of S&amp;P 500 stocks closing lower. The S&amp;P 500&#x27;s decline marked a sixth straight losing session, its longest losing streak in two and a half years, as a price war between Anthropic and OpenAI and broader doubts about the AI buildout weighed on sentiment. The pattern echoed other recent high-profile debuts that likewise failed to translate into gains for the wider market.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Slide as AI Bust Continues Despite Anthropic IPO</div>
+        <div class="art-sum">US stocks fell sharply on Thursday, November 19, 2026, with the Dow Jones Industrial Average sinking about 1,084 points (roughly 2.2%) below 50,000, the S&amp;P 500 dropping about 2% for its sixth straight losing session (its longest such streak since 2024, leaving it down 8.2% from last month&#x27;s record), and the Nasdaq Composite falling about 2.2-2.3%. The selloff came even as Anthropic&#x27;s IPO — the largest on record — priced at $83 a share and opened near $111.50, briefly spiking as high as 38.6% above offer before paring gains to close up about 17.1%; the muted follow-through failed to revive broader AI-trade enthusiasm. Chipmakers and AI-linked names reversed early gains to close lower, with Nvidia erasing a 4.7% advance to finish down 2.7%, CoreWeave swinging from a 10.5% gain to a 5.5% loss, and the Philadelphia Semiconductor Index closing 2.4% lower, while more than 90% of S&amp;P 500 constituents fell across all 11 sectors.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic’s IPO Mints New Millionaires | What’s News for Nov. 19</div>
+        <div class="art-sum">Anthropic&#x27;s Nasdaq debut on November 19, 2026, closed its first day of trading with a $1.76 trillion valuation, priced at $83 per share, up from the $70-$78 IPO range that itself had raised roughly $61-$64.4 billion. The listing made millionaires of about 5,100 employees (96% of staff) holding equity above $1 million, with roughly 2,800 &quot;Ants&quot; holding stakes above $10 million and about 600 centi-millionaires holding over $100 million each. Total employee equity value at the IPO price reached an estimated $232 billion, though a staggered lockup schedule limits most non-founder insiders to cashing out only up to 10% of their shares immediately.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">What to Know About Anthropic’s Record-Breaking IPO</div>
+        <div class="art-sum">Anthropic priced its IPO at $83 per share on November 19, 2026, selling 980 million shares to raise roughly $81.3 billion — the largest capital raise in IPO history, surpassing SpaceX&#x27;s $75 billion offering from June. The deal valued the Claude maker at about $1.5 trillion at pricing; shares then jumped as much as 35% intraday before closing up 17% at $97.17, pushing its fully diluted market cap to roughly $1.76 trillion, making it worth more than companies like JPMorgan Chase, Visa, and Walmart. The listing delivered a massive windfall to Anthropic&#x27;s co-founders, whose stakes are now worth roughly $20 billion each on paper, and minted many employee millionaires.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Investors Dumping AI Stocks to Buy Into Anthropic Send Tech Shares Lower</div>
+        <div class="art-sum">Anthropic&#x27;s initial public offering on November 19, 2026 raised $107.3 billion (with underwriters&#x27; option to push the total to $119.5 billion), valuing the company at roughly $1.76 trillion and surpassing SpaceX&#x27;s prior record raise; the stock itself jumped 17% to close at $97.17. Despite that debut, broader tech shares sold off sharply as investors reportedly shifted cash into the new listing: the S&amp;P 500 logged its sixth straight losing session, the Nasdaq fell about 2%, the Dow closed below 50,000, and Nvidia dropped 3.3% for its sixth consecutive decline. U.S. equities lost roughly $2.3 trillion in market value within a 2.5-hour window that day, with the Cboe Volatility Index spiking to near 29, its highest level since March, as the IPO failed to revive broader AI-stock sentiment.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Babcock Shares Climb on Earnings Beat, Push Into Drones</div>
+        <div class="art-sum">Babcock International&#x27;s shares jumped as much as 8% on November 19, 2026, after the UK defense contractor reported first-half results and outlined a push into autonomous drone technology as part of a new growth strategy. Underlying operating profit rose 13% to £227 million, with the underlying margin improving to 8.4% from 7.9%, beating consensus of 8.3%, while underlying earnings per share climbed 15% to 32.7 pence from 28.5p. Defense, which makes up roughly three-quarters of group revenue, grew 8% organically, led by nuclear and aviation, even as marine revenue fell 7% due to lower civil activity and Type 31 frigate program timing. The company also raised its interim dividend 12% to 2.8p, generated £186 million in free cash flow, and expects to complete an approximately £80 million share buyback by year-end.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Equities Mixed Amid Cautious Market Sentiment</div>
+        <div class="art-sum">Asian equities were mixed on November 19, 2026, as investors weighed AI-sector volatility ahead of Anthropic&#x27;s blockbuster Nasdaq IPO valuing the company near $81 billion. Japan&#x27;s Nikkei 225 rose 0.7% to 59,444.21 and South Korea&#x27;s Kospi gained 1% to 5,118.96, while Hong Kong&#x27;s Hang Seng fell 1.9% to 22,851.15, Australia&#x27;s S&amp;P/ASX 200 slid 1% to 8,730.40, and Taiwan&#x27;s Taiex dropped 4.4% as chipmaker TSMC fell 3.5%. Gains in AI-linked names like SoftBank Group (+4.6%) and SK Hynix (+3.1%) contrasted with broader caution tied to lingering concerns about an AI spending slowdown following Nvidia&#x27;s recent selloff.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Stock Indexes Rise as Tech Sentiment Improves</div>
+        <div class="art-sum">European shares rose Thursday, November 19, 2026, snapping three straight sessions of losses, with the pan-European STOXX 600 index up about 0.2% to 645.07 points by 09:58 GMT after closing at a three-week low the prior day. Technology stocks led the gains, climbing roughly 1.6%, with chipmakers ASML, STMicroelectronics, and Infineon rising between 3% and 5.5%, while France&#x27;s Soitec jumped 12.7% after beating expectations with its fiscal 2027 forecast. The rally followed Anthropic&#x27;s stock-market debut, in which the company raised $81.3 billion — a record for a market debut — valuing it at roughly $1.5 trillion and easing concerns about AI-sector fundraising. Separately, a November Bank of America fund manager survey found 67% of respondents expect European stocks to rise over the next one to three months, up from 44% in October.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Five Takeaways From This Year’s Tax Data</div>
+        <div class="art-sum">The IRS collected a record $5.6 trillion in gross taxes during fiscal year 2026, while issuing larger refunds to taxpayers following the Working Families Tax Cuts legislation signed by President Trump. Average refunds rose roughly 11% year-over-year, with total refund dollars up about 17-19.7% compared to 2025, reaching nearly $373 billion by mid-October 2026. New deductions for tips, overtime pay, and car-loan interest boosted many filers&#x27; refunds, while the agency&#x27;s individual online accounts grew to about 37.6 million users, up 34% from the prior year. Despite workforce cuts of more than 25% under DOGE, the IRS reported no major disruptions to the 2026 filing season, though paper returns took about twice as long to process as the year before.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Visa, Mastercard and JPMorgan Customer Data Leaked by Hackers</div>
+        <div class="art-sum">Hackers published customer data tied to Visa, Mastercard and JPMorgan Chase on Thursday, November 19, 2026, after breaching third-party vendors rather than the companies&#x27; own networks, with a ransomware group calling itself &quot;n0n&quot; claiming responsibility. The leaked JPMorgan Chase file contained roughly 16,000 customer email addresses, some phone numbers and Chase account IDs, plus 124 internal staff email addresses, while Visa&#x27;s leak involved data on more than 6,000 premium cardholders and Mastercard disclosed a limited cardholder subset; none of the three said card numbers or payment systems were exposed. The hackers had reportedly set a 48-hour deadline threatening to publish the data unless demands were met, and all three firms said their core networks remained uncompromised.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Trump’s Personal Lawyer to Step Down as Sullivan &amp; Cromwell Co-Chair</div>
+        <div class="art-sum">Robert Giuffra, co-chair of Sullivan &amp; Cromwell and one of President Trump&#x27;s personal appellate lawyers, will step down from the firm&#x27;s leadership on January 1, 2028, alongside fellow co-chair Scott Miller. The two will be succeeded by litigation partner Sharon Nelles, who will become the first woman to lead the 147-year-old firm, and capital markets partner Carsten Berrar; the firm announced the succession plan in November 2026. After the transition, Giuffra and Miller will remain at Sullivan &amp; Cromwell as senior chairs and continue their client work, with Giuffra expected to keep representing Trump in pending appeals, including the hush-money criminal case and the E. Jean Carroll defamation matter.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Nvidia Says It’s ‘Business as Usual’ After Huang’s Ouster. Wall Street Doesn’t Buy It.</div>
+        <div class="art-sum">Jensen Huang resigned as Nvidia&#x27;s president, CEO, and board member effective November 12, 2026, following revelations of extramarital affairs, including one with a woman suspected of being a Chinese spy; CFO Colette Kress became interim CEO while the board searches for a permanent replacement. On Nvidia&#x27;s first earnings call without Huang, Kress told analysts &quot;from a business perspective, it&#x27;s business as usual,&quot; noting customers, suppliers, and partners remained &quot;100 percent behind&quot; the company, and Nvidia reported $115.8 billion in quarterly revenue while raising its sales outlook. Board chair Harvey Jones directly rejected the possibility of reinstating Huang, rebutting Huang&#x27;s own earlier comment that he&#x27;d be &quot;honored&quot; to return. Despite the reassurances, Wall Street reacted with skepticism about the leadership transition and governance fallout from the scandal.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 16 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Thousands of Anthropic Employees and Investors Are Set to Reap Fortunes</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">I Tried New York City’s New High-Tech Public Bathrooms—and Saw the Future</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">Uber Co-Founder Kalanick Teases Protest at Nvidia as Calls for Huang’s Return Continue</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">What the Blue Wave in Texas Means for Elon Musk’s Tesla and SpaceX</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Two Big Debuts Fail To Boost Stocks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">U.S. Stocks Slide as AI Bust Continues Despite Anthropic IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Anthropic’s IPO Mints New Millionaires | What’s News for Nov. 19</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">What to Know About Anthropic’s Record-Breaking IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Investors Dumping AI Stocks to Buy Into Anthropic Send Tech Shares Lower</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Babcock Shares Climb on Earnings Beat, Push Into Drones</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Asian Equities Mixed Amid Cautious Market Sentiment</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">European Stock Indexes Rise as Tech Sentiment Improves</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Five Takeaways From This Year’s Tax Data</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">Visa, Mastercard and JPMorgan Customer Data Leaked by Hackers</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">15</span><span class="toc-t">Trump’s Personal Lawyer to Step Down as Sullivan &amp; Cromwell Co-Chair</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">16</span><span class="toc-t">Nvidia Says It’s ‘Business as Usual’ After Huang’s Ouster. Wall Street Doesn’t Buy It.</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">123 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">105 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">80 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-19.html">← Older · November 19, 2026 · Exclusive | Palo Alto Networks to Buy AI-Startup Applied Compute for $4.5 Billion</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
