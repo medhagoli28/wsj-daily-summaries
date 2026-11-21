@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 21, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-20.html">‹ Nov 20</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Saturday Issue · No. 131</div>
+    <div class="issue-date">November 21, 2026</div>
+    <div class="issue-sub">19 stories across tech, markets &amp; finance — a 12-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 19</span><span class="tab" data-key="tech">Tech · 9</span><span class="tab" data-key="markets">Markets · 7</span><span class="tab" data-key="finance">Finance · 3</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Databricks In Early Talks To Raise Funds At $225 Billion Valuation</div>
+        <div class="art-sum">Databricks is in early talks to raise several billion dollars at a valuation of roughly $225 billion, up about 18% from the $190 billion valuation it secured in a funding round last August, according to a Wall Street Journal report cited by Reuters and other outlets on November 20, 2026. The negotiations are described as preliminary, meaning the final size, valuation, and terms of the deal could still change before any agreement is reached. Databricks, which makes software for data storage, management, and AI application development, competes with Snowflake and is widely seen as a leading candidate for an eventual IPO.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic Mathematician Says AI Has Solved the Most Famous Problem in Math</div>
+        <div class="art-sum">Anthropic mathematician Levent Alpoge announced on Friday, November 20, 2026, that he used the company&#x27;s Claude chatbot to develop a proof of the Riemann Hypothesis, a prime-number conjecture dating to 1859 and one of the seven Millennium Prize Problems carrying a $1 million reward. Alpoge said the AI-assisted proof runs more than 250,000 pages and claims to resolve the Generalized Riemann Hypothesis, with the Extended Riemann Hypothesis potentially solvable with additional work. The announcement, posted online rather than published in a peer-reviewed journal, has not yet been verified by the broader mathematical community. This follows other recent AI mathematics claims from Anthropic, including Claude Mythos reportedly solving the Erdős unit-distance conjecture earlier in 2026.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Brother-Sister Duo Who Want to Keep Anthropic Weird</div>
+        <div class="art-sum">Dario Amodei and his sister Daniela Amodei co-founded Anthropic in January 2021 after leaving OpenAI, with Dario serving as CEO and Daniela as president and board chair; the pair, along with five other co-founders, built the company into an AI giant that recently went public, making each of the seven founders worth roughly $20 billion in the IPO payday, according to CBS News. As Anthropic has scaled and gone public, Daniela has urged the company&#x27;s leadership to &quot;keep Anthropic weird,&quot; reflecting the founders&#x27; effort to preserve the startup&#x27;s eccentric, safety-focused culture — shaped by effective-altruism and rationalist-community influences — even as it faces the pressures of being a public company. Coverage from Yahoo Finance and CNN notes that despite his CEO title, Dario handles comparatively little day-to-day management, with Daniela running daily operations, and describes the founding team as including a college dropout, several PhDs, a former journalist, and the sibling pair who grew up squabbling over toys.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Essay | How to Survive the Coming Age of Everything Breaking</div>
+        <div class="art-sum">No direct match found — this appears to be a WSJ opinion/essay piece (not a hard-news story), and no other outlet covered this specific &quot;Tech&quot; section essay. Since it&#x27;s a WSJ-exclusive essay rather than a reported news story, there&#x27;s no independent coverage to draw from for a factual brief.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | Nestle Eyes Autonomous Factory Lines and Looks to Google, Microsoft as Partners</div>
+        <div class="art-sum">Nestlé announced on November 20, 2026 that it is partnering with Microsoft and Boston Dynamics to expand AI use in its manufacturing operations, while also holding late-stage talks with Google about automating production lines, as the food giant pushes toward fully autonomous factory operations. The work centers on Nestlé&#x27;s new Deep Tech Center in Orbe, Switzerland, where AI, smart sensors, and robotics—including Boston Dynamics&#x27; Spot robots running hourly thermal and acoustic inspection routes on packaging lines—are being tested to free up maintenance technicians for predictive work. Microsoft is contributing cloud computing and AI capabilities, with the technologies intended to extend beyond the factory floor to consumer products such as coffee machines, and eventually roll out across Nestlé&#x27;s global plant network. No financial terms, contract length, or specific Microsoft product details have been disclosed.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">China’s AI Firms Are Addicted to Nvidia Chips. Now They Are Facing Withdrawal.</div>
+        <div class="art-sum">Chinese AI companies are rapidly cutting their reliance on Nvidia, with Beijing&#x27;s internet regulator ordering top tech firms to halt purchases of Nvidia AI chips and cancel existing orders as part of a broader push toward domestic semiconductors. Nvidia&#x27;s share of China&#x27;s data-center AI chip market fell to 34% in the first half of 2026, while Huawei&#x27;s Ascend chips surged to 28% share after shipping 572,000 AI accelerators in the same period, and Huawei now claims to have outsold Nvidia inside China as of October 2026. Analysts project China-based vendors like Huawei, Cambricon, and Hygon will control roughly 90% of the domestic AI accelerator market in 2026, with Chinese executives saying they plan to allocate about 46% of their AI budgets to domestic products within a year. Even so, many of China&#x27;s top AI developers still depend on Nvidia hardware to train their most advanced models, so the transition away from Nvidia remains incomplete.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Anthropic Shares Are a Rational Bet on the Next Phase of AI</div>
+        <div class="art-sum">Anthropic went public on the Nasdaq under ticker ANT on November 18-19, 2026, in the largest IPO on record, raising $81.3 billion by selling roughly 980 million shares and topping SpaceX&#x27;s prior benchmark offering. Shares surged 17.07% on their debut session to close at $97.17, pushing Anthropic&#x27;s fully diluted market valuation to about $1.76 trillion, making it the seventh most valuable U.S. company behind Apple, Microsoft, Nvidia, Alphabet, Amazon, and SpaceX. The listing&#x27;s staggered lockup let non-founder insiders sell up to 10% of their shares immediately, with current and former employees eligible to sell roughly 315 million shares worth about $32 billion, turning large numbers of staff into instant millionaires.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">California Attorney General Issues Investigative Subpoena to Nvidia</div>
+        <div class="art-sum">California Attorney General Rob Bonta issued an investigative subpoena to Nvidia on November 19, 2026, probing whether the company&#x27;s advanced AI chips were illegally diverted to China in violation of U.S. export restrictions. The inquiry is tied to former Nvidia CEO Jensen Huang&#x27;s resignation amid allegations of an affair with a woman suspected of being a Chinese intelligence asset, who had ties to Megaspeed, a Singapore-based firm under investigation for funneling restricted Nvidia chips into China. Bonta&#x27;s office is examining whether Nvidia or Huang&#x27;s conduct let China obtain advanced chips or confidential information, and whether the company misled investors and the public about that risk. Huang is set to testify before Congress on December 1, with Nvidia general counsel Tim Teter following on December 2.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Drama Over Drone Delivery</div>
+        <div class="art-sum">Walmart and drone-delivery startup Zipline announced a multi-year deal on November 5, 2026 to expand to roughly 300 U.S. delivery sites, a sharp jump from the 66 stores the program covered as recently as May, with Walmart having logged more than 2 million drone deliveries since the partnership began in 2021; the same day, Zipline disclosed a $1.5 billion funding round valuing it at $21.5 billion, nearly tripling its valuation in under a year. The expansion intensifies competition with Amazon, which is pushing Prime Air toward nearly 500 U.S. communities by the end of 2026 while also raising seller fulfillment fees by an average of 19 cents per item starting in 2027. Rivals are also moving fast: Uber Eats and Zipline launched drone delivery in Spring, Texas on November 17, and Alphabet&#x27;s Wing is expanding its own Walmart partnership toward 270 stores by 2027.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic’s IPO Turmoil Caps $4 Trillion AI Wipeout on Wall Street</div>
+        <div class="art-sum">Anthropic priced its IPO at $83 a share on November 19, 2026, raising roughly $81 billion in the largest IPO on record and valuing the company near $1.5 trillion; shares closed up 17% at $97.17 on debut day. The rally reversed fast — on Friday, November 20, Anthropic stock fell about 8.5-9%, closing near $88.91, just above the offer price, as a broader tech selloff wiped out roughly $4 trillion in market value over the week and erased the Nasdaq&#x27;s gains for 2026. The S&amp;P 500 and Dow also slid into correction territory as investors pulled back from the AI trade, with analysts describing a &quot;real exodus out of tech stocks.&quot;</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stocks Extend Plunge as AI Boom Turns to Bust</div>
+        <div class="art-sum">I now have corroborated numbers from CNBC, CNN, and Yahoo Finance/AOL. U.S. stocks tumbled further on Friday, November 20, 2026, with the S&amp;P 500 sinking 3.70% (down 265.44 points) to 6,910.39 and the Dow Jones Industrial Average dropping 949.73 points (1.93%) to 48,147.33, pushing both indexes into correction territory (more than 10% below their record highs) for the first time since April 2025. The Nasdaq Composite plunged 5.28% to 22,617.73, erasing its gains for 2026 and marking its worst week since March 2020. Nvidia shares fell 14% to $125.53 — their worst day since the 2025 DeepSeek selloff — after Reuters reported the SEC is examining the chipmaker&#x27;s accounting, while newly public AI firm Anthropic dropped about 9% in its second day of trading, deepening fears that massive AI infrastructure spending is outpacing returns.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Equities Tumble as AI Stock Selloff Deepens</div>
+        <div class="art-sum">Asian equities sold off sharply on Friday, November 20, 2026, with Japan&#x27;s Nikkei 225 dropping roughly 4.5-4.8%, South Korea&#x27;s KOSPI falling about 4.7-5.2%, and Hong Kong&#x27;s Hang Seng Index nearing bear-market territory, putting the region on track for its worst week since the March 2020 pandemic crash. Taiwanese shares were down around 17% for the week, their steepest weekly decline since 1990, while SoftBank Group plunged 15% as the AI selloff hammered chip and tech stocks including Advantest, Samsung Electronics, and Tencent. The rout followed a Wall Street slump driven by fears the AI boom&#x27;s valuations are overextended, a concern that persisted even after Anthropic&#x27;s high-profile stock market debut failed to sustain its early rally. The MSCI Asia-Pacific ex-Japan index tumbled about 8% on the week, reflecting broad investor anxiety that AI-related company valuations have outrun fundamentals.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Outages Are Inevitable. Business Chaos Doesn’t Have to Be.</div>
+        <div class="art-sum">A string of outages in November 2026—including disruptions to Microsoft Outlook, the FAA, and national security infrastructure—has shaken confidence in U.S. digital infrastructure and pushed &quot;digital resilience&quot; into investor focus, with one firm identifying a basket of 29 resilience-related stocks in the S&amp;P 1500 spanning backup/recovery, cybersecurity, multi-cloud infrastructure, and data-center power. The July 2024 CrowdStrike outage remains the benchmark case: it cost Fortune 500 companies a combined $5.4 billion, with Delta Air Lines alone reporting roughly $500 million in losses, after a faulty Falcon sensor update bricked an estimated 8.5 million Windows endpoints. Broader industry data shows the stakes rising—Splunk&#x27;s 2026 downtime resilience report put the annual cost of outages at $600 billion across the Global 2000, up 50% in two years, while New Relic&#x27;s 2026 survey found high-impact IT outages now average $1.85 million per hour. In response, 84% of companies are diversifying or considering diversifying their software and service providers, and Morgan Stanley has flagged SpaceX as an &quot;off-the-grid&quot; beneficiary of the resilience push.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic’s IPO Mints New Millionaires</div>
+        <div class="art-sum">Anthropic&#x27;s IPO priced shares at $83 each, raising $81.3 billion and valuing the company such that employees collectively hold roughly $240 billion in stock. Around 5,100 employees — about 96% of staff — became paper millionaires the moment shares began trading, with roughly 2,800 holding stakes above $10 million and about 600 crossing into &quot;centi-millionaire&quot; territory with holdings north of $100 million. CEO Dario Amodei and the six other co-founders each hold between 230 million and 240 million shares, though employees were limited to selling only 10% of their shares in the offering, capping day-one cash proceeds at around $4 million per person before taxes.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Basic Materials Roundup: Market Talk</div>
+        <div class="art-sum">This &quot;Basic Materials Roundup: Market Talk&quot; headline is a generic WSJ Dow Jones Newswires compilation column — a recurring aggregation of brief market-commentary snippets on sector stocks (its November 20, 2026 edition touched on names like Zhaojin Mining and BASF), not a single reportable news event, so it is not the kind of discrete story that other outlets independently cover. The closest genuine news in the basic-materials space this week is copper&#x27;s sharp slide: prices fell further as AI- and tariff-driven trades unwound, erasing roughly $186 billion in value from top copper producers over the preceding month, before staging a partial rebound on November 19-20, 2026, as physical market tightness reasserted itself; separately, the U.S. Federal Reserve&#x27;s minutes released around November 19, 2026 pointed to the possibility of further rate hikes, which weighed on metals prices broadly that day.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">European Tech Stocks Tumble as AI Selloff Intensifies</div>
+        <div class="art-sum">Europe&#x27;s Stoxx 600 Technology index sank as much as 4.5% to a six-month low on Friday, November 20, 2026, putting it on track for a roughly 9.8% weekly decline—its worst week since October 2020—as Anthropic&#x27;s roughly $2 trillion IPO became a flashpoint for a broader reassessment of AI valuations; the pan-European Stoxx 600 itself dropped as much as 1.8%, its steepest one-day fall since March, with about 92% of its constituents in the red. Chipmakers tied to the AI buildout were hit hardest, with ASML, ASM International, STMicroelectronics, Infineon, BE Semiconductor and Soitec each falling roughly 5% to 11%. The rout extended a global selloff that began earlier in November, driven by investor doubts over whether massive AI capital spending (highlighted in recent Amazon and Intel earnings commentary) will generate adequate returns, and it pushed money into haven assets like Treasuries. Deutsche Bank and other European financials also slid as part of the broader risk-off move.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Even Personal-Finance Devotees Struggle With Roth Conversions and IRS Rules</div>
+        <div class="art-sum">Roth IRA conversions carry no IRS income limit and no annual dollar cap, but several technical rules trip up even experienced savers: the pro-rata rule requires aggregating all traditional, SEP, and SIMPLE IRA balances (using the December 31 year-end value, not the conversion-date balance) to determine what portion of a conversion is taxable, so a $100,000 combined balance with $80,000 pre-tax would make 80% of a backdoor conversion taxable. A 2026 conversion must leave the IRA by December 31, 2026 to count for that tax year, with no April filing extension, and estimated tax on the converted amount is generally due by the next quarterly deadline (mid-January) or a penalty applies retroactive to the prior April. Since 2018, conversions can no longer be undone through recharacterization, and savers who pay the conversion tax out of the IRA funds themselves (rather than from outside cash) reduce what actually reaches the Roth while still owing tax on the full converted amount.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">TPG, Corpay to Buy Finance Platform Bill for About $6 Billion</div>
+        <div class="art-sum">BILL Holdings has agreed to be taken private by TPG and Corpay in a cash deal valuing the financial operations software company at about $6 billion, with shareholders set to receive $63.25 per share, a roughly 31% premium to BILL&#x27;s 60-day volume-weighted average price through November 16, 2026. Under the deal structure, TPG Capital will take a majority stake while Corpay invests $1.1 billion for roughly a third of the equity, with an option to acquire the remaining ownership in 2030. BILL&#x27;s board unanimously approved the agreement, and the transaction is expected to close in the first half of 2027, pending shareholder and regulatory approvals. It marks the second payments-automation buyout TPG and Corpay have done together in about 18 months, following their $2.2 billion acquisition of AvidXchange in May 2025.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Houthi Attack Damages Saudi Capital’s Tallest Tower</div>
+        <div class="art-sum">A Houthi missile strike on November 19, 2026 damaged the Public Investment Fund (PIF) Tower, Riyadh&#x27;s tallest skyscraper at roughly 385 meters and 80 stories, located in the King Abdullah Financial District; Saudi Civil Defence reported &quot;material damage&quot; across several floors of the tower and two adjacent buildings, including shattered windows on up to eight floors, with no casualties reported. The strike came after an earlier Houthi attack this month damaged a tower belonging to oil giant Aramco, marking the second hit on Riyadh&#x27;s financial hub in November. Saudi air defenses continued intercepting Houthi projectiles in the following days, downing five drones and a ballistic missile on November 20 and three more ballistic missiles aimed at Riyadh on November 21, as the Yemen-based group escalated strikes on Saudi financial, military, and oil assets.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 19 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | Databricks In Early Talks To Raise Funds At $225 Billion Valuation</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">Anthropic Mathematician Says AI Has Solved the Most Famous Problem in Math</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Brother-Sister Duo Who Want to Keep Anthropic Weird</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Essay | How to Survive the Coming Age of Everything Breaking</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">Exclusive | Nestle Eyes Autonomous Factory Lines and Looks to Google, Microsoft as Partners</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">China’s AI Firms Are Addicted to Nvidia Chips. Now They Are Facing Withdrawal.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">7</span><span class="toc-t">Anthropic Shares Are a Rational Bet on the Next Phase of AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">8</span><span class="toc-t">California Attorney General Issues Investigative Subpoena to Nvidia</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">9</span><span class="toc-t">The Drama Over Drone Delivery</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Anthropic’s IPO Turmoil Caps $4 Trillion AI Wipeout on Wall Street</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">U.S. Stocks Extend Plunge as AI Boom Turns to Bust</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">12</span><span class="toc-t">Asian Equities Tumble as AI Stock Selloff Deepens</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">13</span><span class="toc-t">Tech Outages Are Inevitable. Business Chaos Doesn’t Have to Be.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">14</span><span class="toc-t">Anthropic’s IPO Mints New Millionaires</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">15</span><span class="toc-t">Basic Materials Roundup: Market Talk</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">16</span><span class="toc-t">European Tech Stocks Tumble as AI Selloff Intensifies</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">17</span><span class="toc-t">Even Personal-Finance Devotees Struggle With Roth Conversions and IRS Rules</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">18</span><span class="toc-t">TPG, Corpay to Buy Finance Platform Bill for About $6 Billion</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">19</span><span class="toc-t">Houthi Attack Damages Saudi Capital’s Tallest Tower</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">124 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">106 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">81 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">78 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">57 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">26 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-20.html">← Older · November 20, 2026 · Thousands of Anthropic Employees and Investors Are Set to Reap Fortunes</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
