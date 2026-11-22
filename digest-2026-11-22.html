@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 22, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-21.html">‹ Nov 21</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Sunday Issue · No. 132</div>
+    <div class="issue-date">November 22, 2026</div>
+    <div class="issue-sub">14 stories across tech, markets &amp; finance — a 9-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 14</span><span class="tab" data-key="tech">Tech · 2</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 7</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Exclusive | The Alice Huang Associate Accused of Funneling Nvidia Chips to China</div>
+        <div class="art-sum">I now have enough non-WSJ corroboration (Outlook India, TBS News, WION, and others citing the report) to write the brief with concrete facts. The Wall Street Journal identified the associate as Li Ming, a 52-year-old Chinese national who worked alongside Alice Huang and her husband Kang Wei at Singapore-based Megaspeed, allegedly orchestrating a network that routed restricted Nvidia AI chips to China while Huang served as the company&#x27;s public face; Singapore prosecutors charged Li and others with fraud in February 2025 over claims that Nvidia-equipped servers purchased through his firm, Luxuriate Your Life, were misrepresented as intended for local use rather than transshipment, and Li remains out on bail as the case proceeds. The broader network has been tied to roughly 240,000 restricted Nvidia chips (mostly H100 and H200 models) moved into China, with Megaspeed and Singapore-based Aperia Cloud Services among the entities named in chip-purchase records reviewed by reporters. Huang has reportedly since relocated to Beijing, complicating U.S. efforts to question her further about the network&#x27;s operations.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">What Comes Next After Anthropic’s Historic IPO</div>
+        <div class="art-sum">Anthropic priced its IPO at $83 a share on November 18, 2026, selling 980 million Class A shares to raise roughly $81 billion — the largest IPO on record, topping SpaceX — and valuing the company near $1.5 trillion; shares began trading on Nasdaq under ticker ANT on November 19 and opened around $111.50, up about 34%, pushing the market cap to roughly $1.8 trillion. Looking ahead, reporting from CNBC and CNN notes Anthropic now faces quarterly pressure as a public company: sustaining growth as customers scrutinize AI ROI and budgets tighten, fending off competition from open-weight models, cheaper rivals like Meta, and model routers, all while balancing its safety commitments against shareholder demands for results. The IPO filing also disclosed strong 900% net revenue retention alongside roughly $80 billion in first-half losses, underscoring the scale of both Anthropic&#x27;s growth and its spending.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Has the AI Bubble Already Burst?</div>
+        <div class="art-sum">A steep AI-stock selloff erased about $2.5 trillion in market value and wiped out the Nasdaq&#x27;s entire 2026 gains during the week of November 16-21, 2026, with Nvidia falling roughly 35-47% from its October 6 peak and losing over $1 trillion in value, while CoreWeave, Nebius, and Oracle dropped 64%, 63%, and 52% respectively from their highs. Analysts noted that nearly $32 trillion had been added to the S&amp;P 500 since ChatGPT&#x27;s 2022 launch, with more than half of that gain concentrated in just ten AI-linked companies, fueling fears of an overextended bubble. Some of the pressure stemmed from Nvidia CEO Jensen Huang&#x27;s resignation announcement around November 12 and growing doubts about the profitability of massive AI infrastructure spending. Despite the sharp declines, several analysts characterized the move as a valuation correction rather than a full bubble collapse, noting AI business fundamentals (like Palantir&#x27;s strong Q3 earnings) remained solid even as stock prices fell.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nasdaq Turns Red For The Year</div>
+        <div class="art-sum">The Nasdaq Composite fell 5.28%, or 1,261.47 points, to close at 22,617.73 on Friday, November 20, 2026, pushing the tech-heavy index 2.7% below where it started the year. The drop capped the S&amp;P 500&#x27;s worst weekly loss in roughly 18 months, with that index sinking 3.7% on the day amid a broad sell-off in AI-related stocks. Chipmakers bore the brunt of the decline: Advanced Micro Devices sank 13.3%, Micron Technology slid 13.9%, Broadcom fell 12.2%, and Nvidia dropped roughly 14%, marking its ninth decline in ten sessions. The rout was driven largely by investor anxiety over ballooning AI-related capital spending by Big Tech and fears that the sector&#x27;s buildout has outpaced near-term returns.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Blame Game Has Begun Over Anthropic’s Turbulent Trading Debut</div>
+        <div class="art-sum">Anthropic&#x27;s Nasdaq debut on November 19, 2026 priced at $83 a share and raised $81.3 billion in the largest IPO in history, with ANT shares popping as much as 34% to open near $111.50 and valuing the company above $2 trillion at the peak before closing the first day up 17% at $97.17. By the second trading day, Friday November 21, the stock fell as much as 15%—briefly trading just five cents above its IPO price—before closing down 8.5% at $88.91, erasing roughly $109 billion in market value. A blame game then broke out among bankers, fund managers shut out of the offering, and critics of the deal&#x27;s structure, pointing to factors such as more than half the IPO shares going to existing investors and employees able to immediately sell about 300 million shares, with another 300 million shares set to unlock on December 15 as a further overhang.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Trump to Punish Companies That Build Data Centers Overseas</div>
+        <div class="art-sum">President Trump said on November 21, 2026 that his administration will impose a &quot;tremendous tax&quot; penalty on U.S. companies that build AI data centers outside the United States, arguing the move is needed so American firms don&#x27;t lose ground to China in the AI race. Speaking at a White House news conference following his Asia trip, Trump said &quot;we&#x27;re not going to allow our companies to build data centers outside of our country,&quot; and specifically cited a proposed data center in Finland that he said his administration would block. Major US-based developers such as Equinix and Digital Realty operate significant overseas data center capacity, meaning the threatened tax could disrupt existing global buildout plans tied to the AI boom. No formal policy, tax rate, or legislative text had been released as of the announcement.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Tech Rout Deepens as Anthropic Stock Slides</div>
+        <div class="art-sum">Anthropic went public on the Nasdaq on November 19, 2026, pricing its IPO at $83 and raising roughly $93.5 billion in the largest IPO on record, with shares opening around $111.50 and the company reaching a fully diluted valuation near $2 trillion before closing that first day at $97.17 (about $1.76 trillion). On its second trading day, November 20, 2026, Anthropic shares fell about 8.5–9%, closing near $88.91, just above the IPO price, as part of a broader tech selloff that sent the Nasdaq Composite down over 5% and toward its worst week since March 2020. The slide dragged other AI-linked names lower too, with Nvidia shares dropping sharply the same week, as investors grew skeptical that AI valuations could be justified. By week&#x27;s end Anthropic&#x27;s fully diluted market cap had settled around $1.6 trillion, still ranking it behind only a handful of U.S. companies like Apple, Microsoft, and Nvidia.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">What It’s Like to Retire in Thailand</div>
+        <div class="art-sum">No other outlet appears to have covered this specific WSJ feature — the search results returned only generic expat-blog and SEO content about retiring in Thailand, not reporting on the WSJ piece itself, so there&#x27;s no independent news coverage to summarize as a brief.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">The 11 Retirement-Planning Milestones Everyone Over 50 Needs to Know</div>
+        <div class="art-sum">Key retirement-planning milestones begin at age 50, when savers can make catch-up contributions to 401(k)s, 403(b)s, and IRAs, adding $1,100 to the 2026 IRA limit for a total of $8,600 and at least $8,000 extra to 401(k) plans; those aged 60-63 qualify for an even larger &quot;super catch-up&quot; of $11,250 in 401(k) plans in 2026, allowing total contributions up to $35,750. At 55, workers who leave a job can tap that employer&#x27;s 401(k) penalty-free under the Rule of 55, and HSA holders become eligible for a $1,000 catch-up contribution. At 59½, savers can withdraw from IRAs and 401(k)s without the usual early-withdrawal penalty, while 62 marks the earliest age to claim Social Security and 65 brings Medicare eligibility, with required minimum distributions from most retirement accounts kicking in at 73.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How to Support Your Grandchildren Without Straining Your Finances</div>
+        <div class="art-sum">This is a general personal-finance advice topic rather than a breaking news story, so there&#x27;s no single underlying event with wire-service confirmation — it&#x27;s covered independently across many personal-finance outlets. Grandparents can give grandchildren up to $19,000 per recipient in 2026 ($38,000 for married couples) without triggering gift-tax reporting, and can &quot;superfund&quot; a 529 plan with up to five years of gifts at once — $95,000 per individual or $190,000 per married couple per grandchild. Direct tuition payments made straight to a school are exempt from gift-tax limits entirely. Advisors recommend setting a fixed annual &quot;giving budget,&quot; favoring one-time gifts (e.g., for a crib or school supplies) over open-ended recurring support, and confirming grandparent-owned 529 distributions no longer count as student income under the redesigned FAFSA (effective for the 2024-25 school year), which removed a prior financial-aid penalty.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">What to Do Now to Prepare for the Next Bank Outage</div>
+        <div class="art-sum">A nationwide outage hit JPMorgan Chase, Bank of America, Wells Fargo and U.S. Bank customers on Monday, November 16, 2026, locking users out of online and mobile banking, delaying Zelle transfers, and in Chase&#x27;s case lasting roughly eight and a half hours before full resolution; Chase attributed the disruption to a software bug in on-premise hardware rather than a cyberattack. Consumer advocates, including the Consumer Financial Protection Bureau, recommend keeping one to two days&#x27; worth of cash on hand, saving your bank&#x27;s customer-service number and account number in a safe place, knowing that debit cards typically still work at ATMs during app outages, and treating any unsolicited &quot;account locked&quot; texts during such events as likely phishing attempts.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Boomers Are Rewriting the Playbook for Old Age. It Doesn’t Include Winding Down.</div>
+        <div class="art-sum">Baby boomers, the oldest of whom turn 80 in 2026, are redefining retirement rather than winding down, with about 4 million Americans crossing that age threshold this year, a figure projected to double over the next two decades. A 25th Annual Retirement Survey from the Transamerica Center for Retirement Studies, which polled 10,009 U.S. adults and was reported November 13, 2026, found that 57% of boomers expect to retire at 70 or later, or never, compared with just 31% of millennials. CNBC&#x27;s related reporting on boomers turning 80 in 2026 notes that many are prioritizing estate planning, fraud protection, and liquid cash access while shifting toward spending on experiences, like travel, rather than preserving wealth for heirs. These findings reflect a broader generational pattern of boomers staying in the workforce longer and treating retirement as a flexible, extended phase rather than a fixed exit.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Anthropic’s Mega IPO Lives Up to Wall Street Hype but Fails to Revive AI Trade</div>
+        <div class="art-sum">Anthropic priced its IPO at $83 a share and began trading on the Nasdaq under ticker ANT on November 19, 2026, raising roughly $81.3 billion in the largest IPO on record, surpassing SpaceX&#x27;s $75 billion offering. Shares opened at $111.50, valuing the company near $2 trillion, before closing the first day at $97.17, up about 17% from the offer price. Despite the strong debut, the broader AI trade failed to get a lift: the Nasdaq fell about 2.3% that day on lingering doubts about AI valuations and data-center spending, and Anthropic reportedly lost roughly $109 billion in market value on its second day of trading. More than half of the $81 billion in shares sold went to existing investors, and the company let current and former employees immediately sell about 300 million shares, worth roughly $26 billion at the IPO price.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">This Ex-Sheriff Was on the Beat When Mark Walter Loaded Insurers With Insider Deals</div>
+        <div class="art-sum">I have enough concrete detail now to write the brief. Delaware Insurance Commissioner Trinidad Navarro — a former New Castle County sheriff elected the state&#x27;s top insurance regulator in 2016 — is under scrutiny for having repeatedly signed off on the financial health of two life insurers, Delaware Life Insurance Co. and Clear Spring Life and Annuity Co., controlled by billionaire Dodgers and Guggenheim Partners owner Mark Walter; both companies have since disclosed that more than $20 billion in loans on their books should have been classified as affiliated-party transactions but weren&#x27;t. Delaware&#x27;s insurance department says it and other state regulators were &quot;intentionally misled&quot; about the roughly $21 billion in assets, and it is now investigating in parallel with federal prosecutors in Manhattan and the SEC, who are examining whether fraud occurred in the private-credit deals after an internal whistleblower raised concerns. Sen. Elizabeth Warren has pressed the National Association of Insurance Commissioners for answers, citing the episode as evidence of regulatory gaps that let an insurer&#x27;s own owner steer billions of dollars of policyholder-backing assets into his other ventures with insufficient oversight. No charges have been filed against Walter or his companies as of November 2026.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 14 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Exclusive | The Alice Huang Associate Accused of Funneling Nvidia Chips to China</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">What Comes Next After Anthropic’s Historic IPO</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">3</span><span class="toc-t">Has the AI Bubble Already Burst?</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">Nasdaq Turns Red For The Year</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">The Blame Game Has Begun Over Anthropic’s Turbulent Trading Debut</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Trump to Punish Companies That Build Data Centers Overseas</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Tech Rout Deepens as Anthropic Stock Slides</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">8</span><span class="toc-t">What It’s Like to Retire in Thailand</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">The 11 Retirement-Planning Milestones Everyone Over 50 Needs to Know</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">How to Support Your Grandchildren Without Straining Your Finances</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">11</span><span class="toc-t">What to Do Now to Prepare for the Next Bank Outage</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Boomers Are Rewriting the Playbook for Old Age. It Doesn’t Include Winding Down.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">Anthropic’s Mega IPO Lives Up to Wall Street Hype but Fails to Revive AI Trade</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">14</span><span class="toc-t">This Ex-Sheriff Was on the Beat When Mark Walter Loaded Insurers With Insider Deals</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">125 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">107 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">82 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-21.html">← Older · November 21, 2026 · Exclusive | Databricks In Early Talks To Raise Funds At $225 Billion Valuation</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
