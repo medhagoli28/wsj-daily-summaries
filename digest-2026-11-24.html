@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 24, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-23.html">‹ Nov 23</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Tuesday Issue · No. 134</div>
+    <div class="issue-date">November 24, 2026</div>
+    <div class="issue-sub">13 stories across tech, markets &amp; finance — a 9-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 13</span><span class="tab" data-key="tech">Tech · 6</span><span class="tab" data-key="markets">Markets · 5</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Jensen Huang Is Back at Nvidia. Major Investigations Still Surround Him.</div>
+        <div class="art-sum">Nvidia&#x27;s board unanimously reinstated Jensen Huang as CEO, president and director on November 23, 2026, just 11 days after he resigned on November 12 amid revelations of extramarital affairs — including one with Megaspeed executive Alice Huang, who was described in reports as a suspected Chinese intelligence asset. Despite reinstating him, the board imposed new oversight: it formed a National Security and Export Control Committee led by director Suzanne Nora Johnson (with Stephen Neal and John Dabiri), hired law firm Wachtell, Lipton, Rosen &amp; Katz to conduct an independent investigation into whether company secrets or national security were compromised, and began a search for Nvidia&#x27;s first Chief Compliance Officer, who will report directly to the board&#x27;s governance committee. The board said it consulted senior U.S. government officials and concluded Huang&#x27;s return &quot;poses no national security risk.&quot;</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">For Better or Worse, the Fate of the AI Boom Is in Nvidia’s Hands</div>
+        <div class="art-sum">Nvidia reported fiscal Q3 2027 revenue of $115.8 billion for the quarter ended October 25, 2026, up 103% year-over-year, with data-center revenue of $107.6 billion driven by the Blackwell Ultra ramp, yet the stock has since lost nearly $2 trillion in market value — more than 30% — since its October 6, 2026 peak amid a broader AI-spending selloff. The rout deepened the week of November 20, when Nvidia shares fell around 14% in a single session as Anthropic&#x27;s post-IPO gains also evaporated and global markets logged their worst week since March 2020. Compounding the turmoil, Nvidia CEO Jensen Huang resigned amid an ongoing investigation, while quarterly global AI funding has been declining (from $239.1 billion in Q1 2026 to $103.3 billion in Q3), and voters in the recent midterms backed data-center moratoriums, adding political headwinds to the buildout Nvidia&#x27;s chips underpin.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Most Famous Problem in Math Was Just Solved by AI—and This Human</div>
+        <div class="art-sum">Levent Alpöge, a number theorist at Anthropic (on leave from Harvard), announced on Friday, November 21, 2026, that he had produced a proof of the Riemann hypothesis—unsolved since 1859—working together with Anthropic&#x27;s Claude AI; his result actually covers the broader generalized Riemann hypothesis. Rather than a conventional paper, Alpöge released the argument in the Lean proof-assistant language, backed by roughly 17 million lines of formally verified code, with an AI-generated explanation he says runs over 250,000 pages. The Riemann hypothesis is one of the six remaining Clay Mathematics Institute Millennium Prize problems, carrying a $1 million reward, and mathematician Terence Tao had predicted in October 2026 that AI wouldn&#x27;t crack it until around 2050. Independent verification of the claimed proof was still ongoing as of the announcement, and the mathematics community has reacted with a mix of astonishment and caution.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Cisco, OpenAI Launch Project to Safeguard Agentic AI</div>
+        <div class="art-sum">Cisco and OpenAI announced an open-source project called Shirudo (Japanese for &quot;shield&quot;) on November 23, 2026, aimed at making Linux infrastructure self-defending against cyberattacks using AI agents. The platform uses eBPF technology to let AI agents detect a vulnerability, build a protective &quot;shield&quot; inside the kernel, and test it against the exploit—without needing a source-code patch—before the shield is deployed, with humans setting the safety boundaries the agents must operate within. The goal is to shift security response from human-paced patching to automated, agent-driven defense, and the companies envision eventually distributing these shields alongside vulnerability disclosures to give organizations temporary protection until a permanent patch is available. SecurityWeek additionally frames the tool as specifically designed to shield unpatched Linux systems while patches are pending.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">U.S. Blacklists Alibaba-Owned Company Over Chip Curbs</div>
+        <div class="art-sum">The U.S. Commerce Department added seven companies based in Malaysia, Singapore and Thailand to its export blacklist, including Apex Enterprise Solutions, a Singapore-based unit of Alibaba that procures computing capacity for the Chinese tech giant, over concerns that advanced Nvidia chips were being diverted to unauthorized users in China. The action, disclosed November 24, 2026, stems from an ongoing investigation into suspected chip diversion and means any exports, re-exports, or transfers of items subject to U.S. Export Administration Regulations to these firms now require a license. Also named was Singapore&#x27;s Megaspeed, an Nvidia partner. Alibaba rejected the designation, calling Apex&#x27;s inclusion &quot;erroneous,&quot; stating the firm never diverted export-controlled advanced computing chips, and said it would &quot;seek all legal avenues&quot; to protect its rights and reputation.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Why Amazon’s Rival to Starlink Is Struggling to Catch Up With SpaceX</div>
+        <div class="art-sum">Amazon&#x27;s Project Kuiper has only around a few dozen satellites in orbit after launching its first batch of 27 in April 2025, far behind SpaceX&#x27;s Starlink, which has deployed more than 7,000 satellites; Kuiper faces an FCC deadline to launch 1,600 satellites by mid-2026, meaning it must roughly quadruple its production and launch pace or seek a regulatory extension. A second Kuiper launch in June 2025 was pushed back by United Launch Alliance due to weather, compounding delays already caused by faulty supplier components and limited rocket availability. Amazon has acknowledged production bottlenecks in its satellite manufacturing, even as it continues deploying batches from Florida to build out the broadband constellation meant to rival Starlink&#x27;s dominance in satellite internet.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Compass Group Plans to Move Primary Listing to U.S.</div>
+        <div class="art-sum">Compass Group, the British catering giant, has launched a shareholder consultation on moving its primary stock market listing from London to the United States, with the transition expected to complete in 2028 pending approval. The company said North America now generates roughly 75% of group underlying operating profit and employs about 325,000 people — more than half its global workforce — making a US listing a better fit with its largest client base and the world&#x27;s deepest capital markets. Compass plans to retain a secondary listing in the UK and will keep its headquarters there. The move follows similar primary-listing shifts to the US by Flutter Entertainment, CRH, and Wise, adding to concerns about an exodus of major companies from the London Stock Exchange.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">AI Selloff a Realignment of Expectations, Not Broken Investment Cycle</div>
+        <div class="art-sum">A sharp technology selloff on November 5, 2026 knocked down AI-linked stocks as investors questioned whether the sector&#x27;s roughly $740 billion in combined 2026 capital expenditure from Alphabet, Amazon, Meta and Microsoft can translate into sustainable cash flow; Nvidia fell 9.3% that day, with AMD down 17.3% and CoreWeave off 9.8%. The rout deepened later in the month: Reuters reported Nvidia shares plunged further around November 20 amid a broader AI-sector sink, even as Anthropic&#x27;s newly listed shares gave back most of their IPO gains. UBS characterized the move as a &quot;positioning reset&quot; rather than the start of an AI investment downturn, arguing underlying demand remains intact and still projecting about $1.5 trillion in AI-related spending by 2028. Other strategists framed it similarly as a realignment of valuations and expectations rather than a breakdown of the AI capex cycle itself.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Anthropic Committed to Spend $900 Billion. Wall Street Expects Its Debt to Be Junk.</div>
+        <div class="art-sum">Anthropic disclosed roughly $900.9 billion in aggregate long-term infrastructure and compute commitments in an amended S-1 filing tied to its IPO, with about $451.6 billion due before the end of 2030 and roughly $70.7 billion payable within 12 months of September 30, 2026; combined with other variable-cost agreements, total potential exposure runs to $1.05–$1.08 trillion. Despite a reported valuation north of $1 trillion, bond investors and rating agencies are reportedly expected to assign Anthropic a speculative-grade (BB, or &quot;junk&quot;) rating rather than investment-grade, since the company posted a net loss exceeding $100 billion over the first three quarters of 2026 while taking on these massive compute obligations. CEO Dario Amodei has pushed back, telling CNBC the $900 billion will be spread across many years rather than paid immediately, but roughly half the commitments don&#x27;t begin until 2030, raising questions among bond managers about Anthropic&#x27;s long-term debt-servicing capacity.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Treasury Yields Rise After Huang Returns as Nvidia CEO; European Bond Yields Slip</div>
+        <div class="art-sum">U.S. Treasury yields climbed on Monday, November 23, 2026, after Nvidia&#x27;s board reinstated Jensen Huang as CEO, easing investor concerns about the stability of the AI trade and reducing demand for safe-haven assets; the 10-year yield rose 4.6 basis points to 4.96%, the 2-year yield jumped 10.9 basis points to 4.722%, and the 30-year yield added 2.3 basis points to 5.325%. The move came alongside a broader Wall Street rally tied to Huang&#x27;s return, while S&amp;P Global&#x27;s flash U.S. Composite PMI slipped to 54.6 in November from 55.9 in October. In contrast, European government bond yields slipped, with Germany&#x27;s 10-year Bund yield little changed near 3.3% and France&#x27;s 10-year yield falling about 6 basis points to roughly 4.82%, as European markets reacted less to the AI-driven optimism and more to easing inflation pressure from lower oil prices. The divergence reflected the U.S.-centric nature of the Nvidia/AI-trade relief rally versus separate regional drivers in Europe.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nvidia’s Rally Ripples Across Markets</div>
+        <div class="art-sum">Nvidia shares surged 31.5% on November 23, 2026, adding nearly $1 trillion in market value after the company reinstated founder Jensen Huang as CEO, president and director, reversing his earlier resignation amid an AI-spending-driven stock slide that had seen the shares drop roughly 25% over the prior month. The announcement supercharged a broader rally, with the S&amp;P 500 jumping 4.73%, the Nasdaq Composite surging 6.51%, and the Dow gaining 1,448 points (3.01%). Other chip and AI-linked names rode the wave higher, including Taiwan Semiconductor (+15%, ~$248 billion in value), Micron (+18%, ~$123 billion), and Dell (+21%, ~$36 billion), while Asian markets jumped as well, with Taiwan&#x27;s main index up about 9% and South Korea&#x27;s KOSPI rising 6.32% to close at 5,006.03. The move came just days after Nvidia&#x27;s November 17 fiscal third-quarter report showed revenue of $115.8 billion, up 103% year-over-year, beating Wall Street estimates.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Jensen and Lori Huang Have Amassed a Vast Fortune. We Break Down Their Wealth.</div>
+        <div class="art-sum">Jensen and Lori Huang&#x27;s combined Nvidia-driven fortune is worth roughly $150 billion, held through a web of trusts, LLCs, and a foundation rather than as simple individual stock ownership; Jensen directly owns about 70 million shares (~$12 billion), while he and Lori jointly control about 530 million shares as co-trustees of the Jen-Hsun and Lori Huang Living Trust, created in 1995. Lori also serves as president of the Jen-Hsun and Lori Huang Foundation, which held roughly 69 million shares and reported about $9.1 billion in net assets as of 2024 IRS filings. Altogether the couple jointly oversees close to 800 million Nvidia shares, and CNBC reported on November 12, 2026 that this jointly-controlled structure has become more complicated to untangle now that Jensen has resigned as CEO.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">How Southwest, Target and AT&amp;T Finance Chiefs Think About the Human in the Loop</div>
+        <div class="art-sum">I now have enough confirmed facts from multiple non-WSJ sources (MIT CFO Summit&#x27;s own site/press release, cfodive, financialcontent/bizwire) to write the brief. Pascal Desroches of AT&amp;T, Tom Doxey of Southwest Airlines, and Jim Lee of Target appeared together on a keynote panel at the 24th annual MIT Sloan CFO Summit on November 19, 2026, in a session themed &quot;The Human CFO: Creativity and Judgment,&quot; discussing how AI is reshaping finance decision-making while keeping executives in control of key calls. The appearance marked Desroches&#x27;s final public event as AT&amp;T&#x27;s finance chief before his planned retirement at the end of 2026, when he is set to be succeeded by Jennifer Biry; he used the panel to highlight productivity gains AI has delivered in AT&amp;T&#x27;s call centers, field service, network operations, and software coding. The one-day, sold-out summit in Newton, Massachusetts, also featured finance chiefs from Chevron and Snowflake addressing similar themes of balancing AI automation with human oversight.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 13 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Jensen Huang Is Back at Nvidia. Major Investigations Still Surround Him.</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">For Better or Worse, the Fate of the AI Boom Is in Nvidia’s Hands</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Most Famous Problem in Math Was Just Solved by AI—and This Human</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Cisco, OpenAI Launch Project to Safeguard Agentic AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">5</span><span class="toc-t">U.S. Blacklists Alibaba-Owned Company Over Chip Curbs</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">6</span><span class="toc-t">Why Amazon’s Rival to Starlink Is Struggling to Catch Up With SpaceX</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">Compass Group Plans to Move Primary Listing to U.S.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">AI Selloff a Realignment of Expectations, Not Broken Investment Cycle</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">9</span><span class="toc-t">Anthropic Committed to Spend $900 Billion. Wall Street Expects Its Debt to Be Junk.</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">10</span><span class="toc-t">Treasury Yields Rise After Huang Returns as Nvidia CEO; European Bond Yields Slip</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">11</span><span class="toc-t">Nvidia’s Rally Ripples Across Markets</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">12</span><span class="toc-t">Jensen and Lori Huang Have Amassed a Vast Fortune. We Break Down Their Wealth.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">13</span><span class="toc-t">How Southwest, Target and AT&amp;T Finance Chiefs Think About the Human in the Loop</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">127 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">109 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">83 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-23.html">← Older · November 23, 2026 · The 15 Best Tech Gifts of 2026, According to Our In-House Guru</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
