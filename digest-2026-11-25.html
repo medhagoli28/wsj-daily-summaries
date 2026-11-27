@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 25, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-24.html">‹ Nov 24</a> &nbsp;·&nbsp; <a href="digest-2026-11-26.html">Nov 26 ›</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Wednesday Issue · No. 135</div>
+    <div class="issue-date">November 25, 2026</div>
+    <div class="issue-sub">7 stories across tech, markets &amp; finance — a 5-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 7</span><span class="tab" data-key="tech">Tech · 3</span><span class="tab" data-key="markets">Markets · 4</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Huang Tells Staff He Is in Therapy, Apologizes in Nvidia Town Hall</div>
+        <div class="art-sum">Nvidia CEO Jensen Huang apologized to employees during an all-hands meeting on November 24, 2026, a day after being reinstated to the top job, calling it the &quot;hardest company meeting&quot; he&#x27;d ever done. He told staff he has been in mental health therapy daily, roughly 90 minutes a session, and that it was helping him &quot;a lot,&quot; while acknowledging he had violated Nvidia&#x27;s code of conduct. The apology followed his brief ouster tied to reports of an extramarital affair with a woman U.S. officials suspected of ties to Chinese intelligence, as well as relationships with two other Nvidia employees. Huang said he was grateful for a second chance to lead the company he co-founded nearly three decades ago.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">OpenAI’s IPO Countdown Clock Is Ticking</div>
+        <div class="art-sum">OpenAI confidentially filed a draft registration statement with the U.S. SEC around June 8, 2026, laying groundwork for what could be a record-setting IPO, with CFO Sarah Friar telling employees the company expects to be public in 2027, or sooner if growth accelerates. CEO Sam Altman confirmed in September 2026 that OpenAI would not list in 2026, pushing the earliest listing to 2027, with forecasters pegging a likely window around October 2027. Private-market investors already value the company near $1.25 trillion, and as of October 2026 OpenAI was in talks for a roughly $30 billion primary funding round that could push its valuation above $1.4 trillion, a push partly driven by competitive pressure from Anthropic&#x27;s expected IPO. OpenAI had previously closed a funding round in March 2026 with $122 billion in committed capital at an $852 billion valuation.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The AI Build-Out Is Sucking Up Resources and Crowding Out the Rest of the Economy</div>
+        <div class="art-sum">AI-related capital spending is on pace to hit roughly $600 billion in the U.S. in 2026, equal to about 2% of GDP, with Goldman Sachs economists estimating that AI-linked investment categories accounted for a median 35.5% of quarterly U.S. GDP growth over the past six quarters, effectively crowding out other forms of business investment, especially in rate-sensitive sectors. The buildout is also straining physical resources: data-center electricity consumption is projected to roughly double from about 485 terawatt-hours in 2025 to near 950 terawatt-hours by 2030, and in Virginia, the top data-center market, facilities already consume more than a quarter of the state&#x27;s power. Construction labor, equipment, and semiconductor fabrication capacity are similarly being diverted toward AI infrastructure projects, which carry gross margins more than twice those of typical non-tech construction, at the expense of housing and other building activity. Some economists, including those at Goldman Sachs, caution that the scale of this crowding-out effect may be overstated relative to its true drag on broader economic capacity.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">These Technical Measures Warned of Stock Market Whiplash</div>
+        <div class="art-sum">The S&amp;P 500&#x27;s slide below its 50-day moving average by 4.1 standard deviations — the widest gap since August 2015 and among the most extreme readings in at least two decades — flagged the sharp volatility that has rattled Wall Street through mid-to-late November 2026, with the VIX jumping from roughly 20 to above 37 over the same week. The S&amp;P 500 fell 4.36% to 7,353.73 and the Nasdaq Composite dropped 5.52% to 24,315.00 on Thursday, November 5, while the 14-day RSI sank to 24.7, its lowest since April 8, 2025, signaling extreme oversold conditions. Market breadth also deteriorated, with only about 46% of S&amp;P 500 stocks trading above their 200-day moving average and 43% above their 50-day average, prompting strategists such as Fundstrat&#x27;s Newton to caution that &quot;we haven&#x27;t really seen evidence of the market being flushed out.&quot; Analysts remain split on whether the selloff — driven partly by AI-valuation repricing and a liquidity contraction tied to Gulf markets — has run its course or signals deeper trouble ahead.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Exclusive | Stripe’s Valuation Set to Top $200 Billion in Latest Investor Talks</div>
+        <div class="art-sum">Stripe is in talks with investors over a tender offer that would value the payments company at more than $200 billion, up at least 26% from the $159 billion valuation set in its last employee tender offer in February 2026, with the deal expected to close in early 2027 and existing investors reportedly buying some of the shares this time. The valuation jump follows strong growth: Stripe processed $1.9 trillion in payment volume in 2025, a 34% increase, and told investors that first-half 2026 revenue and free cash flow grew 41% and 43%, respectively. The company also recently made its largest acquisition to date, buying AI model-routing startup OpenRouter for upwards of $7 billion. Talks are ongoing and the final valuation could still shift before the deal closes.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Nvidia Chief’s Return Lifts Many Boats</div>
+        <div class="art-sum">Nvidia shares surged roughly 31% on Monday, November 23, 2026, after the company&#x27;s board reinstated Jensen Huang as CEO and president effective immediately, adding hundreds of billions of dollars to its market capitalization just a week after he had reportedly left amid allegations tied to a Chinese spy affair. The rally spread across the chip sector, with Intel jumping about 13%, AMD gaining roughly 7%, and AI infrastructure firm CoreWeave rising 22.3%, helping the broader market rebound from the prior week&#x27;s AI-stock selloff (Nvidia itself had fallen 12.6% in November on AI-bubble fears). Despite the one-day bounce, analysts cautioned it doesn&#x27;t resolve the larger debate over whether the AI trade is in a sustainable boom or a bubble nearing its end.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">The Frantic White House Push to Get Jensen Huang Back</div>
+        <div class="art-sum">Jensen Huang was reinstated as Nvidia&#x27;s CEO following an intense, multi-day pressure campaign by the Trump administration, with Vice President JD Vance leading weekend calls privately urging Nvidia&#x27;s board to bring him back, according to CNN&#x27;s reporting on November 23, 2026; the push came after Huang&#x27;s affair with a suspected Chinese spy became public, triggering a scandal that nearly cost him his job. Trump personally intervened, stating he believed Huang &quot;did nothing wrong,&quot; even as the episode fueled a bipartisan congressional effort—reported by CNBC on November 12 and 17, 2026—to attach stricter AI chip export controls on China to the National Defense Authorization Act. Huang had previously lobbied the administration to allow sales of advanced chips like the H200 to approved Chinese customers, a campaign that already unsettled China hawks in Congress, and his reinstatement is now seen as deepening the rift between a White House seeking stable US-China ties and lawmakers pushing to tighten chip curbs.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 7 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Huang Tells Staff He Is in Therapy, Apologizes in Nvidia Town Hall</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">OpenAI’s IPO Countdown Clock Is Ticking</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The AI Build-Out Is Sucking Up Resources and Crowding Out the Rest of the Economy</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">4</span><span class="toc-t">These Technical Measures Warned of Stock Market Whiplash</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Exclusive | Stripe’s Valuation Set to Top $200 Billion in Latest Investor Talks</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Nvidia Chief’s Return Lifts Many Boats</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">The Frantic White House Push to Get Jensen Huang Back</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">130 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">112 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">86 days</span></div><div class="thread-row"><span class="thread-name">Deals &amp; M&amp;A</span><span class="thread-days">58 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-24.html">← Older · November 24, 2026 · Jensen Huang Is Back at Nvidia. Major Investigations Still Surround Him.</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>

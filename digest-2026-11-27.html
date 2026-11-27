@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Deep Digest — November 27, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <style>
+  :root { --paper:#f6f1e6; --outer:#e5e1d6; --panel:#efe8d8; --ink:#1c1a15;
+          --body:#413d33; --mut:#5a554a; --mut2:#7c7568; --faint:#a49b86;
+          --rule:#d8cfbd; --rule2:#d3c9b4; --brown:#8a5a2b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:'Newsreader',Georgia,'Times New Roman',serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  ::selection { background:#e9d9bf; }
+  .sans { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+  .paper { max-width:1000px; margin:0 auto; background:var(--paper); min-height:100vh;
+           box-shadow:0 0 40px rgba(0,0,0,.12); }
+
+  /* masthead */
+  .mast { padding:26px 44px 20px; text-align:center; border-bottom:2px solid var(--ink); }
+  .mast-top { display:flex; justify-content:space-between; align-items:center;
+              font:500 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--brown); }
+  .mast-title { font-weight:600; font-size:56px; letter-spacing:-.01em; margin:14px 0 9px; }
+  .mast-sub { font:400 12px/1.5 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:var(--mut); }
+
+  /* nav / search bar */
+  .navbar { display:flex; align-items:center; justify-content:space-between; padding:11px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); gap:12px; flex-wrap:wrap; }
+  .navtabs { display:flex; gap:22px; font:500 12px/1 system-ui,sans-serif; }
+  .navtabs span { color:var(--mut2); }
+  .navtabs .on { color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+  .searchbox { display:flex; align-items:center; gap:8px; border:1px solid #c9bfa8; border-radius:2px;
+               padding:6px 11px; background:var(--paper); font:400 12px system-ui,sans-serif; color:#8a8375;
+               min-width:210px; }
+  .searchbox input { border:0; background:transparent; font:inherit; color:var(--ink); width:100%; outline:none; }
+
+  /* lead + also-inside */
+  .lead-grid { display:grid; grid-template-columns:1.55fr 1fr; }
+  .lead { padding:30px 38px 32px; border-right:1px solid var(--rule); }
+  .kicker { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--brown); margin-bottom:12px; }
+  .lead-title { font-weight:700; font-size:40px; line-height:1.04; letter-spacing:-.015em; margin-bottom:14px; }
+  .lead-sum { font-size:17px; line-height:1.5; color:var(--body); }
+  .lead-btn { display:inline-flex; gap:8px; margin-top:18px; font:600 10px/1 system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; padding:9px 13px; background:var(--ink); color:var(--paper); }
+  .lead-btn:hover { text-decoration:none; opacity:.92; }
+  .also { padding:28px 32px; }
+  .also-h { font:600 10.5px/1 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--mut); margin-bottom:14px; }
+  .also-item { border-top:1px solid var(--rule); padding-top:11px; margin-bottom:13px; display:block; }
+  .also-cat { font:600 9px/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+  .also-title { font-size:17px; line-height:1.2; font-weight:600; margin-top:3px; }
+
+  /* archive calendar */
+  .archive { padding:24px 44px 18px; border-top:2px solid var(--ink); background:var(--panel); }
+  .archive + .archive { border-top:1px solid var(--rule); }
+  .archive-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+  .archive-title { font-weight:600; font-size:23px; }
+  .archive-meta { font:400 11px system-ui,sans-serif; color:var(--mut2); letter-spacing:.04em; }
+  .weekhead { display:grid; grid-template-columns:repeat(7,1fr); gap:2px 8px; text-align:center;
+              font:600 10px/1 system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+              color:var(--faint); margin-bottom:7px; }
+  .caldays { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .cell { min-height:60px; padding-top:5px; }
+  .cell .cnum { font-size:14px; }
+  .cell .chead { font:500 10.5px/1.2 system-ui,sans-serif; color:#4a4638; margin-top:3px; }
+  .cell.blank { border-top:1px solid var(--rule2); color:#c3b9a3; }
+  .cell.has { border-top:1.5px solid var(--ink); }
+  .cell.has .cnum { font-weight:600; }
+  .cell.lead { border-top:2.5px solid var(--brown); background:var(--paper); }
+  .cell.lead .cnum { font-weight:700; color:var(--brown); }
+  .cell.lead .chead { color:var(--ink); font-weight:600; }
+  .cell a { display:block; }
+  .cell a:hover { text-decoration:none; }
+  .cell a:hover .chead { text-decoration:underline; }
+
+  /* recurring threads (landing) */
+  .threads { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:16px 0 6px;
+             border-top:1px solid var(--rule); margin-top:12px; }
+  .threads-label { font:600 10px/1 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--mut2); margin-right:4px; }
+  .thread { font-style:italic; font-size:15px; border-bottom:1px solid var(--brown); }
+
+  /* issue page */
+  .crumb { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+           border-bottom:1px solid var(--rule); font:500 11px/1 system-ui,sans-serif;
+           letter-spacing:.04em; color:var(--mut2); gap:10px; }
+  .crumb a { color:var(--brown); }
+  .crumb .mid { letter-spacing:.16em; text-transform:uppercase; }
+  .issue-mast { padding:34px 44px 22px; text-align:center; border-bottom:2px solid var(--ink); }
+  .issue-kicker { font:500 11px/1 system-ui,sans-serif; letter-spacing:.22em; text-transform:uppercase;
+                  color:var(--brown); margin-bottom:14px; }
+  .issue-date { font-weight:700; font-size:60px; line-height:.98; letter-spacing:-.02em; }
+  .issue-sub { font-style:italic; font-size:18px; color:var(--mut); margin-top:12px; }
+  .tabbar { display:flex; align-items:center; justify-content:space-between; padding:12px 44px;
+            border-bottom:1px solid var(--rule); background:var(--panel); position:sticky; top:0; z-index:5;
+            gap:12px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:8px; font:500 12px/1 system-ui,sans-serif; }
+  .tab { cursor:pointer; padding:6px 12px; border-radius:2px; border:1px solid #c9bfa8; background:transparent; color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .issue-grid { display:grid; grid-template-columns:1.7fr 1fr; }
+  .articles { padding:30px 38px 34px; border-right:1px solid var(--rule); }
+  .article { padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid var(--rule); }
+  .article:last-child { border-bottom:0; margin-bottom:0; }
+  .art-cat { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+  .art-title { font-weight:700; font-size:25px; line-height:1.1; margin-bottom:9px; }
+  .art-title a:hover { text-decoration:underline; }
+  .art-sum { font-size:15.5px; line-height:1.56; color:var(--body); }
+  .art-kicker { font-style:italic; color:var(--mut); }
+  .sidebar { padding:30px; background:var(--panel); }
+  .sidebar-sticky { position:sticky; top:72px; }
+  .side-h { font:600 10px/1 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+            color:var(--mut2); margin-bottom:14px; }
+  .toc { display:flex; flex-direction:column; gap:9px; margin-bottom:26px; }
+  .toc-item { display:flex; gap:9px; align-items:baseline; border-bottom:1px solid var(--rule2); padding-bottom:8px; }
+  .toc-n { font:600 10px system-ui,sans-serif; width:14px; flex:none; }
+  .toc-t { font-size:14px; line-height:1.25; color:var(--body); flex:1; }
+  .side-threads-h { padding-top:20px; border-top:2px solid var(--ink); }
+  .thread-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px; }
+  .thread-name { font-style:italic; font-size:16px; border-bottom:1px solid var(--brown); }
+  .thread-days { font:400 11px system-ui,sans-serif; color:var(--faint); }
+  .issue-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 44px;
+                border-top:2px solid var(--ink); background:var(--panel); font:500 12px/1.4 system-ui,sans-serif; }
+  .issue-foot .older { color:var(--brown); }
+  .issue-foot .home { color:var(--faint); }
+
+  @media (max-width:760px) {
+    .mast, .archive { padding-left:20px; padding-right:20px; }
+    .navbar, .crumb, .tabbar, .issue-mast, .issue-foot { padding-left:20px; padding-right:20px; }
+    .mast-title { font-size:38px; } .issue-date { font-size:40px; }
+    .lead-grid, .issue-grid { grid-template-columns:1fr; }
+    .lead, .articles { border-right:0; border-bottom:1px solid var(--rule); }
+    .cell .chead { display:none; } .cell { min-height:44px; }
+    .searchbox { min-width:0; width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="crumb">
+    <a href="index.html">← The Archive</a>
+    <span class="mid">The Deep Digest</span>
+    <span><a href="digest-2026-11-26.html">‹ Nov 26</a></span>
+  </div>
+  <header class="issue-mast">
+    <div class="issue-kicker">Friday Issue · No. 137</div>
+    <div class="issue-date">November 27, 2026</div>
+    <div class="issue-sub">10 stories across tech, markets &amp; finance — a 6-minute read.</div>
+  </header>
+  <div class="tabbar"><div class="tabs"><span class="tab on" data-key="all">All · 10</span><span class="tab" data-key="tech">Tech · 4</span><span class="tab" data-key="markets">Markets · 4</span><span class="tab" data-key="finance">Finance · 2</span></div><form class="searchbox" action="search.html" method="get" role="search"><span>⌕</span><input name="q" placeholder="Search the archive…" aria-label="Search the archive"></form></div>
+  <div class="issue-grid">
+    <div class="articles">
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Nvidia Tells Partners to Pause Shipments to Southeast Asia</div>
+        <div class="art-sum">Nvidia has directed manufacturing partners, including Dell and Super Micro, to pause server shipments to Malaysia, Singapore, Thailand, and Indonesia as of November 26, 2026, while it reviews whether regional partners meet U.S. export requirements. The move follows a Commerce Department rule change this month that closed a loophole allowing Chinese firms to remotely access Nvidia chips via data centers in those countries — a channel the Institute for Progress estimates supplied about 24% of China&#x27;s AI computing power. The case of Singapore-based Megaspeed, which became the region&#x27;s top Nvidia buyer before being accused of smuggling chips to China, has heightened scrutiny. It&#x27;s unclear how long the halt will last, but it threatens Nvidia&#x27;s business in a region where its Singapore entity alone booked $104 billion in 2025 revenue.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">A Game-Changing Move Just Gave America the Edge Over China in AI</div>
+        <div class="art-sum">I have enough confirmed from NBC News, Fortune, and the Commerce Department rule details to write the brief. The U.S. Commerce Department&#x27;s Bureau of Industry and Security issued an interim final rule on November 16, 2026, closing a loophole that let Chinese companies remotely rent access to advanced Nvidia AI chips housed in overseas data centers rather than importing them directly. The rule now requires export licenses for shipping advanced chips to Malaysia, Thailand, Indonesia, Singapore, and Brazil, and bars foreign data centers from giving remote access to companies headquartered in China, Russia, or Iran once they supply more than 12 million units of &quot;aggregate total processing performance&quot; to those customers. Investigators flagged a Malaysian firm, A201, which had built data centers specifically to funnel compute to a Chinese tech company, as a key target of the crackdown. The rule was developed jointly with the Treasury Department and National Security Council and follows reporting that remote cloud access to chips abroad had become a significant source of China&#x27;s AI computing capacity.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">The Mad Dash for Memory Chips—and the Pain It’s Causing Holiday Shoppers</div>
+        <div class="art-sum">Memory chip prices have surged dramatically in 2026 as AI data center demand outstrips supply, with a 16Gb DDR5 chip&#x27;s contract price climbing from $8.70 in October 2025 to roughly $48 by September 2026, and global DRAM revenue jumping 369% year-over-year in the third quarter to nearly $200 billion. Samsung, SK hynix, and Micron have sold out their high-bandwidth memory (HBM) production to AI customers months in advance—SK hynix has said its DRAM and HBM output is sold out through 2029—squeezing supply for the general-purpose memory used in laptops, phones, and other consumer devices. Analysts at Gartner and TrendForce project PC prices rising roughly 17% and conventional DRAM contract prices climbing 90-95% in early 2026 as manufacturers pass costs to shoppers this holiday season, with Costco among retailers warning customers of higher electronics prices. Industry watchers expect the shortage to persist into 2027 or later, since new fabrication capacity takes years to come online.</div>
+      </article>
+      <article class="article" data-cat="tech">
+        <div class="art-cat" style="color:#8a5a2b">TECH</div>
+        <div class="art-title">Jensen Huang’s Vision for the New Nvidia Is a Lot Like the Old One</div>
+        <div class="art-sum">I have enough to write the brief with concrete facts on the reinstatement, stock move, and strategic continuity. Jensen Huang was reinstated as Nvidia&#x27;s president, CEO, and board member on November 23, 2026, just 11 days after resigning on November 12 amid a scandal involving extramarital affairs, one with a subordinate and another with a woman U.S. officials reportedly believe may have been spying for China; Nvidia shares jumped more than 31% on the reinstatement news. The board said it received input from senior U.S. government officials, including President Trump, who said he personally pressed the board to bring Huang back, and the board concluded his return posed no national security risk. At a company-wide all-hands meeting on November 24, Huang apologized to employees, said he had been in daily therapy, and stressed that Nvidia&#x27;s underlying strategy—full-stack dominance from GPUs to the CUDA software ecosystem, now extending into PC chips, networking, and the &quot;Vera Rubin&quot; roadmap—remains intact even as rivals like Amazon, Google, and Microsoft push custom AI silicon. Huang has argued these in-house chip efforts rarely reach the scale needed to challenge Nvidia&#x27;s ecosystem lock-in.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Markets Mostly Higher as Sentiment Stabilizes</div>
+        <div class="art-sum">Asian equity markets steadied on November 26, 2026 after an 11-session slide, with South Korea&#x27;s KOSPI jumping 3%, Japan&#x27;s Nikkei 225 adding 1.5%, Australia&#x27;s S&amp;P/ASX 200 up 0.7%, Hong Kong&#x27;s Hang Seng gaining 0.5%, and Taiwan&#x27;s benchmark rising 0.8%. The rebound was led by technology shares and helped by easing concerns over U.S. trade tensions, though worries about the sustainability of the AI investment boom kept risk appetite in check. Despite the day&#x27;s gains, MSCI&#x27;s broadest Asia-Pacific index excluding Japan was still down about 8.2% for the month of November, with analysts cautioning the recovery could be short-lived.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Pensions Trusted by Millions of Industrial Workers Make a Surprising Comeback</div>
+        <div class="art-sum">Multiemployer pension plans, which cover millions of unionized industrial and trucking workers, ended 2025 with an aggregate funded ratio of 103%, the highest level recorded in Milliman&#x27;s 18-year funding study and up from 97% at the end of 2024, driven by strong equity returns and continued employer contributions. About 69% of the 1,180 plans tracked (812 plans) are now funded at 100% or more, and 90% are at least 80% funded, a sharp turnaround from the funding crisis that hit plans like the Teamsters&#x27; Central States Pension Fund, which required a roughly $36 billion federal bailout to project solvency through 2051. Separately, corporate single-employer pensions have also rebounded, with Milliman&#x27;s index showing the 100 largest U.S. corporate plans funded at 112.2% in August 2026, up from just 77% in 2012 and the highest level since 2001, prompting companies such as IBM, JBS Foods and Northwell Health to reopen or launch new defined-benefit pension plans to attract workers.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">U.S. Stock Futures Higher as AI Trade Steadies for Thanksgiving Break</div>
+        <div class="art-sum">US stock futures rose Wednesday evening into Thursday, with S&amp;P 500 contracts up about 0.7%, Nasdaq-100 futures up roughly 0.6%, and Dow futures gaining around 277 points, as markets headed into the close of a Thanksgiving-shortened trading week. The move follows a volatile stretch for AI-related stocks: Nvidia jumped as much as 31% earlier in the week after Jensen Huang&#x27;s reinstatement as CEO, before a subsequent selloff briefly pushed the Nasdaq 100 into bear-market territory. Traders are weighing doubts about debt-funded AI spending against expectations of further Federal Reserve rate hikes after core PCE inflation hit 3.3%, and despite the rebound, major U.S. indexes remain on pace for November losses of roughly 3% to 7.3%, with the Nasdaq Composite posting the steepest monthly decline.</div>
+      </article>
+      <article class="article" data-cat="markets">
+        <div class="art-cat" style="color:#2f5d3a">MARKETS</div>
+        <div class="art-title">Asian Stocks Rise as Investors Shrug Off U.S. Tariff Plan</div>
+        <div class="art-sum">Asian equity markets rallied on November 26, 2026, after the White House&#x27;s new tariff proposal on 14 major trading partners—including China, Japan and the EU—came in less severe than investors had feared, with the rates not set to take effect until February or March and not stacking on top of the tariffs already imposed in July. Japan&#x27;s Nikkei gained 1.6%, South Korea&#x27;s Kospi rose 1.9%, and Taiwan&#x27;s index added 1.4%, while MSCI&#x27;s broader Asia-Pacific shares outside Japan climbed 1.5% and Chinese blue chips rose 0.6%. Analysts at JPMorgan and Capital Economics said the macro impact looks modest since the tariff review had been well telegraphed, with Capital Economics&#x27; Stephen Brown describing the plan as a &quot;replacement rather than an escalation&quot; of earlier duties.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Essay | I Tried to Figure Out the Right Age to Retire. Now I Have to Work Forever.</div>
+        <div class="art-sum">This is a WSJ first-person opinion essay, not a reported news story — no other outlet has covered this specific piece, so there&#x27;s no independent, non-paywalled source to verify or draw concrete facts from.</div>
+      </article>
+      <article class="article" data-cat="finance">
+        <div class="art-cat" style="color:#5a4a8a">FINANCE</div>
+        <div class="art-title">Braskem Agrees to Plan Restructuring $10.9 Billion in Debt</div>
+        <div class="art-sum">Braskem&#x27;s board approved pursuing an out-of-court &quot;extrajudicial reorganization&quot; to restructure $10.9 billion in unsecured financial debt, filing the petition in Brazilian court on August 24, 2026, after securing support from creditors holding 39.6% of the affected claims. Under Brazilian law, the Brazilian petrochemical producer now has 90 days from the filing date to win approval from the required majority of creditors so the updated plan binds 100% of the subject claims. The restructuring aims to extend debt maturities and build a sustainable long-term capital structure, with options including shareholder liquidity support and possible debt-to-equity conversion, while the company says operations and payments to suppliers and customers continue unaffected.</div>
+      </article>
+    </div>
+    <aside class="sidebar"><div class="sidebar-sticky">
+      <div class="side-h">In this issue · 10 stories</div>
+      <div class="toc"><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">1</span><span class="toc-t">Nvidia Tells Partners to Pause Shipments to Southeast Asia</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">2</span><span class="toc-t">A Game-Changing Move Just Gave America the Edge Over China in AI</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">3</span><span class="toc-t">The Mad Dash for Memory Chips—and the Pain It’s Causing Holiday Shoppers</span></div><div class="toc-item"><span class="toc-n" style="color:#8a5a2b">4</span><span class="toc-t">Jensen Huang’s Vision for the New Nvidia Is a Lot Like the Old One</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">5</span><span class="toc-t">Asian Markets Mostly Higher as Sentiment Stabilizes</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">6</span><span class="toc-t">Pensions Trusted by Millions of Industrial Workers Make a Surprising Comeback</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">7</span><span class="toc-t">U.S. Stock Futures Higher as AI Trade Steadies for Thanksgiving Break</span></div><div class="toc-item"><span class="toc-n" style="color:#2f5d3a">8</span><span class="toc-t">Asian Stocks Rise as Investors Shrug Off U.S. Tariff Plan</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">9</span><span class="toc-t">Essay | I Tried to Figure Out the Right Age to Retire. Now I Have to Work Forever.</span></div><div class="toc-item"><span class="toc-n" style="color:#5a4a8a">10</span><span class="toc-t">Braskem Agrees to Plan Restructuring $10.9 Billion in Debt</span></div></div>
+      <div class="side-h side-threads-h">Recurring threads</div>
+<div class="thread-row"><span class="thread-name">AI boom</span><span class="thread-days">130 days</span></div><div class="thread-row"><span class="thread-name">Chips</span><span class="thread-days">112 days</span></div><div class="thread-row"><span class="thread-name">IPOs &amp; listings</span><span class="thread-days">86 days</span></div><div class="thread-row"><span class="thread-name">Iran &amp; oil</span><span class="thread-days">84 days</span></div><div class="thread-row"><span class="thread-name">Fed &amp; rates</span><span class="thread-days">79 days</span></div><div class="thread-row"><span class="thread-name">Tariffs &amp; trade</span><span class="thread-days">27 days</span></div>
+    </div></aside>
+  </div>
+  <div class="issue-foot">
+    <span><a class="older" href="digest-2026-11-26.html">← Older · November 26, 2026 · Saudi Engineer Accused of Bugging OpenAI to Be Released on $1 Million Bond</a></span>
+    <a class="home" href="index.html">Back to The Archive</a>
+  </div>
+</div>
+<script>(function(){var tabs=document.querySelectorAll('.tab'),arts=document.querySelectorAll('.article');tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.key;tabs.forEach(function(x){x.classList.toggle('on',x===t)});arts.forEach(function(a){a.style.display=(k==='all'||a.dataset.cat===k)?'':'none'})})})})();</script>
+
+</body>
+</html>
